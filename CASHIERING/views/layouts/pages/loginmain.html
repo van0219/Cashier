@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<!--<![endif]-->
+<head>
+	<meta charset="utf-8" />
+	{% block title %}<title>CMS | Login</title>{% endblock %}
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta content="" name="description" />
+    <meta content="" name="author" />
+    
+    <!-- ================== BEGIN BASE CSS ================== -->
+    {% include "views/layouts/includes/base_css.html" %}
+    <!-- ================== END BASE CSS ================== -->
+    
+	<!-- ================== BEGIN BASE JS ================== -->
+    <script src="{%static 'assets/plugins/pace/pace.min.js' %}"></script>
+	<!-- ================== END BASE JS ================== -->
+</head>
+<body class="pace-top">
+	<!-- begin #page-loader -->
+	<div id="page-loader" class="fade show"><span class="spinner"></span></div>
+	<!-- end #page-loader -->
+	
+	<div class="login-cover">
+	    <div class="login-cover-image" style="background-image: url('/static/assets/img/login-bg/PUP-Pylon.jpg')" data-id="login-cover-image"></div>
+	    <div class="login-cover-bg"></div>
+	</div>
+    <!-- begin #page-container -->
+    {% block content %} {% endblock %}
+	<!-- end page container -->
+	
+	<!-- ================== BEGIN BASE JS ================== -->
+    {% include "views/layouts/includes/base_js.html" %}
+	<!-- ================== END BASE JS ================== -->
+	
+	<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+	<script src="{%static 'assets/js/demo/login-v2.demo.min.js' %}"></script>
+	<!-- ================== END PAGE LEVEL JS ================== -->
+
+	<script>
+		$(document).ready(function() {
+			App.init();
+			LoginV2.init();
+		});
+	</script>
+</body>
+</html>

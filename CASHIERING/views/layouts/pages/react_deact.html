@@ -1,0 +1,175 @@
+{% extends 'views/layouts/pages/admin_main.html' %}
+{% block title %}<title>CMS | Reactivate/Deactivate</title>{% endblock %}
+{% load static %}
+{% block page-css %}
+<link href="{%static 'assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/switchery/switchery.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/powerange/powerange.min.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<!-- begin #content -->
+<div id="content" class="content">
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+        <li class="breadcrumb-item"><a href="javascript:;">User Management</a></li>
+        <li class="breadcrumb-item active">Reactivate | Deactivate</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">Reactivate | Deactivate <small>Change User Status</small></h1>
+    <!-- end page-header -->
+    
+    <!-- begin row -->
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <!-- begin col-10 -->
+        <div class="col-lg-10">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fas fa-user-times m-r-5"></i>Reactivate | Deactivate User</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin panel-body -->
+                <div class="panel-body">
+                    <table id="data-table-responsive" class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th hidden>ID</th>
+                                <th class="text-nowrap">Fullname</th>
+                                <th class="text-nowrap">Role</th>
+                                <th class="text-nowrap">Status</th>
+                                <th width="20%" class="text-nowrap">Option</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td hidden>1</td>
+                                <td>Van Anthony Silleza</td>
+                                <td>Admin</td>
+                                <td>Active</td>
+                                <td align="center">
+                                    <input type="checkbox" class="deactBtn" name="radio-css" id="user1" checked />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td hidden>2</td>
+                                <td>Merly Gonzalbo</td>
+                                <td>Cashier</td>
+                                <td>Active</td>
+                                <td align="center">
+                                    <input type="checkbox" class="deactBtn" id="user2" checked />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td hidden>3</td>
+                                <td>Armando Caruso</td>
+                                <td>Cashier</td>
+                                <td>Inactive</td>
+                                <td align="center">
+                                    <input type="checkbox" class="reactBtn" id="user3" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- end panel-body -->
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-10 -->
+    </div>
+    <!-- end row -->
+</div>
+<!-- end #content -->
+{% endblock %}
+{% block page-js %}
+<script src="{%static 'assets/plugins/DataTables/media/js/jquery.dataTables.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/table-manage-responsive.demo.min.js' %}"></script>
+<!--  -->
+<script src="{%static 'assets/plugins/switchery/switchery.min.js' %}"></script>
+<script src="{%static 'assets/plugins/powerange/powerange.min.js' %}"></script>
+{% endblock %}
+{% block init %}
+<script>
+    $(document).ready(function() {
+        App.init();
+        TableManageResponsive.init();
+    });
+    $('.deactBtn').on('click', function() {
+        var id = $(this).closest("tbody tr").find("td:eq(0)").html();
+        swal({
+            title: "Deactivate",
+            text: "Are you sure to deactivate this user?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d9534f",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: true,
+            customClass: "Custom_Cancel"
+        },
+        function(isConfirm) {
+            if (isConfirm){
+                swal({
+                        title: "Deactivated Successfully", 
+                        text: "Record was deactivated successfully!", 
+                        type: "success",
+                        showLoaderOnConfirm: true,
+                        confirmButtonColor: "#5cb85c",
+                    },
+                    function(isConfirm) {
+                        if (isConfirm){
+                            //close swal
+                        }
+                    })
+            }
+            else {
+                var switcherID = '#user'+ id;
+                $(switcherID).prop("checked", true);
+            }
+        });
+    });
+    $('.reactBtn').on('click', function() {
+        var id = $(this).closest("tbody tr").find("td:eq(0)").html();
+        swal({
+            title: "Reactivate",
+            text: "Are you sure to reactivate this user?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#5cb85c",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: true,
+            customClass: "Custom_Cancel"
+        },
+        function(isConfirm) {
+            if (isConfirm){
+                swal({
+                        title: "Reactivated Successfully", 
+                        text: "Record was reactivated successfully!", 
+                        type: "success",
+                        showLoaderOnConfirm: true,
+                        confirmButtonColor: "#5cb85c",
+                    },
+                    function(isConfirm) {
+                        if (isConfirm){
+                            // 
+                        }
+                    })
+            }
+            else {
+                var switcherID = '#user'+ id;
+                $(switcherID).prop("checked", false);
+            }
+        });
+    });
+</script>
+{% endblock%}

@@ -1,0 +1,128 @@
+{% load static %}
+<div id="sidebar" class="sidebar">
+    <!-- begin sidebar scrollbar -->
+    <div data-scrollbar="true" data-height="100%">
+        <!-- begin sidebar user -->
+        <ul class="nav">
+            <li class="nav-profile">
+                <a href="javascript:;" data-toggle="nav-profile">
+                    <div class="cover with-shadow">
+                        <img src="{%static 'assets/img/cover/cashier.jpg' %}" alt=""/>
+                    </div>
+                    <div class="image">
+                        <img src="{%static 'assets/img/user/maam_meg.jpg' %}" alt="" />
+                    </div>
+                    <div class="info">
+                        <b class="caret pull-right"></b>
+                        Merly Gonzalbo
+                        <small>Collection Officer</small>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <ul class="nav nav-profile">
+                    <li><a href="#setup_queue" data-toggle="modal"><i class="fas fa-hourglass-start"></i> Setup Queue</a></li>
+                </ul>
+            </li>
+        </ul>
+        <!-- end sidebar user -->
+        <!-- begin sidebar nav -->
+        <ul class="nav">
+            <li class="nav-header">Navigation</li>
+            <li>
+                <a href="dashboard">
+                    <i class="fa fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret"></b>
+                    <i class="fa fa-plus-square"></i> 
+                    <span>Add Collection</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="add_collection_manual">Add Collection <small>(Manual)</small></a></li>
+                    <li><a href="add_collection_student">Add Collection <small>(Student)</small></a></li>
+                    <li><a href="javascript:;">Add Clearance <small>(Student)</small></a></li>
+                    <li><a href="javascript:;">SIS Payments</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret"></b>
+                    <i class="fas fa-search"></i>
+                    <span>View Records</span> 
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="view_receipts">View Receipts</a></li>
+                    <li><a href="cleared_students">Cleared Students</a></li>
+                    <li><a href="javascript:;">Transaction Logs</a></li>
+                    <li><a href="sis_payments">View SIS Payments</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret"></b>
+                    <i class="fas fa-list-alt"></i>
+                    <span>Collection Report</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="accountable_forms_report">Accountable Forms</a></li>
+                    <li><a href="certification_report">Certification</a></li>
+                    <li><a href="monthly_collection_report">Monthly Collection</a></li>
+                    <li><a href="summary_collection_report">Summary of Collection</a></li>
+                    <li><a href="cash_receipt_record_report">Cash Receipt Record</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret"></b>
+                    <i class="fas fa-download"></i>
+                    <span>Deposits</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="javascript:;">Pending</a></li>
+                    <li><a href="javascript:;">Deposited</a></li>
+                </ul>
+            </li>
+            <!-- begin sidebar minify button -->
+            <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
+            <!-- end sidebar minify button -->
+        </ul>
+        <!-- end sidebar nav -->
+    </div>
+    <!-- end sidebar scrollbar -->
+</div>
+<div class="sidebar-bg"></div>
+<!-- #modal-dialog -->
+<div class="modal fade" id="setup_queue">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Setup Queue</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" data-parsley-validate="true" name="demo-form">
+                    <div class="form-group row m-b-15">
+                        <label class="col-md-4 col-sm-4 col-form-label" for="fullname">Starting Count <span class="text-red">*</span> :</label>
+                        <div class="col-md-8 col-sm-8">
+                            <input class="form-control" type="text" id="start" name="start" placeholder="Input Number" data-parsley-type="digit" data-parsley-required="true" />
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-15">
+                        <label class="col-md-4 col-sm-4 col-form-label" for="fullname">End Count :</label>
+                        <div class="col-md-8 col-sm-8">
+                            <input class="form-control" type="text" id="end" name="end" placeholder="Input Number" data-parsley-type="digit" data-parsley-required="true" />
+                        </div>
+                    </div>
+                    <div class="modal-footer form-group">
+                        <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                        <button type="submit" class="btn btn-success">Set</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

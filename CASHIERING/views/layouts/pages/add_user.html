@@ -1,0 +1,132 @@
+{% extends 'views/layouts/pages/admin_main.html' %}
+{% block title %}<title>CMS | Add User</title>{% endblock %}
+{% load static %}
+{% block page-css %}
+<link href="{%static 'assets/plugins/parsley/src/parsley.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<!-- begin #content -->
+<div id="content" class="content">
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+        <li class="breadcrumb-item"><a href="javascript:;">User Management</a></li>
+        <li class="breadcrumb-item active">Add User</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">Add User <small>Add New User to the System</small></h1>
+    <!-- end page-header -->
+    
+    <!-- begin row -->
+    <div class="row">
+        <!--begin filler-->
+        <div class="col-lg-3"></div>
+        <!--end filler-->
+        <!-- begin col-6 -->
+        <div class="col-lg-6">
+            <!-- begin panel -->
+            <div class="panel panel-inverse" data-sortable-id="form-validation-1">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fas fa-user-plus m-r-5"></i>Add User</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin panel-body -->
+                <div class="panel-body">
+                    <form class="form-horizontal" name="demo-form" action="#" id="addForm" autocomplete="off">
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="fullname">First Name <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control" type="text" id="fname" name="fname" placeholder="First Name" data-parsley-required="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="fullname">Middle Name :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control" type="text" id="mname" name="mname" placeholder="Middle Name" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="fullname">Last Name <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" data-parsley-required="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="email">Username <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control" type="text" id="uname" name="uname" placeholder="Username" data-parsley-required="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="message">Password <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control" type="text" id="pword" name="pword" maxlength="15" placeholder="Password" data-parsley-required="true"/>
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label">Role <span class="text-red">*</span> :</label>
+                            <div class="col-md-4 col-sm-4">
+                                <div class="radio radio-css">
+                                    <input type="radio" name="radio_css" id="radiorequired" checked />
+                                    <label for="radiorequired" class="text-success">Admin</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <div class="radio radio-css">
+                                    <input type="radio" name="radio_css" id="radiorequired2" />
+                                    <label for="radiorequired2" class="text-success">Cashier</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-0">
+                            <label class="col-md-4 col-sm-4 col-form-label">&nbsp;</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="submit" class="btn btn-success" id="add" onclick="addClick(event);" value="Submit"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- end panel-body -->
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-6 -->
+    </div>
+    <!-- end row -->
+</div>
+<!-- end #content -->
+{% endblock %}
+{% block page-js %}
+<script src="{%static 'assets/plugins/parsley/dist/parsley.js' %}"></script>
+<script src="{%static 'assets/plugins/highlight/highlight.common.js' %}"></script>
+<script src="{%static 'assets/js/demo/render.highlight.js' %}"></script>
+{% endblock %}
+{% block init %}
+<script>
+    $(document).ready(function() {
+        App.init();
+        Highlight.init();
+    });
+    function addClick(event) {
+        event.preventDefault();
+        $('#addForm').parsley();
+        if($('#addForm').parsley().validate()) {
+            swal({
+                title: "Added Successfully", 
+                text: "Record was added successfully!", 
+                type: "success",
+                showLoaderOnConfirm: true,
+                confirmButtonColor: "#5cb85c",
+            },
+            function(isConfirm){
+                    if (isConfirm){
+                        // $('#addForm').parsley().reset();
+                        $('.form-control').val('');
+                    }
+            })
+        }
+    };
+</script>
+{% endblock %}

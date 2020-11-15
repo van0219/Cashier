@@ -1,0 +1,225 @@
+{% extends "views/layouts/pages/main.html" %}
+{% block title %}<title>CMS | Dashboard</title>{% endblock %}
+{% load static %}
+{% block page-css %}
+<link href="{%static 'assets/plugins/jquery-jvectormap/jquery-jvectormap.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/nvd3/build/nv.d3.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/nvd3/build/nv.d3.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<!-- begin #content -->
+<div id="content" class="content">
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li class="breadcrumb-item active">Home</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">Dashboard <small>Cashier</small></h1>
+    <!-- end page-header -->
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-3 -->
+        <div class="col-lg-3 col-md-6">
+            <div class="widget widget-stats bg-gradient-red">
+                <div class="stats-icon stats-icon-lg"><i class="fas fa-shopping-basket fa-fw"></i></div>
+                <div class="stats-content">
+                    <div class="stats-title">TODAY'S COLLECTION</div>
+                    <div class="stats-number">₱15,853</div>
+                    <div class="stats-progress progress">
+                        <div class="progress-bar" style="width: 70.1%;"></div>
+                    </div>
+                    <div class="stats-desc">{% now "SHORT_DATE_FORMAT" %}</div>
+                </div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-lg-3 col-md-6">
+            <div class="widget widget-stats bg-gradient-orange">
+                <div class="stats-icon stats-icon-lg"><i class="fas fa-shopping-bag fa-fw"></i></div>
+                <div class="stats-content">
+                    <div class="stats-title">YESTERDAY'S COLLECTION</div>
+                    <div class="stats-number">₱50,466.75</div>
+                    <div class="stats-progress progress">
+                        <div class="progress-bar" style="width: 40.5%;"></div>
+                    </div>
+                    <div class="stats-desc"><span id="yesterday"></span></div>
+                </div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-lg-3 col-md-6">
+            <div class="widget widget-stats bg-gradient-lime">
+                <div class="stats-icon stats-icon-lg"><i class="fas fa-shopping-cart fa-fw"></i></div>
+                <div class="stats-content">
+                    <div class="stats-title">LAST WEEK'S COLLECTION</div>
+                    <div class="stats-number">₱400,125</div>
+                    <div class="stats-progress progress">
+                        <div class="progress-bar" style="width: 76.3%;"></div>
+                    </div>
+                    <div class="stats-desc"><span id="last_week"></span></div>
+                </div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-lg-3 col-md-6">
+            <div class="widget widget-stats bg-gradient-black">
+                <div class="stats-icon stats-icon-lg"><i class="fas fa-ship fa-fw"></i></div>
+                <div class="stats-content">
+                    <div class="stats-title">LAST MONTH'S COLLECTION</div>
+                    <div class="stats-number">₱2,674,399</div>
+                    <div class="stats-progress progress">
+                        <div class="progress-bar" style="width: 54.9%;"></div>
+                    </div>
+                    <div class="stats-desc"><span id="last_month"></span></div>
+                </div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+    </div>
+    <!-- end row -->
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-8 -->
+        <div class="col-lg-8">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fas fa-chart-bar"></i> Daily Collection</h4>
+                </div>
+                <div class="panel-body">
+                    <div id="nv-bar-chart" class="height-sm"></div>
+                </div>
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-8 -->
+        <!-- begin col-4 -->
+        <div class="col-lg-4">
+            <!-- begin panel -->
+            <div class="panel panel-inverse" data-sortable-id="index-3">
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fas fa-calendar-alt"></i> Today's Schedule</h4>
+                </div>
+                <div id="schedule-calendar" class="bootstrap-calendar"></div>
+                <div class="list-group">
+                    <a href="javascript:;" class="list-group-item d-flex justify-content-between align-items-center text-ellipsis">
+                        Finalyze Accountable Forms
+                        <span class="badge f-w-500 bg-gradient-green f-s-10">9:00 am</span>
+                    </a> 
+                    <a href="javascript:;" class="list-group-item d-flex justify-content-between align-items-center text-ellipsis">
+                        Have a meeting with accounting
+                        <span class="badge f-w-500 bg-gradient-blue f-s-10">2:45 pm</span>
+                    </a>
+                </div>
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-4 -->
+    </div>
+    <!-- end row -->
+</div>
+<!-- end #content -->
+{% endblock %}
+{% block page-js %}
+<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js"></script>
+<script src="{%static 'assets/plugins/nvd3/build/nv.d3.js' %}"></script>
+<script src="{%static 'assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/dashboard-v2.js' %}"></script>
+<!--  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js"></script>
+<script src="{%static 'assets/plugins/nvd3/build/nv.d3.js' %}"></script>
+<script src="{%static 'assets/plugins/moment/moment.min.js' %}"></script>
+<!-- ================== END PAGE LEVEL JS ================== -->
+{% endblock %}
+{% block init %}
+<script>
+    $(document).ready(function() {
+        App.init();
+        DashboardV2.init();
+        Notification.init();
+        Highlight.init();
+        handleBarChart();
+
+        
+        $('#yesterday').text((d.getMonth()+1) + '/' + (d.getDate()-1) + '/' + d.getFullYear());
+        $('#last_week').text(last_week(moment(new Date(d)).format("dddd").toLowerCase()));
+        var lastMonth = new Date(d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear());
+        $('#last_month').text(moment(lastMonth).format("MMMM"));
+        // alert(moment(new Date(d)).format("dddd"));
+        // alert(moment(new Date(d)).format("dddd").toLowerCase());
+    });
+    var d = new Date();
+    function last_week(day) {
+        var toMinus = 0;
+        switch (day) {
+            case "sunday":
+                toMinus = 13;
+                break;
+            case "monday":
+                toMinus = 7;
+                break;
+            case "tuesday":
+                toMinus = 8;
+                break;
+            case "wednesday":
+                toMinus = 9;
+                break;
+            case "thursday":
+                toMinus = 10;
+                break;
+            case "friday":
+                toMinus = 11;
+                break;
+            case "saturday":
+                toMinus = 12;
+                break;
+            default:
+                break;
+        }
+        var last_week_start = (d.getMonth()+1) + '/' + (d.getDate()-toMinus) + '/' + d.getFullYear();
+        var newStart = new Date(last_week_start);
+        var last_week_end = (newStart.getMonth()+1) + '/' + (newStart.getDate()+6) + '/' + newStart.getFullYear();
+        return last_week_start + ' ' + 'to' + ' ' + last_week_end;
+    }
+    var handleBarChart = function() {
+        "use strict";
+        
+        var barChartData = [{
+            key: 'Cumulative Return',
+            values: [
+                { 'label' : 'SUN', 'value' : 2904, 'color' : COLOR_BLUE }, 
+                { 'label' : 'MON', 'value' : 15107, 'color' : COLOR_BLUE }, 
+                { 'label' : 'TUE', 'value' : 3206, 'color' : COLOR_BLUE }, 
+                { 'label' : 'WED', 'value' : 19600, 'color' : COLOR_BLUE },  
+                { 'label' : 'THU', 'value' : 4400, 'color' : COLOR_BLUE },  
+                { 'label' : 'FRI', 'value' : 9800, 'color' : COLOR_BLUE },  
+                { 'label' : 'SAT', 'value' : 1367, 'color' : COLOR_BLUE },  
+            ]
+        }];
+
+        nv.addGraph(function() {
+            var barChart = nv.models.discreteBarChart()
+                .x(function(d) { return d.label })
+                .y(function(d) { return d.value })
+                .showValues(true)
+                .duration(250);
+            
+            barChart.yAxis.axisLabel("Total Collection");
+            barChart.xAxis.axisLabel('Days');
+        
+            d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
+            nv.utils.windowResize(barChart.update);
+        
+            return barChart;
+        });
+    }
+</script>
+{% endblock %}

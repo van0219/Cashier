@@ -1,0 +1,255 @@
+{% extends 'views/layouts/pages/admin_main.html' %}
+{% block title %}<title>CMS | Admin Dashboard</title>{% endblock %}
+{% load static %}
+{% block page-css %}
+<link href="{%static 'assets/plugins/jquery-jvectormap/jquery-jvectormap.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css' %}" rel="stylesheet" />
+<!-- <link href="{%static 'assets/plugins/gritter/css/jquery.gritter.css' %}" rel="stylesheet" /> -->
+<link href="{%static 'assets/plugins/morris/morris.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<!-- begin #content -->
+<div id="content" class="content">
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+        <li class="breadcrumb-item active">Dashboard</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">Dashboard <small>Administrator</small></h1>
+    <!-- end page-header -->
+    
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-3 -->
+        <div class="col-lg-3 col-md-6">
+            <div class="widget widget-stats bg-lime">
+                <div class="stats-icon"><i class="fas fa-users"></i></div>
+                <div class="stats-info">
+                    <h4>TOTAL USERS</h4>
+                    <p>3</p>	
+                </div>
+                <div class="stats-link">
+                    <a href="javascript:;">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-lg-3 col-md-6">
+            <div class="widget widget-stats bg-blue-lighter">
+                <div class="stats-icon"><i class="fas fa-chart-area"></i></div>
+                <div class="stats-info">
+                    <h4>WEEKLY USED "OR"</h4>
+                    <p>55</p>	
+                </div>
+                <div class="stats-link">
+                    <a href="javascript:;">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-lg-3 col-md-6">
+            <div class="widget widget-stats bg-grey-darker">
+                <div class="stats-icon"><i class="fas fa-chart-pie"></i></div>
+                <div class="stats-info">
+                    <h4>MONTHLY USED "OR"</h4>
+                    <p>126</p>	
+                </div>
+                <div class="stats-link">
+                    <a href="javascript:;">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-lg-3 col-md-6">
+            <div class="widget widget-stats bg-danger">
+                <div class="stats-icon"><i class="fas fa-envelope"></i></div>
+                <div class="stats-info">
+                    <h4>WEEKLY MESSAGES</h4>
+                    <p>34</p>	
+                </div>
+                <div class="stats-link">
+                    <a href="javascript:;">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+    </div>
+    <!-- end row -->
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-8 -->
+        <div class="col-lg-8">
+            <!-- begin panel -->
+            <div class="panel panel-inverse" data-sortable-id="index-5">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Requests</h4>
+                </div>
+                <div class="panel-body">
+                    <div  data-scrollbar="true" style="height: 225px;">
+                        <ul class="media-list media-list-with-divider media-messaging">
+                            <li class="media media-sm">
+                                <a href="javascript:;" class="pull-left">
+                                    <img src="../assets/img/user/user-5.jpg" alt="" class="media-object rounded-corner" />
+                                </a>
+                                <div class="media-body">
+                                    <h5 class="media-heading">John Doe</h5>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id nunc non eros fermentum vestibulum ut id felis. Nunc molestie libero eget urna aliquet, vitae laoreet felis ultricies. Fusce sit amet massa malesuada, tincidunt augue vitae, gravida felis.</p>
+                                </div>
+                            </li>
+                            <li class="media media-sm">
+                                <a href="javascript:;" class="pull-left">
+                                    <img src="../assets/img/user/user-6.jpg" alt="" class="media-object rounded-corner" />
+                                </a>
+                                <div class="media-body">
+                                    <h5 class="media-heading">Terry Ng</h5>
+                                    <p>Sed in ante vel ipsum tristique euismod posuere eget nulla. Quisque ante sem, scelerisque iaculis interdum quis, eleifend id mi. Fusce congue leo nec mauris malesuada, id scelerisque sapien ultricies.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel-footer bg-grey-lighter">
+                    <form>
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-silver" placeholder="Enter message" />
+                            <span class="input-group-append">
+                                <button class="btn btn-primary" type="button"><i class="fa fa-pencil-alt"></i></button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-8 -->
+        <!-- begin col-4 -->
+        <div class="col-lg-4">
+            <!-- begin panel -->
+            <div class="panel panel-inverse" data-sortable-id="index-6">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Monitoring</h4>
+                </div>
+                <div class="panel-body p-t-0">
+                    <div class="table-responsive">
+                        <table class="table table-valign-middle">
+                            <thead>
+                                <tr>	
+                                    <th>Daily Source</th>
+                                    <th>Total</th>
+                                    <th>Weekly Trend</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><label class="label label-danger">Messages</label></td>
+                                    <td>6 <span class="text-success"><i class="fa fa-arrow-up"></i></span></td>
+                                    <td><div id="sparkline-unique-visitor"></div></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="label label-warning">Used OR</label></td>
+                                    <td>8</td>
+                                    <td><div id="sparkline-bounce-rate"></div></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="label label-default">Unused OR</label></td>
+                                    <td>156</td>
+                                    <td><div id="sparkline-new-visits"></div></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="label label-success">User (Admin)</label></td>
+                                    <td>1</td>
+                                    <td><div id="sparkline-total-page-views"></div></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="label label-primary">User (Cashier)</label></td>
+                                    <td>2</td>
+                                    <td><div id="sparkline-avg-time-on-site"></div></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel-footer bg-grey-lighter">
+
+                </div>
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-4 -->
+    </div>
+    <!-- end row -->
+</div>
+<!-- end #content -->
+{% endblock %}
+{% block page-js %}
+<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+<!-- <script src="{%static 'assets/plugins/gritter/js/jquery.gritter.js' %}"></script> -->
+<script src="{%static 'assets/plugins/flot/jquery.flot.min.js' %}"></script>
+<script src="{%static 'assets/plugins/flot/jquery.flot.time.min.js' %}"></script>
+<script src="{%static 'assets/plugins/flot/jquery.flot.resize.min.js' %}"></script>
+<script src="{%static 'assets/plugins/flot/jquery.flot.pie.min.js' %}"></script>
+<script src="{%static 'assets/plugins/sparkline/jquery.sparkline.js' %}"></script>
+<script src="{%static 'assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/jquery-jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+<script src="{%static 'assets/js/demo/dashboard.min.js' %}"></script>
+<!--  -->
+<script src="{%static 'assets/plugins/morris/raphael.min.js' %}"></script>
+<script src="{%static 'assets/plugins/morris/morris.js' %}"></script>
+<!-- ================== END PAGE LEVEL JS ================== -->
+{% endblock %}
+{% block init %}
+<script>
+    $(document).ready(function() {
+        App.init();
+        Dashboard.init();
+        handleMorrisBarChart();
+        handleMorrisDonusChart();
+    });
+    var handleMorrisBarChart = function () {
+        Morris.Bar({
+            element: 'morris-bar-chart',
+            data: [
+                {device: 'Used', geekbench: 75},
+                {device: 'Unused', geekbench: 125}
+            ],
+            xkey: 'device',
+            ykeys: ['geekbench'],
+            labels: ['OR Count'],
+            barRatio: 0.4,
+            xLabelAngle: 35,
+            resize: true,
+            gridLineColor: [COLOR_GREY_LIGHTER],
+            gridTextFamily: FONT_FAMILY,
+            gridTextColor: FONT_COLOR,
+            gridTextWeight: FONT_WEIGHT,
+            gridTextSize: FONT_SIZE,
+            barColors: ['#428bca']
+        });
+    };
+    var handleMorrisDonusChart = function() {
+        Morris.Donut({
+            element: 'morris-donut-chart',
+            data: [
+                {label: 'Jam', value: 25 },
+                {label: 'Frosted', value: 40 },
+                {label: 'Custard', value: 25 },
+                {label: 'Sugar', value: 10 }
+            ],
+            formatter: function (y) { return y + "%" },
+            resize: true,
+            gridLineColor: [COLOR_GREY_LIGHTER],
+            gridTextFamily: FONT_FAMILY,
+            gridTextColor: FONT_COLOR,
+            gridTextWeight: FONT_WEIGHT,
+            gridTextSize: FONT_SIZE,
+            colors: [COLOR_BLACK, COLOR_AQUA, COLOR_BLUE, COLOR_GREY]
+        });
+    };
+</script>
+{% endblock %}

@@ -1,0 +1,233 @@
+{% extends "views/layouts/pages/main.html" %}
+{% block title %}<title>CMS | Accountable Forms Report</title>{% endblock %}
+{% load static %}
+{% block page-css %} 
+<link href="{%static 'assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Buttons/css/buttons.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/AutoFill/css/autoFill.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/ColReorder/css/colReorder.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/KeyTable/css/keyTable.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/RowReorder/css/rowReorder.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Select/css/select.bootstrap.min.css '%}" rel="stylesheet" />
+<!--  -->
+<link href="{%static 'assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/ionRangeSlider/css/ion.rangeSlider.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/ionRangeSlider/css/ion.rangeSlider.skinNice.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/password-indicator/css/password-indicator.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-combobox/css/bootstrap-combobox.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-tag-it/css/jquery.tagit.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/select2/dist/css/select2.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-eonasdan-datetimepicker/build/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-colorpalette/css/bootstrap-colorpalette.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker-fontawesome.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker-glyphicons.css' %}" rel="stylesheet" />
+<!--  -->
+<style type="text/css" media="print">
+    @page {
+        size: landscape;
+    }
+    .hidden-print {
+        display: none; 
+    }
+</style>
+{% endblock %}
+{% block content %}
+<!-- begin #content -->
+<div id="content" class="content">
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+        <li class="breadcrumb-item"><a href="javascript:;">Collection Report</a></li>
+        <li class="breadcrumb-item active">Accountable Forms</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">Accountable Forms <small>View/Generate Report</small></h1>
+    <!-- end page-header -->
+    
+    <!-- begin row -->
+    <div class="row">
+         <!-- begin col-2 -->
+         <div class="col-lg-2">
+            <h5>Generate Custom Report</h5>
+            <div class="m-t-10">
+                <div>
+                    <div id="advance-daterange" class="btn btn-default btn-block text-left f-s-12">
+                        <span class="m-r-5 f-s-10"></span>  
+                        <i class="fa fa-caret-down pull-right m-t-2"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="m-t-10">
+                <a href="javascript:;" class="btn btn-success btn-m"><i class="fas fa-file-code"></i> Create</a>
+            </div>
+            <hr class="m-t-20 bg-black-transparent-2">
+            <h5 class="m-t-20">Generate Monthly Report</h5>
+            <div class="col-lg-12 row" style="margin-left: -15px;">
+                <select class="form-control selectpicker" data-style="btn-default">
+                    <option selected disabled>Select Month</option>
+                    <option>January</option>
+                    <option>February</option>
+                    <option>March</option>
+                    <option>April</option>
+                    <option>May</option>
+                    <option>June</option>
+                    <option>July</option>
+                    <option>August</option>
+                    <option>September</option>
+                    <option>October</option>
+                    <option>November</option>
+                    <option>December</option>
+                </select>
+            </div>
+            <div>
+                <a href="javascript:;" class="btn btn-success btn-m"><i class="fas fa-file-code"></i> Create</a>
+            </div>
+        </div>
+        <!-- end col-2 -->
+        <!-- begin col-10 -->
+        <div class="col-lg-10">
+            <div class="panel panel-inverse">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fas fa-file-alt m-r-5"></i>Accountable Forms</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin panel-body -->
+                <div class="panel-body overflow-x-scroll">
+                    <table id="data-table-combines" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Accountable Forms</th>
+                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Beginning Balance</th>
+                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Receipt</th>
+                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Issuance</th>
+                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Ending Balance</th>
+                            </tr>
+                            <tr>
+                                <th class="text-nowrap" rowspan="2" colspan="3">Face Value</th>
+                                <th class="text-nowrap" rowspan="2">Qty</th>
+                                <th class="text-nowrap" colspan="3">Inclusive Serial Nos</th>
+                                <th class="text-nowrap" colspan="3">Inclusive Serial Nos</th>
+                                <th class="text-nowrap" colspan="3">Inclusive Serial Nos</th>
+                                <th class="text-nowrap" colspan="2">Inclusive Serial Nos</th>
+                            </tr>
+                            <tr>
+                                <th class="text-nowrap">From</th>
+                                <th class="text-nowrap">To</th>
+                                <th class="text-nowrap">Qty</th>
+                                <th class="text-nowrap">From</th>
+                                <th class="text-nowrap">To</th>
+                                <th class="text-nowrap">Qty</th>
+                                <th class="text-nowrap">From</th>
+                                <th class="text-nowrap">To</th>
+                                <th class="text-nowrap">Qty</th>
+                                <th class="text-nowrap">From</th>
+                                <th class="text-nowrap">To</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- <tr class="odd gradeX">
+                                <td width="1%" class="f-s-600 text-inverse">1</td>
+                                <td></td>
+                                <td>Trident</td>
+                                <td>Internet Explorer 4.0</td>
+                                <td>Win 95+</td>
+                                <td>4</td>
+                                <td>X</td>
+                            </tr>
+                            <tr class="even gradeC">
+                                <td width="1%" class="f-s-600 text-inverse">2</td>
+                                <td width="1%" class="with-img"><img src="../assets/img/user/user-2.jpg" class="img-rounded height-30" /></td>
+                                <td>Trident</td>
+                                <td>Internet Explorer 5.0</td>
+                                <td>Win 95+</td>
+                                <td>5</td>
+                                <td>C</td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- end panel-body -->
+            </div>
+        </div>
+        <!-- end col-10 -->
+    </div>
+    <!-- end row -->
+</div>
+<!-- end #content -->
+{% endblock %}
+{% block page-js %}
+<script src="{%static 'assets/plugins/DataTables/media/js/jquery.dataTables.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.bootstrap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.flash.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/jszip.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/pdfmake.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/vfs_fonts.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.print.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/AutoFill/js/dataTables.autoFill.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/ColReorder/js/dataTables.colReorder.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/KeyTable/js/dataTables.keyTable.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/RowReorder/js/dataTables.rowReorder.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Select/js/dataTables.select.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/table-manage-combine.demo.min.js' %}"></script>
+<!--  -->
+<script src="{%static 'assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+<script src="{%static 'assets/plugins/ionRangeSlider/js/ion-rangeSlider/ion.rangeSlider.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js' %}"></script>
+<script src="{%static 'assets/plugins/masked-input/masked-input.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js' %}"></script>
+<script src="{%static 'assets/plugins/password-indicator/js/password-indicator.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-combobox/js/bootstrap-combobox.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput-typeahead.js' %}"></script>
+<script src="{%static 'assets/plugins/jquery-tag-it/js/tag-it.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-daterangepicker/moment.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<script src="{%static 'assets/plugins/select2/dist/js/select2.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-eonasdan-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-show-password/bootstrap-show-password.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-colorpalette/js/bootstrap-colorpalette.js' %}"></script>
+<script src="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.js' %}"></script>
+<script src="{%static 'assets/plugins/clipboard/clipboard.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/form-plugins.demo.js' %}"></script>
+{% endblock %}
+{% block init %}
+<script>
+    $(document).ready(function() {
+        App.init();
+        TableManageCombine.init();
+        FormPlugins.init();
+    });
+    $('#data-table-combines').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : false,
+        'info'        : true,
+        'autoWidth'   : false,
+        "aaSorting"   : [[1, "desc" ]],
+        // 'autoPrint'   : false,
+        dom: 'lBfrtip',
+            buttons: [
+            'excel',
+            'pdf',
+            'print',
+        ],
+        "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
+    });
+</script>
+{% endblock %}

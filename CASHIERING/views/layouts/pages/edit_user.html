@@ -1,0 +1,253 @@
+{% extends 'views/layouts/pages/admin_main.html' %}
+{% block title %}<title>CMS | Edit User</title>{% endblock %}
+{% load static %}
+{% block page-css %}
+<link href="{%static 'assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Buttons/css/buttons.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/AutoFill/css/autoFill.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/ColReorder/css/colReorder.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/KeyTable/css/keyTable.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/RowReorder/css/rowReorder.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Select/css/select.bootstrap.min.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<!-- begin #content -->
+<div id="content" class="content">
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+        <li class="breadcrumb-item"><a href="javascript:;">User Management</a></li>
+        <li class="breadcrumb-item active">Edit User</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">Edit User <small>Update User Details</small></h1>
+    <!-- end page-header -->
+    
+    <!-- begin row -->
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <!-- begin col-10 -->
+        <div class="col-lg-10">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fas fa-user"><i class="fas fa-pencil-alt m-r-5" style="font-size: 5px; margin-right: -2px;"></i></i>Edit User</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin panel-body -->
+                <div class="panel-body">
+                    <table id="data-table-responsives" class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-nowrap">Fullname</th>
+                                <th class="text-nowrap">Role</th>
+                                <th width="20%" class="text-nowrap">Option</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="">
+                                <td>Van Anthony Silleza</td>
+                                <td>Admin</td>
+                                <td align="center">
+                                    <a href="#edit_user" class="btn btn-sm btn-info editBtn" data-toggle="modal"><i class="fas fa-edit"> Edit</i></a>
+                                </td>
+                            </tr>
+                            <tr class="">
+                                <td>Merly Gonzalbo</td>
+                                <td>Cashier</td>
+                                <td align="center">
+                                    <a href="#edit_user" class="btn btn-sm btn-info editBtn" data-toggle="modal"><i class="fas fa-edit"> Edit</i></a>
+                                </td>
+                            </tr>
+                            <tr class="">
+                                <td>Armando Caruso</td>
+                                <td>Cashier</td>
+                                <td align="center">
+                                    <a href="#edit_user" class="btn btn-sm btn-info editBtn" data-toggle="modal"><i class="fas fa-edit"> Edit</i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- end panel-body -->
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-10 -->
+    </div>
+    <!-- end row -->
+</div>
+<!-- end #content -->
+<!-- #modal-dialog -->
+<div class="modal fade" id="edit_user">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit User</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="editForm" autocomplete="off">
+                    <div class="form-group row m-b-15">
+                        <label class="col-md-4 col-sm-4 col-form-label" for="fullname">First Name <span class="text-red">*</span> :</label>
+                        <div class="col-md-8 col-sm-8">
+                            <input class="form-control" type="text" id="fname" name="fname" placeholder="First Name" data-parsley-required="true" />
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-15">
+                        <label class="col-md-4 col-sm-4 col-form-label" for="fullname">Middle Name :</label>
+                        <div class="col-md-8 col-sm-8">
+                            <input class="form-control" type="text" id="mname" name="mname" placeholder="Middle Name" />
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-15">
+                        <label class="col-md-4 col-sm-4 col-form-label" for="fullname">Last Name <span class="text-red">*</span> :</label>
+                        <div class="col-md-8 col-sm-8">
+                            <input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" data-parsley-required="true" />
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-15">
+                        <label class="col-md-4 col-sm-4 col-form-label" for="email">Username <span class="text-red">*</span> :</label>
+                        <div class="col-md-8 col-sm-8">
+                            <input class="form-control" type="text" id="uname" name="uname" placeholder="Username" data-parsley-required="true" />
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-15">
+                        <label class="col-md-4 col-sm-4 col-form-label" for="message">Password <span class="text-red">*</span> :</label>
+                        <div class="col-md-8 col-sm-8">
+                            <input class="form-control" type="text" id="pword" name="pword" maxlength="15" placeholder="Password" data-parsley-required="true"/>
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-15">
+                        <label class="col-md-4 col-sm-4 col-form-label">Role <span class="text-red">*</span> :</label>
+                        <div class="col-md-4 col-sm-4">
+                            <div class="radio radio-css">
+                                <input type="radio" name="radio_css" id="radiorequired" checked />
+                                <label for="radiorequired" class="text-primary">Admin</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <div class="radio radio-css">
+                                <input type="radio" name="radio_css" id="radiorequired2" />
+                                <label for="radiorequired2" class="text-primary">Cashier</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-0">
+                        <label class="col-md-4 col-sm-4 col-form-label">&nbsp;</label>
+                        <div class="col-md-8 col-sm-8">
+                            <input type="submit" class="btn btn-success" id="add" onclick="updateClick(event);" value="Submit"></button>
+                            <!-- <a href="javascript:;" class="btn btn-primary btn-m" id="update">Update</a> -->
+                            <a href="javascript:;" class="btn btn-white btn-m" data-dismiss="modal" id="close">Close</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block page-js %}
+<script src="{%static 'assets/plugins/DataTables/media/js/jquery.dataTables.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.bootstrap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.flash.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/jszip.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/pdfmake.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/vfs_fonts.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.print.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/AutoFill/js/dataTables.autoFill.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/ColReorder/js/dataTables.colReorder.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/KeyTable/js/dataTables.keyTable.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/RowReorder/js/dataTables.rowReorder.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Select/js/dataTables.select.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/table-manage-combine.demo.min.js' %}"></script>
+{% endblock %}
+{% block init %}
+<script>
+    $(document).ready(function() {
+        App.init();
+        TableManageCombine.init();
+        $('#data-table-responsives').DataTable({
+            'paging'      : true,
+            'lengthChange': true,
+            'searching'   : true,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : true,
+            "aaSorting"   : [[1, "desc" ]],
+            dom: 'lBfrtip',
+            buttons: [
+            {
+                extend: 'excel',
+                exportOptions: {
+                    columns: [0,1]
+                }
+            },
+            {
+                extend: 'pdf',
+                exportOptions: {
+                    columns: [0,1]
+                }
+            },
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: [0,1]
+                }
+            },
+        ],
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
+        });
+    });
+    function updateClick(event) {
+        event.preventDefault();
+        $('#editForm').parsley();
+        if($('#editForm').parsley().validate()) {
+            swal({
+                title: "Update",
+                text: "Are you sure to update?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#f0ad4e",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: false,
+                closeOnCancel: true,
+                customClass: "Custom_Cancel",
+            },
+            function(isConfirm) {
+                if (isConfirm){
+                    swal({
+                            title: "Updated Successfully", 
+                            text: "Record was updated successfully!", 
+                            type: "success",
+                            showLoaderOnConfirm: true,
+                            confirmButtonColor: "#5cb85c",
+                        },
+                        function(isConfirm) {
+                                if (isConfirm){
+                                    $('#close').click();
+                                    $('#editForm').parsley().reset();
+                                }
+                        })
+                }
+            });
+        }
+    };
+    $('#close').on('click', function() {
+        $('#editForm').parsley().reset();
+        $('.form-control').val('');
+    });
+    $('.editBtn').on('click', function() {
+        $('#editForm').parsley().reset();
+        $('.form-control').val('');
+    });
+</script>
+{% endblock%}

@@ -1,0 +1,502 @@
+{% extends 'views/layouts/pages/admin_main.html' %}
+{% block title %}<title>CMS | Setup UACS</title>{% endblock %}
+{% load static %}
+{% block page-css %}
+<link href="{%static 'assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Buttons/css/buttons.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/AutoFill/css/autoFill.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/ColReorder/css/colReorder.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/KeyTable/css/keyTable.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/RowReorder/css/rowReorder.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Select/css/select.bootstrap.min.css' %}" rel="stylesheet" />
+<!--  -->
+<link href="{%static 'assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/ionRangeSlider/css/ion.rangeSlider.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/ionRangeSlider/css/ion.rangeSlider.skinNice.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/password-indicator/css/password-indicator.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-combobox/css/bootstrap-combobox.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-tag-it/css/jquery.tagit.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/select2/dist/css/select2.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-eonasdan-datetimepicker/build/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-colorpalette/css/bootstrap-colorpalette.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker-fontawesome.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker-glyphicons.css' %}" rel="stylesheet" />
+<style type="text/css" media="print">
+    .hidden-print {
+        display: none; 
+    }
+</style>
+{% endblock %}
+{% block content %}
+<!-- begin #content -->
+<div id="content" class="content">
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+        <li class="breadcrumb-item"><a href="javascript:;">System Configuration</a></li>
+        <li class="breadcrumb-item active">Setup UACS</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">Setup UACS <small>Unified Accounts Code Structure</small></h1>
+    <!-- end page-header -->
+    
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-6 -->
+        <div class="col-lg-4">
+            <!-- begin panel -->
+            <div class="panel panel-inverse" data-sortable-id="form-validation-1">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fas fa-plus-square m-r-5"></i>Add | Define UACS</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin panel-body -->
+                <div class="panel-body">
+                    <form class="form-horizontal" name="demo-form" action="#" id="addForm" autocomplete="off">
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="fndtype">Fund Type <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <select class="form-control selectpicker" name="fndtype" data-style="btn-warning">
+                                    <option selected disabled>Select Type of Fund</option>
+                                    <option>Regular Trust Fund</option>
+                                    <option>Special Trust Fund</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="inctype">Income Type <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <select class="form-control selectpicker" name="inctype" data-style="btn-info">
+                                    <option selected disabled>Select Type of Income</option>
+                                    <option>Service Income</option>
+                                    <option>Business Income</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="code">Code <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control" type="text" id="code" name="code" placeholder="Code" data-parsley-type="digits" data-parsley-required="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="desc">Description <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control" type="text" id="desc" name="desc" placeholder="Description" data-parsley-required="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-0">
+                            <label class="col-md-4 col-sm-4 col-form-label">&nbsp;</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="submit" class="btn btn-inverse" id="add" value="Add to List" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- end panel-body -->
+            </div>
+            <!-- end panel -->
+            <div style="border: 1px; border-style: solid; border-radius: 5px;" class="text-grey-lighter p-b-15" align="center">
+                <a href="#setup_fund" data-toggle="modal" class="btn btn-m btn-warning m-t-15" id="fund" onclick="onShowModalFund();"><i class="fas fa-angle-double-right"></i> Setup Fund Type</a>
+                <a href="#setup_income" data-toggle="modal" class="btn btn-m btn-info m-t-15" id="income" onclick="onShowModalInc();"><i class="fas fa-angle-double-right"></i> Setup Income Type</a>
+            </div>
+        </div>
+        <!-- end col-6 -->
+
+        <!-- begin col-8 -->
+        <div class="col-lg-8">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fas fa-file-code m-r-5"></i>UACS List</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin panel-body -->
+                <div class="panel-body">
+                    <table id="data-table-combines" class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-nowrap">Fund Type</th>
+                                <th class="text-nowrap">Income Type</th>
+                                <th class="text-nowrap">Code</th>
+                                <th class="text-nowrap">Description</th>
+                                <th width="25%" class="text-nowrap">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Special Trust Fund</td>
+                                <td>Service Income</td>
+                                <td>4 02 01 040 00 00000</td>
+                                <td>Clearance and Certification Fee</td>
+                                <td align="center">
+                                    <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Regular Trust Fund</td>
+                                <td>Business Income</td>
+                                <td>2 99 99 990 00 00000</td>
+                                <td>Other Payable</td>
+                                <td align="center">
+                                    <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Special Trust Fund</td>
+                                <td>Business Income</td>
+                                <td>4 02 02 060 00 00000</td>
+                                <td>Communication Income</td>
+                                <td align="center">
+                                    <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Special Trust Fund</td>
+                                <td>Business Income</td>
+                                <td>4 02 02 060 00 00000</td>
+                                <td>Communication Income</td>
+                                <td align="center">
+                                    <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Special Trust Fund</td>
+                                <td>Business Income</td>
+                                <td>4 02 02 060 00 00000</td>
+                                <td>Communication Income</td>
+                                <td align="center">
+                                    <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Special Trust Fund</td>
+                                <td>Service Income</td>
+                                <td>4 02 01 040 00 00000</td>
+                                <td>Clearance and Certification Fee</td>
+                                <td align="center">
+                                    <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Regular Trust Fund</td>
+                                <td>Business Income</td>
+                                <td>2 99 99 990 00 00000</td>
+                                <td>Other Payable</td>
+                                <td align="center">
+                                    <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Special Trust Fund</td>
+                                <td>Business Income</td>
+                                <td>4 02 02 060 00 00000</td>
+                                <td>Communication Income</td>
+                                <td align="center">
+                                    <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Special Trust Fund</td>
+                                <td>Business Income</td>
+                                <td>4 02 02 060 00 00000</td>
+                                <td>Communication Income</td>
+                                <td align="center">
+                                    <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Special Trust Fund</td>
+                                <td>Business Income</td>
+                                <td>4 02 02 060 00 00000</td>
+                                <td>Communication Income</td>
+                                <td align="center">
+                                    <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- end panel-body -->
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-8 -->
+    </div>
+    <!-- end row -->
+</div>
+<!-- end #content -->
+<!-- #modal-dialog 1-->
+<div class="modal fade" id="setup_fund">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Setup Fund Type</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" data-parsley-validate="true" id="setup_fund_form">
+                    <div class="form-group row m-b-15 addFundDiv">
+                        <a href="javascript:;" class="btn btn-sm btn-inverse col-sm-5 m-l-10" id="manageFundBut"><i class="fas fa-angle-double-right"></i> Goto Manage Fund Type</a>
+                    </div>
+                    <div class="form-group row m-b-15 addFundDiv">
+                        <label class="col-md-4 col-sm-4 col-form-label" for="codeFund">Fund Type Code <span class="text-red">*</span> :</label>
+                        <div class="col-md-8 col-sm-8">
+                            <input class="form-control" type="text" id="codeFund" name="codeFund" placeholder="Code" data-parsley-type="digits" data-parsley-required="true" />
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-15 addFundDiv">
+                        <label class="col-md-4 col-sm-4 col-form-label" for="descFund">Description <span class="text-red">*</span> :</label>
+                        <div class="col-md-8 col-sm-8">
+                            <input class="form-control" type="text" id="descFund" name="descFund" placeholder="Description" data-parsley-required="true" />
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-15 manageFundDiv" style="display: none;">
+                        <a href="javascript:;" class="btn btn-sm btn-inverse col-sm-4 m-l-10" id="addFundBut"><i class="fas fa-angle-double-right"></i> Goto Add Fund Type</a>
+                    </div>
+                    <!-- for loop -->
+                    <div class=" manageFundDiv" style="display: none;">
+                        <table id="data-table-modal-fund" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <th class="text-nowrap">Fund Type</th>
+                                <th class="text-nowrap text-center">Options</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Regular Trust Fund</td>
+                                    <td align="center">
+                                        <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Special Trust Fund</td>
+                                    <td align="center">
+                                        <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer form-group addFundDiv">
+                        <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                        <input type="submit" class="btn btn-inverse" value="Add"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #modal-dialog 2-->
+<div class="modal fade" id="setup_income">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Setup Income Type</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" data-parsley-validate="true" id="setup_inc_form">
+                    <div class="form-group row m-b-15 addIncDiv">
+                        <a href="javascript:;" class="btn btn-sm btn-inverse col-sm-5 m-l-10" id="manageIncBut"><i class="fas fa-angle-double-right"></i> Goto Manage Income Type</a>
+                    </div>
+                    <div class="form-group row m-b-15 addIncDiv">
+                        <label class="col-md-4 col-sm-4 col-form-label" for="codeInc">Income Type Code <span class="text-red">*</span> :</label>
+                        <div class="col-md-8 col-sm-8">
+                            <input class="form-control" type="text" id="codeInc" name="codeInc" placeholder="Code" data-parsley-type="digits" data-parsley-required="true" />
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-15 addIncDiv">
+                        <label class="col-md-4 col-sm-4 col-form-label" for="descInc">Description <span class="text-red">*</span> :</label>
+                        <div class="col-md-8 col-sm-8">
+                            <input class="form-control" type="text" id="descInc" name="descInc" placeholder="Description" data-parsley-required="true" />
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-15 manageIncDiv" style="display: none;">
+                        <a href="javascript:;" class="btn btn-sm btn-inverse col-sm-4 m-l-10" id="addIncBut"><i class="fas fa-angle-double-right"></i> Goto Add Income Type</a>
+                    </div>
+                    <!-- for loop -->
+                    <div class=" manageIncDiv" style="display: none;">
+                        <table id="data-table-modal-Income" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <th class="text-nowrap">Fund Type</th>
+                                <th class="text-nowrap text-center">Options</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Regular Trust Fund</td>
+                                    <td align="center">
+                                        <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Special Trust Fund</td>
+                                    <td align="center">
+                                        <button class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer form-group addIncDiv">
+                        <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                        <input type="submit" class="btn btn-inverse" id="set" value="Add"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block page-js %}
+<!--  -->
+<script src="{%static 'assets/plugins/DataTables/media/js/jquery.dataTables.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.bootstrap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.flash.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/jszip.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/pdfmake.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/vfs_fonts.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.print.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/AutoFill/js/dataTables.autoFill.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/ColReorder/js/dataTables.colReorder.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/KeyTable/js/dataTables.keyTable.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/RowReorder/js/dataTables.rowReorder.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Select/js/dataTables.select.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/table-manage-combine.demo.min.js' %}"></script>
+<!--  -->
+<script src="{%static 'assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+<script src="{%static 'assets/plugins/ionRangeSlider/js/ion-rangeSlider/ion.rangeSlider.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js' %}"></script>
+<script src="{%static 'assets/plugins/masked-input/masked-input.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js' %}"></script>
+<script src="{%static 'assets/plugins/password-indicator/js/password-indicator.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-combobox/js/bootstrap-combobox.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput-typeahead.js' %}"></script>
+<script src="{%static 'assets/plugins/jquery-tag-it/js/tag-it.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-daterangepicker/moment.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<script src="{%static 'assets/plugins/select2/dist/js/select2.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-eonasdan-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-show-password/bootstrap-show-password.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-colorpalette/js/bootstrap-colorpalette.js' %}"></script>
+<script src="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.js' %}"></script>
+<script src="{%static 'assets/plugins/clipboard/clipboard.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/form-plugins.demo.js' %}"></script>
+<!--  -->
+{% endblock %}
+{% block init %}
+<script>
+    $(document).ready(function() {
+        App.init();
+        TableManageCombine.init();
+        FormPlugins.init();
+        $('#data-table-combines').DataTable({
+            'paging'      : true,
+            'lengthChange': true,
+            'searching'   : true,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : true,
+            "aaSorting"   : [[1, "desc" ]],
+            dom: 'lBfrtip',
+            buttons: [
+            'excel',
+            'pdf',
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: [0,1,2,3]
+                }
+            },
+        ],
+            "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ]
+        });
+    });
+    $('#data-table-modal-fund').DataTable({
+        'paging'      : false,
+        'lengthChange': false,
+        'searching'   : true,
+        'ordering'    : false,
+        'info'        : false,
+        'autoWidth'   : true,
+        "aaSorting"   : [[1, "desc" ]],
+        dom: 'lBfrtip',
+        buttons: [
+
+        ],
+    });
+    $('#data-table-modal-Income').DataTable({
+        'paging'      : false,
+        'lengthChange': false,
+        'searching'   : true,
+        'ordering'    : false,
+        'info'        : false,
+        'autoWidth'   : true,
+        "aaSorting"   : [[1, "desc" ]],
+        dom: 'lBfrtip',
+        buttons: [
+
+        ],
+    });
+    $('#fund').on('click', function() {
+        $('#setup_fund_form').parsley().reset();
+    });
+    $('#income').on('click', function() {
+        $('#setup_inc_form').parsley().reset();
+    });
+    $('#manageFundBut').on('click', function() {
+        $('.addFundDiv').hide();
+        $('.manageFundDiv').show();
+    });
+    $('#addFundBut').on('click', function() {
+        $('.manageFundDiv').hide();
+        $('.addFundDiv').show();
+    });
+    $('#manageIncBut').on('click', function() {
+        $('.addIncDiv').hide();
+        $('.manageIncDiv').show();
+    });
+    $('#addIncBut').on('click', function() {
+        $('.manageIncDiv').hide();
+        $('.addIncDiv').show();
+    });
+    function onShowModalFund() {
+        $('.manageFundDiv').hide();
+        $('.addFundDiv').show();
+    }
+    function onShowModalInc() {
+        $('.manageIncDiv').hide();
+        $('.addIncDiv').show();
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "views/layouts/pages/main.html" %}
+{% block title %}<title>CMS | View Receipts</title>{% endblock %}
+{% load static %}
+{% block page-css %}
+<link href="{%static 'assets/css/default/invoice-print.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Select/css/select.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css' %}" rel="stylesheet" />
+<style>
+    .dataTables_length label{
+        color: #363636;
+    }
+    .dataTables_filter label{
+        color: #363636;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<!-- begin #content -->
+<div id="content" class="content">
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+        <li class="breadcrumb-item"><a href="javascript:;">View Records</a></li>
+        <li class="breadcrumb-item active">View Receipts</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">View Receipts <small>View Individual Receipts</small></h1>
+    <!-- end page-header -->
+    
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-12 -->
+        <div class="col-lg-12">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h4 class="panel-title">Search Receipt</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin alert -->
+
+                <!-- end alert -->
+                <!-- begin panel-body -->
+                <div class="panel-body bg-black-transparent-1 text-inverse">
+                    <table id="data-table-select" class="table table-hover table-striped table-bordered bg-white">
+                        <thead>
+                            <tr>
+                                <th width="1%"></th>
+                                <th class="text-nowrap">OR Number</th>
+                                <th class="text-nowrap">Fullname</th>
+                                <th class="text-nowrap">Total Amount</th>
+                                <th class="text-nowrap">Transaction Date</th>
+                                <th class="text-nowrap">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="odd gradeX">
+                                <td width="1%" class="f-s-600 text-inverse">1</td>
+                                <td>0000014256</td>
+                                <td>Van Anthony Silleza</td>
+                                <td>2,925.75</td>
+                                <td>{% now "N j, Y" %}</td>
+                                <td align="center"><a href="show_receipt" class="btn btn-info btn-icon btn-circle btn-sm"><i class="fas fa-eye"></i></a></td>
+                            </tr>
+                            <tr class="even gradeC">
+                                <td width="1%" class="f-s-600 text-inverse">2</td>
+                                <td>0000014257</td>
+                                <td>Queen Kimberly Panlubasan</td>
+                                <td>1,437.00</td>
+                                <td>{% now "N j, Y" %}</td>
+                                <td align="center"><a href="show_receipt" class="btn btn-info btn-icon btn-circle btn-sm"><i class="fas fa-eye"></i></a></td>
+                            </tr>
+                            <tr class="odd gradeX">
+                                <td width="1%" class="f-s-600 text-inverse">3</td>
+                                <td>0000014258</td>
+                                <td>Jessie James Mercurio</td>
+                                <td>548.30</td>
+                                <td>{% now "N j, Y" %}</td>
+                                <td align="center"><a href="show_receipt" class="btn btn-info btn-icon btn-circle btn-sm"><i class="fas fa-eye"></i></a></td>        
+                            </tr>
+                            <tr class="even gradeC">
+                                <td width="1%" class="f-s-600 text-inverse">4</td>
+                                <td>0000014259</td>
+                                <td>Marinel Cantuja</td>
+                                <td>1,689.50</td>
+                                <td>{% now "N j, Y" %}</td>
+                                <td align="center"><a href="javascript:;" class="btn btn-info btn-icon btn-circle btn-sm"><i class="fas fa-eye"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- end panel-body -->
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-10 -->
+    </div>
+    <!-- end row -->
+</div>
+<!-- end #content -->
+{% block page-js %}
+<script src="{%static 'assets/plugins/DataTables/media/js/jquery.dataTables.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Select/js/dataTables.select.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/table-manage-select.demo.min.js' %}"></script>
+{% endblock %}
+{% endblock %}
+{% block init %}
+<script>
+    $(document).ready(function() {
+        App.init();
+        TableManageTableSelect.init();
+    });
+</script>
+{% endblock%}
