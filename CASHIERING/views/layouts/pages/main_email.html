@@ -49,11 +49,13 @@
 						<span class="d-none d-md-inline">Merly Gonzalbo</span> <b class="caret"></b>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
-						<a href="javascript:;" class="dropdown-item">Calendar</a>
+						<a href="#request" class="dropdown-item" data-toggle="modal"><i class="fas fa-user-secret m-r-5"></i>Request</a>
 						<div class="dropdown-divider"></div>
-						<a href="email" class="dropdown-item">Email</a>
+						<a href="email" class="dropdown-item"><i class="fas fa-envelope m-r-5"></i>Email</a>
 						<div class="dropdown-divider"></div>
-						<a href="login" class="dropdown-item">Log Out</a>
+						<a href="account" class="dropdown-item"><i class="fas fa-user-circle m-r-5"></i>Account</a>
+						<div class="dropdown-divider"></div>
+						<a href="login" class="dropdown-item"><i class="fas fa-sign-out-alt m-r-5"></i>Log Out</a>
 					</div>
 				</li>
 			</ul>
@@ -84,7 +86,19 @@
 		<!-- end scroll to top btn -->
 	</div>
 	<!-- end page container -->
+	<div class="modal fade" id="request">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Request</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				<div class="modal-body">
 	
+				</div>
+			</div>
+		</div>
+	</div>
 	<!-- ================== BEGIN BASE JS ================== -->
 	{% include "views/layouts/includes/base_js.html" %}
 	<!-- ================== END BASE JS ================== -->
