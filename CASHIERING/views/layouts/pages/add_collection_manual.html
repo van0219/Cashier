@@ -202,7 +202,7 @@
     <!-- end panel -->
 </div>
 <!-- end #content -->
-
+{% endblock %}
 {% include "views/layouts/includes/base_js.html" %}
 {% block page-js %} 
 <script src="{%static 'assets/plugins/parsley/dist/parsley.js' %}"></script>
@@ -213,7 +213,6 @@
 <script src="{%static 'assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js' %}"></script>
 <script src="{%static 'assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js' %}"></script>
 <script src="{%static 'assets/js/demo/table-manage-responsive.demo.min.js' %}"></script>
-{% endblock %}
 {% endblock %}
 {% block init %}
 <script>
