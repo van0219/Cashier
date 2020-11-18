@@ -42,4 +42,5 @@ urlpatterns = [
     path('setup_uacs', views.setup_uacs, name='setup_uacs'),
     path('email', views.email, name="email"),
     path('account', views.account, name="account"),
+    path('add_user_btn_click', views.add_user_btn_click, name="add_user_btn_click"),
 ]

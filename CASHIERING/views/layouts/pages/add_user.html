@@ -69,13 +69,13 @@
                             <label class="col-md-4 col-sm-4 col-form-label">Role <span class="text-red">*</span> :</label>
                             <div class="col-md-4 col-sm-4">
                                 <div class="radio radio-css">
-                                    <input type="radio" name="radio_css" id="radiorequired" checked />
+                                    <input type="radio" name="radio_css" class="radiocss" id="radiorequired" value="admin" checked />
                                     <label for="radiorequired" class="text-success">Admin</label>
                                 </div>
                             </div>
                             <div class="col-md-4 col-sm-4">
                                 <div class="radio radio-css">
-                                    <input type="radio" name="radio_css" id="radiorequired2" />
+                                    <input type="radio" name="radio_css" class="radiocss" id="radiorequired2" value="cashier"/>
                                     <label for="radiorequired2" class="text-success">Cashier</label>
                                 </div>
                             </div>
@@ -113,19 +113,59 @@
         event.preventDefault();
         $('#addForm').parsley();
         if($('#addForm').parsley().validate()) {
+            var fname = $.trim($('#fname').val());
+            var mname = $.trim($('#mname').val());
+            var lname = $.trim($('#lname').val());
+            var uname = $.trim($('#uname').val());
+            var psword = $.trim($('#pword').val());
+            var role_name = $(".radiocss:checked").val();
+            var roleid = role_name == "admin" ? 1 : 2; 
             swal({
-                title: "Added Successfully", 
-                text: "Record was added successfully!", 
-                type: "success",
-                showLoaderOnConfirm: true,
-                confirmButtonColor: "#5cb85c",
-            },
-            function(isConfirm){
-                    if (isConfirm){
-                        // $('#addForm').parsley().reset();
-                        $('.form-control').val('');
+                title: "Add User",
+                text: "Are you sure to add this user?",
+                type: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#428bca",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: true,
+                closeOnCancel: true,
+                customClass: "Custom_Cancel"
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            url: "{% url 'add_user_btn_click' %}",
+                            type: "POST",
+                            data: { 
+                                fname:fname,
+                                mname:mname,
+                                lname:lname,
+                                uname:uname,
+                                psword:psword,
+                                roleid:roleid,
+                                csrfmiddlewaretoken:"{{csrf_token}}"
+                            },
+                            success:function() {
+                                swal({
+                                    title: "Added Successfully", 
+                                    text: "Record was added successfully!", 
+                                    type: "success",
+                                    showLoaderOnConfirm: true,
+                                    confirmButtonColor: "#5cb85c",
+                                },
+                                function(isConfirm){
+                                        if (isConfirm){
+                                            $('.form-control').val('');
+                                        }
+                                })
+                            },
+                            error:function() {
+                                swal('Sorry...', 'An error occured while adding a record.','error');
+                            }
+                        })
                     }
-            })
+                });
         }
     };
 </script>

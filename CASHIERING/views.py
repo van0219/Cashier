@@ -78,3 +78,15 @@ def email(request):
 
 def account(request):
     return render(request, 'views/layouts/pages/account.html')
+
+def add_user_btn_click(request):
+    cursor = connection.cursor()
+    cursor.callproc("sp_insert_user_cms", (
+        request.POST['fname'],
+        request.POST['mname'],
+        request.POST['lname'],
+        request.POST['uname'],
+        request.POST['psword'],
+        request.POST['roleid'],
+    ))
+    return HttpResponse("")

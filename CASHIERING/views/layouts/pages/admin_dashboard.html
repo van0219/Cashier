@@ -94,7 +94,7 @@
                         <ul class="media-list media-list-with-divider media-messaging">
                             <li class="media media-sm">
                                 <a href="javascript:;" class="pull-left">
-                                    <img src="../assets/img/user/user-5.jpg" alt="" class="media-object rounded-corner" />
+                                    <img src="{%static 'assets/img/user/user-5.jpg' %}" alt="" class="media-object rounded-corner" />
                                 </a>
                                 <div class="media-body">
                                     <h5 class="media-heading">John Doe</h5>
@@ -103,7 +103,7 @@
                             </li>
                             <li class="media media-sm">
                                 <a href="javascript:;" class="pull-left">
-                                    <img src="../assets/img/user/user-6.jpg" alt="" class="media-object rounded-corner" />
+                                    <img src="{%static 'assets/img/user/user-6.jpg' %}" alt="" class="media-object rounded-corner" />
                                 </a>
                                 <div class="media-body">
                                     <h5 class="media-heading">Terry Ng</h5>
@@ -197,7 +197,7 @@
 <script src="{%static 'assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js' %}"></script>
 <script src="{%static 'assets/plugins/jquery-jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
 <script src="{%static 'assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
-<script src="{%static 'assets/js/demo/dashboard.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/dashboard.js' %}"></script>
 <!--  -->
 <script src="{%static 'assets/plugins/morris/raphael.min.js' %}"></script>
 <script src="{%static 'assets/plugins/morris/morris.js' %}"></script>
@@ -208,48 +208,6 @@
     $(document).ready(function() {
         App.init();
         Dashboard.init();
-        handleMorrisBarChart();
-        handleMorrisDonusChart();
     });
-    var handleMorrisBarChart = function () {
-        Morris.Bar({
-            element: 'morris-bar-chart',
-            data: [
-                {device: 'Used', geekbench: 75},
-                {device: 'Unused', geekbench: 125}
-            ],
-            xkey: 'device',
-            ykeys: ['geekbench'],
-            labels: ['OR Count'],
-            barRatio: 0.4,
-            xLabelAngle: 35,
-            resize: true,
-            gridLineColor: [COLOR_GREY_LIGHTER],
-            gridTextFamily: FONT_FAMILY,
-            gridTextColor: FONT_COLOR,
-            gridTextWeight: FONT_WEIGHT,
-            gridTextSize: FONT_SIZE,
-            barColors: ['#428bca']
-        });
-    };
-    var handleMorrisDonusChart = function() {
-        Morris.Donut({
-            element: 'morris-donut-chart',
-            data: [
-                {label: 'Jam', value: 25 },
-                {label: 'Frosted', value: 40 },
-                {label: 'Custard', value: 25 },
-                {label: 'Sugar', value: 10 }
-            ],
-            formatter: function (y) { return y + "%" },
-            resize: true,
-            gridLineColor: [COLOR_GREY_LIGHTER],
-            gridTextFamily: FONT_FAMILY,
-            gridTextColor: FONT_COLOR,
-            gridTextWeight: FONT_WEIGHT,
-            gridTextSize: FONT_SIZE,
-            colors: [COLOR_BLACK, COLOR_AQUA, COLOR_BLUE, COLOR_GREY]
-        });
-    };
 </script>
 {% endblock %}
