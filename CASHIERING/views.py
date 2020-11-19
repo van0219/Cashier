@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.shortcuts import render, redirect, resolve_url
-from django.db import connection
+from django.db import IntegrityError, connection
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
@@ -81,12 +81,12 @@ def account(request):
 
 def add_user_btn_click(request):
     cursor = connection.cursor()
-    cursor.callproc("sp_insert_user_cms", (
+    data = cursor.callproc("sp_insert_user_cms", (
         request.POST['fname'],
         request.POST['mname'],
         request.POST['lname'],
         request.POST['uname'],
         request.POST['psword'],
-        request.POST['roleid'],
+        request.POST['roleid']
     ))
-    return HttpResponse("")
+    return JsonResponse(data)
