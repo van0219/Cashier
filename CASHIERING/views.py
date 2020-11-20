@@ -81,7 +81,7 @@ def account(request):
 
 def add_user_btn_click(request):
     cursor = connection.cursor()
-    data = cursor.callproc("sp_insert_user_cms", (
+    cursor.callproc("SP_INSERT_USER_CMS", (
         request.POST['fname'],
         request.POST['mname'],
         request.POST['lname'],
@@ -89,4 +89,11 @@ def add_user_btn_click(request):
         request.POST['psword'],
         request.POST['roleid']
     ))
-    return JsonResponse(data)
+    return HttpResponse("")
+
+def check_username(request):
+    cursor = connection.cursor()
+    data = cursor.callproc("SP_CHECK_UNAME_CMS", (
+        request.POST['uname'],
+    ))
+    return JsonResponse(data, safe=False)

@@ -110,70 +110,112 @@
         Highlight.init();
     });
     function addClick(event) {
-        event.preventDefault();
-        $('#addForm').parsley();
-        if($('#addForm').parsley().validate()) {
-            var fname = $.trim($('#fname').val());
-            var mname = $.trim($('#mname').val());
-            var lname = $.trim($('#lname').val());
-            var uname = $.trim($('#uname').val());
-            var psword = $.trim($('#pword').val());
-            var role_name = $.trim($(".radiocss:checked").val());
-            var roleid = role_name == "admin" ? 1 : 2; 
-            swal({
-                title: "Add User",
-                text: "Are you sure to add this user?",
-                type: "info",
-                showCancelButton: true,
-                confirmButtonColor: "#428bca",
-                confirmButtonText: "Yes",
-                cancelButtonText: "No",
-                closeOnConfirm: true,
-                closeOnCancel: true,
-                customClass: "Custom_Cancel"
-                },
-                function(isConfirm) {
-                    if (isConfirm) {
-                        $.ajax({
-                            url: "{% url 'add_user_btn_click' %}",
-                            type: "POST",
-                            data: { 
-                                fname:fname,
-                                mname:mname,
-                                lname:lname,
-                                uname:uname,
-                                psword:psword,
-                                roleid:roleid,
-                                csrfmiddlewaretoken:"{{csrf_token}}"
-                            },
-                            timeout: 5000,
-                            success:function(data) {
-                                swal({
-                                    title: "Added Successfully", 
-                                    text: "Record was added successfully!", 
-                                    type: "success",
-                                    showLoaderOnConfirm: true,
-                                    confirmButtonColor: "#5cb85c",
+        if(valid_email()) {
+            event.preventDefault();
+            $('#addForm').parsley();
+            if($('#addForm').parsley().validate()) {
+                var fname = $.trim($('#fname').val());
+                var mname = $.trim($('#mname').val());
+                var lname = $.trim($('#lname').val());
+                var uname = $.trim($('#uname').val());
+                var psword = $.trim($('#pword').val());
+                var role_name = $.trim($(".radiocss:checked").val());
+                var roleid = role_name == "admin" ? 1 : 2; 
+                swal({
+                    title: "Add User",
+                    text: "Are you sure to add this user?",
+                    type: "info",
+                    showCancelButton: true,
+                    confirmButtonColor: "#428bca",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No",
+                    closeOnConfirm: true,
+                    closeOnCancel: true,
+                    customClass: "Custom_Cancel"
+                    },
+                    function(isConfirm) {
+                        if (isConfirm) {
+                            $.ajax({
+                                url: "{% url 'add_user_btn_click' %}",
+                                type: "POST",
+                                data: { 
+                                    fname:fname,
+                                    mname:mname,
+                                    lname:lname,
+                                    uname:uname,
+                                    psword:psword,
+                                    roleid:roleid,
+                                    csrfmiddlewaretoken:"{{csrf_token}}"
                                 },
-                                function(isConfirm){
+                                timeout: 5000,
+                                success:function(data) {
+                                    swal({
+                                        title: "Added Successfully", 
+                                        text: "Record was added successfully!", 
+                                        type: "success",
+                                        showLoaderOnConfirm: true,
+                                        confirmButtonColor: "#5cb85c",
+                                    },
+                                    function(isConfirm){
                                         if (isConfirm){
                                             $('.form-control').val('');
                                         }
-                                })
-                            },
-                            error:function(xhr, status, error) {
-                               var errMsg = xhr.status + ': ' + xhr.statusText;
-                                swal({
-                                    title: "Error!", 
-                                    text: errMsg,
-                                    type: "error",
-                                    showLoaderOnConfirm: true
-                                    })
-                            }
-                        })
-                    }
-                });
+                                    });
+                                },
+                                error:function(xhr, status, error) {
+                                    var errMsg = xhr.status + ': ' + xhr.statusText;
+                                    swal({
+                                        title: "Error!", 
+                                        text: errMsg,
+                                        type: "error",
+                                        confirmButtonColor: "#428bca",
+                                        showLoaderOnConfirm: true
+                                    });
+                                }
+                            })
+                        }
+                    });
+            }
         }
+        else {
+            event.preventDefault();
+            swal({
+                title: "Error!", 
+                text: "Username already exists!",
+                type: "error",
+                confirmButtonColor: "#428bca",
+                showLoaderOnConfirm: true
+            });
+        }
+    };
+    function valid_email() {
+        var uname = $.trim($('#uname').val());
+        $.ajax({
+            url: "{% url 'check_username' %}",
+            type: "POST",
+            data: { 
+                uname:uname,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            timeout: 5000,
+            success:function(data) {
+                if(data[0] == ' ' || data[0] == null) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            },
+            error:function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    showLoaderOnConfirm: true
+                })
+            }
+        })
     };
 </script>
 {% endblock %}
