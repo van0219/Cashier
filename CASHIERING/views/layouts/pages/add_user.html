@@ -110,8 +110,11 @@
         Highlight.init();
     });
     function addClick(event) {
-        if(valid_email()) {
-            event.preventDefault();
+        event.preventDefault();
+        valid_email();
+    };
+    function check_email(cond) {
+        if(cond == 0) {
             $('#addForm').parsley();
             if($('#addForm').parsley().validate()) {
                 var fname = $.trim($('#fname').val());
@@ -129,7 +132,7 @@
                     confirmButtonColor: "#428bca",
                     confirmButtonText: "Yes",
                     cancelButtonText: "No",
-                    closeOnConfirm: true,
+                    closeOnConfirm: false,
                     closeOnCancel: true,
                     customClass: "Custom_Cancel"
                     },
@@ -151,7 +154,7 @@
                                 success:function(data) {
                                     swal({
                                         title: "Added Successfully", 
-                                        text: "Record was added successfully!", 
+                                        text: "A new user is added to the system.", 
                                         type: "success",
                                         showLoaderOnConfirm: true,
                                         confirmButtonColor: "#5cb85c",
@@ -160,7 +163,7 @@
                                         if (isConfirm){
                                             $('.form-control').val('');
                                         }
-                                    });
+                                    })
                                 },
                                 error:function(xhr, status, error) {
                                     var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -170,7 +173,7 @@
                                         type: "error",
                                         confirmButtonColor: "#428bca",
                                         showLoaderOnConfirm: true
-                                    });
+                                    })
                                 }
                             })
                         }
@@ -178,7 +181,6 @@
             }
         }
         else {
-            event.preventDefault();
             swal({
                 title: "Error!", 
                 text: "Username already exists!",
@@ -193,18 +195,16 @@
         $.ajax({
             url: "{% url 'check_username' %}",
             type: "POST",
+            dataType: 'json',
+            cache: false,
             data: { 
                 uname:uname,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             timeout: 5000,
-            success:function(data) {
-                if(data[0] == ' ' || data[0] == null) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
+            success:function(obj) {
+                cond = (obj[0] == 1);
+                check_email(cond);
             },
             error:function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;

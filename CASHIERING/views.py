@@ -93,7 +93,8 @@ def add_user_btn_click(request):
 
 def check_username(request):
     cursor = connection.cursor()
-    data = cursor.callproc("SP_CHECK_UNAME_CMS", (
+    cursor.callproc("SP_CHECK_UNAME_CMS", (
         request.POST['uname'],
     ))
+    data = cursor.fetchall()
     return JsonResponse(data, safe=False)
