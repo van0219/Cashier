@@ -1,6 +1,24 @@
 {% extends "views/layouts/pages/loginmain.html" %}
 {% block content %}
 {% load static %}
+<style>
+    .login-content i { 
+        position: absolute; 
+    }   
+    .form-group {
+        width: 100%; 
+        margin-bottom: 10px;
+    }  
+    .icon { 
+        padding: 10px; 
+        min-width: 40px; 
+        margin-top: -38px;
+    }     
+    .form-control { 
+        width: 100%; 
+        padding-left: 30px; 
+    } 
+</style>
 <div id="page-container" class="fade">
     <!-- begin login -->
     <div class="login login-v2" data-pageload-addclass="animated fadeIn">
@@ -9,35 +27,42 @@
             <div class="brand">
                 <span><img src="{%static 'assets/img/logo/PUPLogo.jpg' %}" class="rounded-corner" style="max-width: 30px; max-height: 30px; margin-right: 10px;"/></span> <b>CMS</b>
                 <small>Polytechnic University of the Philippines QC</small>
-            </div>
+            <!-- </div> -->
             <div class="icon">
                 <i class="fas fa-id-badge"></i>
+            </div>
             </div>
         </div>
         <!-- end brand -->
         <!-- begin login-content -->
         <div class="login-content">
-            <div class="margin-bottom-0"> <!--form-->
-                <!-- {% csrf_token %} -->
-                <div class="form-group m-b-20">
-                    <input type="text" class="form-control form-control-lg" placeholder="Email Address" id="email" required />
-                </div>
-                <div class="form-group m-b-20">
-                    <input type="password" class="form-control form-control-lg" placeholder="Password" id="password" required />
-                </div>
-                <div class="checkbox checkbox-css m-b-20">
-                    <input type="checkbox" id="remember_checkbox" /> 
-                    <label for="remember_checkbox">
-                        Remember Me
-                    </label>
-                </div>
-                <div class="login-buttons">
-                    <button type="submit" class="btn btn-danger btn-block btn-lg" id="btn_login">Log In</button>
-                </div>
-                <div class="m-t-20">
+            <div class="m-b-0"> 
+                <!--form-->
+                <form autocomplete="off" action="#" data-parsley-validate="true">
+                    <div class="form-group m-b-20">
+                        <input type="text" class="form-control form-control-lg" placeholder="Username" id="uname" required />
+                        <i class="fas fa-user icon"></i>
+                    </div>
+                    <div class="form-group m-b-20">
+                        <input type="text" class="form-control form-control-lg" placeholder="Password" id="password" required />
+                        <i class="fas fa-lock icon"></i>
+                        <i class="fas fa-eye icon pull-right" style="position: relative;"></i>
+                    </div>
+                    <div class="checkbox checkbox-css m-b-20">
+                        <input type="checkbox" id="remember_checkbox" /> 
+                        <label for="remember_checkbox">
+                            Remember Me
+                        </label>
+                    </div>
+                    <div class="login-buttons">
+                        <button type="submit" class="btn btn-danger btn-block btn-lg" id="btn_login">Log In</button>
+                    </div>
+                    <div class="m-t-20">
 
-                </div>
-            </div>  <!--End Form-->
+                    </div>
+                </form>
+                <!--End Form-->
+            </div>  
         </div>
         <!-- end login-content -->
     </div>
@@ -49,6 +74,9 @@
 </div>
 {% include "views/layouts/includes/base_js.html" %}
 <script>
+    $(document).ready(function() {
+        $('.form-control').val('');
+    });
     $("#btn_login").click( function() {
         checklogin();
     });
