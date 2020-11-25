@@ -18,6 +18,9 @@
         width: 100%; 
         padding-left: 30px; 
     } 
+    .neg_icon {
+        margin-top: -60px;
+    }
 </style>
 <div id="page-container" class="fade">
     <!-- begin login -->
@@ -27,10 +30,10 @@
             <div class="brand">
                 <span><img src="{%static 'assets/img/logo/PUPLogo.jpg' %}" class="rounded-corner" style="max-width: 30px; max-height: 30px; margin-right: 10px;"/></span> <b>CMS</b>
                 <small>Polytechnic University of the Philippines QC</small>
-            <!-- </div> -->
-            <div class="icon">
-                <i class="fas fa-id-badge"></i>
             </div>
+            <div class="icon">
+                <br><br>
+                <i class="fas fa-id-badge"></i>
             </div>
         </div>
         <!-- end brand -->
@@ -38,21 +41,19 @@
         <div class="login-content">
             <div class="m-b-0"> 
                 <!--form-->
-                <form autocomplete="off" action="#" data-parsley-validate="true">
+                <form autocomplete="off" action="#" id="login_form">
                     <div class="form-group m-b-20">
-                        <input type="text" class="form-control form-control-lg" placeholder="Username" id="uname" required />
-                        <i class="fas fa-user icon"></i>
+                        <input type="text" class="form-control form-control-lg" placeholder="Username" id="uname" data-parsley-required="true" data-parsley-required-message="Username is required" />
+                        <i class="fas fa-user icon unameicon"></i>
                     </div>
                     <div class="form-group m-b-20">
-                        <input type="text" class="form-control form-control-lg" placeholder="Password" id="password" required />
-                        <i class="fas fa-lock icon"></i>
-                        <i class="fas fa-eye icon pull-right" style="position: relative;"></i>
+                        <input type="text" class="form-control form-control-lg" placeholder="Password" id="password" data-parsley-required="true" data-parsley-required-message="Password is required" />
+                        <i class="fas fa-lock icon pwordicon"></i>
+                        <i class="fas fa-eye icon pull-right" style="position: relative; display: none;" id="icon-right"></i>
+                        <i class="fas fa-eye-slash icon pull-right" style="position: relative; display: none;" id="icon-right2"></i>
                     </div>
-                    <div class="checkbox checkbox-css m-b-20">
-                        <input type="checkbox" id="remember_checkbox" /> 
-                        <label for="remember_checkbox">
-                            Remember Me
-                        </label>
+                    <div class="form-group m-b-35">
+                        
                     </div>
                     <div class="login-buttons">
                         <button type="submit" class="btn btn-danger btn-block btn-lg" id="btn_login">Log In</button>
@@ -77,11 +78,65 @@
     $(document).ready(function() {
         $('.form-control').val('');
     });
+    $('#icon-right').on('click', function() {
+        $('#icon-right').hide();
+        $('#icon-right2').show();
+    });
+    $('#icon-right2').on('click', function() {
+        $('#icon-right2').hide();
+        $('#icon-right').show();
+    });
     $("#btn_login").click( function() {
-        checklogin();
+        event.preventDefault();
+        $('#login_form').parsley();
+        if ($('#login_form').parsley().validate()) {
+            checklogin();
+        }
+        else {
+            $('.icon').css('color', '#363636');
+            $('.unameicon').addClass('neg_icon');
+            $('.pwordicon').addClass('neg_icon');
+        }
     });
     function checklogin() {
-        window.location = "dashboard";
-    }
+
+        // window.location = "dashboard";
+    };
+    $('#uname').on('keypress', function() {
+        $('.unameicon').removeClass('neg_icon');   
+    });
+    $('#password').on('keypress', function() {
+        $('#icon-right').show();
+        $('.pwordicon').removeClass('neg_icon');   
+    });
+    $('#password').on('keydown', function(event) {
+        $('.pwordicon').css('color', '#363636'); 
+        $('#icon-right').css('color', '#363636');
+        $('#icon-right2').css('color', '#363636');
+        if ($('#password').parsley().validate()) {
+            var pwordTxt = $('#password').val();
+            if (event.keyCode == 8 || event.keyCode == 46) {
+                if (pwordTxt.length <= 1) {
+                    $('#icon-right').hide();
+                    $('.pwordicon').addClass('neg_icon');  
+                }
+            }
+        }
+    });
+    $('#uname').on('keydown', function(event) {
+        $('.unameicon').css('color', '#363636'); 
+        if ($('#uname').parsley().validate()) {
+            var pwordTxt = $('#uname').val();
+            if (event.keyCode == 8 || event.keyCode == 46) {
+                if (pwordTxt.length <= 1) {
+                    $('.unameicon').addClass('neg_icon'); 
+                }
+            }
+        }
+    });
+    $('#uname').on('focus', function() {
+        $('#icon-right').hide();
+        $('#icon-right2').hide();
+    });
 </script>
 {% endblock %}
