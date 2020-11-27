@@ -87,7 +87,7 @@
         },
         success: function(uname_session) {
             if (uname_session) {
-                window.location = "dashboard";
+                alert(uname_session[0]);
             }
             else {
                 $(document).ready(function() {
