@@ -9,7 +9,7 @@
         width: 100%; 
         margin-bottom: 10px;
     }  
-    .icon { 
+    .iconz { 
         padding: 10px; 
         min-width: 40px; 
         margin-top: -38px;
@@ -20,6 +20,10 @@
     } 
     .neg_icon {
         margin-top: -60px;
+    }
+    input::-ms-reveal,
+    input::-ms-clear {
+      display: none;
     }
 </style>
 <div id="page-container" class="fade">
@@ -32,8 +36,7 @@
                 <small>Polytechnic University of the Philippines QC</small>
             </div>
             <div class="icon">
-                <br><br>
-                <i class="fas fa-id-badge"></i>
+                <i class="fas fa-id-badge m-t-5"></i>
             </div>
         </div>
         <!-- end brand -->
@@ -41,16 +44,16 @@
         <div class="login-content">
             <div class="m-b-0"> 
                 <!--form-->
-                <form autocomplete="off" action="#" id="login_form">
+                <form action="#" id="login_form" autocomplete="off">
                     <div class="form-group m-b-20">
-                        <input type="text" class="form-control form-control-lg" placeholder="Username" id="uname" data-parsley-required="true" data-parsley-required-message="Username is required" />
-                        <i class="fas fa-user icon unameicon"></i>
+                        <input type="text" class="form-control form-control-lg" placeholder="Username" id="uname" autocomplete="off" data-parsley-ui-enabled="false" required/>
+                        <i class="fas fa-user iconz unameicon"></i>
                     </div>
                     <div class="form-group m-b-20">
-                        <input type="text" class="form-control form-control-lg" placeholder="Password" id="password" data-parsley-required="true" data-parsley-required-message="Password is required" />
-                        <i class="fas fa-lock icon pwordicon"></i>
-                        <i class="fas fa-eye icon pull-right" style="position: relative; display: none;" id="icon-right"></i>
-                        <i class="fas fa-eye-slash icon pull-right" style="position: relative; display: none;" id="icon-right2"></i>
+                        <input type="text" class="form-control form-control-lg" placeholder="Password" id="password" autocomplete="new-password" data-parsley-ui-enabled="false" required/>
+                        <i class="fas fa-lock iconz pwordicon"></i>
+                        <i class="fas fa-eye iconz pull-right" style="position: relative; display: none;" id="icon-right"></i>
+                        <i class="fas fa-eye-slash iconz pull-right" style="position: relative; display: none;" id="icon-right2"></i>
                     </div>
                     <div class="form-group m-b-35">
                         
@@ -75,68 +78,141 @@
 </div>
 {% include "views/layouts/includes/base_js.html" %}
 <script>
-    $(document).ready(function() {
-        $('.form-control').val('');
-    });
-    $('#icon-right').on('click', function() {
-        $('#icon-right').hide();
-        $('#icon-right2').show();
-    });
-    $('#icon-right2').on('click', function() {
-        $('#icon-right2').hide();
-        $('#icon-right').show();
-    });
-    $("#btn_login").click( function() {
-        event.preventDefault();
-        $('#login_form').parsley();
-        if ($('#login_form').parsley().validate()) {
-            checklogin();
-        }
-        else {
-            $('.icon').css('color', '#363636');
-            $('.unameicon').addClass('neg_icon');
-            $('.pwordicon').addClass('neg_icon');
-        }
-    });
-    function checklogin() {
-
-        // window.location = "dashboard";
-    };
-    $('#uname').on('keypress', function() {
-        $('.unameicon').removeClass('neg_icon');   
-    });
-    $('#password').on('keypress', function() {
-        $('#icon-right').show();
-        $('.pwordicon').removeClass('neg_icon');   
-    });
-    $('#password').on('keydown', function(event) {
-        $('.pwordicon').css('color', '#363636'); 
-        $('#icon-right').css('color', '#363636');
-        $('#icon-right2').css('color', '#363636');
-        if ($('#password').parsley().validate()) {
-            var pwordTxt = $('#password').val();
-            if (event.keyCode == 8 || event.keyCode == 46) {
-                if (pwordTxt.length <= 1) {
+    $.ajax({
+        url: "{% url 'get_session' %}",
+        type: "POST",
+        // timeout: 2000,
+        data: {
+            csrfmiddlewaretoken:"{{csrf_token}}"
+        },
+        success: function(uname_session) {
+            if (uname_session) {
+                window.location = "dashboard";
+            }
+            else {
+                $(document).ready(function() {
+                    App.init();
+                    LoginV2.init();
+                });
+                $(document).ready(function() {
+                    $('.form-control').val('');
+                    $('#uname').dblclick(function(e) {
+                        e.preventDefault();
+                    });
+                    $('#password').dblclick(function(e) {
+                        e.preventDefault();
+                    });
+                });
+                $('#icon-right').on('click', function() {
                     $('#icon-right').hide();
-                    $('.pwordicon').addClass('neg_icon');  
-                }
+                    $('#icon-right2').show();
+                    document.getElementById("password").setAttribute("type", "text");
+                });
+                $('#icon-right2').on('click', function() {
+                    $('#icon-right2').hide();
+                    $('#icon-right').show();
+                    document.getElementById("password").setAttribute("type", "password");
+                });
+                $("#btn_login").click( function() {
+                    event.preventDefault();
+                    $('#login_form').parsley();
+                    if ($('#login_form').parsley().validate()) {
+                        checkCredentials();
+                    }
+                    else {
+                        var pwordTxt = $('#password').val();
+                        var unameTxt = $('#uname').val();
+                        if (pwordTxt.length <= 1) {
+                            $('#icon-right').hide();
+                            $('#icon-right2').hide();
+                        }
+                    }
+                });
+                function checkCredentials() {
+                    var uname = $('#uname').val();
+                    var pword = $('#password').val();
+                    $.ajax({
+                        url: "{% url 'check_credentials' %}",
+                        type: "POST",
+                        data: { 
+                            uname:uname,
+                            pword:pword,
+                            csrfmiddlewaretoken:"{{csrf_token}}"
+                        },
+                        timeout: 5000,
+                        success:function(data) {
+                            if (!data[0]) {
+                                swal({
+                                    title: "Invalid Credentials", 
+                                    // text: "Incorrect username or password",
+                                    type: "warning",
+                                    confirmButtonColor: "#428bca",
+                                    showLoaderOnConfirm: true
+                                })
+                            }
+                            else {
+                                window.location = "dashboard";
+                            }
+                        },
+                        error:function(xhr, status, error) {
+                            var errMsg = xhr.status + ': ' + xhr.statusText;
+                            swal({
+                                title: "Error!", 
+                                text: errMsg,
+                                type: "error",
+                                confirmButtonColor: "#428bca",
+                                showLoaderOnConfirm: true
+                            })
+                        }
+                    })
+                };
+                $('#uname').on('keypress', function() {
+
+                });
+                $('#password').on('keypress', function() {
+                    document.getElementById("password").setAttribute("type", "password");
+                    var typePass = document.getElementById("password").getAttribute("type");
+                    if (typePass == 'password') {
+                        $('#icon-right').show();
+                        $('#icon-right2').hide();
+                    }
+                    else if (typePass == 'text') {
+                        $('#icon-right2').show();
+                        $('#icon-right').hide();
+                    }
+                });
+                $('#password').on('keydown', function(event) {
+                    if ($('#password').parsley().isValid()) {
+                        var pwordTxt = $('#password').val();
+                        if (event.keyCode == 8 || event.keyCode == 46) {
+                            if (pwordTxt.length <= 1) {
+                                $('#icon-right').hide();
+                                $('#icon-right2').hide();
+                            }
+                        }
+                    }
+                });
+                $('#uname').on('keydown', function(event) {
+                    if ($('#uname').parsley().isValid()) {
+
+                    }
+                });
+                $('#uname').on('focus', function() {
+                    $('#icon-right').hide();
+                    $('#icon-right2').hide();
+                });
             }
-        }
-    });
-    $('#uname').on('keydown', function(event) {
-        $('.unameicon').css('color', '#363636'); 
-        if ($('#uname').parsley().validate()) {
-            var pwordTxt = $('#uname').val();
-            if (event.keyCode == 8 || event.keyCode == 46) {
-                if (pwordTxt.length <= 1) {
-                    $('.unameicon').addClass('neg_icon'); 
-                }
+        },
+        error:function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
             }
-        }
-    });
-    $('#uname').on('focus', function() {
-        $('#icon-right').hide();
-        $('#icon-right2').hide();
     });
 </script>
 {% endblock %}

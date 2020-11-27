@@ -98,3 +98,23 @@ def check_username(request):
     ))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def check_credentials(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_CHECK_CREDENTIALS", (request.POST['uname'], request.POST['pword']))
+    data = cursor.fetchall()
+    if data:
+        for row in data:
+            uname = row[0]
+            request.session['uname'] = uname
+    
+    return JsonResponse(data, safe=False)
+
+def logout(request):
+    if 'uname' in request.session:
+        del request.session['uname']
+    return render(request, 'views/layouts/pages/login.html')
+
+def get_session(request):
+    uname = request.session.get('uname')
+    return JsonResponse(uname, safe=False)

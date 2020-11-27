@@ -44,4 +44,7 @@ urlpatterns = [
     path('account', views.account, name="account"),
     path('add_user_btn_click', views.add_user_btn_click, name="add_user_btn_click"),
     path('check_username', views.check_username, name="check_username"),
+    path('check_credentials', views.check_credentials, name="check_credentials"),
+    path('', views.logout, name="logout"),
+    path('get_session', views.get_session, name="get_session"),
 ]

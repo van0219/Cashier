@@ -141,85 +141,99 @@
 {% endblock %}
 {% block init %}
 <script>
-    $(document).ready(function() {
-        App.init();
-        DashboardV2.init();
-        Notification.init();
-        Highlight.init();
-        handleBarChart();
+    $.ajax({
+        url: "{% url 'get_session' %}",
+        type: "POST",
+        // timeout: 2000,
+        data: {
+            csrfmiddlewaretoken:"{{csrf_token}}"
+        },
+        success: function(uname_session) {
+            if (!uname_session) {
+                window.location = "login";
+            }
+            else {
+                $(document).ready(function() {
+                    App.init();
+                    DashboardV2.init();
+                    Notification.init();
+                    Highlight.init();
+                    handleBarChart();
 
-        
-        $('#yesterday').text((d.getMonth()+1) + '/' + (d.getDate()-1) + '/' + d.getFullYear());
-        $('#last_week').text(last_week(moment(new Date(d)).format("dddd").toLowerCase()));
-        var lastMonth = new Date(d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear());
-        $('#last_month').text(moment(lastMonth).format("MMMM"));
-        // alert(moment(new Date(d)).format("dddd"));
-        // alert(moment(new Date(d)).format("dddd").toLowerCase());
-    });
-    var d = new Date();
-    function last_week(day) {
-        var toMinus = 0;
-        switch (day) {
-            case "sunday":
-                toMinus = 13;
-                break;
-            case "monday":
-                toMinus = 7;
-                break;
-            case "tuesday":
-                toMinus = 8;
-                break;
-            case "wednesday":
-                toMinus = 9;
-                break;
-            case "thursday":
-                toMinus = 10;
-                break;
-            case "friday":
-                toMinus = 11;
-                break;
-            case "saturday":
-                toMinus = 12;
-                break;
-            default:
-                break;
+                    $('#yesterday').text((d.getMonth()+1) + '/' + (d.getDate()-1) + '/' + d.getFullYear());
+                    $('#last_week').text(last_week(moment(new Date(d)).format("dddd").toLowerCase()));
+                    var lastMonth = new Date(d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear());
+                    $('#last_month').text(moment(lastMonth).format("MMMM"));
+                    // alert(moment(new Date(d)).format("dddd"));
+                    // alert(moment(new Date(d)).format("dddd").toLowerCase());
+                });
+                var d = new Date();
+                function last_week(day) {
+                    var toMinus = 0;
+                    switch (day) {
+                        case "sunday":
+                            toMinus = 13;
+                            break;
+                        case "monday":
+                            toMinus = 7;
+                            break;
+                        case "tuesday":
+                            toMinus = 8;
+                            break;
+                        case "wednesday":
+                            toMinus = 9;
+                            break;
+                        case "thursday":
+                            toMinus = 10;
+                            break;
+                        case "friday":
+                            toMinus = 11;
+                            break;
+                        case "saturday":
+                            toMinus = 12;
+                            break;
+                        default:
+                            break;
+                    }
+                    var last_week_start = (d.getMonth()+1) + '/' + (d.getDate()-toMinus) + '/' + d.getFullYear();
+                    var newStart = new Date(last_week_start);
+                    var last_week_end = (newStart.getMonth()+1) + '/' + (newStart.getDate()+6) + '/' + newStart.getFullYear();
+                    return last_week_start + ' ' + 'to' + ' ' + last_week_end;
+                }
+                var handleBarChart = function() {
+                    "use strict";
+                    
+                    var barChartData = [{
+                        key: 'Cumulative Return',
+                        values: [
+                            { 'label' : 'SUN', 'value' : 2904, 'color' : COLOR_BLUE }, 
+                            { 'label' : 'MON', 'value' : 15107, 'color' : COLOR_BLUE }, 
+                            { 'label' : 'TUE', 'value' : 3206, 'color' : COLOR_BLUE }, 
+                            { 'label' : 'WED', 'value' : 19600, 'color' : COLOR_BLUE },  
+                            { 'label' : 'THU', 'value' : 4400, 'color' : COLOR_BLUE },  
+                            { 'label' : 'FRI', 'value' : 9800, 'color' : COLOR_BLUE },  
+                            { 'label' : 'SAT', 'value' : 1367, 'color' : COLOR_BLUE },  
+                        ]
+                    }];
+
+                    nv.addGraph(function() {
+                        var barChart = nv.models.discreteBarChart()
+                            .x(function(d) { return d.label })
+                            .y(function(d) { return d.value })
+                            .showValues(true)
+                            .duration(250);
+                        
+                        barChart.yAxis.axisLabel("Total Collection");
+                        barChart.xAxis.axisLabel('Days');
+                    
+                        d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
+                        nv.utils.windowResize(barChart.update);
+                    
+                        return barChart;
+                    });
+                }
+            }
         }
-        var last_week_start = (d.getMonth()+1) + '/' + (d.getDate()-toMinus) + '/' + d.getFullYear();
-        var newStart = new Date(last_week_start);
-        var last_week_end = (newStart.getMonth()+1) + '/' + (newStart.getDate()+6) + '/' + newStart.getFullYear();
-        return last_week_start + ' ' + 'to' + ' ' + last_week_end;
-    }
-    var handleBarChart = function() {
-        "use strict";
-        
-        var barChartData = [{
-            key: 'Cumulative Return',
-            values: [
-                { 'label' : 'SUN', 'value' : 2904, 'color' : COLOR_BLUE }, 
-                { 'label' : 'MON', 'value' : 15107, 'color' : COLOR_BLUE }, 
-                { 'label' : 'TUE', 'value' : 3206, 'color' : COLOR_BLUE }, 
-                { 'label' : 'WED', 'value' : 19600, 'color' : COLOR_BLUE },  
-                { 'label' : 'THU', 'value' : 4400, 'color' : COLOR_BLUE },  
-                { 'label' : 'FRI', 'value' : 9800, 'color' : COLOR_BLUE },  
-                { 'label' : 'SAT', 'value' : 1367, 'color' : COLOR_BLUE },  
-            ]
-        }];
-
-        nv.addGraph(function() {
-            var barChart = nv.models.discreteBarChart()
-                .x(function(d) { return d.label })
-                .y(function(d) { return d.value })
-                .showValues(true)
-                .duration(250);
-            
-            barChart.yAxis.axisLabel("Total Collection");
-            barChart.xAxis.axisLabel('Days');
-        
-            d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
-            nv.utils.windowResize(barChart.update);
-        
-            return barChart;
-        });
-    }
+    });
 </script>
 {% endblock %}
