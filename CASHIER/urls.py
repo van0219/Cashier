@@ -47,4 +47,5 @@ urlpatterns = [
     path('check_credentials', views.check_credentials, name="check_credentials"),
     path('', views.logout, name="logout"),
     path('get_session', views.get_session, name="get_session"),
+    path('error_403', views.error_403, name="error_403"),
 ]

@@ -205,9 +205,34 @@
 {% endblock %}
 {% block init %}
 <script>
-    $(document).ready(function() {
-        App.init();
-        Dashboard.init();
+    $.ajax({
+        url: "{% url 'get_session' %}",
+        type: "POST",
+        // timeout: 2000,
+        data: {
+            csrfmiddlewaretoken:"{{csrf_token}}"
+        },
+        success: function(role) {
+            if (role == 1) {
+                $(document).ready(function() {
+                    App.init();
+                    Dashboard.init();
+                });
+            }
+            else if (role == 2) {
+                window.location = "{% url 'error_403' %}";
+            }
+        },
+        error:function(xhr, status, error) {
+            var errMsg = xhr.status + ': ' + xhr.statusText;
+            swal({
+                title: "Error!", 
+                text: errMsg,
+                type: "error",
+                confirmButtonColor: "#428bca",
+                showLoaderOnConfirm: true
+            })
+        }
     });
 </script>
 {% endblock %}

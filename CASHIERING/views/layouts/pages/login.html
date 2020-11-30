@@ -72,9 +72,6 @@
     </div>
     <!-- end login -->
  
-    <!-- begin theme-panel -->
-
-    <!-- end theme-panel -->
 </div>
 {% include "views/layouts/includes/base_js.html" %}
 <script>
@@ -85,9 +82,12 @@
         data: {
             csrfmiddlewaretoken:"{{csrf_token}}"
         },
-        success: function(uname_session) {
-            if (uname_session) {
-                alert(uname_session[0]);
+        success: function(role) {
+            if (role == 1) {
+                window.location = "{% url 'admin_dashboard' %}";
+            }
+            else if (role == 2) {
+                window.location = "{% url 'dashboard' %}";
             }
             else {
                 $(document).ready(function() {
@@ -141,7 +141,7 @@
                         },
                         timeout: 5000,
                         success:function(data) {
-                            if (!data[0]) {
+                            if (!data[0][0]) {
                                 swal({
                                     title: "Invalid Credentials", 
                                     // text: "Incorrect username or password",
@@ -150,8 +150,11 @@
                                     showLoaderOnConfirm: true
                                 })
                             }
-                            else {
-                                window.location = "dashboard";
+                            else if (data[0][0] && data[0][1] == 1) {
+                                window.location = "{% url 'admin_dashboard' %}";
+                            }
+                            else if (data[0][0] && data[0][1] == 2) {
+                                window.location = "{% url 'dashboard' %}";
                             }
                         },
                         error:function(xhr, status, error) {

@@ -103,18 +103,19 @@ def check_credentials(request):
     cursor = connection.cursor()
     cursor.callproc("SP_CHECK_CREDENTIALS", (request.POST['uname'], request.POST['pword']))
     data = cursor.fetchall()
-    if data:
-        for row in data:
-            uname = row[0]
-            request.session['uname'] = uname
-    
+    for row in data:
+        role = row[1]
+    request.session['role'] = role
     return JsonResponse(data, safe=False)
 
 def logout(request):
-    if 'uname' in request.session:
-        del request.session['uname']
+    if 'role' in request.session:
+        del request.session['role']
     return render(request, 'views/layouts/pages/login.html')
 
 def get_session(request):
-    uname = request.session.get('uname')
-    return JsonResponse(uname, safe=False)
+    role = request.session.get('role')
+    return JsonResponse(role, safe=False)
+
+def error_403(request):
+    return render(request, 'views/layouts/pages/error_403.html')
