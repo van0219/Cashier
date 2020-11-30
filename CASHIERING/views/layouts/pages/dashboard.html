@@ -158,6 +158,7 @@
                     DashboardV2.init();
                     Notification.init();
                     Highlight.init();
+                    get_fname();
                     handleBarChart();
 
                     $('#yesterday').text((d.getMonth()+1) + '/' + (d.getDate()-1) + '/' + d.getFullYear());
@@ -167,6 +168,33 @@
                     // alert(moment(new Date(d)).format("dddd"));
                     // alert(moment(new Date(d)).format("dddd").toLowerCase());
                 });
+                function get_fname() {
+                    // event.preventDefault();
+                    var uname = 'nick';
+                    $.ajax({
+                        url: "{% url 'get_fname' %}",
+                        type: "POST",
+                        timeout: 2000,
+                        data: {
+                            uname:uname,
+                            csrfmiddlewaretoken:"{{csrf_token}}"
+                        },
+                        success:function(fname) {
+                            alert(fname);
+                            // $('.fname').text(fname);
+                        },
+                        error:function(xhr, status, error) {
+                            var errMsg = xhr.status + ': ' + xhr.statusText;
+                            swal({
+                                title: "Error!", 
+                                text: errMsg,
+                                type: "error",
+                                confirmButtonColor: "#428bca",
+                                showLoaderOnConfirm: true
+                            })
+                        }
+                    });
+                };
                 var d = new Date();
                 function last_week(day) {
                     var toMinus = 0;

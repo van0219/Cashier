@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
 <!--<![endif]-->
 <head>
@@ -46,7 +46,7 @@
 				<li class="dropdown navbar-user">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
 						<img src="{%static 'assets/img/user/maam_meg.jpg' %}" alt="" /> 
-						<span class="d-none d-md-inline">Merly Gonzalbo</span> <b class="caret"></b>
+						<span class="d-none d-md-inline fname"></span> <b class="caret"></b>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
 						<a href="#request" class="dropdown-item" data-toggle="modal"><i class="fas fa-user-secret m-r-5"></i>Request</a>
@@ -108,11 +108,7 @@
 	{% block page-js %} {% endblock %}
 	<!-- ================== END PAGE LEVEL JS ================== -->
 	{% block init %}
-	<script>
-		$(document).ready(function() {
-			App.init();
-		});
-	</script>
+
 	{% endblock %}
 </body>
 </html>

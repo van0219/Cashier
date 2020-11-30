@@ -48,4 +48,5 @@ urlpatterns = [
     path('', views.logout, name="logout"),
     path('get_session', views.get_session, name="get_session"),
     path('error_403', views.error_403, name="error_403"),
+    path('get_fname', views.get_fname, name="get_fname"),
 ]

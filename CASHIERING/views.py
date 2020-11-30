@@ -93,9 +93,7 @@ def add_user_btn_click(request):
 
 def check_username(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_CHECK_UNAME_CMS", (
-        request.POST['uname'],
-    ))
+    cursor.callproc("SP_CHECK_UNAME_CMS", (request.POST['uname']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -104,7 +102,9 @@ def check_credentials(request):
     cursor.callproc("SP_CHECK_CREDENTIALS", (request.POST['uname'], request.POST['pword']))
     data = cursor.fetchall()
     for row in data:
+        # uname = row[0]
         role = row[1]
+    # request.session['uname'] = uname
     request.session['role'] = role
     return JsonResponse(data, safe=False)
 
@@ -119,3 +119,9 @@ def get_session(request):
 
 def error_403(request):
     return render(request, 'views/layouts/pages/error_403.html')
+
+def get_fname(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_FNAME_CMS", (request.POST['uname']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
