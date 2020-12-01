@@ -110,5 +110,32 @@
 	{% block init %}
 
 	{% endblock %}
+	<script>
+		gt_fname();
+		function gt_fname() {
+			$.ajax({
+				url: "{% url 'gt_fname' %}",
+				type: "POST",
+				timeout: 2000,
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(fname) {
+					$('.fname').text(fname);
+					$('.side_name').text(fname);
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.status + ': ' + xhr.statusText;
+					swal({
+						title: "Error!", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					})
+				}
+			});
+		};
+	</script>
 </body>
 </html>

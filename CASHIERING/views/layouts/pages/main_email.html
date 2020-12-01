@@ -46,7 +46,7 @@
 				<li class="dropdown navbar-user">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
 						<img src="{%static 'assets/img/user/maam_meg.jpg' %}" alt="" /> 
-						<span class="d-none d-md-inline">Merly Gonzalbo</span> <b class="caret"></b>
+						<span class="d-none d-md-inline fname"></span> <b class="caret"></b>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
 						<a href="#request" class="dropdown-item" data-toggle="modal"><i class="fas fa-user-secret m-r-5"></i>Request</a>
@@ -113,5 +113,32 @@
 		});
 	</script>
 	{% endblock %}
+	<script>
+		gt_fname();
+		function gt_fname() {
+			$.ajax({
+				url: "{% url 'gt_fname' %}",
+				type: "POST",
+				timeout: 2000,
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(fname) {
+					$('.fname').text(fname);
+					$('.side_name').text(fname);
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.status + ': ' + xhr.statusText;
+					swal({
+						title: "Error!", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					})
+				}
+			});
+		};
+	</script>
 </body>
 </html>

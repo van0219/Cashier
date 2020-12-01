@@ -158,43 +158,17 @@
                     DashboardV2.init();
                     Notification.init();
                     Highlight.init();
-                    get_fname();
                     handleBarChart();
 
-                    $('#yesterday').text((d.getMonth()+1) + '/' + (d.getDate()-1) + '/' + d.getFullYear());
+                    var day = (d.getDate()==1) ? count_days_month()+1 : d.getDate();//if day today is 1, gets the previous month's number of days plus 1;
+                    $('#yesterday').text((d.getMonth()+1) + '/' + (day-1) + '/' + d.getFullYear());
                     $('#last_week').text(last_week(moment(new Date(d)).format("dddd").toLowerCase()));
                     var lastMonth = new Date(d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear());
                     $('#last_month').text(moment(lastMonth).format("MMMM"));
                     // alert(moment(new Date(d)).format("dddd"));
                     // alert(moment(new Date(d)).format("dddd").toLowerCase());
                 });
-                function get_fname() {
-                    // event.preventDefault();
-                    var uname = 'nick';
-                    $.ajax({
-                        url: "{% url 'get_fname' %}",
-                        type: "POST",
-                        timeout: 2000,
-                        data: {
-                            uname:uname,
-                            csrfmiddlewaretoken:"{{csrf_token}}"
-                        },
-                        success:function(fname) {
-                            alert(fname);
-                            // $('.fname').text(fname);
-                        },
-                        error:function(xhr, status, error) {
-                            var errMsg = xhr.status + ': ' + xhr.statusText;
-                            swal({
-                                title: "Error!", 
-                                text: errMsg,
-                                type: "error",
-                                confirmButtonColor: "#428bca",
-                                showLoaderOnConfirm: true
-                            })
-                        }
-                    });
-                };
+
                 var d = new Date();
                 function last_week(day) {
                     var toMinus = 0;
@@ -223,10 +197,48 @@
                         default:
                             break;
                     }
-                    var last_week_start = (d.getMonth()+1) + '/' + (d.getDate()-toMinus) + '/' + d.getFullYear();
+                    var _month = count_days_month();
+                    var last_week_start;
+                    if (d.getDate() >= 7) {
+                        last_week_start = (d.getMonth()+1) + '/' + (d.getDate()-toMinus) + '/' + d.getFullYear();
+                    }
+                    else {
+                        last_week_start = (d.getMonth()+1) + '/' + (_month-toMinus) + '/' + d.getFullYear();
+                    }
                     var newStart = new Date(last_week_start);
                     var last_week_end = (newStart.getMonth()+1) + '/' + (newStart.getDate()+6) + '/' + newStart.getFullYear();
                     return last_week_start + ' ' + 'to' + ' ' + last_week_end;
+                };
+                function count_days_month() { // determine the number of days for the current month
+                    var _month;
+                    var _month_now = d.getMonth()+1;
+                    if (_month_now == 4 || _month_now == 6 ||
+                        _month_now == 9 || _month_now == 11) {
+                            _month = 30;
+                    }
+                    else if (_month_now == 2) {
+                        var yr = d.getFullYear();
+                        if (yr % 100 == 0) {
+                            if (yr % 400 == 0) {
+                                _month = 29;
+                            }
+                            else {
+                                _month = 28;
+                            }
+                        }
+                        else {
+                            if (yr % 4 == 0) {
+                                _month = 29;
+                            }
+                            else {
+                                _month = 28;
+                            }
+                        }
+                    }
+                    else {
+                        _month = 31;
+                    }
+                    return _month; // returns the number of days of the current month
                 }
                 var handleBarChart = function() {
                     "use strict";
