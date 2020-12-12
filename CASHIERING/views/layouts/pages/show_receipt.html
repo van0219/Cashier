@@ -125,3 +125,10 @@
 <!-- end #content -->
 {% endblock %}
 {% include "views/layouts/includes/base_js.css" %}
+{% block init %}
+<script>
+    $(document).ready(function() {
+        App.init();
+    });
+</script>
+{% endblock %}

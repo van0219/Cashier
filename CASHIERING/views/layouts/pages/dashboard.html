@@ -86,38 +86,50 @@
     <div class="row">
         <!-- begin col-8 -->
         <div class="col-lg-8">
-            <!-- begin panel -->
-            <div class="panel panel-inverse">
-                <div class="panel-heading">
-                    <h4 class="panel-title"><i class="fas fa-chart-bar"></i> Daily Collection</h4>
+            <!-- begin card -->
+            <div class="card text-left">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar"></i> Daily Collection
                 </div>
-                <div class="panel-body">
-                    <div id="nv-bar-chart" class="height-sm"></div>
+                <div class="card-block">
+                    <!-- begin panel -->
+                    <div class="panel panel-white">
+                        <div class="panel-body">
+                            <div id="nv-bar-chart" class="height-sm"></div>
+                        </div>
+                    </div>
+                    <!-- end panel -->
                 </div>
             </div>
-            <!-- end panel -->
+            <!-- end card -->
         </div>
         <!-- end col-8 -->
         <!-- begin col-4 -->
         <div class="col-lg-4">
-            <!-- begin panel -->
-            <div class="panel panel-inverse" data-sortable-id="index-3">
-                <div class="panel-heading">
-                    <h4 class="panel-title"><i class="fas fa-calendar-alt"></i> Today's Schedule</h4>
+            <!-- begin card -->
+            <div class="card text-left">
+                <div class="card-header">
+                    <i class="fas fa-calendar-alt"></i> Today's Schedule
                 </div>
-                <div id="schedule-calendar" class="bootstrap-calendar"></div>
-                <div class="list-group">
-                    <a href="javascript:;" class="list-group-item d-flex justify-content-between align-items-center text-ellipsis">
-                        Finalyze Accountable Forms
-                        <span class="badge f-w-500 bg-gradient-green f-s-10">9:00 am</span>
-                    </a> 
-                    <a href="javascript:;" class="list-group-item d-flex justify-content-between align-items-center text-ellipsis">
-                        Have a meeting with accounting
-                        <span class="badge f-w-500 bg-gradient-blue f-s-10">2:45 pm</span>
-                    </a>
+                <div class="card-block">
+                    <!-- begin panel -->
+                    <div class="panel panel-default" data-sortable-id="index-3">
+                        <div id="schedule-calendar" class="bootstrap-calendar"></div>
+                        <div class="list-group">
+                            <a href="javascript:;" class="list-group-item d-flex justify-content-between align-items-center text-ellipsis">
+                                Finalyze Accountable Forms
+                                <span class="badge f-w-500 bg-gradient-green f-s-10">9:00 am</span>
+                            </a> 
+                            <a href="javascript:;" class="list-group-item d-flex justify-content-between align-items-center text-ellipsis">
+                                Have a meeting with accounting
+                                <span class="badge f-w-500 bg-gradient-blue f-s-10">2:45 pm</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- end panel -->
                 </div>
             </div>
-            <!-- end panel -->
+            <!-- end card -->
         </div>
         <!-- end col-4 -->
     </div>
