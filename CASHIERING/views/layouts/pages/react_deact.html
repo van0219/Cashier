@@ -137,11 +137,11 @@
         App.init();
         TableManageCombine.init();
         $('#data-table-responsives').DataTable({
-            'paging'      : false,
-            'lengthChange': false,
-            'searching'   : false,
+            'paging'      : true,
+            'lengthChange': true,
+            'searching'   : true,
             'ordering'    : false,
-            'info'        : false,
+            'info'        : true,
             'autoWidth'   : true,
             "aaSorting"   : [[1, "desc" ]],
             dom: 'lBfrtip',

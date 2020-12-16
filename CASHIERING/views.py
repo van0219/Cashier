@@ -138,3 +138,6 @@ def gt_fname(request):
     cursor.callproc("SP_SELECT_FNAME_CMS", (request.session['uname'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def activity_log(request):
+    return render(request, 'views/layouts/pages/activity_log.html')

@@ -67,7 +67,7 @@
                 </div>
             </div>
             <div class="m-t-10">
-                <a href="javascript:;" class="btn btn-success btn-m"><i class="fas fa-file-code"></i> Create</a>
+                <a href="javascript:;" class="btn btn-success btn-m"><i class="fas fa-file-code m-r-5"></i> Create</a>
             </div>
             <hr class="m-t-20 bg-black-transparent-2">
             <h5 class="m-t-20">Generate Monthly Report</h5>
@@ -89,16 +89,16 @@
                 </select>
             </div>
             <div>
-                <a href="javascript:;" class="btn btn-success btn-m"><i class="fas fa-file-code"></i> Create</a>
+                <a href="javascript:;" class="btn btn-success btn-m"><i class="fas fa-file-code m-r-5"></i> Create</a>
             </div>
         </div>
         <!-- end col-2 -->
         <!-- begin col-10 -->
         <div class="col-lg-10">
-            <div class="panel panel-inverse">
+            <div class="panel panel-default">
                 <!-- begin panel-heading -->
                 <div class="panel-heading">
-                    <h4 class="panel-title"><i class="fas fa-file-alt m-r-5"></i>Accountable Forms</h4>
+                    <h4 class="panel-title text-inverse"><i class="fas fa-file-alt m-r-5"></i>Accountable Forms</h4>
                 </div>
                 <!-- end panel-heading -->
                 <!-- begin panel-body -->
@@ -135,24 +135,40 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- <tr class="odd gradeX">
-                                <td width="1%" class="f-s-600 text-inverse">1</td>
+                            <tr>
+                                <td style="border-right-color: transparent;"></td>
+                                <td style="border-right-color: transparent;" width="1%" class="f-s-600 text-inverse">1</td>
                                 <td></td>
+                                <td>fdhdsfhposfhp</td>
                                 <td>Trident</td>
                                 <td>Internet Explorer 4.0</td>
                                 <td>Win 95+</td>
                                 <td>4</td>
                                 <td>X</td>
-                            </tr>
-                            <tr class="even gradeC">
-                                <td width="1%" class="f-s-600 text-inverse">2</td>
-                                <td width="1%" class="with-img"><img src="../assets/img/user/user-2.jpg" class="img-rounded height-30" /></td>
                                 <td>Trident</td>
-                                <td>Internet Explorer 5.0</td>
+                                <td>Internet Explorer 4.0</td>
                                 <td>Win 95+</td>
-                                <td>5</td>
-                                <td>C</td>
-                            </tr> -->
+                                <td>4</td>
+                                <td>X</td>
+                                <td>Yugsu</td>
+                            </tr>
+                            <tr>
+                                <td style="border-right-color: transparent;"></td>
+                                <td style="border-right-color: transparent;" width="1%" class="f-s-600 text-inverse">1</td>
+                                <td></td>
+                                <td>fdhdsfhposfhp</td>
+                                <td>Trident</td>
+                                <td>Internet Explorer 4.0</td>
+                                <td>Win 95+</td>
+                                <td>4</td>
+                                <td>X</td>
+                                <td>Trident</td>
+                                <td>Internet Explorer 4.0</td>
+                                <td>Win 95+</td>
+                                <td>4</td>
+                                <td>X</td>
+                                <td>Yugsu</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -219,13 +235,41 @@
         'ordering'    : false,
         'info'        : true,
         'autoWidth'   : false,
-        "aaSorting"   : [[1, "desc" ]],
-        // 'autoPrint'   : false,
+        'aaSorting'   : [[1, "desc" ]],
+        'autoPrint'   : true,
+        'pagingType'  : 'full_numbers',
+        // "infoCallback": function( settings, start, end, max, total, pre ) {
+        //     var api = this.api();
+        //     var pageInfo = api.page.info();
+        
+        //     return 'Page '+ (pageInfo.page+1) +' of '+ pageInfo.pages;
+        // },
         dom: 'lBfrtip',
-            buttons: [
-            'excel',
-            'pdf',
-            'print',
+        buttons: [
+            {
+                extend:    'print',
+                text:      '<i class="fas fa-print text-orange-lighter"></i>',
+                titleAttr: 'Print',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend:    'excel',
+                text:      '<i class="fas fa-file-excel text-green-lighter"></i>',
+                titleAttr: 'Excel',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend:    'pdf',
+                text:      '<i class="fas fa-file-pdf text-red-lighter"></i>',
+                titleAttr: 'PDF',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            }
         ],
         "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
     });
