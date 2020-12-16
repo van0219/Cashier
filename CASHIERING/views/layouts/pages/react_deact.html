@@ -52,7 +52,7 @@
                         <!-- end panel-heading -->
                         <!-- begin panel-body -->
                         <div class="panel-body">
-                            <table id="data-table-responsives" class="table table-bordered table-hover">
+                            <table id="data-table-responsives" class="table table-hover">
                                 <thead>
                                     <tr class="bg-gradient-silver">
                                         <th hidden>ID</th>
@@ -146,25 +146,31 @@
             "aaSorting"   : [[1, "desc" ]],
             dom: 'lBfrtip',
             buttons: [
-            {
-                extend: 'excel',
-                exportOptions: {
-                    columns: [1,2,3]
+                {
+                    extend:    'print',
+                    text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
+                    titleAttr: 'Print',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend:    'excel',
+                    text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
+                    titleAttr: 'Excel',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend:    'pdf',
+                    text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
+                    titleAttr: 'PDF',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
                 }
-            },
-            {
-                extend: 'pdf',
-                exportOptions: {
-                    columns: [1,2,3]
-                }
-            },
-            {
-                extend: 'print',
-                exportOptions: {
-                    columns: [1,2,3]
-                }
-            },
-        ],
+            ],
             // "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
             // ,columnDefs:[{targets:1, render:function(data){
             //     return moment(data).format('YYYY/MM/DD');

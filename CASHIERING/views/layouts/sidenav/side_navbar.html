@@ -75,16 +75,11 @@
                     <li><a href="cash_receipt_record_report">Cash Receipt Record</a></li>
                 </ul>
             </li>
-            <li class="has-sub">
-                <a href="javascript:;">
-                    <b class="caret"></b>
+            <li>
+                <a href="#deposits" data-toggle="modal">
                     <i class="fas fa-download"></i>
                     <span>Deposits</span>
                 </a>
-                <ul class="sub-menu">
-                    <li><a href="javascript:;">Pending</a></li>
-                    <li><a href="javascript:;">Deposited</a></li>
-                </ul>
             </li>
             <!-- begin sidebar minify button -->
             <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
@@ -128,6 +123,47 @@
                 </div>
             </div>
             <!-- end card -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #modal-dialog -->
+<div class="modal fade" id="deposits">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Deposits</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- begin card -->
+                <div class="card text-center">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#card-tab-1">Pending</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#card-tab-2">Deposited</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-block">
+                        <div class="tab-content p-0 m-0">
+                            <div class="tab-pane fade active show" id="card-tab-1">
+                                <h4 class="card-title">Pending Deposits</h4>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="javascript:;" class="btn btn-sm btn-default">Go somewhere</a>
+                            </div>
+                            <div class="tab-pane fade" id="card-tab-2">
+                                <h4 class="card-title">Deposited Collections</h4>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="javascript:;" class="btn btn-sm btn-yellow">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card -->
             </div>
         </div>
     </div>
