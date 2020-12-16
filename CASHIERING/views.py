@@ -141,3 +141,6 @@ def gt_fname(request):
 
 def activity_log(request):
     return render(request, 'views/layouts/pages/activity_log.html')
+
+def transaction_log(request):
+    return render(request, 'views/layouts/pages/transaction_log.html')
