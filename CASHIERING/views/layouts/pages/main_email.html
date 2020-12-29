@@ -18,12 +18,14 @@
 	<!-- ================== END PAGE LEVEL STYLE ================== -->
 
 	<!-- ================== BEGIN BASE JS ================== -->
-	<script src="{%static 'assets/plugins/pace/pace.min.js' %}"></script>
+	<!-- <script src="{%static 'assets/plugins/pace/pace.min.js' %}"></script> -->
 	<!-- ================== END BASE JS ================== -->
 </head>
 <body>
 	<!-- begin #page-loader -->
-	<div id="page-loader" class="fade show"><span class="spinner"></span></div>
+	<div class="loader-wrapper">
+        <span class="loader"><span class="loader-inner"></span></span>
+    </div>
 	<!-- end #page-loader -->
 	
 	<!-- begin #page-container "page-content-full-height" para sa email-compose template--> 
@@ -114,6 +116,9 @@
 	</script>
 	{% endblock %}
 	<script>
+		$(window).on("load",function(){
+			$(".loader-wrapper").fadeOut("slow");
+		});
 		gt_fname();
 		function gt_fname() {
 			$.ajax({

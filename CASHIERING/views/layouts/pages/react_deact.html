@@ -28,7 +28,7 @@
     </ol>
     <!-- end breadcrumb -->
     <!-- begin page-header -->
-    <h1 class="page-header">Reactivate | Deactivate</h1>
+    <h1 class="page-header">Reactivate | Deactivate <small>Change User Status</small></h1>
     <!-- end page-header -->
     
     <!-- begin row -->
@@ -54,40 +54,40 @@
                         <div class="panel-body">
                             <table id="data-table-responsives" class="table table-hover">
                                 <thead>
-                                    <tr class="bg-gradient-silver">
+                                    <tr>
                                         <th hidden>ID</th>
                                         <th class="text-nowrap">Fullname</th>
                                         <th class="text-nowrap">Role</th>
                                         <th class="text-nowrap">Status</th>
-                                        <th width="20%" class="text-nowrap hidden-print">Option</th>
+                                        <th width="20%" class="text-nowrap hidden-print text-center">Option</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td hidden>1</td>
                                         <td>Van Anthony Silleza</td>
-                                        <td><a class="btn btn-xs btn-default">Admin</a></td>
-                                        <td><a class="btn btn-xs btn-success text-white">Active</a></td>
+                                        <td><a class="btn btn-xs btn-white text-inverse">Admin</a></td>
+                                        <td><a class="btn btn-xs btn-white text-inverse">Active</a></td>
                                         <td align="center">
-                                            <input type="checkbox" class="deactBtn" id="user1" checked />
+                                            <a href="javascript:;" class="btn btn-xs btn-danger deactBtn" id="user1"><i class="fas fa-power-off m-r-5"></i>Deactivate</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td hidden>2</td>
                                         <td>Merly Gonzalbo</td>
-                                        <td><a class="btn btn-xs btn-default">Cashier</a></td>
-                                        <td><a class="btn btn-xs btn-success text-white">Active</a></td>
+                                        <td><a class="btn btn-xs btn-white text-inverse">Cashier</a></td>
+                                        <td><a class="btn btn-xs btn-white text-inverse">Active</a></td>
                                         <td align="center">
-                                            <input type="checkbox" class="deactBtn" id="user2" checked />
+                                            <a href="javascript:;" class="btn btn-xs btn-danger deactBtn" id="user2"><i class="fas fa-power-off m-r-5"></i>Deactivate</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td hidden>3</td>
                                         <td>Armando Caruso</td>
-                                        <td><a class="btn btn-xs btn-default">Cashier</a></td>
-                                        <td><a class="btn btn-xs btn-danger text-white">Inactive</a></td>
+                                        <td><a class="btn btn-xs btn-white text-inverse">Cashier</a></td>
+                                        <td><a class="btn btn-xs btn-white text-inverse">Inactive</a></td>
                                         <td align="center">
-                                            <input type="checkbox" class="reactBtn" id="user3" />
+                                            <a href="javascript:;" class="btn btn-xs btn-success reactBtn" id="user3"><i class="fas fa-redo-alt m-r-5"></i>Reactivate</a>
                                         </td>
                                     </tr>
                                 </tbody>

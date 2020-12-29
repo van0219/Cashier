@@ -129,7 +129,6 @@ def get_session(request):
     role = request.session.get('role')
     return JsonResponse(role, safe=False)
 
-
 def error_403(request):
     return render(request, 'views/layouts/pages/error_403.html')
 

@@ -5,7 +5,6 @@
 <link href="{%static 'assets/plugins/jquery-jvectormap/jquery-jvectormap.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/nvd3/build/nv.d3.css' %}" rel="stylesheet" />
-<link href="{%static 'assets/plugins/nvd3/build/nv.d3.css' %}" rel="stylesheet" />
 {% endblock %}
 {% block content %}
 <!-- begin #content -->
@@ -25,12 +24,13 @@
             <div class="widget widget-stats bg-gradient-red">
                 <div class="stats-icon stats-icon-lg"><i class="fas fa-shopping-basket fa-fw"></i></div>
                 <div class="stats-content">
-                    <div class="stats-title">TODAY'S COLLECTION</div>
-                    <div class="stats-number">₱15,853</div>
+                    <div class="stats-title">TODAY'S TOTAL COLLECTION</div>
+                    <div class="stats-number">₱15,853.00</div>
                     <div class="stats-progress progress">
                         <div class="progress-bar" style="width: 70.1%;"></div>
                     </div>
-                    <div class="stats-desc">{% now "m/j/Y" %}</div>
+                    <!-- <div class="stats-desc">{% now "m/j/Y" %}</div> -->
+                    <div class="stats-desc">Count of used OR today: 10</div>
                 </div>
             </div>
         </div>
@@ -40,12 +40,13 @@
             <div class="widget widget-stats bg-gradient-orange">
                 <div class="stats-icon stats-icon-lg"><i class="fas fa-shopping-bag fa-fw"></i></div>
                 <div class="stats-content">
-                    <div class="stats-title">YESTERDAY'S COLLECTION</div>
+                    <div class="stats-title">TODAY'S SIS TOTAL COLLECTION</div>
                     <div class="stats-number">₱50,466.75</div>
                     <div class="stats-progress progress">
                         <div class="progress-bar" style="width: 40.5%;"></div>
                     </div>
-                    <div class="stats-desc"><span id="yesterday"></span></div>
+                    <!-- <div class="stats-desc"><span id="yesterday"></span></div> -->
+                    <div class="stats-desc">Count of used OR for SIS today: 23</div>
                 </div>
             </div>
         </div>
@@ -55,12 +56,13 @@
             <div class="widget widget-stats bg-gradient-lime">
                 <div class="stats-icon stats-icon-lg"><i class="fas fa-shopping-cart fa-fw"></i></div>
                 <div class="stats-content">
-                    <div class="stats-title">LAST WEEK'S COLLECTION</div>
+                    <div class="stats-title">MONTH'S TOTAL COLLECTION</div>
                     <div class="stats-number">₱400,125</div>
                     <div class="stats-progress progress">
                         <div class="progress-bar" style="width: 76.3%;"></div>
                     </div>
-                    <div class="stats-desc"><span id="last_week"></span></div>
+                    <!-- <div class="stats-desc"><span id="last_week"></span></div> -->
+                    <div class="stats-desc">Current Month: {% now "F" %}</div>
                 </div>
             </div>
         </div>
@@ -70,12 +72,13 @@
             <div class="widget widget-stats bg-gradient-black">
                 <div class="stats-icon stats-icon-lg"><i class="fas fa-ship fa-fw"></i></div>
                 <div class="stats-content">
-                    <div class="stats-title">LAST MONTH'S COLLECTION</div>
+                    <div class="stats-title">YEAR'S TOTAL COLLECTION</div>
                     <div class="stats-number">₱2,674,399</div>
                     <div class="stats-progress progress">
                         <div class="progress-bar" style="width: 54.9%;"></div>
                     </div>
-                    <div class="stats-desc"><span id="last_month"></span></div>
+                    <!-- <div class="stats-desc"><span id="last_month"></span></div> -->
+                    <div class="stats-desc">Current Year: {% now "Y" %}</div>
                 </div>
             </div>
         </div>
@@ -89,7 +92,7 @@
             <!-- begin card -->
             <div class="card text-left">
                 <div class="card-header">
-                    <i class="fas fa-chart-bar"></i> Daily Collection
+                    <i class="fas fa-chart-bar"></i> Monthly Collection
                 </div>
                 <div class="card-block">
                     <!-- begin panel -->
@@ -106,30 +109,16 @@
         <!-- end col-8 -->
         <!-- begin col-4 -->
         <div class="col-lg-4">
-            <!-- begin card -->
-            <div class="card text-left">
-                <div class="card-header">
-                    <i class="fas fa-calendar-alt"></i> Today's Schedule
+            <!-- begin panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Line Graph</h4>
                 </div>
-                <div class="card-block">
-                    <!-- begin panel -->
-                    <div class="panel panel-default" data-sortable-id="index-3">
-                        <div id="schedule-calendar" class="bootstrap-calendar"></div>
-                        <div class="list-group">
-                            <a href="javascript:;" class="list-group-item d-flex justify-content-between align-items-center text-ellipsis">
-                                Finalyze Accountable Forms
-                                <span class="badge f-w-500 bg-gradient-green f-s-10">9:00 am</span>
-                            </a> 
-                            <a href="javascript:;" class="list-group-item d-flex justify-content-between align-items-center text-ellipsis">
-                                Have a meeting with accounting
-                                <span class="badge f-w-500 bg-gradient-blue f-s-10">2:45 pm</span>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- end panel -->
+                <div class="panel-body">
+                    <div id="nv-bar-chart" class="height-sm"></div>
                 </div>
             </div>
-            <!-- end card -->
+            <!-- end panel -->
         </div>
         <!-- end col-4 -->
     </div>
@@ -171,6 +160,7 @@
                     Notification.init();
                     Highlight.init();
                     handleBarChart();
+                    handleLineChart();
 
                     var mon;
                     var day = (d.getDate()==1) ? count_days_month()+1 : d.getDate();//if day today is 1 --> gets the previous month's number of days plus 1;
@@ -263,19 +253,18 @@
                 }
                 var handleBarChart = function() {
                     "use strict";
-                    
+
+                    var bar_color = [COLOR_RED, COLOR_ORANGE, COLOR_GREEN, COLOR_AQUA, COLOR_BLUE, COLOR_PURPLE, COLOR_GREY, COLOR_BLACK, "goldenrod",'#ff0000', 'lightblue', 'pink' ];
+                    var bar_value = [29, 15, 32, 196, 44, 98, 13, 5, 87, 123, 99, 176];
+                    var bar_label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    var data= [];
+                    for (var i = 0; i < 12; i++) {
+                        data[i] = { 'label': bar_label[i], 'value': bar_value[i], 'color': bar_color[i]  };
+                    }
                     var barChartData = [{
                         key: 'Cumulative Return',
-                        values: [
-                            { 'label' : 'SUN', 'value' : 2904, 'color' : COLOR_BLUE }, 
-                            { 'label' : 'MON', 'value' : 15107, 'color' : COLOR_BLUE }, 
-                            { 'label' : 'TUE', 'value' : 3206, 'color' : COLOR_BLUE }, 
-                            { 'label' : 'WED', 'value' : 19600, 'color' : COLOR_BLUE },  
-                            { 'label' : 'THU', 'value' : 4400, 'color' : COLOR_BLUE },  
-                            { 'label' : 'FRI', 'value' : 9800, 'color' : COLOR_BLUE },  
-                            { 'label' : 'SAT', 'value' : 1367, 'color' : COLOR_BLUE },  
-                        ]
-                    }];
+                        values: data,
+                    }]
 
                     nv.addGraph(function() {
                         var barChart = nv.models.discreteBarChart()
@@ -284,15 +273,58 @@
                             .showValues(true)
                             .duration(250);
                         
-                        barChart.yAxis.axisLabel("Total Collection");
-                        barChart.xAxis.axisLabel('Days');
+                        barChart.yAxis.axisLabel("Total Registered Residents");
+                        barChart.xAxis.axisLabel('Year');
                     
                         d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
                         nv.utils.windowResize(barChart.update);
                     
                         return barChart;
                     });
-                }
+                };
+                var handleLineChart = function() {
+                    "use strict";
+                    
+                    nv.addGraph(function() {
+                        
+                        var sin = [], cos = [];
+                        for (var i = 0; i < 100; i++) {
+                            sin.push({x: i, y:  Math.sin(i/10) });
+                            cos.push({x: i, y: .5 * Math.cos(i/10)});
+                        }
+                        var lineChartData = [
+                            { values: sin, key: 'Sine Wave', color: COLOR_GREEN }, 
+                            { values: cos, key: 'Cosine Wave', color: COLOR_BLUE }
+                        ];
+                        
+                        var lineChart = nv.models.lineChart()
+                            .options({
+                                transitionDuration: 300,
+                                useInteractiveGuideline: true
+                            });
+
+                        lineChart.xAxis
+                            .axisLabel('Time (s)')
+                            .tickFormat(d3.format(',.1f'));
+
+                        lineChart.yAxis
+                            .axisLabel('Voltage (v)')
+                            .tickFormat(function(d) {
+                                if (d == null) {
+                                    return 'N/A';
+                                }
+                                return d3.format(',.2f')(d);
+                            });
+
+                        d3.select('#nv-line-chart').append('svg')
+                            .datum(lineChartData)
+                            .call(lineChart);
+
+                        nv.utils.windowResize(lineChart.update);
+
+                        return lineChart;
+                    });
+                };
             }
         }
     });

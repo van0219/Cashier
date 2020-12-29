@@ -66,8 +66,8 @@
                         <div class="form-group row m-b-15">
                             <label class="col-md-4 col-sm-4 col-form-label" for="fndtype">Fund Type <span class="text-red">*</span> :</label>
                             <div class="col-md-8 col-sm-8">
-                                <select class="form-control selectpicker" name="fndtype" data-style="btn-default">
-                                    <option selected disabled>--select fund type--</option>
+                                <select class="form-control selectpicker" name="fndtype" data-style="btn-inverse">
+                                    <option selected disabled>Select Fund Type</option>
                                     <option>Regular Trust Fund</option>
                                     <option>Special Trust Fund</option>
                                 </select>
@@ -76,8 +76,8 @@
                         <div class="form-group row m-b-15">
                             <label class="col-md-4 col-sm-4 col-form-label" for="inctype">Income Type <span class="text-red">*</span> :</label>
                             <div class="col-md-8 col-sm-8">
-                                <select class="form-control selectpicker" name="inctype" data-style="btn-default">
-                                    <option selected disabled>--select income type--</option>
+                                <select class="form-control selectpicker" name="inctype" data-style="btn-inverse">
+                                    <option selected disabled>Select Income Type</option>
                                     <option>Service Income</option>
                                     <option>Business Income</option>
                                 </select>
@@ -95,10 +95,16 @@
                                 <input class="form-control" type="text" id="desc" name="desc" placeholder="Description" data-parsley-required="true" />
                             </div>
                         </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="desc">Amount <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control" type="number" id="amt" name="amt" placeholder="Amount in peso" data-parsley-type="digits" data-parsley-required="true" />
+                            </div>
+                        </div>
                         <div class="form-group row m-b-0">
                             <label class="col-md-4 col-sm-4 col-form-label">&nbsp;</label>
                             <div class="col-md-8 col-sm-8">
-                                <input type="submit" class="btn btn-success" id="add" value="Add to List" />
+                                <a href="javascript:;" class="btn btn-success" id="add"><i class="fas fa-plus-circle m-r-5"></i>Add to List</a>
                             </div>
                         </div>
                     </form>
@@ -132,7 +138,7 @@
                         <div class="panel-body">
                             <table id="data-table-combines" class="table table-hover">
                                 <thead>
-                                    <tr class="bg-gradient-silver">
+                                    <tr>
                                         <th class="text-nowrap">Fund Type</th>
                                         <th class="text-nowrap">Income Type</th>
                                         <th class="text-nowrap">Code</th>
@@ -481,7 +487,11 @@
                 }
             }
         ],
-            "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ]
+            "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ],
+            columnDefs:[{
+                targets: 4,
+                orderable: false,
+            }]
         });
     });
     $('#data-table-modal-fund').DataTable({
