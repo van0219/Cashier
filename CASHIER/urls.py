@@ -39,7 +39,6 @@ urlpatterns = [
     path('add_user', views.add_user, name='add_user'),
     path('edit_user', views.edit_user, name='edit_user'),
     path('react_deact', views.react_deact, name='react_deact'),
-    path('setup_uacs', views.setup_uacs, name='setup_uacs'),
     path('email', views.email, name="email"),
     path('account', views.account, name="account"),
     path('add_user_btn_click', views.add_user_btn_click, name="add_user_btn_click"),
@@ -51,4 +50,8 @@ urlpatterns = [
     path('gt_fname', views.gt_fname, name="gt_fname"),
     path('activity_log', views.activity_log, name="activity_log"),
     path('transaction_log', views.transaction_log, name="transaction_log"),
+    path('get_income_type', views.get_income_type, name="get_income_type"),
+    path('get_fund_type', views.get_fund_type, name="get_fund_type"),
+    path('get_UACS_data_table', views.get_UACS_data_table, name="get_UACS_data_table"),
+    path('refresh_UACS_table', views.refresh_UACS_table, name="refresh_UACS_table")
 ]

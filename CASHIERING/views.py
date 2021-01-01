@@ -75,10 +75,6 @@ def react_deact(request):
     return render(request, 'views/layouts/pages/react_deact.html')
 
 
-def setup_uacs(request):
-    return render(request, 'views/layouts/pages/setup_uacs.html')
-
-
 def email(request):
     return render(request, 'views/layouts/pages/email.html')
 
@@ -143,3 +139,27 @@ def activity_log(request):
 
 def transaction_log(request):
     return render(request, 'views/layouts/pages/transaction_log.html')
+    
+def get_income_type(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_INCOME_TYPE")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+  
+def get_fund_type(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_FUND_TYPE")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def get_UACS_data_table(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_UACS_TABLE")
+    data = cursor.fetchall()
+    return render(request, 'views/layouts/pages/setup_uacs.html', {"response": data})
+
+def refresh_UACS_table(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_UACS_TABLE")
+    data = cursor.fetchall()
+    return render(request, 'views/layouts/pages/setup_uacs.html', {"response": data})
