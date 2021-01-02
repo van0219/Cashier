@@ -108,8 +108,8 @@
             </div>
             <!-- end panel -->
             <div style="border: 1px; border-style: solid; border-radius: 5px;" class="text-grey-lighter p-b-15" align="center">
-                <a href="#setup_fund" data-toggle="modal" class="btn btn-m btn-inverse m-t-15" id="fund" onclick="onShowModalFund();"><i class="fas fa-angle-double-right"></i> Setup Fund Type</a>
-                <a href="#setup_income" data-toggle="modal" class="btn btn-m btn-inverse m-t-15" id="income" onclick="onShowModalInc();"><i class="fas fa-angle-double-right"></i> Setup Income Type</a>
+                <a href="#setup_fund" data-toggle="modal" class="btn btn-m bg-black-darker text-white m-t-15" id="fund" onclick="onShowModalFund();"><i class="fas fa-angle-double-right"></i> Setup Fund Type</a>
+                <a href="#setup_income" data-toggle="modal" class="btn btn-m bg-black-darker m-t-15 text-white" id="income" onclick="onShowModalInc();"><i class="fas fa-angle-double-right"></i> Setup Income Type</a>
             </div>
         </div>
         <!-- end col-6 -->
@@ -117,54 +117,116 @@
         <!-- begin col-8 -->
         <div class="col-lg-8">
             <!-- begin card -->
-            <div class="card text-left">
+            <!-- <div class="card text-left">
                 <div class="card-header">
                     <i class="fas fa-file-code m-r-5"></i>UACS List
                 </div>
                 <div class="card-block">
-                    <!-- begin panel -->
-                    <div class="panel panel-white">
-                        <!-- begin panel-heading -->
-                        <div class="panel-heading">
-                            <div class="panel-heading-btn">
-                                <a href="javascript:;" class="btn btn-xs btn-default m-b-10" data-click="panel-expand"><i class="fa fa-expand m-r-5"></i>Expand</a>
-                                <a href="javascript:;" class="btn btn-xs btn-success m-b-10" id="reload"><i class="fa fa-redo m-r-5"></i>Reload</a>
-                            </div>
-                            <h4 class="panel-title"></h4>
-                        </div>
-                        <!-- end panel-heading -->
-                        <!-- begin panel-body -->
-                        <div class="panel-body">
-                            <table id="data-table-combines" class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="text-nowrap" style="width: 5%;">Old Code</th>
-                                        <th class="text-nowrap">New Code</th>
-                                        <th class="text-nowrap">Description</th>
-                                        <th class="text-nowrap text-center">Options</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for val in response %}
-                                    <tr>
-                                        <td>{{val.1}}</td>
-                                        <td>{{val.0}}</td>
-                                        <td style="max-width: 100px;" class="text-ellipsis" title="{{val.4}}">{{val.4}}</td>
-                                        <td align="center">
-                                            <a href="javascript:;" class="btn btn-xs btn-primary"><i class="fas fa-eye m-r-5"></i>View</a>
-                                            <a href="javascript:;" class="btn btn-xs btn-danger"><i class="fas fa-trash m-r-5"></i>Delete</a>
-                                        </td>
-                                    </tr>
-                                   {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- end panel-body -->
-                    </div>
-                    <!-- end panel -->
+
                 </div>
                 <div class="card-footer text-muted">
                     
+                </div>
+            </div> -->
+            <!-- end card -->
+            <!-- begin card -->
+            <div class="card text-center">
+                <div class="card-header">
+                    <ul class="nav nav-pills card-header-pills">
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1">Active</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2">Inactive</a></li>
+                    </ul>
+                </div>
+                <div class="card-block">
+                    <div class="tab-content p-0 m-0">
+                        <div class="tab-pane fade active show" id="card-pill-1">
+                            <!-- begin panel -->
+                            <div class="panel panel-white">
+                                <!-- begin panel-heading -->
+                                <div class="panel-heading">
+                                    <div class="panel-heading-btn">
+                                        <a href="javascript:;" class="btn btn-xs btn-primary m-b-10" data-click="panel-expand" id="expand"><i class="fa fa-expand m-r-5"></i><span id="exp">Expand</span></a>
+                                        <!-- <a href="javascript:;" class="btn btn-xs btn-success m-b-10" id="reload"><i class="fa fa-redo m-r-5"></i>Reload</a> -->
+                                    </div>
+                                    <h4 class="panel-title"></h4>
+                                </div>
+                                <!-- end panel-heading -->
+                                <!-- begin panel-body -->
+                                <div class="panel-body">                           
+                                    <table id="data-table-combines" class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-nowrap" style="width: 5%;">Old Code</th>
+                                                <th class="text-nowrap">New Code</th>
+                                                <th class="text-nowrap">Description</th>
+                                                <th class="text-nowrap text-center">Options</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbod">
+                                            {% for val in response %}
+                                            {% if val.5 == 1 %}
+                                            <tr>
+                                                <td>{{val.1}}</td>
+                                                <td>{{val.0}}</td>
+                                                <td style="max-width: 100px;" class="text-ellipsis" title="{{val.4}}">{{val.4}}</td>
+                                                <td align="center">
+                                                    <a href="#view_modal" class="btn btn-xs btn-primary view" data-toggle="modal"><i class="fas fa-eye m-r-5"></i>View</a>
+                                                    <a href="javascript:;" class="btn btn-xs btn-danger remove"><i class="fas fa-trash m-r-5"></i>Remove</a>
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end panel-body -->
+                            </div>
+                            <!-- end panel -->
+                        </div>
+                        <div class="tab-pane fade" id="card-pill-2">
+                            <!-- begin panel -->
+                            <div class="panel panel-white">
+                                <!-- begin panel-heading -->
+                                <div class="panel-heading">
+                                    <div class="panel-heading-btn">
+                                        <a href="javascript:;" class="btn btn-xs btn-primary m-b-10" data-click="panel-expand" id="expand2"><i class="fa fa-expand m-r-5"></i><span id="exp2">Expand</span></a>
+                                        <!-- <a href="javascript:;" class="btn btn-xs btn-success m-b-10" id="reload"><i class="fa fa-redo m-r-5"></i>Reload</a> -->
+                                    </div>
+                                    <h4 class="panel-title"></h4>
+                                </div>
+                                <!-- end panel-heading -->
+                                <!-- begin panel-body -->
+                                <div class="panel-body">                           
+                                    <table id="data-table-combines2" class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-nowrap" style="width: 5%;">Old Code</th>
+                                                <th class="text-nowrap">New Code</th>
+                                                <th class="text-nowrap">Description</th>
+                                                <th class="text-nowrap text-center">Options</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbod2">
+                                            {% for val in response %}
+                                            {% if val.5 == 0 %}
+                                            <tr>
+                                                <td>{{val.1}}</td>
+                                                <td>{{val.0}}</td>
+                                                <td style="max-width: 100px;" class="text-ellipsis" title="{{val.4}}">{{val.4}}</td>
+                                                <td align="center">
+
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end panel-body -->
+                            </div>
+                            <!-- end panel -->
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- end card -->
@@ -312,6 +374,79 @@
         </div>
     </div>
 </div>
+<!-- #modal-dialog 3-->
+<div class="modal fade" id="view_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Modal Dialog</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- begin card -->
+                <div class="card text-left">
+                    <div class="card-header">
+                        <i class="fas fa-user-plus m-r-5"></i>
+                        Add New User to the System
+                    </div>
+                    <div class="card-block">
+                        <!-- begin panel -->
+                        <div class="panel panel-white" data-sortable-id="form-validation-1">
+                            <!-- begin panel-heading -->
+    
+                            <!-- end panel-heading -->
+                            <!-- begin panel-body -->
+                            <div class="panel-body" style="margin-bottom: -40px;;">
+                                <form class="form-horizontal" name="demo-form" action="#" id="addForm" autocomplete="off">
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="fullname">First Name <span class="text-red">*</span> :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="fname" name="fname" placeholder="First Name" data-parsley-required="true" data-parsley-required-message="Firstname is required" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="fullname">Middle Name :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="mname" name="mname" placeholder="Middle Name" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="fullname">Last Name <span class="text-red">*</span> :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" data-parsley-required="true" data-parsley-required-message="Lastname is required" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="email">Username <span class="text-red">*</span> :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="uname" name="uname" placeholder="Username" data-parsley-required="true" data-parsley-required-message="Username is required"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="message">Password <span class="text-red">*</span> :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="pword" name="pword" maxlength="15" placeholder="Password" data-parsley-required="true" data-parsley-required-message="Password is required"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- end panel-body -->
+                        </div>
+                        <!-- end panel -->
+                    </div>
+                    <div class="card-footer text-grey-darker f-s-10">
+                        <span style="font-style: italic;">Last Accessed: 2 days ago</span>
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-success">Action</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block page-js %}
 <!--  -->
@@ -405,37 +540,23 @@
             }
         });
         $('#reload').on('click', function() {
-            $.ajax({
-                type: "POST",
-                url: "{% url 'refresh_UACS_table' %}",
-                cache: false,
-                // dataType: 'json',
-                data: {
-                    csrfmiddlewaretoken:"{{csrf_token}}"
-                },
-                success: function(obj) {
-                    $('#data-table-combines').DataTable().destroy();
-                    $('#data-table-combines').find('tbody').append(
-                        `{% for val in response %}
-                        <tr>
-                            <td>{{val.1}}</td>
-                            <td>{{val.0}}</td>
-                            <td style="max-width: 100px;" class="text-ellipsis" title="{{val.4}}">{{val.4}}</td>
-                            <td align="center">
-                                <a href="javascript:;" class="btn btn-xs btn-primary"><i class="fas fa-eye m-r-5"></i>View</a>
-                                <a href="javascript:;" class="btn btn-xs btn-danger"><i class="fas fa-trash m-r-5"></i>Delete</a>
-                            </td>
-                        </tr>
-                        {% endfor %}`
-                    );
-                    $('#data-table-combines').DataTable().draw();
-                },
-                error: function(xhr, status, error) {
-                    // var errMsg = xhr.status + ': ' + xhr.statusText;
-                    var errMsg = error;
-                    alert(errMsg);
-                }
-            });
+
+        });
+        $('#expand').on('click', function(){
+            if($('#expand').text()=='Expand') {
+                $('#exp').text('Compress');
+            }
+            else {
+                $('#exp').text('Expand');
+            }
+        });
+        $('#expand2').on('click', function(){
+            if($('#expand2').text()=='Expand') {
+                $('#exp2').text('Compress');
+            }
+            else {
+                $('#exp2').text('Expand');
+            }
         });
     });
     $('#data-table-modal-fund').DataTable({
@@ -464,14 +585,14 @@
 
         ],
     });
-    $('#data-table-combines').DataTable({
+    var dt_combines = $('#data-table-combines').DataTable({
         'paging'      : true,
         'lengthChange': true,
         'searching'   : true,
         'ordering'    : false,
         'info'        : true,
-        'autoWidth'   : false,
-        // "aaSorting"   : [[1, "desc" ]],
+        'autoWidth'   : true,
+        "aaSorting"   : [[1, "desc" ]],
         dom: 'lBfrtip',
         buttons: [
         {
@@ -500,10 +621,14 @@
         }
     ],
         "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ],
-        columnDefs:[{
-            targets: 2,
-            orderable: false,
-        }]
+        // columnDefs:[{
+        //     // targets: 2,
+        //     // orderable: false,
+        // }]
+        columnDefs:[{targets:3, render:function(data){
+            return `<a href="#view_modal" class="btn btn-xs btn-primary view" data-toggle="modal"><i class="fas fa-eye m-r-5"></i>View</a>
+                   <a href="javascript:;" class="btn btn-xs btn-danger remove"><i class="fas fa-trash m-r-5"></i>Remove</a>`;
+        }}]
     });
     $('#fund').on('click', function() {
         $('#setup_fund_form').parsley().reset();
@@ -535,5 +660,154 @@
         $('.manageIncDiv').hide();
         $('.addIncDiv').show();
     }
+
+    var dt_combines2 = $('#data-table-combines2').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : false,
+        'info'        : true,
+        'autoWidth'   : true,
+        "aaSorting"   : [[1, "desc" ]],
+        dom: 'lBfrtip',
+        buttons: [
+        {
+            extend:    'print',
+            text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
+            titleAttr: 'Print',
+            exportOptions: {
+                columns: [0,1,2]
+            }
+        },
+        {
+            extend:    'excel',
+            text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
+            titleAttr: 'Excel',
+            exportOptions: {
+                columns: [0,1,2]
+            }
+        },
+        {
+            extend:    'pdf',
+            text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
+            titleAttr: 'PDF',
+            exportOptions: {
+                columns: [0,1,2]
+            }
+        }
+    ],
+        "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ],
+        columnDefs:[{targets:3, render:function(data){
+            return '<a href="javascript:;" class="btn btn-xs btn-warning redo"><i class="fas fa-redo m-r-5"></i>Restore</a>';
+        }}]
+    });
+
+    $('#data-table-combines2 tbody').on('click', '.redo', function() {
+        var id = $(this).closest("tbody tr").find("td:eq(0)").html();
+        var rowIdx = dt_combines2.row($(this).closest('tr')).index();
+        var row = dt_combines2.row(rowIdx);
+        var rowNode = row.node();
+        var new_status = 1;
+        var code = $(this).closest("tr").find("td:eq(1)").html();
+
+        swal({
+            title: "Restore",
+            text: "Are you sure to restore this fee?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d9534f",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: true,
+            customClass: "Custom_Cancel"
+        },
+        function(isConfirm) {
+            if (isConfirm){
+                row.remove().draw();
+                dt_combines.row.add(rowNode).draw();
+
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'change_status_uacs' %}",
+                    cache: false,
+                    data: {
+                        new_status: new_status,
+                        code: code,
+                        csrfmiddlewaretoken:"{{csrf_token}}"
+                    },
+                    success: function(obj) {
+
+                    },
+                    error: function(xhr, status, error) {
+                        var errMsg = error;
+                        alert(errMsg);
+                    }
+                });
+
+                swal({
+                        title: "Restored Successfully", 
+                        text: "Record was transferred to the Active tab!", 
+                        type: "success",
+                        showLoaderOnConfirm: true,
+                        confirmButtonColor: "#5cb85c",
+                    })
+                }
+        });
+    });
+
+    $('#data-table-combines tbody').on( 'click', '.remove', function () {
+        var rowIdx = dt_combines.row($(this).closest('tr')).index();
+        var row = dt_combines.row(rowIdx);
+        var rowNode = row.node();
+        var new_status = 0;
+        var code = $(this).closest("tr").find("td:eq(1)").html();
+
+        swal({
+            title: "Remove",
+            text: "Are you sure to remove this fee?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d9534f",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: true,
+            customClass: "Custom_Cancel"
+        },
+        function(isConfirm) {
+            if (isConfirm){
+                row.remove().draw();
+                dt_combines2.row.add(rowNode).draw();
+
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'change_status_uacs' %}",
+                    cache: false,
+                    // dataType: 'json',
+                    data: {
+                        new_status: new_status,
+                        code: code,
+                        csrfmiddlewaretoken:"{{csrf_token}}"
+                    },
+                    success: function(obj) {
+
+                    },
+                    error: function(xhr, status, error) {
+                        var errMsg = error;
+                        alert(errMsg);
+                    }
+                });
+
+                swal({
+                        title: "Removed Successfully", 
+                        text: "Record was transferred to the Inactive tab!", 
+                        type: "success",
+                        showLoaderOnConfirm: true,
+                        confirmButtonColor: "#5cb85c",
+                    })
+                }
+        });
+    });
 </script>
 {% endblock %}

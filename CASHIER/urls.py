@@ -53,5 +53,5 @@ urlpatterns = [
     path('get_income_type', views.get_income_type, name="get_income_type"),
     path('get_fund_type', views.get_fund_type, name="get_fund_type"),
     path('get_UACS_data_table', views.get_UACS_data_table, name="get_UACS_data_table"),
-    path('refresh_UACS_table', views.refresh_UACS_table, name="refresh_UACS_table")
+    path('change_status_uacs', views.change_status_uacs, name="change_status_uacs"),
 ]

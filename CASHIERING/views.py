@@ -158,8 +158,7 @@ def get_UACS_data_table(request):
     data = cursor.fetchall()
     return render(request, 'views/layouts/pages/setup_uacs.html', {"response": data})
 
-def refresh_UACS_table(request):
+def change_status_uacs(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_SELECT_UACS_TABLE")
-    data = cursor.fetchall()
-    return render(request, 'views/layouts/pages/setup_uacs.html', {"response": data})
+    cursor.callproc("SP_UPDATE_STATUS_UACS", (request.POST['code'], request.POST['new_status']))
+    return HttpResponse("")
