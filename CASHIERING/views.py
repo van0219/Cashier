@@ -162,3 +162,42 @@ def change_status_uacs(request):
     cursor = connection.cursor()
     cursor.callproc("SP_UPDATE_STATUS_UACS", (request.POST['code'], request.POST['new_status']))
     return HttpResponse("")
+
+def update_uacs(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_UPDATE_UACS_TABLE"
+                    ,(request.POST['id']
+                    ,request.POST['old_code']
+                    ,request.POST['new_code']
+                    ,request.POST['fnd_type']
+                    ,request.POST['inc_type']
+                    ,request.POST['desc_name']
+                    ))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def add_uacs_list(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_INSERT_UACS_TABLE"
+                    ,(request.POST['fndtype']
+                    ,request.POST['inctype']
+                    ,request.POST['code']
+                    ,request.POST['desc']
+                    ))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def add_uacs_fund_type(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_INSERT_UACS_FUND"
+                    ,(request.POST['fund_code']
+                    ,request.POST['fund_desc']
+                    ))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def add_uacs_inc_type(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_INSERT_UACS_INC"
+                    ,(request.POST['inc_desc'],))
+    return HttpResponse("")

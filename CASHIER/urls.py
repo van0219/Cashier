@@ -54,4 +54,8 @@ urlpatterns = [
     path('get_fund_type', views.get_fund_type, name="get_fund_type"),
     path('get_UACS_data_table', views.get_UACS_data_table, name="get_UACS_data_table"),
     path('change_status_uacs', views.change_status_uacs, name="change_status_uacs"),
+    path('update_uacs', views.update_uacs, name="update_uacs"),
+    path('add_uacs_list', views.add_uacs_list, name="add_uacs_list"),
+    path('add_uacs_fund_type', views.add_uacs_fund_type, name="add_uacs_fund_type"),
+    path('add_uacs_inc_type', views.add_uacs_inc_type, name="add_uacs_inc_type"),                                          
 ]
