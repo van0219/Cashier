@@ -201,3 +201,29 @@ def add_uacs_inc_type(request):
     cursor.callproc("SP_INSERT_UACS_INC"
                     ,(request.POST['inc_desc'],))
     return HttpResponse("")
+
+def deact_uacs_inc_type(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_DEACT_INC_TYPE"
+                    ,(request.POST['inctype'],))
+    return HttpResponse("")
+
+def deact_uacs_fund_type(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_DEACT_FUND_TYPE"
+                    ,(request.POST['fndtype'],))
+    return HttpResponse("")
+
+def get_specific_fund(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SPECIFIC_FUND"
+                    ,(request.POST['fndtype'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def get_specific_income(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SPECIFIC_INCOME"
+                    ,(request.POST['inctype'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

@@ -82,7 +82,7 @@
                         <div class="form-group row m-b-15">
                             <label class="col-md-4 col-sm-4 col-form-label" for="code">Code <span class="text-red">*</span> :</label>
                             <div class="col-md-8 col-sm-8">
-                                <input class="form-control" type="text" id="code" name="code" placeholder="Code" data-parsley-type="digits" data-parsley-required="true" data-parsley-required-message="UACS code is required" />
+                                <input class="form-control" type="text" id="code" name="code" placeholder="Code" data-parsley-required="true" data-parsley-required-message="UACS code is required" />
                             </div>
                         </div>
                         <div class="form-group row m-b-15">
@@ -265,13 +265,13 @@
                             <div class="form-group row m-b-15 addFundDiv">
                                 <label class="col-md-4 col-sm-4 col-form-label" for="codeFund">Fund Type Code <span class="text-red">*</span> :</label>
                                 <div class="col-md-8 col-sm-8">
-                                    <input class="form-control" type="text" id="codeFund" name="codeFund" placeholder="Code" data-parsley-required="true" data-parsley-required-message="Fund code is required" />
+                                    <input class="form-control" type="text" id="codeFund" name="codeFund" placeholder="Code" data-parsley-required="true" data-parsley-required-message="Fund code is required" style="text-transform: uppercase;" />
                                 </div>
                             </div>
                             <div class="form-group row m-b-15 addFundDiv">
                                 <label class="col-md-4 col-sm-4 col-form-label" for="descFund">Description <span class="text-red">*</span> :</label>
                                 <div class="col-md-8 col-sm-8">
-                                    <input class="form-control" type="text" id="descFund" name="descFund" placeholder="Description" data-parsley-required="true" data-parsley-required-message="Fund description is required"/>
+                                    <input class="form-control" type="text" id="descFund" name="descFund" placeholder="Description" data-parsley-required="true" data-parsley-required-message="Fund description is required" style="text-transform: uppercase;"/>
                                 </div>
                             </div>
                             <div class="form-group row m-b-15 manageFundDiv" style="display: none;">
@@ -327,7 +327,7 @@
                         <div class="form-group row m-b-15 addIncDiv">
                             <label class="col-md-4 col-sm-4 col-form-label" for="descInc">Description <span class="text-red">*</span> :</label>
                             <div class="col-md-8 col-sm-8">
-                                <input class="form-control" type="text" id="descInc" name="descInc" placeholder="Description" data-parsley-required="true" />
+                                <input class="form-control" type="text" id="descInc" name="descInc" placeholder="Description" data-parsley-required="true" style="text-transform: uppercase;"/>
                             </div>
                         </div>
                         <div class="form-group row m-b-15 manageIncDiv" style="display: none;">
@@ -335,7 +335,7 @@
                         </div>
                         <!-- for loop -->
                         <div class=" manageIncDiv text-black-lighter" style="display: none;">
-                            <table id="data-table-modal-Income" class="table">
+                            <table id="data-table-modal-income" class="table">
                                 <thead align="center">
                                     <th class="text-nowrap bg-white">Income Type</th>
                                     <th class="text-nowrap text-center bg-white">Options</th>
@@ -423,6 +423,96 @@
             <div class="modal-footer">
                 <a href="javascript:;" class="btn btn-white" id="view_close" data-dismiss="modal">Close</a>
                 <a href="javascript:;" class="btn btn-primary" id="view_editBtn">Edit</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #modal-dialog 4-->
+<div class="modal fade" id="editFund">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="view_header">Edit Fund Type</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- begin card -->
+                <div class="card text-left">
+                    <div class="card-block">
+                        <!-- begin panel -->
+                        <div class="panel panel-white" data-sortable-id="form-validation-1">
+                            <!-- begin panel-heading -->
+    
+                            <!-- end panel-heading -->
+                            <!-- begin panel-body -->
+                            <div class="panel-body" style="margin-bottom: -40px;;">
+                                <form class="form-horizontal" name="demo-form" action="#" id="editFundForm" autocomplete="off">
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="editFund-code">Fund Code <span class="text-red">*</span> :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="editFund-code" name="editFund-code" placeholder="Fund Code" data-parsley-required="true" data-parsley-required-message="Fund Code is required" style="text-transform: uppercase;" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="editFund-desc">Fund Description <span class="text-red">*</span> :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="editFund-desc" name="editFund-desc" placeholder="Fund Description" style="text-transform: uppercase;" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- end panel-body -->
+                        </div>
+                        <!-- end panel -->
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" id="editFund_close" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-success" id="editFund_update">Update</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #modal-dialog 4-->
+<div class="modal fade" id="editInc">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="view_header">Edit Income Type</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- begin card -->
+                <div class="card text-left">
+                    <div class="card-block">
+                        <!-- begin panel -->
+                        <div class="panel panel-white" data-sortable-id="form-validation-1">
+                            <!-- begin panel-heading -->
+    
+                            <!-- end panel-heading -->
+                            <!-- begin panel-body -->
+                            <div class="panel-body" style="margin-bottom: -40px;;">
+                                <form class="form-horizontal" name="demo-form" action="#" id="editIncForm" autocomplete="off">
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="editInc-desc">Income Description<span class="text-red">*</span>:</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="editInc-desc" name="editInc-desc" placeholder="Income Description" style="text-transform: uppercase;"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- end panel-body -->
+                        </div>
+                        <!-- end panel -->
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" id="editInc_close" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-success" id="editInc_update">Update</a>
             </div>
         </div>
     </div>
@@ -565,30 +655,30 @@
         'ordering'    : false,
         'info'        : false,
         'autoWidth'   : true,
-        "aaSorting"   : [[1, "desc" ]],
+        "aaSorting"   : [[0, "desc" ]],
         dom: 'lBfrtip',
         buttons: [
 
         ],
         columnDefs:[{targets:1, render:function(data){
-            return `<a href="javascript:;" class="btn btn-xs btn-primary editFundBtn" data-toggle="modal"><i class="fas fa-edit m-r-5"></i>Edit</a>
+            return `<a href="#editFund" class="btn btn-xs btn-primary editFundBtn" data-toggle="modal"><i class="fas fa-edit m-r-5"></i>Edit</a>
                    <a href="javascript:;" class="btn btn-xs btn-danger deleteFundBtn"><i class="fas fa-trash m-r-5"></i>Delete</a>`;
         }}]
     });
-    var dt_inc = $('#data-table-modal-Income').DataTable({
+    var dt_inc = $('#data-table-modal-income').DataTable({
         'paging'      : false,
         'lengthChange': false,
         'searching'   : false,
         'ordering'    : false,
         'info'        : false,
         'autoWidth'   : true,
-        "aaSorting"   : [[1, "desc" ]],
+        "aaSorting"   : [[0, "desc" ]],
         dom: 'lBfrtip',
         buttons: [
 
         ],
         columnDefs:[{targets:1, render:function(data){
-            return `<a href="javascript:;" class="btn btn-xs btn-primary editIncBtn" data-toggle="modal"><i class="fas fa-edit m-r-5"></i>Edit</a>
+            return `<a href="#editInc" class="btn btn-xs btn-primary editIncBtn" data-toggle="modal"><i class="fas fa-edit m-r-5"></i>Edit</a>
                    <a href="javascript:;" class="btn btn-xs btn-danger deleteIncBtn"><i class="fas fa-trash m-r-5"></i>Delete</a>`;
         }}]
     });
@@ -1054,7 +1144,7 @@
         event.preventDefault();
 
         var fund_code = $('#codeFund').val();
-        var fund_desc = $('#descFund').val();
+        var fund_desc = $('#descFund').val().toUpperCase();
 
         $('#setup_fund_form').parsley();
         if ($('#setup_fund_form').parsley().validate()) {
@@ -1070,6 +1160,21 @@
                 success:function(data) {
                     $('#codeFund').val('');
                     $('#descFund').val('');
+                    var txt = '"'+fund_desc.toUpperCase()+'"' + ' has been added to the list of funds.'
+                    swal({
+                        title: "Added Successfully", 
+                        text: txt,
+                        type: "success",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    },
+                    function(isConfirm){
+                        if (isConfirm){
+                            dt_fund.row.add( [
+                                fund_desc,
+                            ] ).draw();
+                        }
+                    })
                 },
                 error:function(xhr, status, error) {
                     var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -1095,6 +1200,7 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
+                dt_fund.clear();
                 $.each(obj, function(index, data){
                     dt_fund.row.add( [
                         data,
@@ -1124,6 +1230,7 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
+                dt_inc.clear();
                 $.each(obj, function(index, data){
                     dt_inc.row.add( [
                         data,
@@ -1146,7 +1253,7 @@
     $('#addIncBtn').on('click', function() {
         event.preventDefault();
 
-        var inc_desc = $('#descInc').val();
+        var inc_desc = $('#descInc').val().toUpperCase();
 
         $('#setup_inc_form').parsley();
         if ($('#setup_inc_form').parsley().validate()) {
@@ -1160,6 +1267,21 @@
                 timeout: 5000,
                 success:function(data) {
                     $('#descInc').val('');
+                    var txt = '"'+inc_desc.toUpperCase()+'"' + ' has been added to the list of incomes.'
+                    swal({
+                        title: "Added Successfully", 
+                        text: txt,
+                        type: "success",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    },
+                    function(isConfirm){
+                        if (isConfirm){
+                            dt_inc.row.add( [
+                                inc_desc,
+                            ] ).draw();
+                        }
+                    })
                 },
                 error:function(xhr, status, error) {
                     var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -1174,5 +1296,181 @@
             })
         }
     });
+
+    $('#data-table-modal-income tbody').on('click', '.deleteIncBtn', function() {
+        event.preventDefault();
+        var inctype = $(this).closest('tr').find('td:eq(0)').html();
+        var rowIdx = dt_inc.row($(this).closest('tr')).index();
+        var row = dt_inc.row(rowIdx);
+        $.ajax({
+            url: "{% url 'deact_uacs_inc_type' %}",
+            type: "POST",
+            data: { 
+                inctype: inctype,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            timeout: 5000,
+            success:function(data) {
+                var txt = '"'+inctype.toUpperCase()+'"' + ' has been removed from the list.'
+                swal({
+                    title: "Deleted Successfully", 
+                    text: txt,
+                    type: "success",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                },
+                function(isConfirm){
+                    if (isConfirm){
+                        row.remove().draw();
+                    }
+                })
+            },
+            error:function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        })
+    });
+
+    $('#data-table-modal-fund tbody').on('click', '.deleteFundBtn', function() {
+        event.preventDefault();
+        var fndtype = $(this).closest('tr').find('td:eq(0)').html();
+        var rowIdx = dt_fund.row($(this).closest('tr')).index();
+        var row = dt_fund.row(rowIdx);
+        $.ajax({
+            url: "{% url 'deact_uacs_fund_type' %}",
+            type: "POST",
+            data: { 
+                fndtype: fndtype,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            timeout: 5000,
+            success:function(data) {
+                var txt = '"'+fndtype.toUpperCase()+'"' + ' has been removed from the list.'
+                swal({
+                    title: "Deleted Successfully", 
+                    text: txt,
+                    type: "success",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                },
+                function(isConfirm){
+                    if (isConfirm){
+                        row.remove().draw();
+                    }
+                })
+            },
+            error:function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        })
+    });
+
+    $('#data-table-modal-fund tbody').on('click', '.editFundBtn', function() {
+        event.preventDefault();
+        var fndtype = $(this).closest('tr').find('td:eq(0)').html();
+        $.ajax({
+            url:"{% url 'get_specific_fund' %}",
+            type: "POST",
+            data: {
+                fndtype: fndtype,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            timeout: 5000,
+            success: function(data) {
+                $('#editFund-code').val(data[0]);
+                $('#editFund-desc').val(fndtype);
+            },
+            error:function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        })
+    });
+
+    $('#data-table-modal-income tbody').on('click', '.editIncBtn', function() {
+        event.preventDefault();
+        var inctype = $(this).closest('tr').find('td:eq(0)').html();
+        $.ajax({
+            url:"{% url 'get_specific_income' %}",
+            type: "POST",
+            data: {
+                inctype: inctype,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            timeout: 5000,
+            success: function(data) {
+                $('#editInc-desc').val(data[0]);
+            },
+            error:function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        })
+    });
+
+    $('#editFund_update').on('click', function() {
+        event.preventDefault();
+        var fndtype = $('#editFund-desc').val();
+        $.ajax({
+            url: "{% url 'update_uacs_fund_type' %}",
+            type: "POST",
+            data: { 
+                fndtype: fndtype,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            timeout: 5000,
+            success:function(data) {
+                var txt = '"'+fndtype.toUpperCase()+'"' + ' was updated successfully.'
+                swal({
+                    title: "Updated Successfully", 
+                    text: txt,
+                    type: "success",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                },
+                function(isConfirm){
+                    if (isConfirm){
+                        row.remove().draw();
+                    }
+                })
+            },
+            error:function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        })
+    })
 </script>
 {% endblock %}
