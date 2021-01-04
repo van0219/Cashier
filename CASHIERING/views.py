@@ -158,6 +158,12 @@ def get_UACS_data_table(request):
     data = cursor.fetchall()
     return render(request, 'views/layouts/pages/setup_uacs.html', {"response": data})
 
+def reload_UACS_data_table(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_UACS_TABLE")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
 def change_status_uacs(request):
     cursor = connection.cursor()
     cursor.callproc("SP_UPDATE_STATUS_UACS", (request.POST['code'], request.POST['new_status']))
@@ -227,3 +233,18 @@ def get_specific_income(request):
                     ,(request.POST['inctype'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def update_uacs_fund_type(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_UPDATE_FUND_TYPE"
+                    ,(request.POST['fndtype_orig']
+                    ,request.POST['fndtype_upd']
+                    ,request.POST['fndcode']))
+    return HttpResponse("")
+
+def update_uacs_inc_type(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_UPDATE_INC_TYPE"
+                    ,(request.POST['inctype_orig']
+                    ,request.POST['inctype_upd']))
+    return HttpResponse("")

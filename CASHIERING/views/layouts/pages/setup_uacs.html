@@ -171,9 +171,9 @@
                                             <tr>
                                                 <td>{{val.1}}</td>
                                                 <td>{{val.0}}</td>
+                                                <td title="{{val.4}}">{{val.4}}</td>
                                                 <td style="display: none;">{{val.2}}</td>
                                                 <td style="display: none;">{{val.3}}</td>
-                                                <td style="max-width: 100px;" class="text-ellipsis" title="{{val.4}}">{{val.4}}</td>
                                                 <td align="center">
                                                     <a href="#view_modal" class="btn btn-xs btn-primary view" data-toggle="modal"><i class="fas fa-eye m-r-5"></i>View</a>
                                                     <a href="javascript:;" class="btn btn-xs btn-danger remove"><i class="fas fa-trash m-r-5"></i>Remove</a>
@@ -207,9 +207,9 @@
                                             <tr>
                                                 <th class="text-nowrap" style="width: 5%;">Old Code</th>
                                                 <th class="text-nowrap">New Code</th>
+                                                <th class="text-nowrap">Description</th>
                                                 <th class="text-nowrap" style="display: none;">Fund Type</th>
                                                 <th class="text-nowrap" style="display: none;">Income Type</th>
-                                                <th class="text-nowrap">Description</th>
                                                 <th class="text-nowrap text-center">Options</th>
                                             </tr>
                                         </thead>
@@ -219,9 +219,9 @@
                                             <tr>
                                                 <td>{{val.1}}</td>
                                                 <td>{{val.0}}</td>
+                                                <td style="max-width: 100px;" class="text-ellipsis" title="{{val.4}}">{{val.4}}</td>
                                                 <td style="display: none;">{{val.2}}</td>
                                                 <td style="display: none;">{{val.3}}</td>
-                                                <td style="max-width: 100px;" class="text-ellipsis" title="{{val.4}}">{{val.4}}</td>
                                                 <td align="center">
 
                                                 </td>
@@ -325,9 +325,9 @@
                             </div>
                         </div> -->
                         <div class="form-group row m-b-15 addIncDiv">
-                            <label class="col-md-4 col-sm-4 col-form-label" for="descInc">Description <span class="text-red">*</span> :</label>
+                            <label class="col-md-4 col-sm-4 col-form-label" for="descInc">Income Description<span class="text-red">*</span>:</label>
                             <div class="col-md-8 col-sm-8">
-                                <input class="form-control" type="text" id="descInc" name="descInc" placeholder="Description" data-parsley-required="true" style="text-transform: uppercase;"/>
+                                <input class="form-control" type="text" id="descInc" name="descInc" placeholder="Income description" data-parsley-required="true" data-parsley-required-message="Income description is required" style="text-transform: uppercase;"/>
                             </div>
                         </div>
                         <div class="form-group row m-b-15 manageIncDiv" style="display: none;">
@@ -456,7 +456,7 @@
                                     <div class="form-group row m-b-15">
                                         <label class="col-md-4 col-sm-4 col-form-label" for="editFund-desc">Fund Description <span class="text-red">*</span> :</label>
                                         <div class="col-md-8 col-sm-8">
-                                            <input class="form-control" type="text" id="editFund-desc" name="editFund-desc" placeholder="Fund Description" style="text-transform: uppercase;" />
+                                            <input class="form-control" type="text" id="editFund-desc" name="editFund-desc" placeholder="Fund Description" data-parsley-required="true" data-parsley-required-message="Fund description is required" style="text-transform: uppercase;" />
                                         </div>
                                     </div>
                                 </form>
@@ -498,7 +498,7 @@
                                     <div class="form-group row m-b-15">
                                         <label class="col-md-4 col-sm-4 col-form-label" for="editInc-desc">Income Description<span class="text-red">*</span>:</label>
                                         <div class="col-md-8 col-sm-8">
-                                            <input class="form-control" type="text" id="editInc-desc" name="editInc-desc" placeholder="Income Description" style="text-transform: uppercase;"/>
+                                            <input class="form-control" type="text" id="editInc-desc" name="editInc-desc" placeholder="Income Description" data-parsley-required="true" data-parsley-required-message="Income description is required" style="text-transform: uppercase;"/>
                                         </div>
                                     </div>
                                 </form>
@@ -688,9 +688,18 @@
         'searching'   : true,
         'ordering'    : false,
         'info'        : true,
-        'autoWidth'   : true,
+        'autoWidth'   : false,
         'aaSorting'   : [[1, "desc" ]],
         'autoPrint'   : false,
+        'processing'  : true,
+        "aoColumns" : [ 
+            { sWidth: '5%' },
+            { sWidth: '35%' },
+            { sWidth: '25%' },
+            { sWidth: '0%' },
+            { sWidth: '0%' },
+            { sWidth: '35%' }
+        ],
         dom: 'lBfrtip',
         buttons: [
         {
@@ -719,14 +728,18 @@
         }
     ],
         "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ],
-        // columnDefs:[{
-        //     // targets: 2,
-        //     // orderable: false,
-        // }]
-        columnDefs:[{targets:5, render:function(data){
-            return `<a href="#view_modal" class="btn btn-xs btn-primary view" data-toggle="modal"><i class="fas fa-eye m-r-5"></i>View</a>
-                   <a href="javascript:;" class="btn btn-xs btn-danger remove"><i class="fas fa-trash m-r-5"></i>Remove</a>`;
-        }}]
+        columnDefs:[
+            {
+                targets:5, render:function(data){
+                    return `<a href="#view_modal" class="btn btn-xs btn-primary view" data-toggle="modal"><i class="fas fa-eye m-r-5"></i>View</a>
+                            <a href="javascript:;" class="btn btn-xs btn-danger remove"><i class="fas fa-trash m-r-5"></i>Remove</a>`;
+                }
+            },
+            {
+                targets:2,
+                className: 'text-ellipsis',              
+            }
+        ],
     });
     $('#fund').on('click', function() {
         $('#setup_fund_form').parsley().reset();
@@ -802,6 +815,7 @@
     });
 
     $('#data-table-combines2 tbody').on('click', '.redo', function() {
+        var desc = $(this).closest('tr').find('td:eq(2)').html();
         var rowIdx = dt_combines2.row($(this).closest('tr')).index();
         var row = dt_combines2.row(rowIdx);
         var rowNode = row.node();
@@ -835,7 +849,7 @@
                         csrfmiddlewaretoken:"{{csrf_token}}"
                     },
                     success: function(obj) {
-
+                        loadUACSdata();
                     },
                     error: function(xhr, status, error) {
                         var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -851,7 +865,7 @@
 
                 swal({
                         title: "Restored Successfully", 
-                        text: "Record was transferred to the Active tab!", 
+                        text: '"' + desc.toUpperCase() + '"' + " was transferred to the Active tab!", 
                         type: "success",
                         showLoaderOnConfirm: true,
                         confirmButtonColor: "#5cb85c",
@@ -861,6 +875,7 @@
     });
 
     $('#data-table-combines tbody').on( 'click', '.remove', function () {
+        var desc = $(this).closest('tr').find('td:eq(2)').html();
         var rowIdx = dt_combines.row($(this).closest('tr')).index();
         var row = dt_combines.row(rowIdx);
         var rowNode = row.node();
@@ -911,7 +926,7 @@
 
                 swal({
                         title: "Removed Successfully", 
-                        text: "Record was transferred to the Inactive tab!", 
+                        text: '"' + desc.toUpperCase() + '"' + " was transferred to the Inactive tab!", 
                         type: "success",
                         showLoaderOnConfirm: true,
                         confirmButtonColor: "#5cb85c",
@@ -921,12 +936,14 @@
     });
     var comp_fnd_type = '';
     var comp_inc_type = '';
+    var id = '';
     $('#data-table-combines tbody').on('click', '.view', function() {
         $('#view_editBtn').removeClass('btn-success');
         $('#view_editBtn').addClass('btn-primary');
         $('#view_editBtn').text('Edit');
-        var dummy_fnd_type = $(this).closest('tr').find('td:eq(2)').html();
-        var dummy_inc_type = $(this).closest('tr').find('td:eq(3)').html();
+        var dummy_fnd_type = $(this).closest('tr').find('td:eq(3)').html();
+        var dummy_inc_type = $(this).closest('tr').find('td:eq(4)').html();
+        id = $(this).closest('tr').find('td:eq(1)').html();
         if (comp_fnd_type != '') {
             if (dummy_fnd_type == comp_fnd_type) {
                 $('#fnd-type').val(dummy_fnd_type);
@@ -949,10 +966,10 @@
         else {
             $('#inc-type').val(dummy_inc_type);
         }
-        $('#view_header').text($(this).closest('tr').find('td:eq(4)').html());
+        $('#view_header').text($(this).closest('tr').find('td:eq(2)').html());
         $('#old-code').val($(this).closest('tr').find('td:eq(0)').html());
         $('#new-code').val($(this).closest('tr').find('td:eq(1)').html());
-        $('#desc-name').val($(this).closest('tr').find('td:eq(4)').html());
+        $('#desc-name').val($(this).closest('tr').find('td:eq(2)').html());
         document.getElementById( "old-code" ).setAttribute('readonly',true);
         document.getElementById( "new-code" ).setAttribute('readonly',true);
         document.getElementById( "fnd-type" ).setAttribute('disabled',true);
@@ -963,9 +980,8 @@
         comp_fnd_type = '';
         comp_inc_type = '';
         var txt = $('#view_editBtn').text();
-        var id = $('#new-code').val();
         var old_code = $('#old-code').val();
-        var new_code = id;
+        var new_code = $('#new-code').val();
         var fnd_type = $('#fnd-type').find("option:selected").text();
         var inc_type = $('#inc-type').find("option:selected").text();
         var desc_name = $('#desc-name').val();
@@ -1018,6 +1034,7 @@
                                 showLoaderOnConfirm: true,
                                 confirmButtonColor: "#5cb85c",
                             })
+                            loadUACSdata();
                             $('#view_close').click();
                         },
                         error: function(xhr, status, error) {
@@ -1191,6 +1208,10 @@
     });
 
     $('#fund').on('click', function() {
+        loadFundData();
+    });
+
+    function loadFundData() {
         $.ajax({
             type: "POST",
             url: "{% url 'get_fund_type' %}",
@@ -1218,7 +1239,43 @@
                 })
             }
         });
-    });
+    };
+
+    function loadUACSdata() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'reload_UACS_data_table' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                dt_combines.clear();
+                dt_combines.columns( [3,4] ).visible(false);
+                $.each(obj, function(index, data){
+                    dt_combines.row.add( [
+                        data[1],
+                        data[0],
+                        data[4],
+                        data[2],
+                        data[3]
+                    ] );
+                })
+                dt_combines.draw();
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
 
     $('#income').on('click', function() {
         $.ajax({
@@ -1379,9 +1436,11 @@
         })
     });
 
+    var fndtype_orig = '';
     $('#data-table-modal-fund tbody').on('click', '.editFundBtn', function() {
         event.preventDefault();
         var fndtype = $(this).closest('tr').find('td:eq(0)').html();
+        fndtype_orig = fndtype;
         $.ajax({
             url:"{% url 'get_specific_fund' %}",
             type: "POST",
@@ -1407,9 +1466,11 @@
         })
     });
 
+    var inctype_orig = '';
     $('#data-table-modal-income tbody').on('click', '.editIncBtn', function() {
         event.preventDefault();
         var inctype = $(this).closest('tr').find('td:eq(0)').html();
+        inctype_orig = inctype;
         $.ajax({
             url:"{% url 'get_specific_income' %}",
             type: "POST",
@@ -1436,17 +1497,21 @@
 
     $('#editFund_update').on('click', function() {
         event.preventDefault();
-        var fndtype = $('#editFund-desc').val();
+        $('#editFundForm').parsley();
+        var fndtype_upd = $('#editFund-desc').val();
+        var fndcode = $('#editFund-code').val();
         $.ajax({
             url: "{% url 'update_uacs_fund_type' %}",
             type: "POST",
             data: { 
-                fndtype: fndtype,
+                fndtype_orig: fndtype_orig,
+                fndtype_upd: fndtype_upd,
+                fndcode: fndcode,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             timeout: 5000,
             success:function(data) {
-                var txt = '"'+fndtype.toUpperCase()+'"' + ' was updated successfully.'
+                var txt = '"'+fndtype_orig+'"' + ' was updated successfully.'
                 swal({
                     title: "Updated Successfully", 
                     text: txt,
@@ -1456,7 +1521,50 @@
                 },
                 function(isConfirm){
                     if (isConfirm){
-                        row.remove().draw();
+                        loadFundData();
+                        $('#editFund_close').click();
+                    }
+                })
+            },
+            error:function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        })
+    });
+
+    $('#editInc_update').on('click', function() {
+        event.preventDefault();
+        $('#editIncForm').parsley();
+        var inctype_upd = $('#editInc-desc').val();
+        $.ajax({
+            url: "{% url 'update_uacs_inc_type' %}",
+            type: "POST",
+            data: { 
+                inctype_orig: inctype_orig,
+                inctype_upd: inctype_upd,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            timeout: 5000,
+            success:function(data) {
+                var txt = '"'+inctype_orig+'"' + ' was updated successfully.'
+                swal({
+                    title: "Updated Successfully", 
+                    text: txt,
+                    type: "success",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                },
+                function(isConfirm){
+                    if (isConfirm){
+                        loadFundData();
+                        $('#editInc_close').click();
                     }
                 })
             },

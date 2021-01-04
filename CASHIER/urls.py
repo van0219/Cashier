@@ -53,6 +53,7 @@ urlpatterns = [
     path('get_income_type', views.get_income_type, name="get_income_type"),
     path('get_fund_type', views.get_fund_type, name="get_fund_type"),
     path('get_UACS_data_table', views.get_UACS_data_table, name="get_UACS_data_table"),
+    path('reload_UACS_data_table', views.reload_UACS_data_table, name="reload_UACS_data_table"),
     path('change_status_uacs', views.change_status_uacs, name="change_status_uacs"),
     path('update_uacs', views.update_uacs, name="update_uacs"),
     path('add_uacs_list', views.add_uacs_list, name="add_uacs_list"),
@@ -61,5 +62,7 @@ urlpatterns = [
     path('deact_uacs_inc_type', views.deact_uacs_inc_type, name="deact_uacs_inc_type"),       
     path('deact_uacs_fund_type', views.deact_uacs_fund_type, name="deact_uacs_fund_type"),    
     path('get_specific_fund', views.get_specific_fund, name="get_specific_fund"),         
-    path('get_specific_income', views.get_specific_income, name="get_specific_income"),            
+    path('get_specific_income', views.get_specific_income, name="get_specific_income"), 
+    path('update_uacs_fund_type', views.update_uacs_fund_type, name="update_uacs_fund_type"),    
+    path('update_uacs_inc_type', views.update_uacs_inc_type, name="update_uacs_inc_type"),         
 ]
