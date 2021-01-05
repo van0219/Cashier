@@ -248,3 +248,40 @@ def update_uacs_inc_type(request):
                     ,(request.POST['inctype_orig']
                     ,request.POST['inctype_upd']))
     return HttpResponse("")
+
+def load_user_data(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_ALL_USERS")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def update_user_data(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_UPDATE_USER_DATA"
+                    ,(request.POST['vID']
+                    ,request.POST['fname']
+                    ,request.POST['mname']
+                    ,request.POST['lname']
+                    ,request.POST['role']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_user_data2(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_ALL_USERS2")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def deactivate_user(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_DEACT_USER"
+                    ,(request.POST['act_id']
+                    ,request.POST['act']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def get_uacs_code(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_ALL_UACS_CODE")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

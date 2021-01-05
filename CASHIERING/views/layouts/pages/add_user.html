@@ -20,9 +20,7 @@
     
     <!-- begin row -->
     <div class="row">
-        <!--begin filler-->
-        <div class="col-lg-3"></div>
-        <!--end filler-->
+        <div class="col-lg-1"></div>
         <!-- begin col-6 -->
         <div class="col-lg-6">
             <!-- begin card -->
@@ -98,12 +96,25 @@
                     <!-- end panel -->
                 </div>
                 <div class="card-footer text-grey-darker f-s-10">
-                    <span style="font-style: italic;">Last Accessed: 2 days ago</span>
+                    <!-- <span style="font-style: italic;">Last Accessed: 2 days ago</span> -->
                 </div>
             </div>
             <!-- end card -->
         </div>
         <!-- end col-6 -->
+        <div class="col-lg-3">
+            <div>
+                <img src="{%static 'assets/img/user/user-15.png' %}" 
+                style="border-radius: 5px; border: 1px solid #747474; max-width: 128px; max-height: 128px; height: 100%;" 
+                class="m-l-40" id="imgProfile" name="imgProfile" alt="Upload Image"><br>
+            </div>
+            <br>
+            <div>
+                <input type="file" class="btn btn-sm btn-primary" id="fileBtn" name="fileBtn" value="Upload Image"
+                onclick="uploadProfile(this)" data-parsley-required="true" data-parsley-required-message="Please choose an image.">
+                <p id="imgError"><span class="text-danger">*</span>upload image with .jpg, .jpeg, and .png extensions only.</p>
+            </div>
+        </div>
     </div>
     <!-- end row -->
 </div>
@@ -120,6 +131,22 @@
         App.init();
         Highlight.init();
     });
+
+    function uploadProfile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgProfile').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#fileBtn").change(function(){
+        uploadProfile(this);
+    });	
+
     function addClick(event) {
         event.preventDefault();
         valid_email();

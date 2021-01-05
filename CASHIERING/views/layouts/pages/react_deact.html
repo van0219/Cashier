@@ -63,33 +63,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td hidden>1</td>
-                                        <td>Van Anthony Silleza</td>
-                                        <td><a class="btn btn-xs btn-white text-inverse">Admin</a></td>
-                                        <td><a class="btn btn-xs btn-white text-inverse">Active</a></td>
-                                        <td align="center">
-                                            <a href="javascript:;" class="btn btn-xs btn-danger deactBtn" id="user1"><i class="fas fa-power-off m-r-5"></i>Deactivate</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td hidden>2</td>
-                                        <td>Merly Gonzalbo</td>
-                                        <td><a class="btn btn-xs btn-white text-inverse">Cashier</a></td>
-                                        <td><a class="btn btn-xs btn-white text-inverse">Active</a></td>
-                                        <td align="center">
-                                            <a href="javascript:;" class="btn btn-xs btn-danger deactBtn" id="user2"><i class="fas fa-power-off m-r-5"></i>Deactivate</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td hidden>3</td>
-                                        <td>Armando Caruso</td>
-                                        <td><a class="btn btn-xs btn-white text-inverse">Cashier</a></td>
-                                        <td><a class="btn btn-xs btn-white text-inverse">Inactive</a></td>
-                                        <td align="center">
-                                            <a href="javascript:;" class="btn btn-xs btn-success reactBtn" id="user3"><i class="fas fa-redo-alt m-r-5"></i>Reactivate</a>
-                                        </td>
-                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -136,53 +110,129 @@
     $(document).ready(function() {
         App.init();
         TableManageCombine.init();
-        $('#data-table-responsives').DataTable({
-            'paging'      : true,
-            'lengthChange': true,
-            'searching'   : true,
-            'ordering'    : false,
-            'info'        : true,
-            'autoWidth'   : true,
-            "aaSorting"   : [[1, "desc" ]],
-            dom: 'lBfrtip',
-            buttons: [
-                {
-                    extend:    'print',
-                    text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
-                    titleAttr: 'Print',
-                    exportOptions: {
-                        columns: ':visible'
+        loadReactDeactdata();
+    });
+
+    var dt_reactdeact = $('#data-table-responsives').DataTable({
+        'paging'      : false,
+        'lengthChange': false,
+        'searching'   : true,
+        'ordering'    : false,
+        'info'        : false,
+        'autoWidth'   : false,
+        'aaSorting'   : [[1, "desc" ]],
+        'autoPrint'   : false,
+        "aoColumns" : [ 
+            { sWidth: '0%' },
+            { sWidth: '35%' },
+            { sWidth: '20%' },
+            { sWidth: '20%' },
+            { sWidth: '25%' },
+        ],
+        dom: 'lBfrtip',
+        buttons: [
+            {
+                extend:    'print',
+                text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
+                titleAttr: 'Print',
+                exportOptions: {
+                    columns: [1,2,3]
+                }
+            },
+            {
+                extend:    'excel',
+                text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
+                titleAttr: 'Excel',
+                exportOptions: {
+                    columns: [1,2,3]
+                }
+            },
+            {
+                extend:    'pdf',
+                text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
+                titleAttr: 'PDF',
+                exportOptions: {
+                    columns: [1,2,3]
+                }
+            }
+        ],
+        // "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
+        // ,columnDefs:[{targets:1, render:function(data){
+        //     return moment(data).format('YYYY/MM/DD');
+        // }}]
+        columnDefs:[
+            {
+                targets:4, render:function(data){
+                    if (data == 'Active') {
+                        return `<a href="javascript:;" class="btn btn-xs btn-danger deactBtn"><i class="fas fa-power-off m-r-5"></i>Deactivate</a>`;
                     }
-                },
-                {
-                    extend:    'excel',
-                    text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
-                    titleAttr: 'Excel',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
-                    extend:    'pdf',
-                    text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
-                    titleAttr: 'PDF',
-                    exportOptions: {
-                        columns: ':visible'
+                    else if (data == 'Inactive') {
+                        return `<a href="javascript:;" class="btn btn-xs btn-success reactBtn"><i class="fas fa-redo m-r-5"></i>Reactivate</a>`;
                     }
                 }
-            ],
-            // "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
-            // ,columnDefs:[{targets:1, render:function(data){
-            //     return moment(data).format('YYYY/MM/DD');
-            // }}]
-
-        });
+            },
+            {
+                targets:0,
+                visible: false
+            },
+            {
+                targets:2, render:function(data){
+                    return `<a href="javascript:;" class="btn btn-xs btn-white role">${data}</a>`
+                }
+            },
+            {
+                targets:3, render:function(data){
+                    return `<a href="javascript:;" class="btn btn-xs btn-white role">${data}</a>`
+                }
+            },
+            {
+                targets:[0,1,2,3,4],
+                className: 'text-center'
+            }
+        ]
     });
-    $('.deactBtn').on('click', function() {
-        var id = $(this).closest("tbody tr").find("td:eq(0)").html();
+    function loadReactDeactdata() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_user_data2' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                dt_reactdeact.clear().draw();
+                $.each(obj, function(index, data){
+                    dt_reactdeact.row.add([
+                        data[0],
+                        data[1],
+                        data[2],
+                        data[3],
+                        data[3]
+                    ]);
+                })
+                dt_reactdeact.draw();
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+
+    $('#data-table-responsives tbody').on('click', '.deactBtn',function() {
+        dt_reactdeact.columns(0).visible(true);
+        var act_id = $(this).closest("tr").find("td:eq(0)").html();
+        var act = 'deact';
         swal({
             title: "Deactivate",
-            text: "Are you sure to deactivate this user?",
+            text: "Are you sure to deactivate User-"+act_id+"?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#d9534f",
@@ -194,30 +244,50 @@
         },
         function(isConfirm) {
             if (isConfirm){
-                swal({
-                        title: "Deactivated Successfully", 
-                        text: "Record was deactivated successfully!", 
-                        type: "success",
-                        showLoaderOnConfirm: true,
-                        confirmButtonColor: "#5cb85c",
+                dt_reactdeact.columns(0).visible(false);
+                $.ajax({
+                    url: "{% url 'deactivate_user' %}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        act_id: act_id,
+                        act: act,
+                        csrfmiddlewaretoken: "{{csrf_token}}"
                     },
-                    function(isConfirm) {
-                        if (isConfirm){
-                            //close swal
-                        }
-                    })
+                    success: function(data) {
+                        loadReactDeactdata();
+                        swal({
+                            title: "Deactivated Successfully", 
+                            text: "User-"+ act_id + "\nwas deactivated successfully!", 
+                            type: "success",
+                            showLoaderOnConfirm: true,
+                            confirmButtonColor: "#5cb85c",
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        var errMsg = xhr.status + ': ' + xhr.statusText;
+                        swal({
+                            title: "Error!", 
+                            text: errMsg,
+                            type: "error",
+                            confirmButtonColor: "#428bca",
+                            showLoaderOnConfirm: true
+                        })
+                    }
+                });
             }
             else {
-                var switcherID = '#user'+ id;
-                $(switcherID).prop("checked", true);
+                dt_reactdeact.columns(0).visible(false);
             }
         });
     });
-    $('.reactBtn').on('click', function() {
-        var id = $(this).closest("tbody tr").find("td:eq(0)").html();
+    $('#data-table-responsives').on('click', '.reactBtn',function() {
+        dt_reactdeact.columns(0).visible(true);
+        var act_id = $(this).closest("tbody tr").find("td:eq(0)").html();
+        var act = 'react';
         swal({
             title: "Reactivate",
-            text: "Are you sure to reactivate this user?",
+            text: "Are you sure to reactivate User-"+act_id+"?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#5cb85c",
@@ -229,22 +299,40 @@
         },
         function(isConfirm) {
             if (isConfirm){
-                swal({
-                        title: "Reactivated Successfully", 
-                        text: "Record was reactivated successfully!", 
-                        type: "success",
-                        showLoaderOnConfirm: true,
-                        confirmButtonColor: "#5cb85c",
+                dt_reactdeact.columns(0).visible(false);
+                $.ajax({
+                    url: "{% url 'deactivate_user' %}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        act_id: act_id,
+                        act: act,
+                        csrfmiddlewaretoken: "{{csrf_token}}"
                     },
-                    function(isConfirm) {
-                        if (isConfirm){
-                            // 
-                        }
-                    })
+                    success: function(data) {
+                        loadReactDeactdata();
+                        swal({
+                            title: "Reactivated Successfully", 
+                            text: "User-"+ act_id + "\nwas reactivated successfully!", 
+                            type: "success",
+                            showLoaderOnConfirm: true,
+                            confirmButtonColor: "#5cb85c",
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        var errMsg = xhr.status + ': ' + xhr.statusText;
+                        swal({
+                            title: "Error!", 
+                            text: errMsg,
+                            type: "error",
+                            confirmButtonColor: "#428bca",
+                            showLoaderOnConfirm: true
+                        })
+                    }
+                });
             }
             else {
-                var switcherID = '#user'+ id;
-                $(switcherID).prop("checked", false);
+                dt_reactdeact.columns(0).visible(false);
             }
         });
     });

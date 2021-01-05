@@ -111,8 +111,8 @@
                                         <th class="text-nowrap" rowspan="2" style="text-align: center;">Undeposited<br>Collection</th>
                                     </tr>
                                     <tr>
-                                        <th></th>
-                                        <th></th>
+                                        <th><small>MFO/PAP</small></th>
+                                        <th><small>Object Code</small></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -200,11 +200,11 @@
         FormPlugins.init();
     });
     $('#data-table-combines').DataTable({
-        'paging'      : true,
-        'lengthChange': true,
+        'paging'      : false,
+        'lengthChange': false,
         'searching'   : true,
         'ordering'    : false,
-        'info'        : true,
+        'info'        : false,
         'autoWidth'   : false,
         'aaSorting'   : [[1, "desc" ]],
         'pagingType'  : 'full_numbers',

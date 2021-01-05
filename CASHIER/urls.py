@@ -64,5 +64,10 @@ urlpatterns = [
     path('get_specific_fund', views.get_specific_fund, name="get_specific_fund"),         
     path('get_specific_income', views.get_specific_income, name="get_specific_income"), 
     path('update_uacs_fund_type', views.update_uacs_fund_type, name="update_uacs_fund_type"),    
-    path('update_uacs_inc_type', views.update_uacs_inc_type, name="update_uacs_inc_type"),         
+    path('update_uacs_inc_type', views.update_uacs_inc_type, name="update_uacs_inc_type"),  
+    path('load_user_data', views.load_user_data, name="load_user_data"), 
+    path('update_user_data', views.update_user_data, name="update_user_data"),     
+    path('load_user_data2', views.load_user_data2, name="load_user_data2"), 
+    path('deactivate_user', views.deactivate_user, name="deactivate_user"),
+    path('get_uacs_code', views.get_uacs_code, name="get_uacs_code"),
 ]

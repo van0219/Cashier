@@ -10,6 +10,13 @@
 <link href="{%static 'assets/plugins/DataTables/extensions/KeyTable/css/keyTable.bootstrap.min.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/DataTables/extensions/RowReorder/css/rowReorder.bootstrap.min.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/DataTables/extensions/Select/css/select.bootstrap.min.css' %}" rel="stylesheet" />
+<style>
+    .col-adj { 
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
 {% endblock %}
 {% block content %}
 <!-- begin #content -->
@@ -22,7 +29,7 @@
     </ol>
     <!-- end breadcrumb -->
     <!-- begin page-header -->
-    <h1 class="page-header">Edit User <small>Update User Details</small></h1>
+    <h1 class="page-header">View | Edit User <small>Update User Details</small></h1>
     <!-- end page-header -->
     
     <!-- begin row -->
@@ -38,57 +45,39 @@
                 </div>
                 <div class="card-block">
                     <h4 class="card-title"></h4>
-                        <!-- begin panel -->
-                        <div class="panel panel-white">
-                            <!-- begin panel-heading -->
-                            <div class="panel-heading">
-                                <!-- <h4 class="panel-title">Edit User</h4> -->
-                            </div>
-                            <!-- end panel-heading -->
-                            <!-- begin panel-body -->
-                            <div class="panel-body">
-                                <table id="data-table-responsives" class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-nowrap">Fullname</th>
-                                            <th class="text-nowrap">Role</th>
-                                            <th width="20%" class="text-nowrap text-center">Option</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="">
-                                            <td>Van Anthony Silleza</td>
-                                            <td><a class="btn btn-xs btn-white text-inverse">Admin</a></td>
-                                            <td align="center">
-                                                <a href="javascript:;" class="btn btn-xs btn-primary editBtn" data-toggle="modal"><i class="fas fa-eye m-r-5"></i>View</a>
-                                                <a href="#edit_user" class="btn btn-xs btn-warning editBtn" data-toggle="modal"><i class="fas fa-edit m-r-5"></i>Edit</a>
-                                            </td>
-                                        </tr>
-                                        <tr class="">
-                                            <td>Merly Gonzalbo</td>
-                                            <td><a class="btn btn-xs btn-white text-inverse">Cashier</a></td>
-                                            <td align="center">
-                                                <a href="javascript:;" class="btn btn-xs btn-primary editBtn" data-toggle="modal"><i class="fas fa-eye m-r-5"></i>View</a>
-                                                <a href="#edit_user" class="btn btn-xs btn-warning editBtn" data-toggle="modal"><i class="fas fa-edit m-r-5"></i>Edit</a>
-                                            </td>
-                                        </tr>
-                                        <tr class="">
-                                            <td>Armando Caruso</td>
-                                            <td><a class="btn btn-xs btn-white text-inverse">Cashier</a></td>
-                                            <td align="center">
-                                                <a href="javascript:;" class="btn btn-xs btn-primary editBtn" data-toggle="modal"><i class="fas fa-eye m-r-5"></i>View</a>
-                                                <a href="#edit_user" class="btn btn-xs btn-warning editBtn" data-toggle="modal"><i class="fas fa-edit m-r-5"></i>Edit</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- end panel-body -->
+                    <!-- begin panel -->
+                    <div class="panel panel-white">
+                        <!-- begin panel-heading -->
+                        <div class="panel-heading">
+                            <!-- <h4 class="panel-title">Edit User</h4> -->
                         </div>
-                        <!-- end panel -->
+                        <!-- end panel-heading -->
+                        <!-- begin panel-body -->
+                        <div class="panel-body">
+                            <table id="data-table-responsives" class="table table-hover" style="overflow-x: hidden;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-nowrap">ID</th>
+                                        <th class="text-nowrap">First Name</th>
+                                        <th class="text-nowrap">Middle Name</th>
+                                        <th class="text-nowrap">Last Name</th>
+                                        <th class="text-nowrap">Username</th>
+                                        <th class="text-nowrap">Date Added</th>
+                                        <th class="text-nowrap">Role</th>
+                                        <th width="20%" class="text-nowrap text-center">Option</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- end panel-body -->
+                    </div>
+                    <!-- end panel -->
                 </div>
                 <div class="card-footer text-grey-darker f-s-10">
-                    <span style="font-style: italic;">Last Updated: 2 days ago</span>
+                    <span style="font-style: italic;">Last Accessed: 2 days ago</span>
                 </div>
             </div>
             <!-- end card -->
@@ -172,6 +161,81 @@
         </div>
     </div>
 </div>
+<!-- #modal-dialog 2-->
+<div class="modal fade" id="view_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="fas fa-user f-s-20 m-r-5"></i><span id="view_header"></span></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- begin card -->
+                <div class="card text-left">
+                    <div class="card-block">
+                        <!-- begin panel -->
+                        <div class="panel panel-white" data-sortable-id="form-validation-1">
+                            <!-- begin panel-heading -->
+    
+                            <!-- end panel-heading -->
+                            <!-- begin panel-body -->
+                            <div class="panel-body" style="margin-bottom: -40px;;">
+                                <form class="form-horizontal" name="demo-form" action="#" id="viewForm" autocomplete="off">
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="vfname">First Name <span class="text-red">*</span> :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="vfname" name="vfname" placeholder="First Name" data-parsley-required="true" data-parsley-required-message="First name is required" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="vmname">Middle Name :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="vmname" name="vmname" placeholder="Middle Name" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="vlname">Last Name <span class="text-red">*</span> :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="vlname" name="vlname" placeholder="Last Name" data-parsley-required="true" data-parsley-required-message="Last name is required" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="vuname">Username <span class="text-red">*</span> :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="vuname" name="vuname" placeholder="User Name" data-parsley-required="true" data-parsley-required-message="Username name is required" disabled/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="vdate-added">Date Added <span class="text-red">*</span> :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="vdate-added" name="vdate-added" placeholder="Date Added" data-parsley-required="true" data-parsley-required-message="Date added is required" disabled/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="vrole">Role <span class="text-red">*</span> :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <select class="form-control selectpicker1" id="vrole" data-style="btn-white" data-parsley-required="true" data-parsley-required-message="User role is required">
+                                                <option value="Admin" selected>Admin</option>
+                                                <option value="Cashier">Cashier</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- end panel-body -->
+                        </div>
+                        <!-- end panel -->
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" id="view_close" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-warning" id="view_editBtn">Edit</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block page-js %}
 <script src="{%static 'assets/plugins/DataTables/media/js/jquery.dataTables.js' %}"></script>
@@ -197,22 +261,34 @@
     $(document).ready(function() {
         App.init();
         TableManageCombine.init();
-        $('#data-table-responsives').DataTable({
+    });
+    var dt_user = $('#data-table-responsives').DataTable({
             'paging'      : false,
             'lengthChange': false,
             'searching'   : false,
             'ordering'    : false,
             'info'        : false,
-            'autoWidth'   : true,
-            "aaSorting"   : [[1, "desc" ]],
+            'autoWidth'   : false,
+            'aaSorting'   : [[1, "desc" ]],
+            'autoPrint'   : false,
+            "aoColumns" : [ 
+                { sWidth: '0%' },
+                { sWidth: '20%' },
+                { sWidth: '20%' },
+                { sWidth: '20%' },
+                { sWidth: '0%' },
+                { sWidth: '0%' },
+                { sWidth: '20%' },
+                { sWidth: '20%' },
+            ],
             dom: 'lBfrtip',
             buttons: [
-                {
+                { 
                     extend:    'print',
                     text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
                     titleAttr: 'Print',
                     exportOptions: {
-                        columns: ':visible'
+                        columns: [1,2,3,4]
                     }
                 },
                 {
@@ -220,7 +296,7 @@
                     text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
                     titleAttr: 'Excel',
                     exportOptions: {
-                        columns: ':visible'
+                        columns: [1,2,3,4]
                     }
                 },
                 {
@@ -228,17 +304,34 @@
                     text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
                     titleAttr: 'PDF',
                     exportOptions: {
-                        columns: ':visible'
+                        columns: [1,2,3,4]
                     }
                 }
             ],
-            // "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
             // ,columnDefs:[{targets:1, render:function(data){
             //     return moment(data).format('YYYY/MM/DD');
             // }}]
-
+            columnDefs:[
+                {
+                    targets:7, render:function(data){
+                        return `<a href="#view_modal" class="btn btn-xs btn-primary viewBtn" data-toggle="modal"><i class="fas fa-eye m-r-5"></i>View</a>`;
+                    }
+                },
+                {
+                    targets:[0,4,5],
+                    visible: false
+                },
+                {
+                    targets:6, render:function(data){
+                        return `<a href="javascript:;" class="btn btn-xs btn-white role">${data}</a>`
+                    }
+                },
+                {
+                    targets:[1,2,3,6,7],
+                    className: 'text-center'
+                }
+            ]
         });
-    });
     function closeFocus() {
         event.preventDefault();
         $('#close').addClass('bg-transparent-7');
@@ -276,7 +369,7 @@
                         })
                 }
             });
-        }
+        } 
     };
     $('#close').on('click', function() {
         $('#editForm').parsley().reset();
@@ -285,6 +378,143 @@
     $('.editBtn').on('click', function() {
         $('#editForm').parsley().reset();
         $('.form-control').val('');
+    });
+
+    loadViewdata();
+
+    function loadViewdata() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_user_data' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                dt_user.clear().draw();
+                $.each(obj, function(index, data){
+                    if (data[7] == 1) {
+                        dt_user.row.add([
+                            data[0],
+                            data[1],
+                            data[2],
+                            data[3],
+                            data[4],
+                            data[5],
+                            data[6]
+                        ]);
+                    }
+                })
+                dt_user.draw();
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+
+    $('#view_modal').on('hidden.bs.modal', function (e) {
+        dt_user.columns([0,4,5]).visible(false);
+    });
+    var vID = '';
+    $('#data-table-responsives tbody').on('click', '.viewBtn', function() {
+        dt_user.columns([0,4,5]).visible(true);
+        vID = $(this).closest('tr').find('td:eq(0)').html();
+        $('#view_editBtn').removeClass('btn-success');
+        $('#view_editBtn').addClass('btn-warning');
+        $('#view_editBtn').text('Edit'); 
+
+        $('#view_header').text('User-' + $(this).closest('tr').find('td:eq(0)').html());
+        $('#vfname').val($(this).closest('tr').find('td:eq(1)').html());
+        $('#vmname').val($(this).closest('tr').find('td:eq(2)').html());
+        $('#vlname').val($(this).closest('tr').find('td:eq(3)').html());
+        $('#vuname').val($(this).closest('tr').find('td:eq(4)').html());
+        $('#vdate-added').val($(this).closest('tr').find('td:eq(5)').html());
+        $('#vrole').val($(this).closest('tr').find('.role').html());
+        document.getElementById( "vfname" ).setAttribute('readonly',true);
+        document.getElementById( "vmname" ).setAttribute('readonly',true);
+        document.getElementById( "vlname" ).setAttribute('readonly',true);
+        document.getElementById( "vuname" ).setAttribute('readonly',true);
+        document.getElementById( "vdate-added" ).setAttribute('readonly',true);
+        document.getElementById( "vrole" ).setAttribute('disabled',true);
+    });
+
+    $('#view_editBtn').on('click', function() {
+        var txt = $('#view_editBtn').text();
+        var fname = $('#vfname').val();
+        var mname = $('#vmname').val();
+        var lname = $('#vlname').val();
+        var role = $('#vrole').find("option:selected").text();
+        $('#view_editBtn').removeClass('btn-warning');
+        $('#view_editBtn').addClass('btn-success');
+        if(txt == 'Edit') {
+            document.getElementById( "vfname" ).removeAttribute('readonly');
+            document.getElementById( "vmname" ).removeAttribute('readonly');
+            document.getElementById( "vlname" ).removeAttribute('readonly');
+            document.getElementById( "vrole" ).removeAttribute('disabled');
+            $('#view_editBtn').text('Update');
+        }
+        else if(txt == 'Update') {
+            swal({
+                title: "Update",
+                text: "Are you sure to update\n"+"User-"+vID+"?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d9534f",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: false,
+                closeOnCancel: true,
+                customClass: "Custom_Cancel"
+            },
+            function(isConfirm) {
+                if (isConfirm){
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'update_user_data' %}",
+                        cache: false,
+                        // dataType: 'json',
+                        data: {
+                            vID: vID,
+                            fname: fname,
+                            mname: mname,
+                            lname: lname,
+                            role: role,
+                            csrfmiddlewaretoken:"{{csrf_token}}"
+                        },
+                        success: function(obj) {
+                            swal({
+                                title: "Updated Successfully", 
+                                text: "User-" + vID + "\nwas updated successfully!", 
+                                type: "success",
+                                showLoaderOnConfirm: true,
+                                confirmButtonColor: "#5cb85c",
+                            })
+                            loadViewdata();
+                            $('#view_close').click();
+                        },
+                        error: function(xhr, status, error) {
+                            var errMsg = xhr.status + ': ' + xhr.statusText;
+                            swal({
+                                title: "Error!", 
+                                text: errMsg,
+                                type: "error",
+                                confirmButtonColor: "#428bca",
+                                showLoaderOnConfirm: true
+                            })
+                        }
+                    });
+                }
+            });
+        }
     });
 </script>
 {% endblock%}

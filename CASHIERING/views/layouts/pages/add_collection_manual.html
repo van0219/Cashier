@@ -109,27 +109,16 @@
                                             <div class="form-group row m-b-15">
                                                 <label class="col-md-4 col-sm-4 col-form-label">Income Type :</label>
                                                 <div class="col-md-8 col-sm-8">
-                                                    <select class="form-control" id="select-required" name="selectBox" data-parsley-required="true">
-                                                        <option value="">Please choose</option>
-                                                        <option value="foo">Business Income</option>
-                                                        <option value="bar">Other Service Income</option>
+                                                    <select class="form-control" id="inc-select" name="selectBox" data-parsley-required="true">
+                                                        <option value="" selected disabled>Please choose</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="form-group row m-b-15">
                                                 <label class="col-md-4 col-sm-4 col-form-label">UAC Code :</label>
                                                 <div class="col-md-8 col-sm-8">
-                                                    <select class="form-control selectpicker" id="select-required" name="selectBox" data-parsley-required="true">
-                                                        <option value="" selected>Please Choose</option>
-                                                        <option value="AF">Tuition Fee</option>
-                                                        <option value="AL">Miscellaneous Fee</option>
-                                                        <option value="DZ">Permit Fee</option>
-                                                        <option value="AS">D</option>
-                                                        <option value="AD">E</option>
-                                                        <option value="AO">F</option>
-                                                        <option value="AI">G</option>
-                                                        <option value="AQ">H</option>
-                                                        <option value="AG">I</option>
+                                                    <select class="form-control selectpicker text-ellipsis" id="uacs_select" name="selectBox" data-parsley-required="true">
+                                                        <option value="" selected disabled>Please Choose</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -142,7 +131,7 @@
                                             <div class="form-group row m-b-0">
                                                 <label class="col-md-4 col-sm-4 col-form-label">&nbsp;</label>
                                                 <div class="col-md-8 col-sm-8">
-                                                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle m-r-5"></i>Add Particulars</button>
+                                                    <a href="javascript:;" class="btn btn-primary btn-sm" id="particular"><i class="fa fa-plus-circle m-r-5"></i>Add Particulars</a>
                                                 </div>
                                             </div>
                                         <!--  -->
@@ -159,7 +148,7 @@
                                     <!-- end panel-heading -->
                                     <!-- begin panel-body -->
                                     <div class="panel-body" style="border-radius: 5px;">
-                                        <table id="data-table-responsives" class="table table-hover">
+                                        <table id="data-table-responsives" class="table">
                                             <thead>
                                                 <tr>
                                                     <th class="text-nowrap">Income Type</th>
@@ -168,28 +157,7 @@
                                                     <th style="max-width: 20px;" class="text-nowrap"></th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <a href="javascript:;" class="btn btn-white btn-xs">Business Income</a>
-                                                    </td>
-                                                    <td>Miscellaneous Fee</td>
-                                                    <td>425.75</td>
-                                                    <td align="center">
-                                                        <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm"><i class="fas fa-times"></i></a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <a href="javascript:;" class="btn btn-white btn-xs">Other Service Income</a>
-                                                    </td>
-                                                    <td>Permit Fee</td>
-                                                    <td>2500.00</td>
-                                                    <td align="center">
-                                                        <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm"><i class="fas fa-times"></i></a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
                                     <!-- end panel-body -->
@@ -238,8 +206,57 @@
         App.init();
         Highlight.init();
         TableManageResponsive.init();
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_income_type' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $.each(obj, function(index, option){
+                    $('#inc-select').append( new Option(option,option)); //value and text
+                });
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_uacs_code' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $.each(obj, function(index, option){
+                    $('#uacs_select').append( new Option(option,option)); //value and text 
+                });
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
     });
-    $('#data-table-responsives').DataTable({
+    var dt_part = $('#data-table-responsivesdd').DataTable({
         'paging'      : false,
         'lengthChange': true,
         'searching'   : false,
@@ -250,6 +267,13 @@
         ,dom: 'lBfrtip'
         ,   buttons: [
         ],
+        columnDefs: [
+            {
+                targets:3, render:function(data){
+                    return '<a href="javascript:;" class="btn btn-xs btn-warning undo"><i class="fas fa-times m-r-5"></i></a>';
+                }
+            }
+        ]
     })
     $("#save").click( function() {
         window.location = '{% url "show_receipt" %}';
@@ -261,6 +285,26 @@
     $("#radiorequired2").click(function() {
         $('.individual').hide();
         $('.company').show();
+    });
+    $('#particular').on('click', function() {
+        var inctype = $('#inc-select').find('option:selected').text();
+        var uacs = $('#uacs_select').find('option:selected').text()
+        var amt = $('#number').val();
+        $('#data-table-responsives tbody').append(
+            `<tr>
+                <td>
+                    <a href="javascript:;" class="btn btn-white btn-xs">${inctype}</a>
+                </td>
+                <td>${uacs}</td>
+                <td>${amt}</td>
+                <td align="center">
+                    <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove"><i class="fas fa-times"></i></a>
+                </td>
+            </tr>`
+        )
+    });
+    $('#data-table-responsives tbody').on('click', '.remove', function() {
+        $(this).closest('tr').remove();
     });
 </script>
 {% endblock %}
