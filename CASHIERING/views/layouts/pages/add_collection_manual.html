@@ -172,7 +172,7 @@
                                     </tr>
                                 </table>
                                 <table class="pull-right">
-                                    <td><button type="submit" id="save" class="btn btn-success"><i class="fas fa-save m-r-5"></i>Save Entry</button></td>
+                                    <td><button id="save" class="btn btn-success"><i class="fas fa-save m-r-5"></i>Save Entry</button></td>
                                 </table>
                             </div>
                         </div>           
@@ -287,7 +287,7 @@
         $('.company').show();
     });
     var total_fee = 0;
-    var minus_fee = 0;
+    var minus_fee = '';
     $('#particular').on('click', function() {
         var tot_fee_txt = $('#total-fee').text();
         var init_tot_fee = parseFloat(tot_fee_txt);
@@ -313,7 +313,7 @@
         $('#number').val('');
     });
     $('#data-table-responsives tbody').on('click', '.remove', function() {
-        minus_fee = $(this).closest('tr').find('td:e(2)').html();
+        minus_fee = $(this).closest('tr').find('td:eq(2)').html();
         var new_total = total_fee - parseFloat(minus_fee);
         $('#total-fee').text(new_total);
         $(this).closest('tr').remove();
