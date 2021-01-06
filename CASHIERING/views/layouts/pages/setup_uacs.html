@@ -1473,7 +1473,7 @@
             },
             timeout: 5000,
             success:function(data) {
-                var txt = '"'+fndtype.toUpperCase()+'"' + ' has been removed from the list.'
+                var txt = '"'+fndtype.toUpperCase()+'"' + ' has been removed from the list.';
                 swal({
                     title: "Deleted Successfully", 
                     text: txt,
@@ -1575,7 +1575,8 @@
             },
             timeout: 5000,
             success:function(data) {
-                var txt = '"'+fndtype_orig+'"' + ' was updated successfully.'
+                loadFundData();
+                var txt = '"'+fndtype_orig+'"' + ' was updated successfully.';
                 swal({
                     title: "Updated Successfully", 
                     text: txt,
@@ -1585,7 +1586,6 @@
                 },
                 function(isConfirm){
                     if (isConfirm){
-                        loadFundData();
                         $('#editFund_close').click();
                     }
                 })
@@ -1617,7 +1617,8 @@
             },
             timeout: 5000,
             success:function(data) {
-                var txt = '"'+inctype_orig+'"' + ' was updated successfully.'
+                loadIncData();
+                var txt = '"'+inctype_orig+'"' + ' was updated successfully.';
                 swal({
                     title: "Updated Successfully", 
                     text: txt,
@@ -1627,7 +1628,6 @@
                 },
                 function(isConfirm){
                     if (isConfirm){
-                        loadIncData();
                         $('#editInc_close').click();
                     }
                 })

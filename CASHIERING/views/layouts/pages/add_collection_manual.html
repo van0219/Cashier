@@ -110,7 +110,7 @@
                                                 <label class="col-md-4 col-sm-4 col-form-label">Income Type :</label>
                                                 <div class="col-md-8 col-sm-8">
                                                     <select class="form-control" id="inc-select" name="selectBox" data-parsley-required="true">
-                                                        <option value="" selected disabled>Please choose</option>
+                                                        <option value="Please choose" selected disabled>Please choose</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -118,7 +118,7 @@
                                                 <label class="col-md-4 col-sm-4 col-form-label">UAC Code :</label>
                                                 <div class="col-md-8 col-sm-8">
                                                     <select class="form-control selectpicker text-ellipsis" id="uacs_select" name="selectBox" data-parsley-required="true">
-                                                        <option value="" selected disabled>Please Choose</option>
+                                                        <option value="Please choose" selected disabled>Please choose</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -167,7 +167,7 @@
                                         <td  style="padding-left: 15px;"></td>
                                         <td><b>Total Amount : </b></td>
                                         <td class="f-s-14">
-                                            <a href="javascript:;" class="btn btn-xs btn-warning">Php 2,925.75</a>
+                                            <a href="javascript:;" class="btn btn-xs btn-warning">Php <span id="total-fee">0.00</span></a>
                                         </td>
                                     </tr>
                                 </table>
@@ -286,10 +286,14 @@
         $('.individual').hide();
         $('.company').show();
     });
+    var total_fee = 0;
+    var minus_fee = 0;
     $('#particular').on('click', function() {
+        var tot_fee_txt = $('#total-fee').text();
+        var init_tot_fee = parseFloat(tot_fee_txt);
         var inctype = $('#inc-select').find('option:selected').text();
         var uacs = $('#uacs_select').find('option:selected').text()
-        var amt = $('#number').val();
+        var amt = parseFloat($('#number').val());
         $('#data-table-responsives tbody').append(
             `<tr>
                 <td>
@@ -301,9 +305,17 @@
                     <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove"><i class="fas fa-times"></i></a>
                 </td>
             </tr>`
-        )
+        );
+        total_fee = init_tot_fee + parseFloat(amt);
+        $('#total-fee').text(parseFloat(total_fee));
+        $('#inc-select').val('Please choose');
+        $('#uacs_select').val('Please choose');
+        $('#number').val('');
     });
     $('#data-table-responsives tbody').on('click', '.remove', function() {
+        minus_fee = $(this).closest('tr').find('td:e(2)').html();
+        var new_total = total_fee - parseFloat(minus_fee);
+        $('#total-fee').text(new_total);
         $(this).closest('tr').remove();
     });
 </script>

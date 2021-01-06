@@ -148,179 +148,182 @@
                 window.location = "{% url 'login' %}";
             }
             else {
-                $(document).ready(function() {
-                    App.init();
-                    DashboardV2.init();
-                    Notification.init();
-                    Highlight.init();
-                    handleBarChart();
-                    handleLineChart();
-
-                    var mon;
-                    var day = (d.getDate()==1) ? count_days_month()+1 : d.getDate();//if day today is 1 --> gets the previous month's number of days plus 1;
-                    if (d.getDate()==1) {
-                        mon = d.getMonth();
-                    }
-                    else {
-                        mon = d.getMonth()+1;
-                    } 
-                    $('#yesterday').text(mon + '/' + (day-1) + '/' + d.getFullYear());
-                    $('#last_week').text(last_week(moment(new Date(d)).format("dddd").toLowerCase()));
-                    var lastMonth = new Date(d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear());
-                    $('#last_month').text(moment(lastMonth).format("MMMM"));
-                });
-
-                var d = new Date();
-                function last_week(day) {// returns last week's date (starts on Monday and ends on Sunday)
-                    var toMinus = 0;
-                    switch (day) {
-                        case "sunday":
-                            toMinus = 13;
-                            break;
-                        case "monday":
-                            toMinus = 7;
-                            break;
-                        case "tuesday":
-                            toMinus = 8;
-                            break;
-                        case "wednesday":
-                            toMinus = 9;
-                            break;
-                        case "thursday":
-                            toMinus = 10;
-                            break;
-                        case "friday":
-                            toMinus = 11;
-                            break;
-                        case "saturday":
-                            toMinus = 12;
-                            break;
-                        default:
-                            break;
-                    }
-                    var _days = count_days_month();
-                    var _month;
-                    var last_week_start;
-                    if (d.getDate() >= 7) { // day of month is greater than or equal to 7
-                        _month = d.getMonth()+1;
-                        last_week_start = _month + '/' + (d.getDate()-toMinus) + '/' + d.getFullYear();
-                    }
-                    else { // day of month is less than 7
-                        _month = d.getMonth();
-                        toMinus--;
-                        last_week_start = _month + '/' + (_days-toMinus) + '/' + d.getFullYear();
-                    }
-                    var newStart = new Date(last_week_start);
-                    var last_week_end = (newStart.getMonth()+1) + '/' + (newStart.getDate()+6) + '/' + newStart.getFullYear();
-                    return last_week_start + ' ' + 'to' + ' ' + last_week_end;
-                };
-                function count_days_month() { // determine the number of days for the current month
-                    var _days;
-                    var _month_now = d.getMonth()+1;
-                    if (_month_now == 4 || _month_now == 6 ||
-                        _month_now == 9 || _month_now == 11) {
-                            _days = 30;
-                    }
-                    else if (_month_now == 2) {
-                        var yr = d.getFullYear();
-                        if (yr % 100 == 0) {
-                            if (yr % 400 == 0) {
-                                _days = 29;
-                            }
-                            else {
-                                _days = 28;
-                            }
-                        }
-                        else {
-                            if (yr % 4 == 0) {
-                                _days = 29;
-                            }
-                            else {
-                                _days = 28;
-                            }
-                        }
-                    }
-                    else {
-                        _days = 31;
-                    }
-                    return _days; // returns the number of days of the current month
-                }
-                var handleBarChart = function() {
-                    "use strict";
-
-                    var bar_color = [COLOR_RED, COLOR_ORANGE, COLOR_GREEN, COLOR_AQUA, COLOR_BLUE, COLOR_PURPLE, COLOR_GREY, COLOR_BLACK, "goldenrod",'#ff0000', 'lightblue', 'pink' ];
-                    var bar_value = [29, 15, 32, 196, 44, 98, 13, 5, 87, 123, 99, 176];
-                    var bar_label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                    var data= [];
-                    for (var i = 0; i < 12; i++) {
-                        data[i] = { 'label': bar_label[i], 'value': bar_value[i], 'color': bar_color[i]  };
-                    }
-                    var barChartData = [{
-                        key: 'Cumulative Return',
-                        values: data,
-                    }]
-
-                    nv.addGraph(function() {
-                        var barChart = nv.models.discreteBarChart()
-                            .x(function(d) { return d.label })
-                            .y(function(d) { return d.value })
-                            .showValues(true)
-                            .duration(250);
-                        
-                        barChart.yAxis.axisLabel("Total Registered Residents");
-                        barChart.xAxis.axisLabel('Year');
-                    
-                        d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
-                        nv.utils.windowResize(barChart.update);
-                    
-                        return barChart;
-                    });
-                };
-                var handleLineChart = function() {
-                    "use strict";
-                    
-                    nv.addGraph(function() {
-                        
-                        var sin = [], cos = [];
-                        for (var i = 0; i < 100; i++) {
-                            sin.push({x: i, y:  Math.sin(i/10) });
-                            cos.push({x: i, y: .5 * Math.cos(i/10)});
-                        }
-                        var lineChartData = [
-                            { values: sin, key: 'Sine Wave', color: COLOR_GREEN }, 
-                            { values: cos, key: 'Cosine Wave', color: COLOR_BLUE }
-                        ];
-                        
-                        var lineChart = nv.models.lineChart()
-                            .options({
-                                transitionDuration: 300,
-                                useInteractiveGuideline: true
-                            });
-
-                        lineChart.xAxis
-                            .axisLabel('Time (s)')
-                            .tickFormat(d3.format(',.1f'));
-
-                        lineChart.yAxis
-                            .axisLabel('Voltage (v)')
-                            .tickFormat(function(d) {
-                                if (d == null) {
-                                    return 'N/A';
-                                }
-                                return d3.format(',.2f')(d);
-                            });
-
-                        d3.select('#nv-line-chart').append('svg')
-                            .datum(lineChartData)
-                            .call(lineChart);
-
-                        nv.utils.windowResize(lineChart.update);
-
-                        return lineChart;
-                    });
-                };
+                validUser();
             }
         }
     });
+    function validUser() {
+        $(document).ready(function() {
+            App.init();
+            DashboardV2.init();
+            Notification.init();
+            Highlight.init();
+            handleBarChart();
+            handleLineChart();
+
+            var mon;
+            var day = (d.getDate()==1) ? count_days_month()+1 : d.getDate();//if day today is 1 --> gets the previous month's number of days plus 1;
+            if (d.getDate()==1) {
+                mon = d.getMonth();
+            }
+            else {
+                mon = d.getMonth()+1;
+            } 
+            $('#yesterday').text(mon + '/' + (day-1) + '/' + d.getFullYear());
+            $('#last_week').text(last_week(moment(new Date(d)).format("dddd").toLowerCase()));
+            var lastMonth = new Date(d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear());
+            $('#last_month').text(moment(lastMonth).format("MMMM"));
+        });
+
+        var d = new Date();
+        function last_week(day) {// returns last week's date (starts on Monday and ends on Sunday)
+            var toMinus = 0;
+            switch (day) {
+                case "sunday":
+                    toMinus = 13;
+                    break;
+                case "monday":
+                    toMinus = 7;
+                    break;
+                case "tuesday":
+                    toMinus = 8;
+                    break;
+                case "wednesday":
+                    toMinus = 9;
+                    break;
+                case "thursday":
+                    toMinus = 10;
+                    break;
+                case "friday":
+                    toMinus = 11;
+                    break;
+                case "saturday":
+                    toMinus = 12;
+                    break;
+                default:
+                    break;
+            }
+            var _days = count_days_month();
+            var _month;
+            var last_week_start;
+            if (d.getDate() >= 7) { // day of month is greater than or equal to 7
+                _month = d.getMonth()+1;
+                last_week_start = _month + '/' + (d.getDate()-toMinus) + '/' + d.getFullYear();
+            }
+            else { // day of month is less than 7
+                _month = d.getMonth();
+                toMinus--;
+                last_week_start = _month + '/' + (_days-toMinus) + '/' + d.getFullYear();
+            }
+            var newStart = new Date(last_week_start);
+            var last_week_end = (newStart.getMonth()+1) + '/' + (newStart.getDate()+6) + '/' + newStart.getFullYear();
+            return last_week_start + ' ' + 'to' + ' ' + last_week_end;
+        };
+        function count_days_month() { // determine the number of days for the current month
+            var _days;
+            var _month_now = d.getMonth()+1;
+            if (_month_now == 4 || _month_now == 6 ||
+                _month_now == 9 || _month_now == 11) {
+                    _days = 30;
+            }
+            else if (_month_now == 2) {
+                var yr = d.getFullYear();
+                if (yr % 100 == 0) {
+                    if (yr % 400 == 0) {
+                        _days = 29;
+                    }
+                    else {
+                        _days = 28;
+                    }
+                }
+                else {
+                    if (yr % 4 == 0) {
+                        _days = 29;
+                    }
+                    else {
+                        _days = 28;
+                    }
+                }
+            }
+            else {
+                _days = 31;
+            }
+            return _days; // returns the number of days of the current month
+        }
+        var handleBarChart = function() {
+            "use strict";
+
+            var bar_color = [COLOR_RED, COLOR_ORANGE, COLOR_GREEN, COLOR_AQUA, COLOR_BLUE, COLOR_PURPLE, COLOR_GREY, COLOR_BLACK, "goldenrod",'#ff0000', 'lightblue', 'pink' ];
+            var bar_value = [29, 15, 32, 196, 44, 98, 13, 5, 87, 123, 99, 176];
+            var bar_label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var data= [];
+            for (var i = 0; i < 12; i++) {
+                data[i] = { 'label': bar_label[i], 'value': bar_value[i], 'color': bar_color[i]  };
+            }
+            var barChartData = [{
+                key: 'Cumulative Return',
+                values: data,
+            }]
+
+            nv.addGraph(function() {
+                var barChart = nv.models.discreteBarChart()
+                    .x(function(d) { return d.label })
+                    .y(function(d) { return d.value })
+                    .showValues(true)
+                    .duration(250);
+                
+                barChart.yAxis.axisLabel("Total Registered Residents");
+                barChart.xAxis.axisLabel('Year');
+            
+                d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
+                nv.utils.windowResize(barChart.update);
+            
+                return barChart;
+            });
+        };
+        var handleLineChart = function() {
+            "use strict";
+            
+            nv.addGraph(function() {
+                
+                var sin = [], cos = [];
+                for (var i = 0; i < 100; i++) {
+                    sin.push({x: i, y:  Math.sin(i/10) });
+                    cos.push({x: i, y: .5 * Math.cos(i/10)});
+                }
+                var lineChartData = [
+                    { values: sin, key: 'Sine Wave', color: COLOR_GREEN }, 
+                    { values: cos, key: 'Cosine Wave', color: COLOR_BLUE }
+                ];
+                
+                var lineChart = nv.models.lineChart()
+                    .options({
+                        transitionDuration: 300,
+                        useInteractiveGuideline: true
+                    });
+
+                lineChart.xAxis
+                    .axisLabel('Time (s)')
+                    .tickFormat(d3.format(',.1f'));
+
+                lineChart.yAxis
+                    .axisLabel('Voltage (v)')
+                    .tickFormat(function(d) {
+                        if (d == null) {
+                            return 'N/A';
+                        }
+                        return d3.format(',.2f')(d);
+                    });
+
+                d3.select('#nv-line-chart').append('svg')
+                    .datum(lineChartData)
+                    .call(lineChart);
+
+                nv.utils.windowResize(lineChart.update);
+
+                return lineChart;
+            });
+        };
+    };
 </script>
 {% endblock %}
