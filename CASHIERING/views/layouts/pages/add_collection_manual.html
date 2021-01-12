@@ -60,7 +60,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group row m-b-10">
                                     <label class="col-md-3 col-form-label">Payor :</label>
-                                    <div class="col-md-9">
+                                    <div class="col-md-3">
                                         <div class="radio radio-css">
                                             <input type="radio" name="radio_css" id="radiorequired" checked />
                                             <label for="radiorequired">Individual</label>
@@ -68,7 +68,14 @@
                                         <div class="radio radio-css">
                                             <input type="radio" name="radio_css" id="radiorequired2" />
                                             <label for="radiorequired2">Company</label>
-                                        </div>
+                                        </div>                                    
+                                    </div>
+                                    <div class="col-md-6">
+                                        <select class="form-control selectpicker individual" name="selectBox">
+                                            <option selected disabled>Select Degree</option>
+                                            <option>Bachelor's Degree</option>
+                                            <option>Master's Degree</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -302,7 +309,7 @@
                 <td>${uacs}</td>
                 <td>${amt}</td>
                 <td align="center">
-                    <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove"><i class="fas fa-times"></i></a>
+                    <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove" title="remove"><i class="fas fa-times"></i></a>
                 </td>
             </tr>`
         );
@@ -314,8 +321,8 @@
     });
     $('#data-table-responsives tbody').on('click', '.remove', function() {
         minus_fee = $(this).closest('tr').find('td:eq(2)').html();
-        var new_total = total_fee - parseFloat(minus_fee);
-        $('#total-fee').text(new_total);
+        total_fee = total_fee - parseFloat(minus_fee);
+        $('#total-fee').text(total_fee);
         $(this).closest('tr').remove();
     });
 </script>
