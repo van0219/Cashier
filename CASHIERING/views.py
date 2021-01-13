@@ -187,6 +187,7 @@ def add_uacs_list(request):
     cursor.callproc("SP_INSERT_UACS_TABLE"
                     ,(request.POST['fndtype']
                     ,request.POST['inctype']
+                    ,request.POST['o_code']
                     ,request.POST['code']
                     ,request.POST['desc']
                     ))

@@ -86,9 +86,18 @@
                             </div>
                         </div>
                         <div class="form-group row m-b-15">
-                            <label class="col-md-4 col-sm-4 col-form-label" for="code">Code <span class="text-red">*</span> :</label>
+                            <label class="col-md-4 col-sm-4 col-form-label" for="code">Old Code :</label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control" type="text" id="o_code" name="o_code" placeholder="Old Code" />
+                            </div>
+                            <div class="col-md-2 col-sm-2 m-t-15" style="margin-left: -10px;">
+                                <input class="m-r-5" type="checkbox" id="o_check" name="o_check" title="Click if old code is not applicable"/><small>N/A</small>
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="code">New Code <span class="text-red">*</span> :</label>
                             <div class="col-md-8 col-sm-8">
-                                <input class="form-control" type="text" id="code" name="code" placeholder="Code" data-parsley-required="true" data-parsley-required-message="UACS code is required" />
+                                <input class="form-control" type="text" id="code" name="code" placeholder="New Code" data-parsley-required="true" data-parsley-required-message="UACS code is required" />
                             </div>
                         </div>
                         <div class="form-group row m-b-15">
@@ -1090,8 +1099,9 @@
 
         var fndtype = $('#fndtype').find("option:selected").text();
         var inctype = $('#inctype').find("option:selected").text();
-        var code = $('#code').val();
-        var desc = $('#desc').val().toUpperCase();
+        var o_code = $('#o_code').val().trim() == '' ? 'N/A' : $('#o_code').val().trim();
+        var code = $('#code').val().trim();
+        var desc = $('#desc').val().trim().toUpperCase();
         var fnd_empty = 0;
         var inc_empty = 0;
 
@@ -1133,6 +1143,7 @@
                             data: { 
                                 fndtype: fndtype,
                                 inctype: inctype,
+                                o_code: o_code,
                                 code: code,
                                 desc: desc,
                                 csrfmiddlewaretoken:"{{csrf_token}}"
@@ -1152,6 +1163,7 @@
                                         $('#fndtype').val('Select Fund Type');
                                         $('#inctype').val('Select Income Type');
                                         $('#code').val('');
+                                        $('#o_code').val('');
                                         $('#desc').val('');
                                     }
                                 })
@@ -1643,6 +1655,17 @@
                 })
             }
         })
-    })
+    });
+
+    $('#o_check').on('click', function() {
+        if ($(this).prop("checked")) {
+            $('#o_code').val('N/A');
+            document.getElementById( "o_code" ).setAttribute('disabled',true);
+        }
+        else {
+            $('#o_code').val('');
+            document.getElementById( "o_code" ).removeAttribute('disabled');
+        }
+    });
 </script>
 {% endblock %}

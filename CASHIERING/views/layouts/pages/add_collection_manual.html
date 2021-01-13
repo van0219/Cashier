@@ -20,17 +20,17 @@
     <!-- begin breadcrumb -->
     <ol class="breadcrumb pull-right">
         <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
-        <li class="breadcrumb-item"><a href="javascript:;">Add Collection</a></li>
-        <li class="breadcrumb-item active">Manual</li>
+        <li class="breadcrumb-item active"><a href="javascript:;">Add Collection</a></li>
+        <!-- <li class="breadcrumb-item active">Manual</li> -->
     </ol>
     <!-- end breadcrumb -->
     <!-- begin page-header -->
-    <h1 class="page-header">Add Collection <small>Manual</small></h1>
+    <h1 class="page-header">Add Collection</h1>
     <!-- end page-header -->
     <!-- begin card -->
     <div class="card text-left">
         <div class="card-header">
-            <i class="fas fa-id-badge m-r-5"></i>Add Collection (Manual)
+            <i class="fas fa-id-badge m-r-5"></i>Add Collection
         </div>
         <div class="card-block">
             <!-- begin panel -->
@@ -62,8 +62,12 @@
                                     <label class="col-md-3 col-form-label">Payor :</label>
                                     <div class="col-md-3">
                                         <div class="radio radio-css">
-                                            <input type="radio" name="radio_css" id="radiorequired" checked />
-                                            <label for="radiorequired">Individual</label>
+                                            <input type="radio" name="radio_css" id="radiorequired3" checked />
+                                            <label for="radiorequired3">Student</label>
+                                        </div>
+                                        <div class="radio radio-css">
+                                            <input type="radio" name="radio_css" id="radiorequired" />
+                                            <label for="radiorequired">Non-Student</label>
                                         </div>
                                         <div class="radio radio-css">
                                             <input type="radio" name="radio_css" id="radiorequired2" />
@@ -71,11 +75,13 @@
                                         </div>                                    
                                     </div>
                                     <div class="col-md-6">
-                                        <select class="form-control selectpicker individual" name="selectBox">
-                                            <option selected disabled>Select Degree</option>
+                                        <select class="form-control selectpicker individual_sel" name="selectBox" style="display: none">;">
+                                            <option selected disabled>Select level of education</option>
+                                            <option>Diploma</option>
                                             <option>Bachelor's Degree</option>
                                             <option>Master's Degree</option>
                                         </select>
+                                        <input type="text" class="form-control studno" placeholder="Student Number" />
                                     </div>
                                 </div>
                             </div>
@@ -285,13 +291,23 @@
     $("#save").click( function() {
         window.location = '{% url "show_receipt" %}';
     });
-    $("#radiorequired").click(function() {
+    $("#radiorequired").click(function() { //non-student radio
         $('.company').hide();
+        $('.studno').hide();
         $('.individual').show();
+        $('.individual_sel').show();
     });
-    $("#radiorequired2").click(function() {
+    $("#radiorequired2").click(function() { //company radio
         $('.individual').hide();
+        $('.individual_sel').hide();
+        $('.stduno').hide();
         $('.company').show();
+    });
+    $("#radiorequired3").click(function() { //student radio
+        $('.individual_sel').hide();
+        $('.individual').show();
+        $('.company').hide();
+        $('.studno').show();
     });
     var total_fee = 0;
     var minus_fee = '';

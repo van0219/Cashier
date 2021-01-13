@@ -22,8 +22,8 @@ from CASHIERING import views
 urlpatterns = [
     path('login', views.login, name='login'),
     path('dashboard', views.dashboard, name='dashboard'),
-    path('add_collection_manual', views.add_collection_manual, name='add_collection_manual'),
-    path('add_collection_student', views.add_collection_student, name='add_collection_student'),
+    path('add_collection', views.add_collection_manual, name='add_collection_manual'),
+    # path('add_collection_student', views.add_collection_student, name='add_collection_student'),
     path('view_receipts', views.view_receipts, name='view_receipts'),
     path('show_receipt', views.show_receipt, name='show_receipt'),
     path('cleared_students', views.cleared_students, name='cleared_students'),
