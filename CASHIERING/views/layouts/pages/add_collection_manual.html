@@ -1,5 +1,5 @@
 {% extends "views/layouts/pages/main.html" %}
-{% block title %}<title>CMS | Add Collection (Manual)</title>{% endblock %}
+{% block title %}<title>CMS | Add Collection</title>{% endblock %}
 {% load static %}
 {% block page-css %}
 <link href="{%static 'assets/plugins/parsley/src/parsley.css' %}" rel="stylesheet" />
@@ -12,6 +12,11 @@
     color: black;
     font-weight: bold;
 }
+</style>
+<style type="text/css" media="print">
+    .hidden-print {
+        display: none; 
+    }
 </style>
 {% endblock %}
 {% block content %}
@@ -36,8 +41,7 @@
             <!-- begin panel -->
             <div class="panel panel-white m-b-0" style="margin-top: -10px;">
                 <div class="panel-body">
-                    <h1></h1>
-                    <form data-parsley-validate="true">
+                    <form class="form-horizontal" id="addForm" action="#" method="POST" data-parsley-validate>
                         <div class="row" style="position: relative;">
                             <div class="col-lg-6">
                                 <div class="form-group row m-b-15">
@@ -112,42 +116,35 @@
                             <div class="col-lg-4">
                                 <!-- begin panel -->
                                 <div class="panel">
-                                    <!-- begin panel-heading -->
-                                    <!-- <div class="panel-heading">
-                                        <h4 class="panel-title">Payment Info</h4>
-                                    </div> -->
-                                    <!-- end panel-heading -->
-                                    <!-- begin panel-body -->
                                     <div class="panel-body" style="border-radius: 5px;">
-                                            <div class="form-group row m-b-15">
-                                                <label class="col-md-4 col-sm-4 col-form-label">Income Type :</label>
-                                                <div class="col-md-8 col-sm-8">
-                                                    <select class="form-control" id="inc-select" name="selectBox" data-parsley-required="true">
-                                                        <option value="Please choose" selected disabled>Please choose</option>
-                                                    </select>
-                                                </div>
+                                        <div class="form-group row m-b-15">
+                                            <label class="col-md-4 col-sm-4 col-form-label">Income Type :</label>
+                                            <div class="col-md-8 col-sm-8">
+                                                <select class="form-control" id="inc-select" name="selectBox">
+                                                    <option value="Please choose" selected disabled>Please choose</option>
+                                                </select>
                                             </div>
-                                            <div class="form-group row m-b-15">
-                                                <label class="col-md-4 col-sm-4 col-form-label">UAC Code :</label>
-                                                <div class="col-md-8 col-sm-8">
-                                                    <select class="form-control selectpicker text-ellipsis" id="uacs_select" name="selectBox" data-parsley-required="true">
-                                                        <option value="Please choose" selected disabled>Please choose</option>
-                                                    </select>
-                                                </div>
+                                        </div>
+                                        <div class="form-group row m-b-15">
+                                            <label class="col-md-4 col-sm-4 col-form-label">UAC Code :</label>
+                                            <div class="col-md-8 col-sm-8">
+                                                <select class="form-control selectpicker text-ellipsis" id="uacs_select" name="selectBox">
+                                                    <option value="Please choose" selected disabled>Please choose</option>
+                                                </select>
                                             </div>
-                                            <div class="form-group row m-b-15">
-                                                <label class="col-md-4 col-sm-4 col-form-label" for="message">Amount :</label>
-                                                <div class="col-md-8 col-sm-8">
-                                                    <input class="form-control" type="text" id="number" name="number" data-parsley-type="number" data-parsley-required="true" placeholder="Amount in Peso" />
-                                                </div>
+                                        </div>
+                                        <div class="form-group row m-b-15">
+                                            <label class="col-md-4 col-sm-4 col-form-label" for="message">Amount :</label>
+                                            <div class="col-md-8 col-sm-8">
+                                                <input class="form-control" type="number" id="number" name="number" data-parsley-type="number" placeholder="Amount in peso"/>
                                             </div>
-                                            <div class="form-group row m-b-0">
-                                                <label class="col-md-4 col-sm-4 col-form-label">&nbsp;</label>
-                                                <div class="col-md-8 col-sm-8">
-                                                    <a href="javascript:;" class="btn btn-primary btn-sm" id="particular"><i class="fa fa-plus-circle m-r-5"></i>Add Particulars</a>
-                                                </div>
+                                        </div>
+                                        <div class="form-group row m-b-0">
+                                            <label class="col-md-4 col-sm-4 col-form-label">&nbsp;</label>
+                                            <div class="col-md-8 col-sm-8">
+                                                <a href="javascript:;" class="btn btn-primary btn-sm" id="particular"><i class="fa fa-plus-circle m-r-5"></i>Add Particulars</a>
                                             </div>
-                                        <!--  -->
+                                        </div>
                                     </div>
                                     <!-- end panel-body -->
                                 </div>
@@ -185,13 +182,15 @@
                                     </tr>
                                 </table>
                                 <table class="pull-right">
-                                    <td><button id="save" class="btn btn-success"><i class="fas fa-save m-r-5"></i>Save Entry</button></td>
+                                    <td>
+                                        <a href="#receipt" data-toggle="modal"  id="save" class="btn btn-success"><i class="fas fa-save m-r-5"></i>Save Entry</a>
+                                    </td>
                                 </table>
                             </div>
                         </div>           
-                        </form>
-                    </div>
+                    </form>
                 </div>
+            </div>
             <!-- end panel -->
         <div class="card-footer text-grey-darker f-s-10">
 
@@ -219,11 +218,14 @@
         App.init();
         Highlight.init();
         TableManageResponsive.init();
-
+        getIncType();
+        getUacsCode();
+    });
+    function getIncType() {
         $.ajax({
             type: "POST",
             url: "{% url 'get_income_type' %}",
-            cache: false,
+            cache: true,
             dataType: 'json',
             data: {
                 csrfmiddlewaretoken:"{{csrf_token}}"
@@ -244,17 +246,19 @@
                 })
             }
         });
+    };
+    function getUacsCode() {
         $.ajax({
             type: "POST",
             url: "{% url 'get_uacs_code' %}",
-            cache: false,
+            cache: true,
             dataType: 'json',
             data: {
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
                 $.each(obj, function(index, option){
-                    $('#uacs_select').append( new Option(option,option)); //value and text 
+                    $('#uacs_select').append( new Option(option[0]+' - '+option[1], option[0])); //text and value
                 });
             },
             error: function(xhr, status, error) {
@@ -268,7 +272,7 @@
                 })
             }
         });
-    });
+    };
     var dt_part = $('#data-table-responsivesdd').DataTable({
         'paging'      : false,
         'lengthChange': true,
@@ -289,7 +293,7 @@
         ]
     })
     $("#save").click( function() {
-        window.location = '{% url "show_receipt" %}';
+        // window.location = '{% url "show_receipt" %}';
     });
     $("#radiorequired").click(function() { //non-student radio
         $('.company').hide();
@@ -317,24 +321,63 @@
         var inctype = $('#inc-select').find('option:selected').text();
         var uacs = $('#uacs_select').find('option:selected').text()
         var amt = parseFloat($('#number').val());
-        $('#data-table-responsives tbody').append(
-            `<tr>
-                <td>
-                    <a href="javascript:;" class="btn btn-white btn-xs">${inctype}</a>
-                </td>
-                <td>${uacs}</td>
-                <td>${amt}</td>
-                <td align="center">
-                    <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove" title="remove"><i class="fas fa-times"></i></a>
-                </td>
-            </tr>`
-        );
-        total_fee = init_tot_fee + parseFloat(amt);
-        $('#total-fee').text(parseFloat(total_fee));
-        $('#inc-select').val('Please choose');
-        $('#uacs_select').val('Please choose');
-        $('#number').val('');
+        var amtBox = $('#number').val().trim();
+        if ($('#inc-select').find('option:selected').text() == 'Please choose' || $('#uacs_select').find('option:selected').text() == 'Please choose') {
+            if ($('#inc-select').find('option:selected').text() == 'Please choose') {
+                $('#inc-select').addClass('is-invalid');
+            }
+            if ($('#uacs_select').find('option:selected').text() == 'Please choose') {
+                $('#uacs_select').addClass('is-invalid');
+            }
+            if (amtBox == '' && amtBox.length == 0) {
+                $('#number').addClass('is-invalid');
+            }
+        }
+        else {
+            $('#inc-select').removeClass('is-invalid');
+            $('#uacs_select').removeClass('is-invalid');
+            if (amtBox != '' && amtBox.length != 0) {
+                $('#number').removeClass('is-invalid');
+                $('#data-table-responsives tbody').append(
+                    `<tr>
+                        <td>
+                            <a href="javascript:;" class="btn btn-white btn-xs">${inctype}</a>
+                        </td>
+                        <td>${uacs}</td>
+                        <td>${amt}</td>
+                        <td align="center">
+                            <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove" title="remove"><i class="fas fa-times"></i></a>
+                        </td>
+                    </tr>`
+                );
+                total_fee = init_tot_fee + parseFloat(amt);
+                $('#total-fee').text(parseFloat(total_fee).toFixed(2));
+                $('#inc-select').val('Please choose');
+                $('#uacs_select').val('Please choose');
+                $('#number').val('');
+            }
+            else {
+                $('#number').addClass('is-invalid');
+            }
+        }
     });
+    $('#inc-select').on('change', function() {
+        if ($('#inc-select').find('option:selected').text() == 'Please choose') {
+            $('#inc-select').addClass('is-invalid');
+        }
+        else {
+            $('#inc-select').removeClass('is-invalid');
+        }
+    });
+    $('#uacs_select').on('change', function() {
+        if ($('#uacs_select').find('option:selected').text() == 'Please choose') {
+            $('#uacs_select').addClass('is-invalid');
+        }
+        else {
+            $('#uacs_select').removeClass('is-invalid');
+        }
+    });
+
     $('#data-table-responsives tbody').on('click', '.remove', function() {
         minus_fee = $(this).closest('tr').find('td:eq(2)').html();
         total_fee = total_fee - parseFloat(minus_fee);
