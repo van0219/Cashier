@@ -47,7 +47,7 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-form-label col-md-3">OR Number :</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control m-b-5 f-s-12 disabledInput" readonly="readonly" onfocus="this.blur();" tabindex="-1" value="00000142579" disabled/>
+                                        <input type="text" class="form-control m-b-5 f-s-12 disabledInput" id="or_num" readonly="readonly" onfocus="this.blur();" tabindex="-1" value="00000142579" disabled/>
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +55,7 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-form-label col-md-3">Date :</label>
                                     <div class="col-md-9">
-                                        <input type="text" value="{% now 'F d, Y' %}" class="form-control m-b-5 f-s-12 disabledInput" readonly="readonly" onfocus="this.blur();" tabindex="-1" />
+                                        <input type="text" value="{% now 'F d, Y' %}" class="form-control m-b-5 f-s-12 disabledInput" id="or_date" readonly="readonly" onfocus="this.blur();" tabindex="-1" />
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +85,7 @@
                                             <option>Bachelor's Degree</option>
                                             <option>Master's Degree</option>
                                         </select>
-                                        <input type="text" class="form-control studno" placeholder="Student Number" />
+                                        <input type="text" id="or_studnum" class="form-control studno" placeholder="20XX-XXXXX-CM-X" style="text-transform: uppercase;"/>
                                     </div>
                                 </div>
                             </div>
@@ -93,11 +93,11 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-form-label col-md-3">Last Name :</label>
                                     <div class="col-md-9">
-                                        <input type="text" style="text-transform: uppercase;" class="form-control m-b-5" />
+                                        <input type="text" id="or_lname" style="text-transform: uppercase;" class="form-control m-b-5" />
                                     </div>
                                     <label class="col-form-label col-md-3">First Name :</label>
                                     <div class="col-md-9">
-                                        <input type="text" style="text-transform: uppercase;" class="form-control m-b-5" />
+                                        <input type="text" id="or_fname" style="text-transform: uppercase;" class="form-control m-b-5" />
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-form-label col-md-3">Company Name :</label>
                                     <div class="col-md-9">
-                                        <input type="text" style="text-transform: uppercase;" class="form-control m-b-5" />
+                                        <input type="text" id="or_comp" style="text-transform: uppercase;" class="form-control m-b-5" />
                                     </div>
                                 </div>
                             </div>
@@ -273,28 +273,49 @@
             }
         });
     };
-    var dt_part = $('#data-table-responsivesdd').DataTable({
-        'paging'      : false,
-        'lengthChange': true,
-        'searching'   : false,
-        'ordering'    : false,
-        'info'        : false,
-        'autoWidth'   : true,
-        "aaSorting": [[3, "desc" ]]
-        ,dom: 'lBfrtip'
-        ,   buttons: [
-        ],
-        columnDefs: [
-            {
-                targets:3, render:function(data){
-                    return '<a href="javascript:;" class="btn btn-xs btn-warning undo"><i class="fas fa-times m-r-5"></i></a>';
-                }
-            }
-        ]
-    })
-    $("#save").click( function() {
-        // window.location = '{% url "show_receipt" %}';
+
+    $("#save").on('click', function() { //save entry is clicked
+        $('.table-invoice tbody').append(
+            `<tr>
+                <td>
+                    <span class="text-inverse" id="r_desc"></span><br />
+                </td>
+                <td class="text-center" id="r_amount"></td>
+                <td class="text-right" id="r_total"></td>
+            </tr>`
+        );
+        $('#r_ornum').text($('#or_num').val());
+
+        if ($('#radiorequired3').prop('checked')) { //student is selected
+            var fullname = $('#or_lname').val()+', '+$('#or_fname').val();
+            $('#r_name').text(fullname.toUpperCase());
+            $('#r_studnum').text($('#or_studnum').val().toUpperCase());
+        }
+        else if ($('#radiorequired2').prop('checked')) { //company is selected
+            $('#r_name').text($('#or_comp').val().toUpperCase());
+            $('#r_studnum').text('');
+        }
+        else if ($('#radiorequired').prop('checked')) { //non-student is selected
+            var fullname = $('#or_lname').val()+', '+$('#or_fname').val();
+            $('#r_name').text(fullname.toUpperCase());
+            $('#r_studnum').text('');
+        }
+
+        $('#r_date').text($('#or_date').val());
+        var dt = new Date();
+        var ampm = (dt.getHours() >= 12) ? "PM" : "AM";
+        var time = dt.getHours() + ":" + dt.getMinutes() + ' ' + ampm;
+        $('#r_time').text(time);
+        $('#r_amount').text('Ambot ha em');
+        $('#r_desc').text('Ambot ha em');
+        $('#r_total').text('Ambot ha em');
+        $('#r_grandtotal').text('Ambot ha em');
     });
+
+    $('#receipt').on('hidden.bs.modal', function (e) {
+        $('.table-invoice tr').remove();
+    })
+
     $("#radiorequired").click(function() { //non-student radio
         $('.company').hide();
         $('.studno').hide();
@@ -304,7 +325,7 @@
     $("#radiorequired2").click(function() { //company radio
         $('.individual').hide();
         $('.individual_sel').hide();
-        $('.stduno').hide();
+        $('.studno').hide();
         $('.company').show();
     });
     $("#radiorequired3").click(function() { //student radio
@@ -319,7 +340,7 @@
         var tot_fee_txt = $('#total-fee').text();
         var init_tot_fee = parseFloat(tot_fee_txt);
         var inctype = $('#inc-select').find('option:selected').text();
-        var uacs = $('#uacs_select').find('option:selected').text()
+        var uacs = $('#uacs_select').find('option:selected').text();
         var amt = parseFloat($('#number').val());
         var amtBox = $('#number').val().trim();
         if ($('#inc-select').find('option:selected').text() == 'Please choose' || $('#uacs_select').find('option:selected').text() == 'Please choose') {

@@ -130,20 +130,20 @@
 							<div class="invoice-from">
 								<small>OR Number</small>
 								<address class="m-t-5 m-b-5">
-									<strong class="text-inverse">00000142579</strong><br />
+									<strong class="text-inverse" id="r_ornum">00000142579</strong><br />
 								</address>
 							</div>
 							<div class="invoice-to">
 								<small>Payor</small>
 								<address class="m-t-5 m-b-5">
-									<strong class="text-inverse">SILLEZA, VAN ANTHONY</strong><br />
-									<div class="invoice-detail">2017-00293-CM-0</div>
+									<strong class="text-inverse" id="r_name">LASTNAME, FIRSTNAME M.</strong><br />
+									<div class="invoice-detail" id="r_studnum">2017-00293-CM-0</div>
 								</address>
 							</div>
 							<div class="invoice-date">
 								<small>Transaction Date</small>
-								<div class="date text-inverse m-t-5">{% now "F j, Y" %}</div>
-								<div class="invoice-detail">{% now "h:i:s a" %}</div>
+								<div class="date text-inverse m-t-5" id="r_date">{% now "F j, Y" %}</div>
+								<div class="invoice-detail" id="r_time">{% now "h:i:s a" %}</div>
 							</div>
 						</div>
 						<!-- end invoice-header -->
@@ -161,22 +161,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td>
-												<span class="text-inverse">Miscellaneous Fee</span><br />
-											</td>
-											<td class="text-center">₱425.75</td>
-											<!-- <td class="text-center"></td> -->
-											<td class="text-right">₱425.75</td>
-										</tr>
-										<tr>
-											<td>
-												<span class="text-inverse">Permit Fee</span><br />
-											</td>
-											<td class="text-center">₱2,500.00</td>
-											<!-- <td class="text-center">1</td> -->
-											<td class="text-right">₱2,500.00</td>
-										</tr>
+
 									</tbody>
 								</table>
 							</div>
@@ -184,10 +169,10 @@
 							<!-- begin invoice-price -->
 							<div class="invoice-price">
 								<div class="invoice-price-left">
-
+									<!--  -->
 								</div>
 								<div class="invoice-price-right">
-									<small>GRAND TOTAL</small> <span class="f-w-600">₱2,925.75</span>
+									<small>GRAND TOTAL</small> <span class="f-w-600" id="r_grandtotal">₱2,925.75</span>
 								</div>
 							</div>
 							<!-- end invoice-price -->
