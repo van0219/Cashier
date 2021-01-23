@@ -55,7 +55,7 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-form-label col-md-3">Date :</label>
                                     <div class="col-md-9">
-                                        <input type="text" value="{% now 'F d, Y' %}" class="form-control m-b-5 f-s-12 disabledInput" id="or_date" readonly="readonly" onfocus="this.blur();" tabindex="-1" />
+                                        <input type="text" value="{% now 'M. d, Y' %}" class="form-control m-b-5 f-s-12 disabledInput" id="or_date" readonly="readonly" onfocus="this.blur();" tabindex="-1" />
                                     </div>
                                 </div>
                             </div>
@@ -93,11 +93,11 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-form-label col-md-3">Last Name :</label>
                                     <div class="col-md-9">
-                                        <input type="text" id="or_lname" style="text-transform: uppercase;" class="form-control m-b-5" />
+                                        <input type="text" id="or_lname" style="text-transform: uppercase;" class="form-control m-b-5" disabled/>
                                     </div>
                                     <label class="col-form-label col-md-3">First Name :</label>
                                     <div class="col-md-9">
-                                        <input type="text" id="or_fname" style="text-transform: uppercase;" class="form-control m-b-5" />
+                                        <input type="text" id="or_fname" style="text-transform: uppercase;" class="form-control m-b-5" disabled/>
                                     </div>
                                 </div>
                             </div>
@@ -275,15 +275,19 @@
     };
 
     $("#save").on('click', function() { //save entry is clicked
-        $('.table-invoice tbody').append(
-            `<tr>
-                <td>
-                    <span class="text-inverse" id="r_desc"></span><br />
-                </td>
-                <td class="text-center" id="r_amount"></td>
-                <td class="text-right" id="r_total"></td>
-            </tr>`
-        );
+        var dt_res = $('#data-table-responsives tbody');
+        var dt_res_len = $('#data-table-responsives tbody tr').length;
+        for (i = 0; i < dt_res_len; i++) {
+            $('.table-invoice tbody').append(
+                `<tr>
+                    <td>
+                        <span class="text-inverse" id="r_desc">${dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text().split('-')[1]}</span><br />
+                    </td>
+                    <td class="text-center" id="r_amount">${dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()}</td>
+                </tr>`
+            );
+        }
+
         $('#r_ornum').text($('#or_num').val());
 
         if ($('#radiorequired3').prop('checked')) { //student is selected
@@ -306,20 +310,22 @@
         var ampm = (dt.getHours() >= 12) ? "PM" : "AM";
         var time = dt.getHours() + ":" + dt.getMinutes() + ' ' + ampm;
         $('#r_time').text(time);
-        $('#r_amount').text('Ambot ha em');
-        $('#r_desc').text('Ambot ha em');
-        $('#r_total').text('Ambot ha em');
-        $('#r_grandtotal').text('Ambot ha em');
+        // $('#r_amount').text(amt.text());
+        // $('#r_desc').text(desc.text());
+        // $('#r_total').text('Ambot ha em');
+        $('#r_grandtotal').text($('#total-fee').text());
     });
 
     $('#receipt').on('hidden.bs.modal', function (e) {
-        $('.table-invoice tr').remove();
+        $('.table-invoice tbody tr').remove();
     })
 
     $("#radiorequired").click(function() { //non-student radio
         $('.company').hide();
         $('.studno').hide();
         $('.individual').show();
+        $('#or_lname').prop('disabled', false);
+        $('#or_fname').prop('disabled', false);
         $('.individual_sel').show();
     });
     $("#radiorequired2").click(function() { //company radio
@@ -333,6 +339,8 @@
         $('.individual').show();
         $('.company').hide();
         $('.studno').show();
+        $('#or_lname').prop('disabled', true);
+        $('#or_fname').prop('disabled', true);
     });
     var total_fee = 0;
     var minus_fee = '';
