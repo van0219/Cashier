@@ -286,3 +286,12 @@ def get_uacs_code(request):
     cursor.callproc("SP_SELECT_ALL_UACS_CODE")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def add_or_set(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_INSERT_OR_SET"
+                    ,(request.POST['startDate']
+                    ,request.POST['endDate']
+                    ,request.POST['startVal']
+                    ,request.POST['endVal']))
+    return HttpResponse("")

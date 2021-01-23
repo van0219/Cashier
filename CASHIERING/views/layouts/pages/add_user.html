@@ -188,7 +188,6 @@
                                     roleid:roleid,
                                     csrfmiddlewaretoken:"{{csrf_token}}"
                                 },
-                                timeout: 5000,
                                 success:function(data) {
                                     swal({
                                         title: "Added Successfully", 
@@ -239,7 +238,6 @@
                 uname:uname,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
-            timeout: 5000,
             success:function(obj) {
                 cond = (obj[0] == 1);
                 check_email(cond);

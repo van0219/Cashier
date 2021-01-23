@@ -85,35 +85,50 @@
     $(document).ready(function() {
         App.init();
         Highlight.init();
-        // $('#from').datepicker({ dateFormat: 'yy/mm/dd' });
+    });
+
+    $('#set').on('click', function() {
+        event.preventDefault();
+        var startDate = $('#from').val();
+        var endDate = $('#to').val();
+        var startVal = $('#min').val();
+        var endVal = $('#max').val();
+        var month = moment(new Date(startDate)).format("MMMM");
+        $.ajax({
+            type: "POST",
+            url: "{% url 'add_or_set' %}",
+            cache: true,
+            data: {
+                startDate: startDate,
+                endDate: endDate,
+                startVal: startVal,
+                endVal: endVal,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                swal({
+                    title: "Added Successfully", 
+                    text: "OR set for the month of "+ month +" was added successfully!", 
+                    type: "success",
+                    showLoaderOnConfirm: true,
+                    confirmButtonColor: "#5cb85c",
+                });
+                $('#from').val('');
+                $('#to').val('');
+                $('#min').val('');
+                $('#max').val('');
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
     });
 </script>
 {% endblock %}
-    <!-- $('#set').on('click',function() {
-        
-        // setup subject and body
-        subject = 'INQUIRY';
-        strMessage = 'Sorry na pre? HAHAHA';
-
-        // // call function
-        // send_email(subject, strMessage)
-        
-    $.ajax({
-        url: "{% url 'send_email' %}",
-        type: "POST", 
-        data: {
-            subject: subject,
-            strMessage: strMessage,
-            csrfmiddlewaretoken:"{{csrf_token}}"
-        },
-        success:function() {
-            alert('Email Sent Successfully!');
-            window.location.reload(true);
-            
-        },
-        error:function() {
-            alert('error');
-        }
-    })
-    }); -->
-

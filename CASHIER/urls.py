@@ -70,4 +70,5 @@ urlpatterns = [
     path('load_user_data2', views.load_user_data2, name="load_user_data2"), 
     path('deactivate_user', views.deactivate_user, name="deactivate_user"),
     path('get_uacs_code', views.get_uacs_code, name="get_uacs_code"),
+    path('add_or_set', views.add_or_set, name="add_or_set"),
 ]

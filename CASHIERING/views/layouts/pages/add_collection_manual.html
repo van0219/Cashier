@@ -177,7 +177,7 @@
                                         <td  style="padding-left: 15px;"></td>
                                         <td><b>Total Amount : </b></td>
                                         <td class="f-s-14">
-                                            <a href="javascript:;" class="btn btn-xs btn-warning">Php <span id="total-fee">0.00</span></a>
+                                            <a href="javascript:;" class="btn btn-xs btn-warning">₱ <span id="total-fee">0.00</span></a>
                                         </td>
                                     </tr>
                                 </table>
@@ -313,12 +313,12 @@
         // $('#r_amount').text(amt.text());
         // $('#r_desc').text(desc.text());
         // $('#r_total').text('Ambot ha em');
-        $('#r_grandtotal').text($('#total-fee').text());
+        $('#r_grandtotal').text('₱'+$('#total-fee').text());
     });
 
     $('#receipt').on('hidden.bs.modal', function (e) {
         $('.table-invoice tbody tr').remove();
-    })
+    });
 
     $("#radiorequired").click(function() { //non-student radio
         $('.company').hide();
@@ -373,7 +373,7 @@
                             <a href="javascript:;" class="btn btn-white btn-xs">${inctype}</a>
                         </td>
                         <td>${uacs}</td>
-                        <td>${amt}</td>
+                        <td>${amt.toFixed(2)}</td>
                         <td align="center">
                             <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove" title="remove"><i class="fas fa-times"></i></a>
                         </td>
@@ -410,7 +410,7 @@
     $('#data-table-responsives tbody').on('click', '.remove', function() {
         minus_fee = $(this).closest('tr').find('td:eq(2)').html();
         total_fee = total_fee - parseFloat(minus_fee);
-        $('#total-fee').text(total_fee);
+        $('#total-fee').text(total_fee.toFixed(2));
         $(this).closest('tr').remove();
     });
 </script>
