@@ -308,12 +308,12 @@
         $('#r_date').text($('#or_date').val());
         var dt = new Date();
         var ampm = (dt.getHours() >= 12) ? "PM" : "AM";
-        var time = dt.getHours() + ":" + dt.getMinutes() + ' ' + ampm;
+        var time = dt.getHours() + ":" + (dt.getMinutes()<10?'0':'' + dt.getMinutes()) + ' ' + ampm;
         $('#r_time').text(time);
         // $('#r_amount').text(amt.text());
         // $('#r_desc').text(desc.text());
         // $('#r_total').text('Ambot ha em');
-        $('#r_grandtotal').text('₱'+$('#total-fee').text());
+        $('#r_grandtotal').text('₱'+$('#total-fee').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     });
 
     $('#receipt').on('hidden.bs.modal', function (e) {
