@@ -47,7 +47,7 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-form-label col-md-3">OR Number :</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control m-b-5 f-s-12 disabledInput" id="or_num" readonly="readonly" onfocus="this.blur();" tabindex="-1" value="00000142579" disabled/>
+                                        <input type="text" class="form-control m-b-5 f-s-12 disabledInput" id="or_num" readonly="readonly" onfocus="this.blur();" tabindex="-1" disabled/>
                                     </div>
                                 </div>
                             </div>
@@ -81,11 +81,11 @@
                                     <div class="col-md-6">
                                         <select class="form-control selectpicker individual_sel" name="selectBox" style="display: none">;">
                                             <option selected disabled>Select level of education</option>
-                                            <option>Diploma</option>
-                                            <option>Bachelor's Degree</option>
-                                            <option>Master's Degree</option>
+                                            <option value="Diploma">Diploma</option>
+                                            <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                            <option value="Master's Degree">Master's Degree</option>
                                         </select>
-                                        <input type="text" id="or_studnum" class="form-control studno" placeholder="20XX-XXXXX-CM-X" style="text-transform: uppercase;"/>
+                                        <input type="text" id="or_studnum" class="form-control studno" placeholder="20__-_____-CM-_" style="text-transform: uppercase;"/>
                                     </div>
                                 </div>
                             </div>
@@ -93,11 +93,11 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-form-label col-md-3">Last Name :</label>
                                     <div class="col-md-9">
-                                        <input type="text" id="or_lname" style="text-transform: uppercase;" class="form-control m-b-5" disabled/>
+                                        <input type="text" id="or_lname" style="text-transform: uppercase;" class="form-control m-b-5 f-s-12 disabledInput" disabled/>
                                     </div>
                                     <label class="col-form-label col-md-3">First Name :</label>
                                     <div class="col-md-9">
-                                        <input type="text" id="or_fname" style="text-transform: uppercase;" class="form-control m-b-5" disabled/>
+                                        <input type="text" id="or_fname" style="text-transform: uppercase;" class="form-control m-b-5 f-s-12 disabledInput" disabled/>
                                     </div>
                                 </div>
                             </div>
@@ -206,6 +206,7 @@
 <script src="{%static 'assets/plugins/parsley/dist/parsley.js' %}"></script>
 <script src="{%static 'assets/plugins/highlight/highlight.common.js' %}"></script>
 <script src="{%static 'assets/js/demo/render.highlight.js' %}"></script>
+<script src="{%static 'assets/plugins/masked-input/masked-input.min.js' %}"></script>
 <!--  -->
 <script src="{%static 'assets/plugins/DataTables/media/js/jquery.dataTables.js' %}"></script>
 <script src="{%static 'assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js' %}"></script>
@@ -218,6 +219,7 @@
         App.init();
         Highlight.init();
         TableManageResponsive.init();
+        getCurrentORnum();
         getIncType();
         getUacsCode();
     });
@@ -225,7 +227,7 @@
         $.ajax({
             type: "POST",
             url: "{% url 'get_income_type' %}",
-            cache: true,
+            // cache: true,
             dataType: 'json',
             data: {
                 csrfmiddlewaretoken:"{{csrf_token}}"
@@ -273,6 +275,122 @@
             }
         });
     };
+    function getCurrentORnum() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_current_or' %}",
+            cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#or_num').val(obj[0].toString());
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+    
+    var getCurrentUserID;
+    function callback(response) {
+        getCurrentUserID = response;
+    }
+    $.ajax({
+        url: "{% url 'get_session' %}",
+        type: "POST",
+        data: {
+            csrfmiddlewaretoken:"{{csrf_token}}"
+        },
+        success: function(role_session) {
+            callback(role_session)
+        }
+    });
+
+    function saveCollection() {
+        var or_num = $('#r_ornum').text();
+        var assessed = parseFloat($('#r_grandtotal').text().substring(1).replace(/,/g,''));
+        var collected = parseFloat($('#r_grandtotal').text().substring(1).replace(/,/g,''));
+        var studno = $('#r_studnum').text();
+        var client = $('#r_name').text();
+        var educ_level = $('.individual_sel').val();
+        var userID = getCurrentUserID;
+        $.ajax({
+            type: "POST",
+            url: "{% url 'insert_collection' %}",
+            cache: true,
+            dataType: 'json',
+            data: {
+                or_num: or_num,
+                assessed: assessed,
+                collected: collected,
+                studno: studno,
+                client: client,
+                educ_level: educ_level,
+                userID: userID,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                console.log(obj);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: error,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+
+    $('#or_studnum').mask('2099-99999-CM-9'); //masked input for student number
+
+    $('#or_studnum').on('keyup', function() {
+        var studno = $('#or_studnum').val();
+        if (studno.length == 15) {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'get_student_name' %}",
+                cache: true,
+                dataType: 'json',
+                data: {
+                    studno: studno,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                success: function(obj) {
+                    if (obj[0] != null) {
+                        $('#or_lname').val(obj[0][1].toString());
+                        $('#or_fname').val(obj[0][0].toString());
+                    }
+                    else {
+                        $('#or_lname').val('');
+                        $('#or_fname').val('');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errMsg = xhr.status + ': ' + xhr.statusText;
+                    swal({
+                        title: "Error!", 
+                        text: errMsg,
+                        type: "error",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    })
+                }
+            });
+        }
+    });
 
     $("#save").on('click', function() { //save entry is clicked
         var dt_res = $('#data-table-responsives tbody');
@@ -308,16 +426,25 @@
         $('#r_date').text($('#or_date').val());
         var dt = new Date();
         var ampm = (dt.getHours() >= 12) ? "PM" : "AM";
-        var time = dt.getHours() + ":" + (dt.getMinutes()<10?'0':'' + dt.getMinutes()) + ' ' + ampm;
+        var time = dt.getHours() + ":" + ((dt.getMinutes()<10?'0':'') + dt.getMinutes()) + ' ' + ampm;
         $('#r_time').text(time);
-        // $('#r_amount').text(amt.text());
-        // $('#r_desc').text(desc.text());
-        // $('#r_total').text('Ambot ha em');
         $('#r_grandtotal').text('₱'+$('#total-fee').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+        //
+        saveCollection();
     });
 
-    $('#receipt').on('hidden.bs.modal', function (e) {
+    $('#receipt').on('hidden.bs.modal', function (e) { //when receipt modal is closed
         $('.table-invoice tbody tr').remove();
+        $('or_num').val(getCurrentORnum());
+        $('#or_lname').val('');
+        $('#or_fname').val('');
+        $('#or_studnum').val('');
+        $('.individual_sel').val('Select level of education');
+        $('#total-fee').text(parseFloat('0').toFixed(2));
+        $('#inc-select').val('Please choose');
+        $('#uacs_select').val('Please choose');
+        $('#number').val('');
+        $('#data-table-responsives tbody tr').remove();
     });
 
     $("#radiorequired").click(function() { //non-student radio
@@ -404,6 +531,14 @@
         }
         else {
             $('#uacs_select').removeClass('is-invalid');
+        }
+    });
+    $('#number').on('input', function() {
+        if ($('#number').val().trim().length == 0) {
+            $('#number').addClass('is-invalid');
+        }
+        else {
+            $('#number').removeClass('is-invalid');
         }
     });
 

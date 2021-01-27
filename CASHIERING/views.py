@@ -295,3 +295,29 @@ def add_or_set(request):
                     ,request.POST['startVal']
                     ,request.POST['endVal']))
     return HttpResponse("")
+
+def get_current_or(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_CURRENT_OR")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def get_student_name(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_STUDENT_NAME"
+                    ,(request.POST['studno'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def insert_collection(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_INSERT_COLLECTION"
+                    ,(request.POST['or_num']
+                    ,request.POST['assessed']
+                    ,request.POST['collected']
+                    ,request.POST['studno']
+                    ,request.POST['client']
+                    ,request.POST['educ_level']
+                    ,request.POST['userID']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

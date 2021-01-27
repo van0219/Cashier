@@ -71,4 +71,7 @@ urlpatterns = [
     path('deactivate_user', views.deactivate_user, name="deactivate_user"),
     path('get_uacs_code', views.get_uacs_code, name="get_uacs_code"),
     path('add_or_set', views.add_or_set, name="add_or_set"),
+    path('get_current_or', views.get_current_or, name="get_current_or"),
+    path('get_student_name', views.get_student_name, name="get_student_name"),
+    path('insert_collection', views.insert_collection, name="insert_collection"),
 ]
