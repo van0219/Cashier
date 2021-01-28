@@ -321,3 +321,18 @@ def insert_collection(request):
                     ,request.POST['userID']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_receipt_table(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_ALL_RECEIPTS")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def insert_collection_breakdown(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_INSERT_COLLECTION_BREAKDOWN"
+                    ,(request.POST['or_num']
+                    ,request.POST['desc']
+                    ,request.POST['amt']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

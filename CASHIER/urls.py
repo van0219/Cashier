@@ -74,4 +74,6 @@ urlpatterns = [
     path('get_current_or', views.get_current_or, name="get_current_or"),
     path('get_student_name', views.get_student_name, name="get_student_name"),
     path('insert_collection', views.insert_collection, name="insert_collection"),
+    path('load_receipt_table', views.load_receipt_table, name="load_receipt_table"),
+    path('insert_collection_breakdown', views.insert_collection_breakdown, name="insert_collection_breakdown"),
 ]
