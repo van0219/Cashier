@@ -283,7 +283,8 @@ def deactivate_user(request):
 
 def get_uacs_code(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_SELECT_ALL_UACS_CODE")
+    cursor.callproc("SP_SELECT_ALL_UACS_CODE"
+                    ,(request.POST['incomeType'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -334,5 +335,19 @@ def insert_collection_breakdown(request):
                     ,(request.POST['or_num']
                     ,request.POST['desc']
                     ,request.POST['amt']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_specific_collection(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SPECIFIC_COLLECTION"
+                    ,(request.POST['or_num'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_specific_collection_breakdown(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SPECIFIC_COLLECTION_BREAKDOWN"
+                    ,(request.POST['or_num'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)

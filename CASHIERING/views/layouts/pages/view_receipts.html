@@ -41,7 +41,7 @@
             <!-- begin card -->
             <div class="card text-left">
                 <div class="card-header">
-                    <i class="fas fa-info-circle fa-lg m-r-5"></i>View Receipt
+                    <i class="fas fa-barcode fa-lg m-r-5"></i>View Receipt
                 </div>
                 <div class="card-block">
                     <!-- begin panel -->
@@ -119,7 +119,7 @@
 <script src="{%static 'assets/plugins/DataTables/extensions/AutoFill/js/dataTables.autoFill.min.js' %}"></script>
 <script src="{%static 'assets/plugins/DataTables/extensions/ColReorder/js/dataTables.colReorder.min.js' %}"></script>
 <script src="{%static 'assets/plugins/DataTables/extensions/KeyTable/js/dataTables.keyTable.min.js' %}"></script>
-<script src="{%static 'assets/plugins/DataTables/extensions/RowReorder/js/dataTables.rowReorder.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/RowReorder/js/dataTables.rowReorder.js' %}"></script>
 <script src="{%static 'assets/plugins/DataTables/extensions/Select/js/dataTables.select.min.js' %}"></script>
 <script src="{%static 'assets/js/demo/table-manage-combine.demo.min.js' %}"></script>
 <!--  -->
@@ -154,6 +154,71 @@
                     ]);
                 })
                 dt_combines.draw();
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+    function loadSpecificCollection(or_num) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_specific_collection' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                or_num: or_num,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#r_ornum').text(obj[0][0]);
+                $('#r_name').text(obj[0][1]);
+                $('#r_studnum').text(obj[0][2]);
+                $('#r_date').text(obj[0][3]);
+                $('#r_time').text(obj[0][4]);
+                $('#r_grandtotal').text('₱'+ obj[0][5].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+    function loadSpecificCollectionBreakdown(or_num) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_specific_collection_breakdown' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                or_num: or_num,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('.table-invoice tbody tr').remove();
+                for (i = 0; i < obj.length; i++) {
+                    $('.table-invoice tbody').append(
+                        `<tr>
+                            <td>
+                                <span class="text-inverse" id="r_desc">${obj[i][0]}</span><br />
+                            </td>
+                            <td class="text-center" id="r_amount">${obj[i][1]}</td>
+                        </tr>`
+                    );
+                }
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -238,43 +303,10 @@
         });
     };
 
-    $('#view_receipt').on('click', function() {
-        var dt_res = $('#data-table-combines tbody');
-        var dt_res_len = $('#data-table-combines tbody tr').length;
-        for (i = 0; i < dt_res_len; i++) {
-            $('.table-invoice tbody').append(
-                `<tr>
-                    <td>
-                        <span class="text-inverse" id="r_desc">${dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text().split('-')[1]}</span><br />
-                    </td>
-                    <td class="text-center" id="r_amount">${dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()}</td>
-                </tr>`
-            );
-        }
-
-        $('#r_ornum').text($('#or_num').val());
-
-        if ($('#radiorequired3').prop('checked')) { //student is selected
-            var fullname = $('#or_lname').val()+', '+$('#or_fname').val();
-            $('#r_name').text(fullname.toUpperCase());
-            $('#r_studnum').text($('#or_studnum').val().toUpperCase());
-        }
-        else if ($('#radiorequired2').prop('checked')) { //company is selected
-            $('#r_name').text($('#or_comp').val().toUpperCase());
-            $('#r_studnum').text('');
-        }
-        else if ($('#radiorequired').prop('checked')) { //non-student is selected
-            var fullname = $('#or_lname').val()+', '+$('#or_fname').val();
-            $('#r_name').text(fullname.toUpperCase());
-            $('#r_studnum').text('');
-        }
-
-        $('#r_date').text($('#or_date').val());
-        var dt = new Date();
-        var ampm = (dt.getHours() >= 12) ? "PM" : "AM";
-        var time = dt.getHours() + ":" + ((dt.getMinutes()<10?'0':'') + dt.getMinutes()) + ' ' + ampm;
-        $('#r_time').text(time);
-        $('#r_grandtotal').text('₱'+$('#total-fee').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+    $('#data-table-combines tbody').on('click', '#view_receipt', function() {
+        var or_num = $(this).closest('tbody tr').find('td:eq(0)').html();
+        loadSpecificCollection(or_num);
+        loadSpecificCollectionBreakdown(or_num);
     });
 </script>
 {% endblock%}

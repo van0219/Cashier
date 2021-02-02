@@ -76,4 +76,6 @@ urlpatterns = [
     path('insert_collection', views.insert_collection, name="insert_collection"),
     path('load_receipt_table', views.load_receipt_table, name="load_receipt_table"),
     path('insert_collection_breakdown', views.insert_collection_breakdown, name="insert_collection_breakdown"),
+    path('load_specific_collection', views.load_specific_collection, name="load_specific_collection"),
+    path('load_specific_collection_breakdown', views.load_specific_collection_breakdown, name="load_specific_collection_breakdown"),
 ]

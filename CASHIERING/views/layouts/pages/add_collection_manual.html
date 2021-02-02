@@ -126,7 +126,7 @@
                                         <div class="form-group row m-b-15">
                                             <label class="col-md-4 col-sm-4 col-form-label">Income Type :</label>
                                             <div class="col-md-8 col-sm-8">
-                                                <select class="form-control" id="inc-select" name="selectBox" data-parsley-excluded="true">
+                                                <select class="form-control" id="inc-select" name="selectBox" data-parsley-excluded="true" on>
                                                     <option value="Please choose" selected disabled>Please choose</option>
                                                 </select>
                                             </div>
@@ -227,7 +227,6 @@
         TableManageResponsive.init();
         getCurrentORnum();
         getIncType();
-        getUacsCode();
     });
     function getIncType() {
         $.ajax({
@@ -255,18 +254,22 @@
             }
         });
     };
-    function getUacsCode() {
+    function getUacsCode(incomeType) {
         $.ajax({
             type: "POST",
             url: "{% url 'get_uacs_code' %}",
-            cache: true,
+            cache: false,
             dataType: 'json',
             data: {
+                incomeType: incomeType,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
+                $('#uacs_select').empty();
+                $('#uacs_select').append(new Option('Please choose')).select();
+                $('#uacs_select').find('option:selected').prop('disabled',true);
                 $.each(obj, function(index, option){
-                    $('#uacs_select').append( new Option(option[0]+' - '+option[1], option[0])); //text and value
+                    $('#uacs_select').append( new Option(option[0]+' - '+option[1])); //text and value
                 });
             },
             error: function(xhr, status, error) {
@@ -327,7 +330,7 @@
         var collected = parseFloat($('#r_grandtotal').text().substring(1).replace(/,/g,''));
         var studno = $('#r_studnum').text();
         var client = $('#r_name').text();
-        var educ_level = $('.individual_sel').val();
+        var educ_level = $('#radiorequired2').prop('checked') ? '' : $('.individual_sel').val();
         var userID = getCurrentUserID;
         $.ajax({
             type: "POST",
@@ -396,6 +399,10 @@
         }
         return;
     };
+
+    $('#inc-select').on('input', function() {
+        getUacsCode($('#inc-select').find('option:selected').text());
+    });
 
     $('#or_studnum').on('focusin', function() {
         $('#or_studnum').mask('2099-99999-CM-9'); //masked input for student number
@@ -499,8 +506,10 @@
 
                 $('#r_date').text($('#or_date').val());
                 var dt = new Date();
-                var ampm = (dt.getHours() >= 12) ? "PM" : "AM";
-                var time = dt.getHours() + ":" + ((dt.getMinutes()<10?'0':'') + dt.getMinutes()) + ' ' + ampm;
+                var hrs = dt.getHours();
+                var mins = dt.getMinutes();
+                var ampm = (hrs >= 12) ? "PM" : "AM";
+                var time = (hrs % 12 || 12) + ":" + ((mins<10?'0':'') + mins) + ' ' + ampm;
                 $('#r_time').text(time);
                 $('#r_grandtotal').text('₱'+$('#total-fee').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")).delay(2000);
                 //
