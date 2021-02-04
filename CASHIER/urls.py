@@ -78,4 +78,5 @@ urlpatterns = [
     path('insert_collection_breakdown', views.insert_collection_breakdown, name="insert_collection_breakdown"),
     path('load_specific_collection', views.load_specific_collection, name="load_specific_collection"),
     path('load_specific_collection_breakdown', views.load_specific_collection_breakdown, name="load_specific_collection_breakdown"),
+    path('load_receipts_donut', views.load_receipts_donut, name="load_receipts_donut"),
 ]

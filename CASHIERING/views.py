@@ -351,3 +351,9 @@ def load_specific_collection_breakdown(request):
                     ,(request.POST['or_num'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_receipts_donut(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_RECEIPT_DONUT")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

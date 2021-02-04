@@ -8,7 +8,7 @@
 <link href="{%static 'assets/plugins/DataTables/extensions/AutoFill/css/autoFill.bootstrap.min.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/DataTables/extensions/ColReorder/css/colReorder.bootstrap.min.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/DataTables/extensions/KeyTable/css/keyTable.bootstrap.min.css' %}" rel="stylesheet" />
-<link href="{%static 'assets/plugins/DataTables/extensions/RowReorder/css/rowReorder.bootstrap.min.csss' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/RowReorder/css/rowReorder.bootstrap.min.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/DataTables/extensions/Select/css/select.bootstrap.min.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/morris/morris.css' %}" rel="stylesheet" />
 <style type="text/css" media="print">
@@ -92,7 +92,7 @@
                     <h4 class="panel-title"><i class="fas fa-graduation-cap fa-lg m-r-5"></i>Receipt Chart</h4>
                 </div>
                 <div class="panel-body">
-                    <h4 class="text-center">Receipts by Education Level</h4>
+                    <h4 class="text-center">Receipts per Category <small>Total Receipts: <span id="tot_receipt"></span></small></h4>
                     <div id="morris-donut-chart" class="height-sm"></div>
                 </div>
             </div>
@@ -132,7 +132,7 @@
     $(document).ready(function() {
         App.init();
         TableManageCombine.init();
-        handleMorrisDonusChart();
+        loadReceiptsDonut();
         loadReceiptTable();
     });
     function loadReceiptTable() {
@@ -283,23 +283,55 @@
             }
         ],
     });
-    var handleMorrisDonusChart = function() {
-        Morris.Donut({
-            element: 'morris-donut-chart',
-            data: [
-                {label: 'Undergraduate', value: 45 },
-                {label: 'Diploma', value: 20 },
-                {label: 'Bachelor\'s Degree', value: 25 },
-                {label: 'Master\'s Degree', value: 10 }
-            ],
-            formatter: function (y) { return y + "%" },
-            resize: true,
-            gridLineColor: [COLOR_GREY_LIGHTER],
-            gridTextFamily: FONT_FAMILY,
-            gridTextColor: FONT_COLOR,
-            gridTextWeight: FONT_WEIGHT,
-            gridTextSize: FONT_SIZE,
-            colors: [COLOR_BLACK, COLOR_AQUA, COLOR_BLUE, COLOR_GREY]
+    function loadReceiptsDonut(date_from, date_to) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_receipts_donut' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                date_from: date_from,
+                date_to: date_to,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                var lbl = [];
+                var val = [];
+                var data = [];
+                var tot = 0;
+                for ( i = 0; i < obj.length; i++) {
+                    lbl[i] = obj[i][0];
+                    val[i] = parseFloat(obj[i][2]).toFixed(2) % 2 == 0 ? parseInt(obj[i][2]) : parseFloat(obj[i][2]).toFixed(2);
+                    data[i] = {label: lbl[i], value: val[i]}; //eto
+                    tot = tot + obj[i][1];
+                }
+                $('#tot_receipt').text(tot);
+                handleMorrisDonusChart();
+                function handleMorrisDonusChart() {
+                    Morris.Donut({
+                        element: 'morris-donut-chart',
+                        data, // yung data nilagay ko sa for-loop sa taas, tpos ang nilagay ko dito yung array-name nlang.
+                        formatter: function (y) { return y + "%" },
+                        resize: true,
+                        gridLineColor: [COLOR_GREY_LIGHTER],
+                        gridTextFamily: FONT_FAMILY,
+                        gridTextColor: FONT_COLOR,
+                        gridTextWeight: FONT_WEIGHT,
+                        gridTextSize: FONT_SIZE,
+                        colors: [COLOR_BLACK, COLOR_AQUA, COLOR_BLUE, COLOR_GREY]
+                    });
+                };
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
         });
     };
 
