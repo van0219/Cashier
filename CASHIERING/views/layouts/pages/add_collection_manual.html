@@ -408,15 +408,6 @@
         $('#or_studnum').mask('2099-99999-CM-9'); //masked input for student number
     });
 
-    $('#or_lname').on('focusin', function() {
-        if ($('#radiorequired').prop('checked')) {
-            $('#or_lname').prop('readonly', false);
-        }
-        else {
-            $('#or_lname').prop('readonly', true);
-        }
-    });
-
     $('#or_studnum').on('keyup', function() {
         var studno = $('#or_studnum').val();
         $.ajax({

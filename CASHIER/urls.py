@@ -79,4 +79,5 @@ urlpatterns = [
     path('load_specific_collection_breakdown', views.load_specific_collection_breakdown, name="load_specific_collection_breakdown"),
     path('load_receipts_donut', views.load_receipts_donut, name="load_receipts_donut"),
     path('sis_payments', views.sis_payments, name="sis_payments"),
+    path('get_sis_payments', views.get_sis_payments, name="get_sis_payments"),
 ]

@@ -360,3 +360,9 @@ def load_receipts_donut(request):
     cursor.callproc("SP_SELECT_RECEIPT_DONUT")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def get_sis_payments(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SIS_PAYMENTS")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
