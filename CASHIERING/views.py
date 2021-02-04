@@ -31,8 +31,8 @@ def show_receipt(request):
 def cleared_students(request):
     return render(request, 'views/layouts/pages/cleared_students.html')
 
-def sis_payments(request):
-    return render(request, 'views/layouts/pages/sis_payments.html')
+def view_sis_payments(request):
+    return render(request, 'views/layouts/pages/view_sis_payments.html')
 
 def or_setup(request):
     return render(request, 'views/layouts/pages/or_setup.html')
