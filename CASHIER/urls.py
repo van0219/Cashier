@@ -23,7 +23,6 @@ urlpatterns = [
     path('login', views.login, name='login'),
     path('dashboard', views.dashboard, name='dashboard'),
     path('add_collection', views.add_collection_manual, name='add_collection_manual'),
-    # path('add_collection_student', views.add_collection_student, name='add_collection_student'),
     path('view_receipts', views.view_receipts, name='view_receipts'),
     path('show_receipt', views.show_receipt, name='show_receipt'),
     path('cleared_students', views.cleared_students, name='cleared_students'),
@@ -79,4 +78,5 @@ urlpatterns = [
     path('load_specific_collection', views.load_specific_collection, name="load_specific_collection"),
     path('load_specific_collection_breakdown', views.load_specific_collection_breakdown, name="load_specific_collection_breakdown"),
     path('load_receipts_donut', views.load_receipts_donut, name="load_receipts_donut"),
+    path('sis_payments', views.sis_payments, name="sis_payments"),
 ]

@@ -1,5 +1,5 @@
 {% extends "views/layouts/pages/main.html" %}
-{% block title %}<title>CMS | Add Collection</title>{% endblock %}
+{% block title %}<title>CMS | SIS Payments</title>{% endblock %}
 {% load static %}
 {% block page-css %}
 <link href="{%static 'assets/plugins/parsley/src/parsley.css' %}" rel="stylesheet" />
@@ -11,10 +11,10 @@
     .nameBox {
         background-color: white !important;
         color: black;
-        font-weight: bold;
+        font-weight: bold !important;
     }
     .disabledInput {
-        background-color: #363636 !important;
+        background-color: #D9534F !important;
         color: white !important;
         font-weight: bold !important;
     }
@@ -32,16 +32,16 @@
     <ol class="breadcrumb pull-right">
         <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
         <li class="breadcrumb-item"><a href="javascript:;">Add Collection</a></li>
-        <li class="breadcrumb-item active"><a href="javascript:;">Add Collection</a></li>
+        <li class="breadcrumb-item active"><a href="javascript:;">Add SIS Payments</a></li>
     </ol>
     <!-- end breadcrumb -->
     <!-- begin page-header -->
-    <h1 class="page-header">Add Collection</h1>
+    <h1 class="page-header">Add SIS Payments</h1>
     <!-- end page-header -->
     <!-- begin card -->
     <div class="card text-left">
         <div class="card-header">
-            <i class="fas fa-calculator fa-lg m-r-5"></i>Add Collection
+            <i class="fas fa-laptop fa-lg m-r-5"></i>Add SIS Payments
         </div>
         <div class="card-block">
             <!-- begin panel -->
@@ -70,28 +70,11 @@
                             <div class="col-lg-6">
                                 <div class="form-group row m-b-10">
                                     <label class="col-md-3 col-form-label">Payor :</label>
-                                    <div class="col-md-3">
-                                        <div class="radio radio-css">
-                                            <input type="radio" name="radio_css" id="radiorequired3" checked />
-                                            <label for="radiorequired3">Student</label>
-                                        </div>
-                                        <div class="radio radio-css">
-                                            <input type="radio" name="radio_css" id="radiorequired" />
-                                            <label for="radiorequired">Non-Student</label>
-                                        </div>
-                                        <div class="radio radio-css">
-                                            <input type="radio" name="radio_css" id="radiorequired2" />
-                                            <label for="radiorequired2">Company</label>
-                                        </div>                                    
-                                    </div>
                                     <div class="col-md-6">
-                                        <input type="text" id="or_studnum" class="form-control m-b-5 studno" data-parsley-required="true" data-parsley-required-message="Student number is required" placeholder="Student Number"/>
-                                        <select class="form-control selectpicker individual_sel m-b-5" name="selectBox">;">
-                                            <option selected disabled>Select level of education</option>
-                                            <option value="Diploma">Diploma</option>
-                                            <option value="Bachelor's Degree">Bachelor's Degree</option>
-                                            <option value="Master's Degree">Master's Degree</option>
-                                        </select>
+                                        <div class="radio radio-css">
+                                            <input type="radio" name="radio_css" id="radiorequired" value="SIS Payment" checked />
+                                            <label for="radiorequired" style="font-weight: bolder;">PUP SIS Payment</label>
+                                        </div>                                   
                                     </div>
                                 </div>
                             </div>
@@ -123,6 +106,15 @@
                                 <!-- begin panel -->
                                 <div class="panel">
                                     <div class="panel-body" style="border-radius: 5px;">
+                                        <div class="form-group row m-b-15" style="margin-left: -10px;">
+                                            <diV class="col-md-4"></diV>
+                                            <div class="col-md-3.5 col-sm-3.5">
+                                                <input class="m-r-5" type="checkbox" id="check_1" name="check" title="Check this if you only want to save the total amount."/><small>Total Only</small>
+                                            </div>    
+                                            <div class="col-md-4.5 col-sm-4.5">
+                                                <input class="m-r-5" type="checkbox" id="check_2" name="check" title="Check this if you want to proceed with breakdown."/><small>With Breakdown</small>
+                                            </div>                                          
+                                        </div>
                                         <div class="form-group row m-b-15">
                                             <label class="col-md-4 col-sm-4 col-form-label">Income Type :</label>
                                             <div class="col-md-8 col-sm-8">
@@ -227,6 +219,9 @@
         TableManageResponsive.init();
         getCurrentORnum();
         getIncType();
+        $('#or_lname').val('PUP');
+        $('#or_fname').val('QUEZON CITY');
+        $('#check_2').prop('checked', true);
     });
     function getIncType() {
         $.ajax({
@@ -266,11 +261,14 @@
             },
             success: function(obj) {
                 $('#uacs_select').empty();
-                $('#uacs_select').append(new Option('Please choose')).select();
+                $('#uacs_select').append(new Option('Please choose')).prop('selected', true);
                 $('#uacs_select').find('option:selected').prop('disabled',true);
                 $.each(obj, function(index, option){
-                    $('#uacs_select').append( new Option(option[0]+' - '+option[1])); //text and value
+                    $('#uacs_select').append( new Option(option[0]+' - '+option[1], option[0])); //text and value
                 });
+                if ($('#check_1').prop('checked')) {
+                    $('#uacs_select').val('4 02 01 990 99 00034');
+                }
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -328,9 +326,9 @@
         var or_num = $('#r_ornum').text();
         var assessed = parseFloat($('#r_grandtotal').text().substring(1).replace(/,/g,''));
         var collected = parseFloat($('#r_grandtotal').text().substring(1).replace(/,/g,''));
-        var studno = $('#r_studnum').text();
+        var studno = '';
         var client = $('#r_name').text();
-        var educ_level = $('#radiorequired2').prop('checked') ? '' : $('.individual_sel').val();
+        var educ_level = $('#radiorequired').val();
         var userID = getCurrentUserID;
         $.ajax({
             type: "POST",
@@ -400,21 +398,37 @@
         return;
     };
 
-    $('#inc-select').on('input', function() {
+    $('#check_1').on('change', function() {
+        if ($('#check_1').prop('checked')) {
+            $('#check_2').prop('checked', false);
+            $('#inc-select').val('SERVICE INCOME');
+            getUacsCode($('#inc-select').find('option:selected').text());
+        }
+        else {
+            $('#check_1').prop('checked', true);
+        }
+    });
+
+    $('#check_2').on('change', function() {
+        if ($('#check_2').prop('checked')) {
+            $('#check_1').prop('checked', false);
+            $('#inc-select').val('Please choose');
+            $('#uacs_select').val('Please choose');
+            $('#uacs_select').empty();
+            $('#uacs_select').append(new Option('Please choose')).prop('selected', true);
+            $('#uacs_select').find('option:selected').prop('disabled',true);
+        }
+        else {
+            $('#check_2').prop('checked', true);
+        }
+    });
+
+    $('#inc-select').on('change', function() {
         getUacsCode($('#inc-select').find('option:selected').text());
     });
 
     $('#or_studnum').on('focusin', function() {
         $('#or_studnum').mask('2099-99999-CM-9'); //masked input for student number
-    });
-
-    $('#or_lname').on('focusin', function() {
-        if ($('#radiorequired').prop('checked')) {
-            $('#or_lname').prop('readonly', false);
-        }
-        else {
-            $('#or_lname').prop('readonly', true);
-        }
     });
 
     $('#or_studnum').on('keyup', function() {
@@ -497,7 +511,9 @@
                 $('#r_grandtotal').text('₱'+$('#total-fee').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")).delay(2000);
                 //
                 saveCollection();
-                saveCollectionBreakdown();
+                if ($('#click_2').prop('checked')) {
+                    saveCollectionBreakdown();
+                }
             }
             else {
                 swal({
@@ -527,32 +543,9 @@
     });
 
     $("#radiorequired").click(function() { //non-student radio
-        $('.company').hide();
-        $('.studno').hide();
         $('.individual').show();
-        $('.individual_sel').show();
         $('#or_lname').val('');
         $('#or_fname').val('');
-        $('#or_comp').val('');
-        $('#or_studnum').val('');
-        $('#addForm').parsley().reset();
-    });
-    $("#radiorequired2").click(function() { //company radio
-        $('.individual').hide();
-        $('.individual_sel').hide();
-        $('.studno').hide();
-        $('.company').show();
-        $('#or_lname').val('');
-        $('#or_fname').val('');
-        $('#or_studnum').val('');
-        $('#addForm').parsley().reset();
-    });
-    $("#radiorequired3").click(function() { //student radio
-        $('.individual_sel').show();
-        $('.individual').show();
-        $('.company').hide();
-        $('.studno').show();
-        $('#or_comp').val('');
         $('#addForm').parsley().reset();
     });
     var total_fee = 0;

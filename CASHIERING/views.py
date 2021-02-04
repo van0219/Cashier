@@ -82,6 +82,9 @@ def email(request):
 def account(request):
     return render(request, 'views/layouts/pages/account.html')
 
+def sis_payments(request):
+    return render(request, 'views/layouts/pages/sis_payments.html')
+
 def add_user_btn_click(request):
     cursor = connection.cursor()
     cursor.callproc("SP_INSERT_USER_CMS", (
