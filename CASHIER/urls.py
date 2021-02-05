@@ -80,4 +80,7 @@ urlpatterns = [
     path('load_receipts_donut', views.load_receipts_donut, name="load_receipts_donut"),
     path('sis_payments', views.sis_payments, name="sis_payments"),
     path('get_sis_payments', views.get_sis_payments, name="get_sis_payments"),
+    path('get_sis_payments2', views.get_sis_payments2, name="get_sis_payments2"),
+    path('load_specific_sis_done', views.load_specific_sis_done, name="load_specific_sis_done"),
+    path('load_specific_sis_client', views.load_specific_sis_client, name="load_specific_sis_client"),
 ]

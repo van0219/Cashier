@@ -41,7 +41,7 @@
             <!-- begin panel -->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4 class="panel-title">SIS Payment Chart</h4>
+                    <h4 class="panel-title"><i class="fas fa-chart-bar fa-lg m-r-5"></i>SIS Payment Chart</h4>
                 </div>
                 <div class="panel-body">
                     <h4 class="text-center m-t-20 m-b-20">SIS Payment <small>(Daily)</small></h4>
@@ -56,38 +56,60 @@
             <!-- begin card -->
             <div class="card text-left">
                 <div class="card-header">
-                    <i class="fas fa-book m-r-5"></i>View SIS Payments
+                    <ul class="nav nav-pills card-header-pills">
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1">Done</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2">Pending</a></li>
+                    </ul>
                 </div>
                 <div class="card-block">
-                    <!-- begin panel -->
-                    <div class="panel panel-white">
-                        <!-- begin panel-heading -->
-                        <div class="panel-heading">
-                            <h4 class="panel-title"></h4>
-                        </div>
-                        <!-- end panel-heading -->
-                        <!-- begin panel-body -->
-                        <div class="panel-body">
-                            <table id="data-table-combines" class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="text-nowrap">OR Number</th>
-                                        <th class="text-nowrap">Total Amount</th>
-                                        <th class="text-nowrap">Transaction Date</th>
-                                        <th class="text-nowrap">Options</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                    <div class="tab-content p-0 m-0">
+                        <div class="tab-pane fade active show" id="card-pill-1">
+                            <!-- begin panel -->
+                            <div class="panel panel-white">
+                                <!-- begin panel-body -->
+                                <div class="panel-body">
+                                    <table id="data-table-combines" class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-nowrap">OR Number</th>
+                                                <th class="text-nowrap">Total Amount</th>
+                                                <th class="text-nowrap">Transaction Date</th>
+                                                <th class="text-nowrap">Options</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                </tbody>
-                            </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end panel-body -->
+                            </div>
+                            <!-- end panel -->
                         </div>
-                        <!-- end panel-body -->
+                        <div class="tab-pane fade" id="card-pill-2">
+                            <!-- begin panel -->
+                            <div class="panel panel-white">
+                                <!-- begin panel-body -->
+                                <div class="panel-body">
+                                    <table id="data-table-combines2" class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-nowrap">OR Number</th>
+                                                <th class="text-nowrap">Total Amount</th>
+                                                <th class="text-nowrap">Transaction Date</th>
+                                                <th class="text-nowrap">Options</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end panel-body -->
+                            </div>
+                            <!-- end panel -->
+                        </div>
                     </div>
-                    <!-- end panel -->
-                </div>
-                <div class="card-footer text-muted">
-                    
                 </div>
             </div>
             <!-- end card -->
@@ -97,6 +119,113 @@
     <!-- end row -->
 </div>
 <!-- end #content -->
+<!-- #sis-done modal-->
+<div class="modal modal-message fade" id="sis-done">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('static/assets/img/logo/PUPLogoMin.png'); background-repeat: no-repeat; background-size: contain; background-position: 320px;">
+            <div class="modal-header">
+                <h4 class="modal-title m-t-20">SIS Payment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body text-inverse">
+                <div class="pull-left">
+                    <label class="m-r-5"><small>OR Number : </small></label><span id="s_or" class="f-w-700 f-s-14"></span>
+                </div>
+                <div class="pull-right">
+                    <label class="m-r-5"><small>Transaction Date :</small> </label><span id="s_date" class="f-w-700 f-s-14"></span>
+                </div>
+                <table id="sis-modal-table" class="table m-t-40" style="max-width: 400px;">
+                    <thead>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            <p><label class="m-r-5"><small>Total :</small> </label><span id="s_total" class="f-w-700 f-s-14"></span></p>
+            </div>
+            <div class="modal-footer">
+                <!-- <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a> -->
+                <!-- <a href="javascript:;" class="btn btn-primary">Save Changes</a> -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end #sis-done modal-->
+<!-- begin #add_breakdown-modal -->
+<div class="modal fade" id="add_breakdown_modal">
+    <div class="modal-dialog" style="max-width: 40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="close hidden-print" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- begin invoice -->
+                <div class="invoice">
+                    <!-- begin invoice-header -->
+                    <div class="invoice-header">
+                        <div class="invoice-from">
+                            <small>OR Number</small>
+                            <address class="m-t-5 m-b-5">
+                                <strong class="text-inverse" id="b_ornum">00000142579</strong><br />
+                            </address>
+                        </div>
+                        <div class="invoice-to">
+                            <small>Payor</small>
+                            <address class="m-t-5 m-b-5">
+                                <strong class="text-inverse" id="b_name">LASTNAME, FIRSTNAME M.</strong><br />
+                            </address>
+                        </div>
+                        <div class="invoice-date">
+                            <small>Transaction Date</small>
+                            <div class="date text-inverse m-t-5" id="b_date">{% now "F j, Y" %}</div>
+                            <div class="invoice-detail" id="b_time">{% now "h:i a" %}</div>
+                        </div>
+                    </div>
+                    <!-- end invoice-header -->
+                    <!-- begin invoice-content -->
+                    <div class="invoice-content">
+                        <!-- begin table-responsive -->
+                        <div class="table-responsive">
+                            <table class="table table-invoice">
+                                <thead>
+                                    <tr>
+                                        <th>DESCRIPTION</th>
+                                        <th class="text-center">AMOUNT</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('static/assets/img/logo/PUPLogoMin.png'); background-repeat: no-repeat; background-size: contain; background-position: center">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- end table-responsive -->
+                        <!-- begin invoice-price -->
+                        <div class="invoice-price">
+                            <div class="invoice-price-left">
+                                <!--  -->
+                            </div>
+                            <div class="invoice-price-right">
+                                <small>TOTAL</small> <span class="f-w-600" id="b_grandtotal"></span>
+                            </div>
+                        </div>
+                        <!-- end invoice-price -->
+                    </div>
+                    <!-- end invoice-content -->
+                    <!-- begin invoice-footer -->
+                    <div class="invoice-footer">
+
+                    </div>
+                    <!-- end invoice-footer -->
+                </div>
+                <!-- end invoice -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end #add_breakdown_modal -->
 {% endblock %}
 {% block page-js %}
 <script src="{%static 'assets/plugins/DataTables/media/js/jquery.dataTables.js' %}"></script>
@@ -119,6 +248,7 @@
 <!--  -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js"></script>
 <script src="{%static 'assets/plugins/nvd3/build/nv.d3.js' %}"></script>
+<script src="{%static 'assets/plugins/moment/moment.min.js' %}"></script>
 {% endblock %}
 {% block init %}
 <script>
@@ -126,6 +256,7 @@
         App.init();
         TableManageCombine.init();
         get_sis_payments();
+        get_sis_payments2();
         handleBarChart();
     });
     var dt_combines = $('#data-table-combines').DataTable({
@@ -170,11 +301,62 @@
                 }
             }
         ],
-        "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+        "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ],
         columnDefs:[
             {
                 targets:3, render:function(data){
-                    return '<a href="javascript:;" id="sisBut" class="btn btn-primary btn-xs"><i class="fas fa-eye m-r-5"></i>View</a>';
+                    return '<a href="#sis-done" data-toggle="modal" id="viewSIS" class="btn btn-primary btn-xs"><i class="fas fa-eye m-r-5"></i>View</a>';
+                }
+            },
+        ]
+    });
+    var dt_combines2 = $('#data-table-combines2').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : false,
+        'info'        : true,
+        'autoWidth'   : false,
+        'aaSorting'   : [[1, "desc" ]],
+        'pagingType'  : 'full_numbers',
+        "aoColumns" : [ 
+            { sWidth: '30%' },
+            { sWidth: '30%' },
+            { sWidth: '25%' },
+            { sWidth: '15%' }
+        ],
+        dom: 'lBfrtip',
+            buttons: [
+            {
+                extend:    'print',
+                text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
+                titleAttr: 'Print',
+                exportOptions: {
+                    columns: [0,1,2]
+                }
+            },
+            {
+                extend:    'excel',
+                text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
+                titleAttr: 'Excel',
+                exportOptions: {
+                    columns: [0,1,2]
+                }
+            },
+            {
+                extend:    'pdf',
+                text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
+                titleAttr: 'PDF',
+                exportOptions: {
+                    columns: [0,1,2]
+                }
+            }
+        ],
+        "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ],
+        columnDefs:[
+            {
+                targets:3, render:function(data){
+                    return '<a href="#add_breakdown_modal" data-toggle="modal" id="addBreakdown" class="btn btn-warning btn-xs"><i class="fas fa-plus-circle m-r-5"></i>Add Breakdown</a>';
                 }
             },
         ]
@@ -193,6 +375,37 @@
                 dt_combines.clear().draw();
                 $.each(obj, function(index, data){
                     dt_combines.row.add( [
+                        data[0],
+                        data[1],
+                        data[2]
+                    ] ).draw();
+                })
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: error,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+    function get_sis_payments2() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_sis_payments2' %}",
+            cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                dt_combines2.clear().draw();
+                $.each(obj, function(index, data){
+                    dt_combines2.row.add( [
                         data[0],
                         data[1],
                         data[2]
@@ -241,6 +454,92 @@
             nv.utils.windowResize(barChart.update);
         
             return barChart;
+        });
+    };
+
+    $('#data-table-combines tbody').on('click', '#viewSIS', function() {
+        var or_num = $(this).closest('tr').find('td:eq(0)').html();
+        load_specific_sis_done(or_num);
+        $('#s_or').text(or_num);
+        $('#s_date').text(moment(new Date($(this).closest('tr').find('td:eq(2)').html())).format("MMM. DD, YYYY"));
+        $('#s_total').text('₱' + $(this).closest('tr').find('td:eq(1)').html());
+    });
+
+    function load_specific_sis_done(or_num) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_specific_sis_done' %}",
+            cache: true,
+            dataType: 'json',
+            data: {
+                or_num: or_num,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $.each(obj, function(index, data){
+                    $('#sis-modal-table').append(
+                        `<tr>
+                            <td>${data[0]}</td>
+                            <td>${data[1]}</td>
+                        </tr>`
+                    )
+                });
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: error,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+
+    $('#sis-done').on('hidden.bs.modal', function (e) {
+        $('#sis-modal-table tbody tr').remove();
+    });
+
+    $('#data-table-combines2 tbody').on('click', '#addBreakdown', function() {
+        var or_num = $(this).closest('tr').find('td:eq(0)').html();
+        $('#b_ornum').text(or_num);
+        load_specific_sis_client(or_num)
+        var tot_fee = $(this).closest('tr').find('td:eq(1)').html();
+        $('#b_grandtotal').text('₱'+tot_fee.replace(/\B(?=(\d{3})+(?!\d))/g, ",")).delay(2000);
+    });
+
+    function load_specific_sis_client(or_num) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_specific_sis_client' %}",
+            cache: true,
+            dataType: 'json',
+            data: {
+                or_num: or_num,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#b_name').text(obj[0][0]);
+                var dt = new Date(obj[0][1]);
+                var hrs = dt.getHours();
+                var mins = dt.getMinutes();
+                var ampm = (hrs >= 12) ? "PM" : "AM";
+                var time = (hrs % 12 || 12) + ":" + ((mins<10?'0':'') + mins) + ' ' + ampm;
+                $('#b_date').text(moment(dt).format("MMMM DD, YYYY"));
+                $('#b_time').text(time);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: error,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
         });
     };
 </script>

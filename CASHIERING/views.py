@@ -363,6 +363,26 @@ def load_receipts_donut(request):
 
 def get_sis_payments(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_SELECT_SIS_PAYMENTS")
+    cursor.callproc("SP_SELECT_SIS_PAYMENTS_DONE")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def get_sis_payments2(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SIS_PAYMENTS_PENDING")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_specific_sis_done(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SPECIFIC_SIS_DONE"
+                    ,(request.POST['or_num'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_specific_sis_client(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SPECIFIC_SIS_CLIENT"
+                    ,(request.POST['or_num'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
