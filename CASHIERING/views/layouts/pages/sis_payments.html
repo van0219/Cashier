@@ -345,7 +345,6 @@
                 userID: userID,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
-            timeout: 2000,
             success: function(obj) {
                 console.log(obj);
             },
@@ -428,45 +427,6 @@
         getUacsCode($('#inc-select').find('option:selected').text());
     });
 
-    $('#or_studnum').on('focusin', function() {
-        $('#or_studnum').mask('2099-99999-CM-9'); //masked input for student number
-    });
-
-    $('#or_studnum').on('keyup', function() {
-        var studno = $('#or_studnum').val();
-        $.ajax({
-            type: "POST",
-            url: "{% url 'get_student_name' %}",
-            cache: true,
-            dataType: 'json',
-            data: {
-                studno: studno,
-                csrfmiddlewaretoken:"{{csrf_token}}"
-            },
-            success: function(obj) {
-                if (obj[0] != null) {
-                    $('#or_lname').val(obj[0][1].toString());
-                    $('#or_fname').val(obj[0][0].toString());
-                    $('#addForm').parsley().reset();
-                }
-                else {
-                    $('#or_lname').val('');
-                    $('#or_fname').val('');
-                }
-            },
-            error: function(xhr, status, error) {
-                var errMsg = xhr.status + ': ' + xhr.statusText;
-                swal({
-                    title: "Error!", 
-                    text: errMsg,
-                    type: "error",
-                    confirmButtonColor: "#428bca",
-                    showLoaderOnConfirm: true
-                })
-            }
-        }); 
-    });
-
     $("#save").on('click', function() { //save entry is clicked
         $('#addForm').parsley();
         if ($('#addForm').parsley().validate()) {
@@ -486,21 +446,9 @@
                 }
 
                 $('#r_ornum').text($('#or_num').val());
-
-                if ($('#radiorequired3').prop('checked')) { //student is selected
-                    var fullname = $('#or_lname').val()+', '+$('#or_fname').val();
-                    $('#r_name').text(fullname.toUpperCase());
-                    $('#r_studnum').text($('#or_studnum').val().toUpperCase());
-                }
-                else if ($('#radiorequired2').prop('checked')) { //company is selected
-                    $('#r_name').text($('#or_comp').val().toUpperCase());
-                    $('#r_studnum').text('');
-                }
-                else if ($('#radiorequired').prop('checked')) { //non-student is selected
-                    var fullname = $('#or_lname').val()+', '+$('#or_fname').val();
-                    $('#r_name').text(fullname.toUpperCase());
-                    $('#r_studnum').text('');
-                }
+                var fullname = $('#or_lname').val()+', '+$('#or_fname').val();
+                $('#r_name').text(fullname.toUpperCase());
+                $('#r_studnum').text('');
 
                 $('#r_date').text($('#or_date').val());
                 var dt = new Date();
@@ -531,11 +479,6 @@
     $('#receipt').on('hidden.bs.modal', function (e) { //when receipt modal is closed
         $('.table-invoice tbody tr').remove();
         $('or_num').val(getCurrentORnum());
-        $('#or_lname').val('');
-        $('#or_fname').val('');
-        $('#or_studnum').val('');
-        $('.individual_sel').val('Select level of education');
-        $('#or_comp').val('');
         $('#total-fee').text(parseFloat('0').toFixed(2));
         $('#inc-select').val('Please choose');
         $('#uacs_select').val('Please choose');
@@ -543,12 +486,6 @@
         $('#data-table-responsives tbody tr').remove();
     });
 
-    $("#radiorequired").click(function() { //non-student radio
-        $('.individual').show();
-        $('#or_lname').val('');
-        $('#or_fname').val('');
-        $('#addForm').parsley().reset();
-    });
     var total_fee = 0;
     var minus_fee = '';
     $('#particular').on('click', function() {

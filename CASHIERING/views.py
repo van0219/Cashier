@@ -386,3 +386,10 @@ def load_specific_sis_client(request):
                     ,(request.POST['or_num'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def get_sis_bar_chart(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SIS_BAR_CHART"
+                    ,(request.POST['filt'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

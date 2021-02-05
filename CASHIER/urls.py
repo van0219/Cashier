@@ -83,4 +83,5 @@ urlpatterns = [
     path('get_sis_payments2', views.get_sis_payments2, name="get_sis_payments2"),
     path('load_specific_sis_done', views.load_specific_sis_done, name="load_specific_sis_done"),
     path('load_specific_sis_client', views.load_specific_sis_client, name="load_specific_sis_client"),
+    path('get_sis_bar_chart', views.get_sis_bar_chart, name="get_sis_bar_chart"),
 ]

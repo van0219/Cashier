@@ -58,7 +58,7 @@
                 <div class="card-header">
                     <ul class="nav nav-pills card-header-pills">
                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1">Done</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2">Pending</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2">Pending<span id="pend_count"></span></a></li>
                     </ul>
                 </div>
                 <div class="card-block">
@@ -124,14 +124,14 @@
     <div class="modal-dialog">
         <div class="modal-content" style="background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('static/assets/img/logo/PUPLogoMin.png'); background-repeat: no-repeat; background-size: contain; background-position: 320px;">
             <div class="modal-header">
-                <h4 class="modal-title m-t-20">SIS Payment</h4>
+                <h4 class="modal-title m-t-20"><a href="javascript:;" class="btn btn-xs btn-danger">SIS Payment</a></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body text-inverse">
-                <div class="pull-left">
+                <div class="pull-left" style="margin-right: 100px;">
                     <label class="m-r-5"><small>OR Number : </small></label><span id="s_or" class="f-w-700 f-s-14"></span>
                 </div>
-                <div class="pull-right">
+                <div>
                     <label class="m-r-5"><small>Transaction Date :</small> </label><span id="s_date" class="f-w-700 f-s-14"></span>
                 </div>
                 <table id="sis-modal-table" class="table m-t-40" style="max-width: 400px;">
@@ -155,10 +155,10 @@
 <!-- end #sis-done modal-->
 <!-- begin #add_breakdown-modal -->
 <div class="modal fade" id="add_breakdown_modal">
-    <div class="modal-dialog" style="max-width: 40%;">
+    <div class="modal-dialog" style="max-width: 50%;">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title"></h4>
+                <h4 class="modal-title"><i class="fas fa-object-ungroup m-r-5"></i>SIS Breakdown</h4>
                 <button type="button" class="close hidden-print" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
@@ -169,24 +169,58 @@
                         <div class="invoice-from">
                             <small>OR Number</small>
                             <address class="m-t-5 m-b-5">
-                                <strong class="text-inverse" id="b_ornum">00000142579</strong><br />
+                                <strong class="text-inverse" id="b_ornum"></strong><br />
                             </address>
                         </div>
                         <div class="invoice-to">
                             <small>Payor</small>
                             <address class="m-t-5 m-b-5">
-                                <strong class="text-inverse" id="b_name">LASTNAME, FIRSTNAME M.</strong><br />
+                                <strong class="text-inverse" id="b_name"></strong><br />
                             </address>
                         </div>
                         <div class="invoice-date">
                             <small>Transaction Date</small>
-                            <div class="date text-inverse m-t-5" id="b_date">{% now "F j, Y" %}</div>
-                            <div class="invoice-detail" id="b_time">{% now "h:i a" %}</div>
+                            <div class="date text-inverse m-t-5" id="b_date"></div>
+                            <div class="invoice-detail" id="b_time"></div>
                         </div>
                     </div>
                     <!-- end invoice-header -->
                     <!-- begin invoice-content -->
                     <div class="invoice-content">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group row m-b-10">
+                                    <div class="col-md-12 col-sm-12">
+                                        <select class="form-control" id="inc-select" name="selectBox" data-parsley-excluded="true" on>
+                                            <option value="Income Type" selected disabled>Income Type</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group row m-b-10">
+                                    <div class="col-md-12 col-sm-12">
+                                        <select class="form-control selectpicker text-ellipsis" id="uacs_select" name="selectBox" data-parsley-excluded="true">
+                                            <option value="UACS Code" selected disabled>UACS Code</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group row m-b-10">
+                                    <div class="col-md-12 col-sm-12">
+                                        <input class="form-control" type="number" id="number" name="number" data-parsley-excluded="true" placeholder="Amount in peso"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group row m-b-0">
+                                    <div class="col-md-12 col-sm-12">
+                                        <a href="javascript:;" class="btn btn-success btn-sm" id="addB"><i class="fa fa-plus-circle m-r-5"></i>Add</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!-- begin table-responsive -->
                         <div class="table-responsive">
                             <table class="table table-invoice">
@@ -257,7 +291,7 @@
         TableManageCombine.init();
         get_sis_payments();
         get_sis_payments2();
-        handleBarChart();
+        handleBarChart('DAILY');
     });
     var dt_combines = $('#data-table-combines').DataTable({
         'paging'      : true,
@@ -411,6 +445,7 @@
                         data[2]
                     ] ).draw();
                 })
+                $('#pend_count').text('(' + dt_combines2.page.info().recordsTotal + ')');
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -425,35 +460,54 @@
         });
     };
 
-    var handleBarChart = function() {
-        "use strict";
+    function handleBarChart(filt) {
+        var bar_filter = filt;
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_sis_bar_chart' %}",
+            cache: true,
+            dataType: 'json',
+            data: {
+                filt: filt,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                var bar_color = [COLOR_GREEN, COLOR_AQUA, COLOR_BLUE, COLOR_PURPLE, COLOR_GREY, COLOR_RED, COLOR_ORANGE, COLOR_BLACK, "goldenrod",'#ff0000', 'lightblue', 'pink'];
+                var data= [];
+                for (var i = 0; i < obj.length; i++) {
+                    data[i] = { 'label': obj[i][1], 'value': obj[i][0], 'color': bar_color[i]  };
+                }
+                var barChartData = [{
+                    key: 'Cumulative Return',
+                    values: data,
+                }]
 
-        var bar_color = [COLOR_RED, COLOR_ORANGE, COLOR_GREEN, COLOR_AQUA, COLOR_BLUE, COLOR_PURPLE, COLOR_GREY ];
-        var bar_value = [29, 15, 32, 196, 44, 98, 13];
-        var bar_label = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        var data= [];
-        for (var i = 0; i < 7; i++) {
-            data[i] = { 'label': bar_label[i], 'value': bar_value[i], 'color': bar_color[i]  };
-        }
-        var barChartData = [{
-            key: 'Cumulative Return',
-            values: data,
-        }]
-
-        nv.addGraph(function() {
-            var barChart = nv.models.discreteBarChart()
-                .x(function(d) { return d.label })
-                .y(function(d) { return d.value })
-                .showValues(true)
-                .duration(250);
-            
-            barChart.yAxis.axisLabel("Total SIS Payments");
-            barChart.xAxis.axisLabel('Day');
-        
-            d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
-            nv.utils.windowResize(barChart.update);
-        
-            return barChart;
+                nv.addGraph(function() {
+                    var barChart = nv.models.discreteBarChart()
+                        .x(function(d) { return d.label })
+                        .y(function(d) { return d.value })
+                        .showValues(true)
+                        .duration(250);
+                    
+                    barChart.yAxis.axisLabel("Total SIS Payments");
+                    barChart.xAxis.axisLabel('Day');
+                
+                    d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
+                    nv.utils.windowResize(barChart.update);
+                
+                    return barChart;
+                });
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: error,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
         });
     };
 
@@ -508,6 +562,7 @@
         load_specific_sis_client(or_num)
         var tot_fee = $(this).closest('tr').find('td:eq(1)').html();
         $('#b_grandtotal').text('₱'+tot_fee.replace(/\B(?=(\d{3})+(?!\d))/g, ",")).delay(2000);
+        getIncType();
     });
 
     function load_specific_sis_client(or_num) {
@@ -542,5 +597,124 @@
             }
         });
     };
+
+    $('#addB').on('click', function() {
+        var amtBox = $('#number').val().trim();
+        if ($('#inc-select').find('option:selected').text() == 'Income Type' || $('#uacs_select').find('option:selected').text() == 'UACS Code') {
+            if ($('#inc-select').find('option:selected').text() == 'Income Type') {
+                $('#inc-select').addClass('is-invalid');
+            }
+            if ($('#uacs_select').find('option:selected').text() == 'UACS Code') {
+                $('#uacs_select').addClass('is-invalid');
+            }
+            if (amtBox == '' && amtBox.length == 0) {
+                $('#number').addClass('is-invalid');
+            }
+        }
+        else {
+            $('#inc-select').removeClass('is-invalid');
+            $('#uacs_select').removeClass('is-invalid');
+            if (amtBox != '' && amtBox.length != 0) {
+                $('#number').removeClass('is-invalid');
+                $('.table-invoice tbody').append(
+                    `<tr>
+                        <td>${$('#uacs_select').find('option:selected').text().split('-')[1]}</td>
+                        <td class='text-center'>${$('#number').val()}</td>
+                    </tr>`
+                );
+                $('#inc-select').val('Income Type');
+                $('#uacs_select').empty();
+                $('#uacs_select').append(new Option('UACS Code')).select();
+                $('#uacs_select').find('option:selected').prop('disabled',true);
+                $('#number').val('');
+            }
+        }
+    });
+    $('#inc-select').on('change', function() {
+        if ($('#inc-select').find('option:selected').text() == 'Income Type') {
+            $('#inc-select').addClass('is-invalid');
+        }
+        else {
+            $('#inc-select').removeClass('is-invalid');
+        }
+    });
+    $('#uacs_select').on('change', function() {
+        if ($('#uacs_select').find('option:selected').text() == 'UACS Code') {
+            $('#uacs_select').addClass('is-invalid');
+        }
+        else {
+            $('#uacs_select').removeClass('is-invalid');
+        }
+    });
+    $('#number').on('input', function() {
+        if ($('#number').val().trim().length == 0) {
+            $('#number').addClass('is-invalid');
+        }
+        else {
+            $('#number').removeClass('is-invalid');
+        }
+    });
+    function getIncType() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_income_type' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#inc-select').empty();
+                $('#inc-select').append(new Option('Income Type')).select();
+                $('#inc-select').find('option:selected').prop('disabled',true);
+                $.each(obj, function(index, option){
+                    $('#inc-select').append( new Option(option,option)); //value and text
+                });
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+    function getUacsCode(incomeType) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_uacs_code' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                incomeType: incomeType,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#uacs_select').empty();
+                $('#uacs_select').append(new Option('UACS Code')).select();
+                $('#uacs_select').find('option:selected').prop('disabled',true);
+                $.each(obj, function(index, option){
+                    $('#uacs_select').append( new Option(option[0]+' - '+option[1])); //text and value
+                });
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+    $('#inc-select').on('input', function() {
+        getUacsCode($('#inc-select').find('option:selected').text());
+    });
 </script>
 {% endblock%}
