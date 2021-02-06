@@ -122,7 +122,7 @@
 <!-- #sis-done modal-->
 <div class="modal modal-message fade" id="sis-done">
     <div class="modal-dialog">
-        <div class="modal-content" style="background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('static/assets/img/logo/PUPLogoMin.png'); background-repeat: no-repeat; background-size: contain; background-position: 320px;">
+        <div class="modal-content" style="background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('static/assets/img/logo/PUPLogoMin.png'); background-repeat: no-repeat; background-size: contain; background-position: 300px;">
             <div class="modal-header">
                 <h4 class="modal-title m-t-20"><a href="javascript:;" class="btn btn-xs btn-danger">SIS Payment</a></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -136,8 +136,8 @@
                 </div>
                 <table id="sis-modal-table" class="table m-t-40" style="max-width: 400px;">
                     <thead>
-                        <th>Description</th>
-                        <th>Amount</th>
+                        <th width="70%">Description</th>
+                        <th width="30%">Amount</th>
                     </thead>
                     <tbody>
 
@@ -226,11 +226,12 @@
                             <table class="table table-invoice">
                                 <thead>
                                     <tr>
-                                        <th>DESCRIPTION</th>
-                                        <th class="text-center">AMOUNT</th>
+                                        <th width="50%">DESCRIPTION</th>
+                                        <th width="40%" class="text-center">AMOUNT</th>
+                                        <th width="10%" class="text-nowrap"></th>
                                     </tr>
                                 </thead>
-                                <tbody style="background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('static/assets/img/logo/PUPLogoMin.png'); background-repeat: no-repeat; background-size: contain; background-position: center">
+                                <tbody>
 
                                 </tbody>
                             </table>
@@ -239,10 +240,15 @@
                         <!-- begin invoice-price -->
                         <div class="invoice-price">
                             <div class="invoice-price-left">
-                                <!--  -->
+                                <div class="invoice-price-row">
+                                    <div class="sub-price">
+                                        <small>CURRENT TOTAL</small>
+                                        ₱<span class="text-inverse" id="b_currtotal">0.00</span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="invoice-price-right">
-                                <small>TOTAL</small> <span class="f-w-600" id="b_grandtotal"></span>
+                                <small>SAVED TOTAL</small> <span class="f-w-600" id="b_grandtotal"></span>
                             </div>
                         </div>
                         <!-- end invoice-price -->
@@ -250,7 +256,9 @@
                     <!-- end invoice-content -->
                     <!-- begin invoice-footer -->
                     <div class="invoice-footer">
-
+                        <div class="pull-right">
+                            <a href="javascript:;" class="btn btn-md btn-primary"><i class="fas fa-chevron-circle-right m-r-5"></i>Proceed</a>
+                        </div>
                     </div>
                     <!-- end invoice-footer -->
                 </div>
@@ -280,7 +288,7 @@
 <script src="{%static 'assets/plugins/DataTables/extensions/Select/js/dataTables.select.min.js' %}"></script>
 <script src="{%static 'assets/js/demo/table-manage-combine.demo.min.js' %}"></script>
 <!--  -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js"></script>
+<script src="{%static 'assets/plugins/nvd3/build/d3.js' %}"></script>
 <script src="{%static 'assets/plugins/nvd3/build/nv.d3.js' %}"></script>
 <script src="{%static 'assets/plugins/moment/moment.min.js' %}"></script>
 {% endblock %}
@@ -494,7 +502,7 @@
                 
                     d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
                     nv.utils.windowResize(barChart.update);
-                
+                    document.querySelector("#nv-bar-chart > svg > g > g > g.nv-y.nv-axis.nvd3-svg > g.nvd3.nv-wrap.nv-axis > g:nth-child(1) > g:nth-child(2) > text").setAttribute('style', 'display: none;');
                     return barChart;
                 });
             },
@@ -556,12 +564,19 @@
         $('#sis-modal-table tbody tr').remove();
     });
 
+    $('#add_breakdown_modal').on('hidden.bs.modal', function (e) {
+        $('.table-invoice tbody tr').remove();
+        $('#inc-select').removeClass('is-invalid');
+        $('#uacs_select').removeClass('is-invalid');
+        $('#number').removeClass('is-invalid');
+    });
+
     $('#data-table-combines2 tbody').on('click', '#addBreakdown', function() {
         var or_num = $(this).closest('tr').find('td:eq(0)').html();
         $('#b_ornum').text(or_num);
         load_specific_sis_client(or_num)
         var tot_fee = $(this).closest('tr').find('td:eq(1)').html();
-        $('#b_grandtotal').text('₱'+tot_fee.replace(/\B(?=(\d{3})+(?!\d))/g, ",")).delay(2000);
+        $('#b_grandtotal').text('₱'+tot_fee.replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         getIncType();
     });
 
@@ -619,9 +634,14 @@
                 $('.table-invoice tbody').append(
                     `<tr>
                         <td>${$('#uacs_select').find('option:selected').text().split('-')[1]}</td>
-                        <td class='text-center'>${$('#number').val()}</td>
+                        <td class='text-center'>${amtBox}</td>
+                        <td>
+                            <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove"><i class="fas fa-times"></i></a>
+                        </td>
                     </tr>`
                 );
+                var total = parseFloat($('#b_currtotal').text().replace(',','')) + parseFloat(amtBox);
+                $('#b_currtotal').text(total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $('#inc-select').val('Income Type');
                 $('#uacs_select').empty();
                 $('#uacs_select').append(new Option('UACS Code')).select();
@@ -713,8 +733,16 @@
             }
         });
     };
+
     $('#inc-select').on('input', function() {
         getUacsCode($('#inc-select').find('option:selected').text());
+    });
+
+    $('.table-invoice tbody').on('click', '.remove', function() {
+        var minus_fee = $(this).closest('tr').find('td:eq(1)').html();
+        var total_fee = parseFloat($('#b_currtotal').text().replace(',', '')) - parseFloat(minus_fee);
+        $('#b_currtotal').text(total_fee.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+        $(this).closest('tr').remove();
     });
 </script>
 {% endblock%}
