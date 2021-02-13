@@ -58,7 +58,7 @@
                 <div class="card-header">
                     <ul class="nav nav-pills card-header-pills">
                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1">Done</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2">Pending<span id="pend_count"></span></a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2">Pending<span class="badge pull-right bg-danger" id="pend_count"></span></a></li>
                     </ul>
                 </div>
                 <div class="card-block">
@@ -309,7 +309,7 @@
         'info'        : true,
         'autoWidth'   : false,
         'aaSorting'   : [[1, "desc" ]],
-        'pagingType'  : 'full_numbers',
+        'pagingType'  : 'numbers',
         "aoColumns" : [ 
             { sWidth: '30%' },
             { sWidth: '30%' },
@@ -360,7 +360,7 @@
         'info'        : true,
         'autoWidth'   : false,
         'aaSorting'   : [[1, "desc" ]],
-        'pagingType'  : 'full_numbers',
+        'pagingType'  : 'numbers',
         "aoColumns" : [ 
             { sWidth: '30%' },
             { sWidth: '30%' },
@@ -453,7 +453,7 @@
                         data[2]
                     ] ).draw();
                 })
-                $('#pend_count').text('(' + dt_combines2.page.info().recordsTotal + ')');
+                $('#pend_count').text(dt_combines2.page.info().recordsTotal);
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;

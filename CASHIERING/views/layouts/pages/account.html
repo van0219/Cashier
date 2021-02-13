@@ -1,6 +1,7 @@
+<!-- content format -->
 {% extends 'views/layouts/pages/main.html' %}
 {% block title %} 
-<title>CMS | My Account</title>
+<title>CTS | My Account</title>
 {% endblock %}
 {% load static %}
 {% block page-css %}
@@ -19,23 +20,3 @@
     });
 </script>
 {% endblock %}
-
-<!-- <script>//Dynamic adding of tr for tables
-    var scntDiv = $('#p_scents');
-    var i = $('#p_scents tr').size() + 1;
-
-    $('#addScnt').click(function() {
-        scntDiv.append('<tr><td><select name="type" id="type"><option value="Debit">Debit</option><option value="Credit">Credit</option></select></td><td><select name="accounts" id="accounts"><option value="">SELECT</option><option value="One">One</option><option value="Two">Two</option></select></td><td><input type="text" name="debit_amount" id="debit_amount"/></td><td><input type="text" name="credit_amount" id="credit_amount"/></td><td><a href="#" id="remScnt">Remove</a></td></tr>');   
-        i++;
-        return false;
-    });
-
-    //Remove button
-    $(document).on('click', '#remScnt', function() {
-        if (i > 2) {
-            $(this).closest('tr').remove();
-            i--;
-        }
-        return false;
-    });​
-</script> -->
