@@ -223,7 +223,7 @@
                         </div>
                         <!-- begin table-responsive -->
                         <div class="table-responsive">
-                            <table class="table table-invoice">
+                            <table class="table table-invoice" id="table-invoice">
                                 <thead>
                                     <tr>
                                         <th width="50%">DESCRIPTION</th>
@@ -257,7 +257,7 @@
                     <!-- begin invoice-footer -->
                     <div class="invoice-footer">
                         <div class="pull-right">
-                            <a href="javascript:;" class="btn btn-md btn-primary"><i class="fas fa-chevron-circle-right m-r-5"></i>Proceed</a>
+                            <a href="javascript:;" class="btn btn-md btn-primary" id="b_proceed"><i class="fas fa-chevron-circle-right m-r-5"></i>Proceed</a>
                         </div>
                     </div>
                     <!-- end invoice-footer -->
@@ -482,11 +482,13 @@
             success: function(obj) {
                 var bar_color = [COLOR_GREEN, COLOR_AQUA, COLOR_BLUE, COLOR_PURPLE, COLOR_GREY, COLOR_RED, COLOR_ORANGE, COLOR_BLACK, "goldenrod",'#ff0000', 'lightblue', 'pink'];
                 var data= [];
+                var keyy = 0;
                 for (var i = 0; i < obj.length; i++) {
-                    data[i] = { 'label': obj[i][1], 'value': obj[i][0], 'color': bar_color[i]  };
+                    data[i] = { 'label': moment( new Date(obj[i][1])).format('MMM.DD'), 'value': parseFloat(obj[i][0]).toFixed(2), 'color': bar_color[i]  };
+                    keyy += parseFloat(obj[i][0]).toFixed(2);
                 }
                 var barChartData = [{
-                    key: 'Cumulative Return',
+                    key: keyy,
                     values: data,
                 }]
 
@@ -500,9 +502,10 @@
                     barChart.yAxis.axisLabel("Total SIS Payments");
                     barChart.xAxis.axisLabel('Day');
                 
+                    d3.select('#nv-bar-chart svg').remove();
                     d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
                     nv.utils.windowResize(barChart.update);
-                    document.querySelector("#nv-bar-chart > svg > g > g > g.nv-y.nv-axis.nvd3-svg > g.nvd3.nv-wrap.nv-axis > g:nth-child(1) > g:nth-child(2) > text").setAttribute('style', 'display: none;');
+                    // document.querySelector("#nv-bar-chart > svg > g > g > g.nv-y.nv-axis.nvd3-svg > g.nvd3.nv-wrap.nv-axis > g:nth-child(1) > g:nth-child(2) > text").setAttribute('style', 'display: none;');
                     return barChart;
                 });
             },
@@ -744,5 +747,60 @@
         $('#b_currtotal').text(total_fee.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         $(this).closest('tr').remove();
     });
+
+    $('#b_proceed').on('click', function() {
+        if ('₱'+$('#b_currtotal').text() != $('#b_grandtotal').text()) {
+            swal({
+                title: "Review Total", 
+                text: "The current total and saved total must be equal.",
+                type: "warning",
+                confirmButtonColor: "#428bca",
+                showLoaderOnConfirm: true
+            })
+        }
+        else {
+            saveCollectionBreakdown();
+            $('#add_breakdown_modal').modal('hide');
+            get_sis_payments2();
+            setInterval(function() {
+                get_sis_payments();
+            }, 3000);
+        }
+    });
+    function saveCollectionBreakdown() {
+        var or_num = $('#b_ornum').text();
+        var dt_res = $('#table-invoice tbody');
+        var dt_res_len = $('#table-invoice tbody tr').length;
+        for (var i = 0; i < dt_res_len; i++) {
+            var desc = dt_res.find('tr:eq('+ i +')').find('td:eq(0)').text();
+            var amt = dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'insert_collection_breakdown' %}",
+                cache: true,
+                dataType: 'json',
+                data: {
+                    or_num: or_num,
+                    desc: desc,
+                    amt: amt,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                success: function(obj) {
+                   
+                },
+                error: function(xhr, status, error) {
+                    var errMsg = xhr.status + ': ' + xhr.statusText;
+                    swal({
+                        title: "Error!", 
+                        text: error,
+                        type: "error",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    });
+                }
+            });
+        };
+        return;
+    };
 </script>
 {% endblock%}

@@ -1,4 +1,4 @@
-{% extends 'views/layouts/pages/main.html' %}
+{% extends 'views/layouts/pages/trans_log_main.html' %}
 {% block title %} 
 <title>CMS | Transaction Log</title>
 {% endblock %}
@@ -17,7 +17,7 @@
     </ol>
     <!-- end breadcrumb -->
     <!-- begin page-header -->
-    <h1 class="page-header m-b-10">Transaction Log <small>View Transaction History</small></h1>
+    <h1 class="page-header m-b-10">Transaction Logs <small>View Transaction History</small></h1>
     <!-- end page-header -->
     <!-- begin row -->
     <div class="row">
@@ -27,8 +27,8 @@
             <div class="card text-center">
                 <div class="card-header">
                     <ul class="nav nav-pills card-header-pills">
-                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1">Collections</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2">Deposits</a></li>
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1">Collection</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2">Deposit</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-3">Account</a></li>
                     </ul>
                 </div>
@@ -61,12 +61,15 @@
 <!-- end #content -->
 {% endblock %}
 {% block page-js %}
-<!-- dito yung page-js -->
+<script src="{%static 'assets/plugins/sparkline/jquery.sparkline.js' %}"></script>
+<script src="{%static 'assets/plugins/jquery-knob/js/jquery.knob.js' %}"></script>
+<script src="{%static 'assets/js/demo/page-with-two-sidebar.demo.min.js' %}"></script>
 {% endblock %}
 {% block init %}
 <script>
     $(document).ready(function() {
         App.init();
+        PageWithTwoSidebar.init();
     });
 </script>
 {% endblock %}

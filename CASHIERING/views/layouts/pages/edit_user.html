@@ -323,7 +323,12 @@
                 },
                 {
                     targets:6, render:function(data){
-                        return `<a href="javascript:;" class="btn btn-xs btn-white role">${data}</a>`
+                        if (data == 'Admin') {
+                            return `<span class="label label-purple f-s-11 role">${data}</span>`
+                        }
+                        else {
+                            return `<span class="label label-info f-s-11 role">${data}</span>`
+                        }
                     }
                 },
                 {
