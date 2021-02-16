@@ -76,7 +76,7 @@
                 </ul>
             </li>
             <li>
-                <a href="#deposits" data-toggle="modal">
+                <a href="javascript:;" data-toggle="modal" id="deposit_but">
                     <i class="fas fa-download"></i>
                     <span>Deposits</span>
                 </a>
@@ -220,7 +220,7 @@
 </div>
 <!-- #modal-dialog -->
 <div class="modal fade" id="deposits">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="max-width: 60%;">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Deposits</h4>
@@ -243,8 +243,24 @@
                         <div class="tab-content p-0 m-0">
                             <div class="tab-pane fade active show" id="card-tab-1">
                                 <h4 class="card-title">Pending Deposits</h4>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="javascript:;" class="btn btn-sm btn-default">Go somewhere</a>
+                                <div style="height: 380px;" class="overflow-auto">
+                                    <table class="table table-striped table hover table-bordered" id="col-hist-table2" >
+                                        <thead class="thead">
+                                            <th width="2%"></th>
+                                            <th class="text-nowrap">OR Number</th>
+                                            <th class="text-nowrap">Client Name</th>
+                                            <th class="text-nowrap">Assessed</th>
+                                            <th class="text-nowrap">Collected</th>
+                                            <th class="text-nowrap">Transaction Date</th>
+                                        </thead>
+                                        <tbody>
+                                            <!-- append here -->
+                                        </tbody>
+                                        <tfoot class="text-center">
+                                            <tr><td colspan="5"><span class="label label-inverse f-s-11">End of Results</span></td></tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="card-tab-2">
                                 <h4 class="card-title">Deposited Collections</h4>

@@ -393,3 +393,10 @@ def get_sis_bar_chart(request):
                     ,(request.POST['filt'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_collection_history(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_COLLECTION_LOG"
+                    ,(request.POST['range'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

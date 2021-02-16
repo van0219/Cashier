@@ -4,7 +4,15 @@
 {% endblock %}
 {% load static %}
 {% block page-css %}
-<!-- dito yung page css -->
+<style>
+    .table thead th {
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        z-index: 1;
+        background-color: white;
+    }
+</style>
 {% endblock %}
 {% block content %}
 <!-- begin #content -->
@@ -17,7 +25,7 @@
     </ol>
     <!-- end breadcrumb -->
     <!-- begin page-header -->
-    <h1 class="page-header m-b-10">Transaction Logs <small>View Transaction History</small></h1>
+    <h1 class="page-header m-b-10">Transaction Log <small>View Transaction History</small></h1>
     <!-- end page-header -->
     <!-- begin row -->
     <div class="row">
@@ -32,25 +40,72 @@
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-3">Account</a></li>
                     </ul>
                 </div>
+                <!-- begin card-block -->
                 <div class="card-block">
                     <div class="tab-content p-0 m-0">
+                        <!-- begin #card-pill-1 -->
                         <div class="tab-pane fade active show" id="card-pill-1">
-                            <h4 class="card-title">Collections History</h4>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="javascript:;" class="btn btn-sm btn-success">Go somewhere</a>
+                            <!-- begin row -->
+                            <div class="row">
+                                <!-- begin col-2 -->
+                                <div class="col-lg-2" style="margin-top: 15px;">
+                                    <span class="label label-purple f-s-11">
+                                        Total Results: <span id="table-count"></span>
+                                    </span>
+                                </div>
+                                <!-- end col-2 -->
+                                <!-- begin col-8 -->
+                                <div class="col-lg-8">
+                                    <h4 class="card-title">Collection Log</h4>
+                                </div>
+                                <!-- end col-8 -->
+                                <!-- begin col-2 -->
+                                <div class="col-lg-2">
+                                    <select class="form-control" id="col-hist-sel">
+                                        <option selected value="7">Last 7 days</option>
+                                        <option value="15">Last 15 days</option>
+                                        <option value="30">Last 30 days</option>
+                                    </select>
+                                </div>
+                                <!-- end col-2 -->
+                            </div>
+                            <!-- end row -->
+                            <div style="height: 380px;" class="overflow-auto">
+                                <table class="table table-striped table hover table-bordered" id="col-hist-table"> 
+                                    <thead class="thead">
+                                        <th class="text-nowrap">OR Number</th>
+                                        <th class="text-nowrap">Client Name</th>
+                                        <th class="text-nowrap">Assessed</th>
+                                        <th class="text-nowrap">Collected</th>
+                                        <th class="text-nowrap">Transaction Date</th>
+                                    </thead>
+                                    <tbody>
+                                        <!-- append here -->
+                                    </tbody>
+                                    <tfoot class="text-center">
+                                        <tr><td colspan="5"><span class="label label-inverse f-s-11">End of Results</span></td></tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
+                        <!-- end #card-pill-1 -->
+                        <!-- begin #card-pill-2 -->
                         <div class="tab-pane fade" id="card-pill-2">
-                            <h4 class="card-title">Deposits History</h4>
+                            <h4 class="card-title">Deposit Log</h4>
                             <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                             <a href="javascript:;" class="btn btn-sm btn-success">Go somewhere</a>
                         </div>
+                        <!-- end #card-pill-2 -->
+                        <!-- begin #card-pill-3 -->
                         <div class="tab-pane fade" id="card-pill-3">
                             <h4 class="card-title">Account Log</h4>
                             <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                             <a href="javascript:;" class="btn btn-sm btn-success">Go somewhere</a>
                         </div>
+                        <!-- end card-pill-3 -->
                     </div>
                 </div>
+                <!-- end card-block -->
             </div>
             <!-- end card -->
         </div>
@@ -70,6 +125,91 @@
     $(document).ready(function() {
         App.init();
         PageWithTwoSidebar.init();
+        load_collection_history(7);
     });
+
+    function load_collection_history(range) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_collection_history' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                range: range,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#col-hist-table tbody tr').remove();
+                for (var i = 0; i < obj.length; i++) {   
+                    $('#col-hist-table tbody').append(
+                        `<tr>
+                            <td class="text-nowrap"><span class="label label-success f-s-12">${obj[i][0]}</span></td>
+                            <td class="text-nowrap">${obj[i][1]}</td>
+                            <td class="text-nowrap">${obj[i][2]}</td>
+                            <td>${obj[i][3]}</td>
+                            <td class="text-nowrap">${moment(new Date(obj[i][4])).format("MMM. DD, YYYY h:m:s")}</td>
+                        </tr>`
+                    );
+                };
+                $('#table-count').text($('#col-hist-table tbody tr').length);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
+    $('#col-hist-sel').on('change', function() {
+        load_collection_history(parseInt($('#col-hist-sel').val()));
+    });
+    $('#deposit_but').on('click', function() {
+        load_collection_history2(7);
+        $('#deposits').modal('show');
+    });
+    function load_collection_history2(range) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_collection_history' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                range: range,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#col-hist-table2 tbody tr').remove();
+                for (var i = 0; i < obj.length; i++) {   
+                    $('#col-hist-table2 tbody').append(
+                        `<tr>
+                            <td><input type="checkbox" /></td>
+                            <td class="text-nowrap"><span class="label label-success f-s-12">${obj[i][0]}</span></td>
+                            <td class="text-nowrap">${obj[i][1]}</td>
+                            <td class="text-nowrap">${obj[i][2]}</td>
+                            <td>${obj[i][3]}</td>
+                            <td class="text-nowrap">${moment(new Date(obj[i][4])).format("MMM. DD, YYYY h:m:s")}</td>
+                        </tr>`
+                    );
+                };
+                // $('#table-count').text($('#col-hist-table tbody tr').length);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
 </script>
 {% endblock %}
