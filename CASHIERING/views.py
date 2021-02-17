@@ -400,3 +400,10 @@ def load_collection_history(request):
                     ,(request.POST['range'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def save_for_remittance(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SAVE_FOR_REMITTANCE"
+                    ,(request.POST['or_num'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
