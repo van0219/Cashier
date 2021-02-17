@@ -57,7 +57,7 @@
                 <ul class="sub-menu">
                     <li><a href="view_receipts">View Receipts</a></li>
                     <li><a href="cleared_students">Cleared Students</a></li>
-                    <li><a href="transaction_log">Transaction Logs</a></li>
+                    <li><a href="transaction_log">Transaction Log</a></li>
                     <li><a href="view_sis_payments">View SIS Payments</a></li>
                 </ul>
             </li>
@@ -97,33 +97,23 @@
         <!-- begin sidebar user -->
         <ul class="nav m-t-10">
             <li class="nav-widget">
-                <p>Server Status</p>
+                <p>Collection Status</p>
                 <div class="pull-left m-b-10 m-t-5">
                     <div class="pull-left p-r-15">
-                        <input class="knob" data-width="80" data-height="80" data-thickness=".2" data-readonly="true" data-min="10" data-displayPrevious=true value="44" data-fgColor="#00acac" data-bgColor="#242a30" />
+                        <input class="knob" id="knob-on-site" data-width="80" data-height="80" data-thickness=".2" data-readonly="true" data-min="0" data-displayPrevious=true value="0" data-fgColor="#00acac" data-bgColor="#242a30" />
                     </div>
                     <div class="pull-left">
-                        <input class="knob" data-width="80" data-height="80" data-thickness=".2" data-readonly="true" data-min="10" data-displayPrevious=true value="67" data-fgColor="#348fe2" data-bgColor="#242a30" />
+                        <input class="knob" id="knob-company" data-width="80" data-height="80" data-thickness=".2" data-readonly="true" data-min="0" data-displayPrevious=true value="0" data-fgColor="#348fe2" data-bgColor="#242a30" />
                     </div>
                 </div>
                 <div class="pull-left">
                     <div class="pull-left p-r-15">
-                        <input class="knob" data-width="80" data-height="80" data-thickness=".2" data-readonly="true" data-min="10" data-displayPrevious=true value="70" data-fgColor="#ff5b57" data-bgColor="#242a30" />
+                        <input class="knob" id="knob-sis" data-width="80" data-height="80" data-thickness=".2" data-readonly="true" data-min="0" data-displayPrevious=true value="0" data-fgColor="#ff5b57" data-bgColor="#242a30" />
                     </div>
                     <div class="pull-left">
-                        <input class="knob" data-width="80" data-height="80" data-thickness=".2" data-readonly="true" data-min="10" data-displayPrevious=true value="52" data-fgColor="#727cb6" data-bgColor="#242a30" />
+                        <input class="knob" id="knob-total" data-width="80" data-height="80" data-thickness=".2" data-readonly="true" data-min="0" data-displayPrevious=true value="0" data-fgColor="#727cb6" data-bgColor="#242a30" />
                     </div>
                 </div>
-            </li>
-            <li class="nav-widget">
-                <p class="m-b-5">Total Visitors</p>
-                <div id="sidebar-sparkline-1" class="m-b-10"></div>
-                <p class="m-b-5">Total Page Views</p>
-                <div id="sidebar-sparkline-2" class="m-b-10"></div>
-                <p class="m-b-5">Total Unique Visitors</p>
-                <div id="sidebar-sparkline-3" class="m-b-10"></div>
-                <p class="m-b-5">Bounce Rate</p>
-                <div id="sidebar-sparkline-4"></div>
             </li>
             <li class="nav-widget">
                 <div class="panel-group m-b-0" id="accordion">
@@ -132,13 +122,13 @@
                             <h3 class="panel-title">
                                 <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                                     <i class="fa fa-plus-circle pull-right text-success"></i> 
-                                    Accordion #1
+                                    On-Site Student
                                 </a>
                             </h3>
                         </div>
                         <div id="collapseOne" class="panel-collapse collapse">
                             <div class="panel-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                                <span id="total-on-site" class="f-w-700 f-s-12"></span>
                             </div>
                         </div>
                     </div>
@@ -147,13 +137,13 @@
                             <h3 class="panel-title">
                                 <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
                                     <i class="fa fa-plus-circle pull-right text-success"></i> 
-                                    Accordion #2
+                                    Company
                                 </a>
                             </h3>
                         </div>
                         <div id="collapseTwo" class="panel-collapse collapse">
                             <div class="panel-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                                <span id="total-company" class="f-w-700 f-s-12"></span>
                             </div>
                         </div>
                     </div>
@@ -162,13 +152,28 @@
                             <h3 class="panel-title">
                                 <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
                                     <i class="fa fa-plus-circle pull-right text-success"></i> 
-                                    Accordion #3
+                                    SIS Payment
                                 </a>
                             </h3>
                         </div>
                         <div id="collapseThree" class="panel-collapse collapse">
                             <div class="panel-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                                <span id="total-sis" class="f-w-700 f-s-12"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-inverse">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                                    <i class="fa fa-plus-circle pull-right text-success"></i> 
+                                    Total Collection
+                                </a>
+                            </h3>
+                        </div>
+                        <div id="collapseFour" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <span id="total-collection" class="f-w-700 f-s-12"></span>
                             </div>
                         </div>
                     </div>
@@ -214,63 +219,6 @@
                 </div>
             </div>
             <!-- end card -->
-            </div>
-        </div>
-    </div>
-</div>
-<!-- #modal-dialog -->
-<div class="modal fade" id="deposits">
-    <div class="modal-dialog" style="max-width: 60%;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Deposits</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body">
-                <!-- begin card -->
-                <div class="card text-center">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs card-header-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#card-tab-1">Pending</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#card-tab-2">Deposited</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-block">
-                        <div class="tab-content p-0 m-0">
-                            <div class="tab-pane fade active show" id="card-tab-1">
-                                <h4 class="card-title">Pending Deposits</h4>
-                                <div style="height: 380px;" class="overflow-auto">
-                                    <table class="table table-striped table hover table-bordered" id="col-hist-table2" >
-                                        <thead class="thead">
-                                            <th width="2%"></th>
-                                            <th class="text-nowrap">OR Number</th>
-                                            <th class="text-nowrap">Client Name</th>
-                                            <th class="text-nowrap">Assessed</th>
-                                            <th class="text-nowrap">Collected</th>
-                                            <th class="text-nowrap">Transaction Date</th>
-                                        </thead>
-                                        <tbody>
-                                            <!-- append here -->
-                                        </tbody>
-                                        <tfoot class="text-center">
-                                            <tr><td colspan="5"><span class="label label-inverse f-s-11">End of Results</span></td></tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="card-tab-2">
-                                <h4 class="card-title">Deposited Collections</h4>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="javascript:;" class="btn btn-sm btn-yellow">Go somewhere</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card -->
             </div>
         </div>
     </div>

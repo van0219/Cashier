@@ -12,6 +12,9 @@
         z-index: 1;
         background-color: white;
     }
+    #col-hist-table2 {
+        cursor: pointer;
+    }
 </style>
 {% endblock %}
 {% block content %}
@@ -62,7 +65,8 @@
                                 <!-- begin col-2 -->
                                 <div class="col-lg-2">
                                     <select class="form-control" id="col-hist-sel">
-                                        <option selected value="7">Last 7 days</option>
+                                        <option value="1">Today</option>
+                                        <option value="7">Last 7 days</option>
                                         <option value="15">Last 15 days</option>
                                         <option value="30">Last 30 days</option>
                                     </select>
@@ -70,8 +74,8 @@
                                 <!-- end col-2 -->
                             </div>
                             <!-- end row -->
-                            <div style="height: 380px;" class="overflow-auto">
-                                <table class="table table-striped table hover table-bordered" id="col-hist-table"> 
+                            <div style="height: 370px;" class="overflow-auto">
+                                <table class="table table-striped table-bordered" id="col-hist-table"> 
                                     <thead class="thead">
                                         <th class="text-nowrap">OR Number</th>
                                         <th class="text-nowrap">Client Name</th>
@@ -86,6 +90,11 @@
                                         <tr><td colspan="5"><span class="label label-inverse f-s-11">End of Results</span></td></tr>
                                     </tfoot>
                                 </table>
+                            </div>
+                            <div class="pull-right">
+                                <span class="label label-danger">SIS PAYMENT</span>
+                                <span class="label label-primary">COMPANY</span>
+                                <span class="label label-success">ON-SITE STUDENT PAYMENT</span>
                             </div>
                         </div>
                         <!-- end #card-pill-1 -->
@@ -125,7 +134,7 @@
     $(document).ready(function() {
         App.init();
         PageWithTwoSidebar.init();
-        load_collection_history(7);
+        load_collection_history($('#col-hist-sel').val());
     });
 
     function load_collection_history(range) {
@@ -141,17 +150,20 @@
             success: function(obj) {
                 $('#col-hist-table tbody tr').remove();
                 for (var i = 0; i < obj.length; i++) {   
+                    var payor = obj[i][5] == 'SIS PAYMENT' ? 'danger' : obj[i][5] == 'COMPANY' ? 'primary' : 'success'; 
+                    var dummyClass = payor.substr(0,2);
                     $('#col-hist-table tbody').append(
                         `<tr>
-                            <td class="text-nowrap"><span class="label label-success f-s-12">${obj[i][0]}</span></td>
+                            <td class="${dummyClass}"><span class="label label-${payor} f-s-12">${obj[i][0]}</span></td>
                             <td class="text-nowrap">${obj[i][1]}</td>
                             <td class="text-nowrap">${obj[i][2]}</td>
                             <td>${obj[i][3]}</td>
-                            <td class="text-nowrap">${moment(new Date(obj[i][4])).format("MMM. DD, YYYY h:m:s")}</td>
+                            <td class="text-nowrap">${moment(new Date(obj[i][4])).format("MMM. DD, YYYY hh:mm:ss")}</td>
                         </tr>`
                     );
                 };
                 $('#table-count').text($('#col-hist-table tbody tr').length);
+                loadKnobData();
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -169,47 +181,45 @@
     $('#col-hist-sel').on('change', function() {
         load_collection_history(parseInt($('#col-hist-sel').val()));
     });
-    $('#deposit_but').on('click', function() {
-        load_collection_history2(7);
-        $('#deposits').modal('show');
-    });
-    function load_collection_history2(range) {
-        $.ajax({
-            type: "POST",
-            url: "{% url 'load_collection_history' %}",
-            // cache: true,
-            dataType: 'json',
-            data: {
-                range: range,
-                csrfmiddlewaretoken:"{{csrf_token}}"
-            },
-            success: function(obj) {
-                $('#col-hist-table2 tbody tr').remove();
-                for (var i = 0; i < obj.length; i++) {   
-                    $('#col-hist-table2 tbody').append(
-                        `<tr>
-                            <td><input type="checkbox" /></td>
-                            <td class="text-nowrap"><span class="label label-success f-s-12">${obj[i][0]}</span></td>
-                            <td class="text-nowrap">${obj[i][1]}</td>
-                            <td class="text-nowrap">${obj[i][2]}</td>
-                            <td>${obj[i][3]}</td>
-                            <td class="text-nowrap">${moment(new Date(obj[i][4])).format("MMM. DD, YYYY h:m:s")}</td>
-                        </tr>`
-                    );
-                };
-                // $('#table-count').text($('#col-hist-table tbody tr').length);
-            },
-            error: function(xhr, status, error) {
-                var errMsg = xhr.status + ': ' + xhr.statusText;
-                swal({
-                    title: "Error!", 
-                    text: errMsg,
-                    type: "error",
-                    confirmButtonColor: "#428bca",
-                    showLoaderOnConfirm: true
-                });
+
+    function loadKnobData() {
+        var rows = $('#col-hist-table tbody tr').length
+        var knob_on_site = 0;
+        var knob_sis = 0;
+        var knob_company = 0;
+        var knob_total = 0;
+        var total_on_site = 0;
+        var total_company = 0;
+        var total_sis = 0;
+        var total_collection = 0;
+        for (var i = 0; i < rows; i++) {
+            if ($('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(0)').attr('class') == 'su') {
+                knob_on_site++;
+                var temp = $('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(3)').html();
+                total_on_site += parseFloat(temp);
+            }  
+            else if ($('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(0)').attr('class') == 'pr') {
+                knob_company++;
+                var temp = $('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(3)').html();
+                total_company += parseFloat(temp);
             }
-        });
+            else if ($('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(0)').attr('class') == 'da') {
+                knob_sis++;
+                var temp = $('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(3)').html();
+                total_sis += parseFloat(temp);
+            }
+        }
+        knob_total = knob_on_site + knob_company + knob_sis;
+        total_collection = total_on_site + total_company + total_sis;
+        $('#knob-on-site').val(knob_on_site);
+        $('#knob-company').val(knob_company);
+        $('#knob-sis').val(knob_sis);
+        $('#knob-total').val(knob_total);
+        // 
+        $('#total-on-site').text('₱' + total_on_site.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+        $('#total-company').text('₱' + total_company.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+        $('#total-sis').text('₱' + total_sis.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+        $('#total-collection').text('₱' + total_collection.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     };
 </script>
 {% endblock %}

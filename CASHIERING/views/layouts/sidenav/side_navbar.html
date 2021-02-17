@@ -57,7 +57,7 @@
                 <ul class="sub-menu">
                     <li><a href="view_receipts">View Receipts</a></li>
                     <li><a href="cleared_students">Cleared Students</a></li>
-                    <li><a href="transaction_log">Transaction Logs</a></li>
+                    <li><a href="transaction_log">Transaction Log</a></li>
                     <li><a href="view_sis_payments">View SIS Payments</a></li>
                 </ul>
             </li>
@@ -76,7 +76,7 @@
                 </ul>
             </li>
             <li>
-                <a href="#deposits" data-toggle="modal">
+                <a href="#deposits" data-toggle="modal" id="deposit_but">
                     <i class="fas fa-download"></i>
                     <span>Deposits</span>
                 </a>
@@ -127,59 +127,4 @@
         </div>
     </div>
 </div>
-<!-- #modal-dialog -->
-<div class="modal fade" id="deposits">
-    <div class="modal-dialog" style="max-width: 50%;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Deposits</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body">
-                <!-- begin card -->
-                <div class="card text-center">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs card-header-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#card-tab-1">Pending</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#card-tab-2">Deposited</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-block">
-                        <div class="tab-content p-0 m-0">
-                            <div class="tab-pane fade active show" id="card-tab-1">
-                                <h4 class="card-title">Pending Deposits</h4>
-                                <div id="col-hist-table" style="height: 380px;" class="overflow-auto">
-                                    <table class="table table-striped table hover table-bordered">
-                                        <thead class="thead">
-                                            <th class="text-nowrap">OR Number</th>
-                                            <th class="text-nowrap">Client Name</th>
-                                            <th class="text-nowrap">Assessed</th>
-                                            <th class="text-nowrap">Collected</th>
-                                            <th class="text-nowrap">Transaction Date</th>
-                                        </thead>
-                                        <tbody>
-                                            <!-- append here -->
-                                        </tbody>
-                                        <tfoot class="text-center">
-                                            <tr><td colspan="5"><span class="label label-inverse f-s-11">End of Results</span></td></tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="card-tab-2">
-                                <h4 class="card-title">Deposited Collections</h4>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="javascript:;" class="btn btn-sm btn-yellow">Go somewhere</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card -->
-            </div>
-        </div>
-    </div>
-</div>
+
