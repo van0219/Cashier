@@ -85,5 +85,7 @@ urlpatterns = [
     path('load_specific_sis_client', views.load_specific_sis_client, name="load_specific_sis_client"),
     path('get_sis_bar_chart', views.get_sis_bar_chart, name="get_sis_bar_chart"),
     path('load_collection_history', views.load_collection_history, name="load_collection_history"),
+    path('deposits', views.deposits, name="deposits"),
     path('save_for_remittance', views.save_for_remittance, name="save_for_remittance"),
+    path('insert_deposit', views.insert_deposit, name="insert_deposit"),
 ]

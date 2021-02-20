@@ -102,6 +102,7 @@
 		<!-- end scroll to top btn -->
 	</div>
 	<!-- end page container -->
+	<!-- #request -->
 	<div class="modal fade" id="request">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -111,73 +112,6 @@
 				</div>
 				<div class="modal-body">
 	
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- #modal-deposits -->
-	<div class="modal fade" id="deposits">
-		<div class="modal-dialog" style="max-width: 60%;">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title">Deposits</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-				</div>
-				<div class="modal-body">
-					<!-- begin card -->
-					<div class="card text-center">
-						<div class="card-header">
-							<ul class="nav nav-pills card-header-pills">
-								<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1-deposits">Pending</a></li>
-								<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2-deposits">Scheduled Deposit</a></li>
-								<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-3-deposits">Deposited</a></li>
-							</ul>
-						</div>
-						<div class="card-block">
-							<div class="tab-content p-0 m-0">
-								<div class="tab-pane fade active show" id="card-pill-1-deposits">
-									<h4 class="card-title">Pending</h4>
-									<div style="height: 380px;" class="overflow-auto">
-										<table class="table table-hover" id="col-hist-table2" >
-											<thead class="thead">
-												<th width="2%"><input type="checkbox" name="col-hist-check-all" title="Check All" style="cursor: pointer;"/></th>
-												<th class="text-nowrap">OR Number</th>
-												<th class="text-nowrap">Client Name</th>
-												<th class="text-nowrap">Assessed</th>
-												<th class="text-nowrap">Collected</th>
-												<th class="text-nowrap">Transaction Date</th>
-											</thead>
-											<tbody>
-												<!-- append here -->
-											</tbody>
-											<tfoot class="text-center">
-												<tr><td colspan="6"><span class="label label-inverse f-s-11">End of Results</span></td></tr>
-											</tfoot>
-										</table>
-									</div>
-								</div>
-								<div class="pull-left">
-									<a href="javascript:;" class="btn btn-sm btn-warning" id="pending_save"><i class="fas fa-save m-r-5"></i>Schedule Deposit</a>
-								</div>
-								<div class="pull-right">
-									<span class="label label-danger">SIS PAYMENT</span>
-									<span class="label label-primary">COMPANY</span>
-									<span class="label label-success">ON-SITE STUDENT PAYMENT</span>
-								</div>
-								<div class="tab-pane fade" id="card-pill-2-deposits">
-									<h4 class="card-title">Special title treatment 2</h4>
-									<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-									<a href="javascript:;" class="btn btn-sm btn-success">Go somewhere</a>
-								</div>
-								<div class="tab-pane fade" id="card-pill-3-deposits">
-									<h4 class="card-title">Special title treatment 3</h4>
-									<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-									<a href="javascript:;" class="btn btn-sm btn-success">Go somewhere</a>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
 				</div>
 			</div>
 		</div>
@@ -226,70 +160,6 @@
 				}
 			});
 		};
-		$('#deposit_but').on('click', function() {
-			load_collection_history2(0);
-			$('#deposits').modal('show');
-		});
-		function load_collection_history2(range) {
-			$.ajax({
-				type: "POST",
-				url: "{% url 'load_collection_history' %}",
-				// cache: true,
-				dataType: 'json',
-				data: {
-					range: range,
-					csrfmiddlewaretoken:"{{csrf_token}}"
-				},
-				success: function(obj) {
-					$('#col-hist-table2 tbody tr').remove();
-					for (var i = 0; i < obj.length; i++) {   
-						var payor = obj[i][5] == 'SIS PAYMENT' ? 'danger' : obj[i][5] == 'COMPANY' ? 'primary' : 'success';
-						$('#col-hist-table2 tbody').append(
-							`<tr>
-								<td><input type="checkbox" name="col-hist-check"/></td>
-								<td class="text-nowrap"><span class="label label-${payor} f-s-12">${obj[i][0]}</span></td>
-								<td class="text-nowrap">${obj[i][1]}</td>
-								<td class="text-nowrap">${obj[i][2]}</td>
-								<td>${obj[i][3]}</td>
-								<td class="text-nowrap">${moment(new Date(obj[i][4])).format("MMM. DD, YYYY hh:mm:ss")}</td>
-							</tr>`
-						);
-					};
-				},
-				error: function(xhr, status, error) {
-					var errMsg = xhr.status + ': ' + xhr.statusText;
-					swal({
-						title: "Error!", 
-						text: errMsg,
-						type: "error",
-						confirmButtonColor: "#428bca",
-						showLoaderOnConfirm: true
-					});
-				}
-			});
-		};
-		$('#deposits').on('hidden.bs.modal', function() {
-			$('input[name="col-hist-check-all"]').prop('checked', false)
-		});
-
-		$('#col-hist-table2 tbody').on('click','tr', function() {
-			var rowCheckBox = $(this).closest('tr').find('td:eq(0)').find('input[name="col-hist-check"]');
-			if (rowCheckBox.prop('checked')) {
-				rowCheckBox.prop('checked', false);
-			}
-			else {
-				rowCheckBox.prop('checked', true);
-			}
-		});
-
-		$('input[name="col-hist-check-all"]').on('change', function() {
-			if ($('input[name="col-hist-check-all"]').prop('checked')) {
-				$('input[name="col-hist-check"]').prop('checked', true);
-			}
-			else {
-				$('input[name="col-hist-check"]').prop('checked', false);
-			}
-		});
 	</script>
 </body>
 </html>

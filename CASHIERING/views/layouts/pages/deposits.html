@@ -1,0 +1,363 @@
+{% extends 'views/layouts/pages/main.html' %}
+{% block title %} 
+<title>CTS | Deposits</title>
+{% endblock %}
+{% load static %}
+{% block page-css %}
+<!-- dito yung page css -->
+{% endblock %}
+{% block content %}
+<div class="content" id="content">
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+        <li class="breadcrumb-item"><a href="javascript:;">Collection Report</a></li>
+        <li class="breadcrumb-item active">Cash Receipt Record</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">Deposits <small>View Pending and Deposited Collections</small></h1>
+    <!-- end page-header -->
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-2 -->
+        <div class="col-lg-2">
+
+        </div>
+        <!-- end col-2 -->
+        <!-- begin col-8 -->
+        <div class="col-lg-8">
+            <!-- begin card -->
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-pills card-header-pills">
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1-deposits">Pending</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2-deposits">Scheduled Deposit</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-3-deposits">Deposited</a></li>
+                    </ul>
+                </div>
+                <div class="card-block">
+                    <div class="tab-content p-0 m-0">
+                        <div class="tab-pane fade active show" id="card-pill-1-deposits">
+                            <h4 class="card-title">Pending</h4>
+                            <div style="height: 350px;" class="overflow-auto">
+                                <table class="table table-hover table-striped" id="col-hist-table2" >
+                                    <thead class="thead">
+                                        <th width="2%"><input type="checkbox" name="col-hist-check-all" title="Check All" style="cursor: pointer;"/></th>
+                                        <th class="text-nowrap">OR Number</th>
+                                        <th class="text-nowrap">Client Name</th>
+                                        <th class="text-nowrap">Assessed</th>
+                                        <th class="text-nowrap">Collected</th>
+                                        <th class="text-nowrap">Transaction Date</th>
+                                    </thead>
+                                    <tbody>
+                                        <!-- append here -->
+                                    </tbody>
+                                    <tfoot class="text-center">
+                                        <tr><td colspan="6"><span class="label label-inverse f-s-11">End of Results</span></td></tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="pull-left">
+                                <a href="javascript:;" class="btn btn-sm btn-warning" id="pending_save"><i class="fas fa-calendar-plus m-r-5"></i>Schedule Deposit</a>
+                            </div>
+                            <div class="pull-right">
+                                <span class="label label-danger">SIS PAYMENT</span>
+                                <span class="label label-primary">COMPANY</span>
+                                <span class="label label-success">ON-SITE STUDENT PAYMENT</span>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="card-pill-2-deposits">
+                            <h4 class="card-title">Scheduled Deposits</h4>
+                            <div class="col-lg-12">
+                                <div class="panel panel-inverse panel-sched">
+                                    <div class="panel-heading">
+                                        <span class="text-left">2021-DEPOSIT-00001</span>
+                                    </div>
+                                    <div class="panel-body">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="card-pill-3-deposits">
+                            <h4 class="card-title">Special title treatment 3</h4>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <a href="javascript:;" class="btn btn-sm btn-success">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col-8 -->
+        <!-- begin col-2 -->
+        <div class="col-lg-2">
+
+        </div>
+        <!-- end col-2 -->
+    </div>
+    <!-- end row -->
+</div>
+<!-- #sched-deposit -->
+<div class="modal fade" id="sched-deposit">
+    <div class="modal-dialog" style="max-width: 40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Pick Schedule</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body" style="height: 250px;">
+                <!-- begin row -->
+                <div class="row">
+                    <!-- begin col-6 -->
+                    <div class="col-lg-6">
+                        <input type="text" id="pick-sched-group" value="2021-DEPOSIT-00001" class="form-control f-s-15 f-w-700 m-b-10" onfocus="this.blur()" tabindex="-1"/>
+                        <input type="date" id="pick-sched-date" class="form-control m-b-10" />
+                        <textarea class="form-control" id="pick-sched-notes" placeholder="Add a note here." style="height: 110px;"></textarea>
+                    </div>
+                    <!-- end col-6 -->
+                    <!-- begin col-6 -->
+                    <div class="col-lg-6">
+                        <div style="max-height: 200px; overflow-y: auto;">
+                            <table class="table table-bordered table-striped" id="sched-deposit-table">
+                                <thead class="text-center">
+                                    <th class="text-nowrap">OR Number</th>
+                                    <th class="text-nowrap">Amount</th>
+                                </thead>
+                                <tbody class="text-center">
+                                    <!-- append here -->
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" class="text-center"><span class="label label-inverse">Nothing follows..</span></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="pull-right m-t-10">
+                            <span class="label label-purple f-s-11">Total: <span id="tot"></span></span>
+                        </div>
+                    </div>
+                    <!-- end col-6 -->
+                </div>
+                <!-- end row -->
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal"><i class="fas fa-undo-alt fa-lg m-r-5"></i>Discard</a>
+                <a href="javascript:;" class="btn btn-success" id="pick-sched-set-but"><i class="fas fa-clock fa-lg m-r-5" id="set-but-icon"></i>Set</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block page-js %}
+<!-- dito yung page-js -->
+{% endblock %}
+{% block init %}
+<script>
+    $(document).ready(function() {
+        App.init();
+        load_collection_history2(0,0);
+    });
+    function load_collection_history2(range,fromSaveRemittance) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_collection_history' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                range: range,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#col-hist-table2 tbody tr').remove();
+                for (var i = 0; i < obj.length; i++) {   
+                    var payor = obj[i][5] == 'SIS PAYMENT' ? 'danger' : obj[i][5] == 'COMPANY' ? 'primary' : 'success';
+                    $('#col-hist-table2 tbody').append(
+                        `<tr>
+                            <td><input type="checkbox" name="col-hist-check" value="${obj[i][0]}"/></td>
+                            <td class="text-nowrap"><span class="label label-${payor} f-s-12">${obj[i][0]}</span></td>
+                            <td class="text-nowrap">${obj[i][1]}</td>
+                            <td class="text-nowrap">${obj[i][2]}</td>
+                            <td>${obj[i][3]}</td>
+                            <td class="text-nowrap">${moment(new Date(obj[i][4])).format("MMM. DD, YYYY hh:mm:ss")}</td>
+                        </tr>`
+                    );
+                };
+                if (fromSaveRemittance == 1) {
+                    $('#set-but-icon').removeClass('fa-spinner fa-spin');
+                    $('#set-but-icon').addClass('fa-clock');
+                    $('input[name="col-hist-check-all"]').prop('checked', false)
+                    swal({
+                        title: "Scheduled Successfully", 
+                        text: "Your scheduled deposits are stored in the deposits tab", 
+                        type: "success",
+                        showLoaderOnConfirm: true,
+                        confirmButtonColor: "#5cb85c",
+                    },function(isConfirm) {
+                        if (isConfirm) {
+                            $('#sched-deposit').modal('hide');
+                        }
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
+    $('#sched-deposit').on('hidden.bs.modal', function() {
+        $('#sched-deposit-table tbody tr').remove();
+    });
+
+    $('#col-hist-table2 tbody').on('click','tr', function() {
+        var rowCheckBox = $(this).closest('tr').find('td:eq(0)').find('input[name="col-hist-check"]');
+        if (rowCheckBox.prop('checked')) {
+            rowCheckBox.prop('checked', false);
+        }
+        else {
+            rowCheckBox.prop('checked', true);
+        }
+    });
+
+    $('input[name="col-hist-check-all"]').on('change', function() {
+        if ($('input[name="col-hist-check-all"]').prop('checked')) {
+            $('input[name="col-hist-check"]').prop('checked', true);
+        }
+        else {
+            $('input[name="col-hist-check"]').prop('checked', false);
+        }
+    });
+
+    var checked_cell = [];
+    $('#pending_save').on('click', function() {
+        var tot = 0;
+        $('#pick-sched-date').val('mm/dd/yyyy');
+        $('#pick-sched-note').val('');
+        $('#sched-deposit-table tbody tr').remove();
+        for (var i = j = 0; i < $('input[name="col-hist-check"]').length; i++) {
+            if($('#col-hist-table2 tbody').find('tr:eq('+i+')').find('td:eq(0)').find('input[name="col-hist-check"]').prop('checked')) {
+                checked_cell[j] = $('#col-hist-table2 tbody').find('tr:eq('+i+')').find('td:eq(0)').find('input[name="col-hist-check"]').val();
+                tot += parseFloat($('#col-hist-table2 tbody').find('tr:eq('+i+')').find('td:eq(4)').html());
+                $('#sched-deposit-table tbody').append(
+                    `<tr>
+                        <td class="text-nowrap">${checked_cell[j]}</td>
+                        <td class="text-nowrap">${$('#col-hist-table2 tbody').find('tr:eq('+i+')').find('td:eq(4)').html()}</td>
+                    </tr>`
+                );
+                j++;
+            }
+        };
+        $('#tot').text('₱' + tot.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+        if ($('#sched-deposit-table tbody tr').length > 0) {
+            $('#sched-deposit').modal('show');
+        }
+        else {
+            swal({
+                title: "Nothing Selected", 
+                text: "Please check an item in the list.",
+                type: "info",
+                confirmButtonColor: "#428bca",
+                showLoaderOnConfirm: true
+            });
+        }
+    });
+    function saveForRemittance(checked_cell) {
+        for (var i = 0; i < checked_cell.length; i++) {
+            var or_num = checked_cell[i];
+            $.ajax({
+                type: "POST",
+                url: "{% url 'save_for_remittance' %}",
+                // cache: true,
+                dataType: 'json',
+                data: {
+                    or_num: or_num,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                success: function(obj) {
+                    
+                },
+                error: function(xhr, status, error) {
+                    var errMsg = xhr.status + ': ' + xhr.statusText;
+                    swal({
+                        title: "Error!", 
+                        text: errMsg,
+                        type: "error",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    });
+                }
+            });
+            insertDeposit(or_num);
+        };
+        checked_cell = [];
+        load_collection_history2(0,1);
+    };
+
+    $('#pick-sched-set-but').on('click', function() {
+        $('#set-but-icon').removeClass('fa-clock');
+        $('#set-but-icon').addClass('fa-spinner fa-spin');
+        saveForRemittance(checked_cell);		
+    });
+
+    var getCurrentUserID;
+    function callback(response) {
+        getCurrentUserID = response;
+    }
+    $.ajax({
+        url: "{% url 'get_session' %}",
+        type: "POST",
+        data: {
+            csrfmiddlewaretoken:"{{csrf_token}}"
+        },
+        success: function(role_session) {
+            callback(role_session)
+        }
+    });
+
+    function insertDeposit(or_num) {
+        var group_id = $('#pick-sched-group').val();
+        var status = 'FOR REMIT';
+        var date_sched = $('#pick-sched-date').val();
+        var notes = $('#pick-sched-notes').val();
+        var user_id = getCurrentUserID;
+        $.ajax({
+            type: "POST",
+            url: "{% url 'insert_deposit' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                or_num: or_num,
+                group_id: group_id,
+                status: status,
+                date_sched: date_sched,
+                notes: notes,
+                user_id: user_id,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+</script>
+{% endblock %}

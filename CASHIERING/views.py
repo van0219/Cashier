@@ -401,9 +401,24 @@ def load_collection_history(request):
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
+def deposits(request):
+    return render(request, 'views/layouts/pages/deposits.html')
+
 def save_for_remittance(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SAVE_FOR_REMITTANCE"
                     ,(request.POST['or_num'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def insert_deposit(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_INSERT_DEPOSIT"
+                    ,(request.POST['or_num']
+                    ,request.POST['group_id']
+                    ,request.POST['status']
+                    ,request.POST['date_sched']
+                    ,request.POST['notes']
+                    ,request.POST['user_id']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
