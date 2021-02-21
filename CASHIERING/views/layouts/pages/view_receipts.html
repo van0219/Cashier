@@ -337,7 +337,7 @@
     };
 
     $('#data-table-combines tbody').on('click', '#view_receipt', function() {
-        var or_num = $(this).closest('tbody tr').find('td:eq(0)').html();
+        var or_num = $(this).closest('tr').find('td:eq(0)').html();
         loadSpecificCollection(or_num);
         loadSpecificCollectionBreakdown(or_num);
     });
