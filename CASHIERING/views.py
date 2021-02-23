@@ -421,4 +421,23 @@ def insert_deposit(request):
                     ,request.POST['notes']
                     ,request.POST['user_id']))
     data = cursor.fetchall()
+    return JsonResponse(data, safe=False) 
+
+def load_scheduled_deposit(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SCHEDULED_DEPOSITS")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def get_current_group_id(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_CURRENT_GROUP_ID")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def remove_sched_deposit(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_REMOVE_SCHED_DEPOSIT"
+                    ,(request.POST['group_id'],))
+    data = cursor.fetchall()
     return JsonResponse(data, safe=False)

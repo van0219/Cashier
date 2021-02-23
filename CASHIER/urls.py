@@ -88,4 +88,7 @@ urlpatterns = [
     path('deposits', views.deposits, name="deposits"),
     path('save_for_remittance', views.save_for_remittance, name="save_for_remittance"),
     path('insert_deposit', views.insert_deposit, name="insert_deposit"),
+    path('load_scheduled_deposit', views.load_scheduled_deposit, name="load_scheduled_deposit"),
+    path('get_current_group_id', views.get_current_group_id, name="get_current_group_id"),
+    path('remove_sched_deposit', views.remove_sched_deposit, name="remove_sched_deposit"),
 ]
