@@ -271,7 +271,7 @@
                     .duration(250);
                 
                 barChart.yAxis.axisLabel("Total Registered Residents");
-                barChart.xAxis.axisLabel('Year');
+                barChart.xAxis.axisLabel('Month');
             
                 d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
                 nv.utils.windowResize(barChart.update);

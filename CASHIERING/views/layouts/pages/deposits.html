@@ -33,13 +33,13 @@
                     <ul class="nav nav-pills card-header-pills">
                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1-deposits">Pending</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2-deposits" id="sched-dep-tab">Scheduled Deposit</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-3-deposits">Deposited</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-3-deposits" id="deposited-tab">Deposited</a></li>
                     </ul>
                 </div>
                 <div class="card-block">
                     <div class="tab-content p-0 m-0">
                         <div class="tab-pane fade active show" id="card-pill-1-deposits">
-                            <h4 class="card-title">Pending</h4>
+                            <h4 class="card-title text-center">Pending</h4>
                             <div style="height: 350px;" class="overflow-auto">
                                 <table class="table table-hover table-striped" id="col-hist-table2" >
                                     <thead class="thead">
@@ -68,7 +68,7 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="card-pill-2-deposits">
-                            <h4 class="card-title">Scheduled Deposits</h4>
+                            <h4 class="card-title text-center">Scheduled Deposits</h4>
                             <!-- begin col-12 -->
                             <div class="col-lg-12" id="sched-panel">
                                 <!-- append panel here -->
@@ -76,9 +76,22 @@
                             <!-- end col-12 -->
                         </div>
                         <div class="tab-pane fade" id="card-pill-3-deposits">
-                            <h4 class="card-title">Special title treatment 3</h4>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="javascript:;" class="btn btn-sm btn-success">Go somewhere</a>
+                            <h4 class="card-title text-center">Deposited</h4>
+                            <div style="height: 350px; overflow: auto;">
+                                <table class="table table-striped table-hover table-bordered" id="deposited-table">
+                                    <thead class="thead text-center">
+                                        <th width="30%" class="text-nowrap">Date Deposited</th>
+                                        <th width="40%" class="text-nowrap">Group ID</th>
+                                        <th width="30%" class="text-nowrap">Amount</th>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        <!-- append tbody tr here -->
+                                    </tbody>
+                                    <tfoot>
+                                        <!-- append tfoot here -->
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -98,40 +111,42 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body" style="height: 250px;">
-                <!-- begin row -->
-                <div class="row">
-                    <!-- begin col-6 -->
-                    <div class="col-lg-6">
-                        <input type="text" id="pick-sched-group" class="form-control f-s-15 f-w-700 m-b-10" onfocus="this.blur()" tabindex="-1"/>
-                        <input type="date" id="pick-sched-date" class="form-control m-b-10" />
-                        <textarea class="form-control" id="pick-sched-notes" placeholder="Add a note here." style="height: 110px;"></textarea>
-                    </div>
-                    <!-- end col-6 -->
-                    <!-- begin col-6 -->
-                    <div class="col-lg-6">
-                        <div style="max-height: 200px; overflow-y: auto;">
-                            <table class="table table-bordered table-striped" id="sched-deposit-table">
-                                <thead class="text-center">
-                                    <th class="text-nowrap">OR Number</th>
-                                    <th class="text-nowrap">Amount</th>
-                                </thead>
-                                <tbody class="text-center">
-                                    <!-- append here -->
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="2" class="text-center"><span class="label label-inverse">Nothing follows..</span></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                <form method="POST" action="#" id="sched-deposit-form">
+                     <!-- begin row -->
+                    <div class="row">
+                        <!-- begin col-6 -->
+                        <div class="col-lg-6">
+                            <input type="text" id="pick-sched-group" class="form-control f-s-15 f-w-700 m-b-10" data-parsley-required="true" data-parsley-required-message="Deposit group number is required" onfocus="this.blur()" tabindex="-1"/>
+                            <input type="date" id="pick-sched-date" class="form-control m-b-10" data-parsley-required="true" data-parsley-required-message="Date is required"/>
+                            <textarea class="form-control" id="pick-sched-notes" placeholder="Add a note here." style="height: 110px;"></textarea>
                         </div>
-                        <div class="pull-right m-t-10">
-                            <span class="label label-purple f-s-11">Total: <span id="tot"></span></span>
+                        <!-- end col-6 -->
+                        <!-- begin col-6 -->
+                        <div class="col-lg-6">
+                            <div style="max-height: 200px; overflow-y: auto;">
+                                <table class="table table-bordered table-striped" id="sched-deposit-table">
+                                    <thead class="text-center">
+                                        <th class="text-nowrap">OR Number</th>
+                                        <th class="text-nowrap">Amount</th>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        <!-- append here -->
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="2" class="text-center"><span class="label label-inverse">Nothing follows..</span></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="pull-right m-t-10">
+                                <span class="label label-purple f-s-11">Total: <span id="tot"></span></span>
+                            </div>
                         </div>
+                        <!-- end col-6 -->
                     </div>
-                    <!-- end col-6 -->
-                </div>
-                <!-- end row -->
+                    <!-- end row -->
+                </form>
             </div>
             <div class="modal-footer">
                 <a href="javascript:;" class="btn btn-white" data-dismiss="modal"><i class="fas fa-undo-alt fa-lg m-r-5"></i>Discard</a>
@@ -179,7 +194,6 @@
                 if (fromSaveRemittance == 1) {
                     $('#set-but-icon').removeClass('fa-spinner fa-spin');
                     $('#set-but-icon').addClass('fa-clock');
-                    $('input[name="col-hist-check-all"]').prop('checked', false);
                     get_current_group_id();
                     swal({
                         title: "Scheduled Successfully", 
@@ -193,6 +207,7 @@
                         }
                     });
                 }
+                $('input[name="col-hist-check-all').prop('checked', false);
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -317,13 +332,15 @@
             insertDeposit(or_num);
         };
         checked_cell = [];
-        load_collection_history2(0,1);
     };
 
     $('#pick-sched-set-but').on('click', function() {
-        $('#set-but-icon').removeClass('fa-clock');
-        $('#set-but-icon').addClass('fa-spinner fa-spin');
-        saveForRemittance(checked_cell);		
+        $('#sched-deposit-form').parsley();
+        if ($('#sched-deposit-form').parsley().validate()) {
+            $('#set-but-icon').removeClass('fa-clock');
+            $('#set-but-icon').addClass('fa-spinner fa-spin');
+            saveForRemittance(checked_cell);
+        }		
     });
 
     var getCurrentUserID;
@@ -362,7 +379,7 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                
+                load_collection_history2(0,1);
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -382,7 +399,7 @@
         var group_id = $('#sched-head' + num).text().trim();
         swal({
             title: "Remove Scheduled Deposit",
-            text: "Are you sure to remove this scheduled deposit?",
+            text: "Are you sure to remove "+ group_id +"?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#428bca",
@@ -414,6 +431,7 @@
                         function(isConfirm){
                             if (isConfirm){
                                 $('#sched-dep-tab').click();
+                                load_collection_history2(0,0);
                             }
                         });
                     },
@@ -431,6 +449,142 @@
             }
         });
     });
+
+    $('#sched-panel').on('click', '#resched_but', function() {    
+        var num = $(this).closest('.panel-body').prop('id').substring(10);
+        var prevDate = $('#sched-date' + num).val();
+        if ($('#resched-icon' + num).prop('class') == 'fas fa-calendar-alt') {
+            $('#sched-date' + num).prop('readonly',false);
+            $('#sched-date' + num).prop('type','date');
+            $('#sched-date' + num).val(moment(new Date(prevDate)).format('YYYY-MM-DD'));
+            $('#resched-icon' + num).removeClass('fa-calendar-alt');
+            $('#resched-icon' + num).addClass('fa-spinner fa-pulse');
+        }
+        else {
+            $('#sched-date' + num).prop('type','text');
+            $('#sched-date' + num).val(moment(new Date(prevDate)).format('MMM. DD, YYYY'));
+            $('#resched-icon' + num).removeClass('fa-spinner fa-pulse');
+            $('#resched-icon' + num).addClass('fa-calendar-alt');
+            var new_date = moment(new Date(prevDate)).format('YYYY-MM-DD');
+            var group_id = $('#sched-head' + num).text().trim();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'resched_deposit' %}",
+                // cache: true,
+                dataType: 'json',
+                data: {
+                    new_date: new_date,
+                    group_id: group_id,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                success: function(obj) {
+                    
+                },
+                error: function(xhr, status, error) {
+                    var errMsg = xhr.status + ': ' + xhr.statusText;
+                    swal({
+                        title: "Error!", 
+                        text: errMsg,
+                        type: "error",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    });
+                }
+            });
+        };
+    });
+
+    $('#sched-panel').on('click', '#check_but', function() {
+        var num = $(this).closest('.panel-body').prop('id').substring(10);
+        var group_id = $('#sched-head' + num).text().trim();
+        $('#check_icon'+num).removeClass('fa-check-circle');
+        $('#check_icon'+num).addClass('fa-spinner fa-pulse');
+        $.ajax({
+            type: "POST",
+            url: "{% url 'done_deposit' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                group_id: group_id,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                setTimeout(function() {
+                    swal({
+                        title: "Deposited Successfully", 
+                        text: group_id + " has been deposited successfully.", 
+                        type: "success",
+                        showLoaderOnConfirm: true,
+                        confirmButtonColor: "#5cb85c",
+                    },
+                    function(isConfirm){
+                        if (isConfirm){
+                            $('#check_icon'+num).removeClass('fa-spinner fa-pulse'); 
+                            $('#check_icon'+num).addClass('fa-check-circle');
+                            $('#sched-dep-tab').click();
+                        }
+                    });
+                },1500);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    });
+    
+    $('#deposited-tab').on('click', function() {
+        load_deposited();
+    });
+
+    function load_deposited() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_deposited' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#deposited-table tbody tr').remove();
+                if (obj.length != 0) {
+                    for (var i = 0; i < obj.length; i++) {
+                        $('#deposited-table tbody').append(
+                            `<tr>
+                                <td><span class="label label-success f-s-12">${moment(new Date(obj[i][0])).format('MMM. DD, YYYY')}</span></td>
+                                <td class="text-nowrap">${obj[i][1]}</td>
+                                <td class="text-nowrap f-w-700">${'₱' + parseFloat(obj[i][2]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+                            </tr>`
+                        );
+                    };
+                }
+                else {
+                    $('#deposited-table tbody').append(
+                        `<tr>
+                            <td colspan="3">No records found</td>
+                        </tr>`
+                    );
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
 
     $('#sched-dep-tab').on('click', function() {
         $.ajax({
@@ -464,14 +618,14 @@
                                         <div class="row height-60">
                                             <!-- begin col-5 -->
                                             <div class="col-lg-5">
-                                                <label class="" for="sched-date${i}">Date Scheduled:</label>
-                                                <input type="text" class="form-control" value="${moment(new Date(obj[i][1])).format('MMM. DD,YYYY')}" name="sched-date${i}" readonly/>
+                                                <label class="" for="sched-date${i}"><small>Date Scheduled:</small></label>
+                                                <input type="text" class="form-control f-w-700" value="${moment(new Date(obj[i][1])).format('MMM. DD,YYYY')}" name="sched-date${i}" id="sched-date${i}" onfocus="this.blur()" tabindex="-1"/>
                                             </div>
                                             <!-- end col-5 -->
                                             <!-- begin col-6 -->
                                             <div class="col-lg-6">
-                                                <label class="" for="dep-notes${i}">Notes:</label>
-                                                <textarea class="form-control" style="height: 94px;" name="dep-notes${i}" readonly>${obj[i][3]}</textarea>
+                                                <label class="" for="dep-notes${i}"><small>Notes:</small></label>
+                                                <textarea class="form-control" style="height: 94px;" name="dep-notes${i}" id="dep-notes${i}" onfocus="this.blur()" tabindex="-1">${obj[i][3]}</textarea>
                                             </div>
                                             <!-- end col-6 -->
                                         </div>
@@ -480,8 +634,8 @@
                                         <div class="row">
                                             <!-- begin col-5 -->
                                             <div class="col-lg-5">
-                                                <label class="" for="dep-amount${i}">Amount:</label>
-                                                <input type="text" class="form-control" value="${'₱' + parseFloat(obj[i][2]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}" name="dep-amount${i}" readonly/>
+                                                <label class="" for="dep-amount${i}"><small>Amount:</small></label>
+                                                <input type="text" class="form-control f-w-700" value="${'₱' + parseFloat(obj[i][2]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}" name="dep-amount${i}" id="dep-amount${i}" onfocus="this.blur()" tabindex="-1"/>
                                             </div>
                                             <!-- end col-5 -->
                                             <!-- begin col-6 -->
@@ -491,8 +645,8 @@
                                             <!-- end col-6 -->
                                             <!-- begin col-1 -->
                                             <div class="col-lg-1 pull-right" style="margin-top: -36px;">
-                                                <a href="javascript:;" class="btn btn-xs btn-success" title="Deposited" id="check_but"><i class="fas fa-check-circle"></i></a><br>
-                                                <a href="javascript:;" class="btn btn-xs btn-warning m-t-5" title="Re-schedule" id="resched_but"><i class="fas fa-calendar-alt"></i></a><br>
+                                                <a href="javascript:;" class="btn btn-xs btn-success" title="Deposited" id="check_but"><i class="fas fa-check-circle" id="check_icon${i}"></i></a><br>
+                                                <a href="javascript:;" class="btn btn-xs btn-warning m-t-5" title="Re-schedule" id="resched_but"><i class="fas fa-calendar-alt" id="resched-icon${i}"></i></a><br>
                                                 <a href="javascript:;" class="btn btn-xs btn-danger m-t-5" title="Remove" id="remove_but"><i class="fas fa-trash-alt"></i></a>
                                             </div>
                                             <!-- end col-1 -->

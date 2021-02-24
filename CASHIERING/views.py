@@ -441,3 +441,24 @@ def remove_sched_deposit(request):
                     ,(request.POST['group_id'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def resched_deposit(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_UPDATE_SCHED_DATE"
+                    ,(request.POST['new_date']
+                    ,request.POST['group_id']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_deposited(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_DEPOSITED")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def done_deposit(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_DONE_DEPOSIT"
+                    ,(request.POST['group_id'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
