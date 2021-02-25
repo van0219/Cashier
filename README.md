@@ -18,3 +18,9 @@
 # Browser used in testing (Microsoft Edge) Version 88.0.705.74 (Official build) (64-bit)
 
 # Mysql Version 15.1 Distrib 10.4.11-MariaDB
+
+# Python Version 3.8.0
+
+# Django Version 3.0.2
+# Pip Version 21.0.1
+
