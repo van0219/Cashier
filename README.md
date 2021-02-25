@@ -1,6 +1,8 @@
 # Cashier
 # This is still an on-going project
 
+# Database location (CASHIER\cashiering_db.sql), updated constantly.
+
 # To run the system, type:
 # 127.0.0.1:8000 in the address bar.
 
