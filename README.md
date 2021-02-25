@@ -9,3 +9,10 @@
 
 # To Login as Cashier:
 # Username: megs | Password: 0219admin
+
+# Made with (Visual Studio Code) Version 1.52.1
+# Database Editor (HeidiSQL) Version 11.2.0.6213(64bit) 
+
+# Browser used in testing (Microsoft Edge) Version 88.0.705.74 (Official build) (64-bit)
+
+# Mysql Version 15.1 Distrib 10.4.11-MariaDB
