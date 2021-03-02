@@ -52,45 +52,90 @@
     <!-- begin page-header -->
     <h1 class="page-header">Accountable Forms <small>View/Generate Report</small></h1>
     <!-- end page-header -->
-    
     <!-- begin row -->
-    <div class="row m-b-20">
-         <!-- begin col-2 -->
-         <div class="col-lg-2">
-            <h5>Generate Custom Report</h5>
-            <div class="m-t-10">
-                <div>
+    <div class="row m-b-10">
+        <!-- begin col-9 -->
+        <div class="col-lg-9">
+            <!-- filler -->
+        </div>
+        <!-- end col-9 -->
+        <!-- begin col-3 -->
+        <div class="col-lg-3">
+            <div class="m-t-10 row">
+                <div class="col-lg-8">
                     <div id="advance-daterange" class="btn btn-default btn-block text-left f-s-12">
                         <span class="m-r-0 f-s-10"></span>  
                         <i class="fa fa-caret-down pull-right m-t-2"></i>
                     </div>
                 </div>
-            </div>
-            <div class="m-t-10">
-                <a href="javascript:;" class="btn btn-success btn-m"><i class="fas fa-file-code m-r-5"></i> Create</a>
-            </div>
-            <hr class="m-t-20 bg-black-transparent-2">
-            <h5 class="m-t-20">Generate Monthly Report</h5>
-            <select class="form-control selectpicker" data-style="btn-default">
-                <option selected disabled>Select Month</option>
-                <option>January</option>
-                <option>February</option>
-                <option>March</option>
-                <option>April</option>
-                <option>May</option>
-                <option>June</option>
-                <option>July</option>
-                <option>August</option>
-                <option>September</option>
-                <option>October</option>
-                <option>November</option>
-                <option>December</option>
-            </select>
-            <div>
-                <a href="javascript:;" class="btn btn-success btn-m"><i class="fas fa-file-code m-r-5"></i> Create</a>
+                <div class="col-lg-4">
+                    <a href="javascript:;" class="btn btn-success btn-m"><i class="fas fa-file-code m-r-5"></i>Filter</a>
+                </div>
             </div>
         </div>
-        <!-- end col-2 -->
+        <!-- end col-3 -->
+    </div>
+    <!-- end row -->
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-6 -->
+        <div class="col-lg-6">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Used vs Unused</h4>
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <canvas id="polar-area-chart" data-render="chart-js"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-6 -->
+        <!-- begin col-3 -->
+        <div class="col-lg-2 col-md-6">
+            <div class="widget widget-stats bg-orange">
+                <div class="stats-icon"><i class="fa fa-link"></i></div>
+                <div class="stats-info">
+                    <h4>TOTAL ISSUED OR</h4>
+                    <p>700</p>	
+                </div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-lg-2 col-md-6">
+            <div class="widget widget-stats bg-grey-darker">
+                <div class="stats-icon"><i class="fa fa-users"></i></div>
+                <div class="stats-info">
+                    <h4>CURRENT USED OR</h4>
+                    <p>150</p>	
+                </div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-lg-2 col-md-6">
+            <div class="widget widget-stats bg-black-lighter">
+                <div class="stats-icon"><i class="fa fa-clock"></i></div>
+                <div class="stats-info">
+                    <h4>REMAINING OR</h4>
+                    <p>550</p>	
+                </div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+    </div>
+    <!-- end row -->
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-5 -->
+        <div class="col-lg-5">
+
+        </div>
+        <!-- end col-5 -->
     </div>
     <!-- end row -->
     <div class="row">
@@ -109,7 +154,7 @@
                         </div>
                         <!-- end panel-heading -->
                         <!-- begin panel-body -->
-                        <div class="panel-body overflow-x-scroll">
+                        <div class="panel-body overflow-x-auto">
                             <table id="data-table-combines" class="table table-hover">
                                 <thead>
                                     <tr>
@@ -161,6 +206,7 @@
         </div>
         <!-- end col-12 -->
     </div>
+    <!-- end row -->
 </div>
 <!-- end #content -->
 {% endblock %}
@@ -203,6 +249,8 @@
 <script src="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.js' %}"></script>
 <script src="{%static 'assets/plugins/clipboard/clipboard.min.js' %}"></script>
 <script src="{%static 'assets/js/demo/form-plugins.demo.js' %}"></script>
+<!--  -->
+<script src="{%static 'assets/plugins/chart-js/Chart.min.js' %}"></script>
 {% endblock %}
 {% block init %}
 <script>
@@ -210,6 +258,7 @@
         App.init();
         TableManageCombine.init();
         FormPlugins.init();
+        handlePolarChart();
     });
     $('#data-table-combines').DataTable({
         'paging'      : true,
@@ -220,12 +269,6 @@
         'autoWidth'   : false,
         'aaSorting'   : [[1, "desc" ]],
         'pagingType'  : 'full_numbers',
-        // "infoCallback": function( settings, start, end, max, total, pre ) {
-        //     var api = this.api();
-        //     var pageInfo = api.page.info();
-        
-        //     return 'Page '+ (pageInfo.page+1) +' of '+ pageInfo.pages;
-        // },
         dom: 'lBfrtip',
         buttons: [
             {
@@ -255,5 +298,25 @@
         ],
         "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
     });
+
+    function handlePolarChart() {
+        var polarAreaData = {
+            labels: ['Used OR', 'Unused OR'],
+            datasets: [{
+                data: [150, 550],
+                backgroundColor: [COLOR_PURPLE_TRANSPARENT_7, COLOR_GREEN_TRANSPARENT_7],
+                borderColor: [COLOR_PURPLE, COLOR_GREEN],
+                borderWidth: 2,
+                label: 'My dataset'
+            }]
+        };
+
+        var ctx4 = document.getElementById('polar-area-chart').getContext('2d');
+        var polarAreaChart = new Chart(ctx4, {
+            type: 'polarArea',
+            data: polarAreaData
+        });
+    };
+
 </script>
 {% endblock %}
