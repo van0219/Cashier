@@ -54,11 +54,6 @@
     <!-- end page-header -->
     <!-- begin row -->
     <div class="row m-b-10">
-        <!-- begin col-9 -->
-        <div class="col-lg-9">
-            <!-- filler -->
-        </div>
-        <!-- end col-9 -->
         <!-- begin col-3 -->
         <div class="col-lg-3">
             <div class="m-t-10 row">
@@ -69,15 +64,81 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <a href="javascript:;" class="btn btn-success btn-m"><i class="fas fa-file-code m-r-5"></i>Filter</a>
+                    <a href="javascript:;" class="btn btn-primary btn-m"><i class="fas fa-file-code m-r-5"></i>Filter</a>
                 </div>
             </div>
         </div>
         <!-- end col-3 -->
+        <!-- begin col-9 -->
+        <div class="col-lg-9">
+            <!-- filler -->
+        </div>
+        <!-- end col-9 -->
     </div>
     <!-- end row -->
     <!-- begin row -->
     <div class="row">
+        <!-- begin col-6 -->
+        <div class="col-lg-6">
+            <!-- begin row -->
+            <div class="row">
+                <!-- begin col-4 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="widget widget-stats bg-orange">
+                        <div class="stats-icon"><i class="fa fa-link"></i></div>
+                        <div class="stats-info">
+                            <h4>TOTAL ISSUED OR</h4>
+                            <p>700</p>	
+                        </div>
+                    </div>
+                </div>
+                <!-- end col-3 -->
+                <!-- begin col-3 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="widget widget-stats bg-grey-darker">
+                        <div class="stats-icon"><i class="fa fa-users"></i></div>
+                        <div class="stats-info">
+                            <h4>CURRENT USED OR</h4>
+                            <p>150</p>	
+                        </div>
+                    </div>
+                </div>
+                <!-- end col-3 -->
+                <!-- begin col-3 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="widget widget-stats bg-black-lighter">
+                        <div class="stats-icon"><i class="fa fa-clock"></i></div>
+                        <div class="stats-info">
+                            <h4>REMAINING OR</h4>
+                            <p>550</p>	
+                        </div>
+                    </div>
+                </div>
+                <!-- end col-3 -->
+            </div>
+            <!-- end row -->
+            <!-- begin row -->
+            <div class="row">
+                <!-- begin col-12 -->
+                <div class="col-lg-12">
+                    <!-- begin panel -->
+                    <div class="panel panel-inverse">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Line Chart</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div>
+                                <canvas id="line-chart" data-render="chart-js"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end panel -->
+                </div>
+                <!-- end col-12 -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end col-6 -->
         <!-- begin col-6 -->
         <div class="col-lg-6">
             <!-- begin panel -->
@@ -94,39 +155,6 @@
             <!-- end panel -->
         </div>
         <!-- end col-6 -->
-        <!-- begin col-3 -->
-        <div class="col-lg-2 col-md-6">
-            <div class="widget widget-stats bg-orange">
-                <div class="stats-icon"><i class="fa fa-link"></i></div>
-                <div class="stats-info">
-                    <h4>TOTAL ISSUED OR</h4>
-                    <p>700</p>	
-                </div>
-            </div>
-        </div>
-        <!-- end col-3 -->
-        <!-- begin col-3 -->
-        <div class="col-lg-2 col-md-6">
-            <div class="widget widget-stats bg-grey-darker">
-                <div class="stats-icon"><i class="fa fa-users"></i></div>
-                <div class="stats-info">
-                    <h4>CURRENT USED OR</h4>
-                    <p>150</p>	
-                </div>
-            </div>
-        </div>
-        <!-- end col-3 -->
-        <!-- begin col-3 -->
-        <div class="col-lg-2 col-md-6">
-            <div class="widget widget-stats bg-black-lighter">
-                <div class="stats-icon"><i class="fa fa-clock"></i></div>
-                <div class="stats-info">
-                    <h4>REMAINING OR</h4>
-                    <p>550</p>	
-                </div>
-            </div>
-        </div>
-        <!-- end col-3 -->
     </div>
     <!-- end row -->
     <!-- begin row -->
@@ -259,6 +287,7 @@
         TableManageCombine.init();
         FormPlugins.init();
         handlePolarChart();
+        handleLineChart();
     });
     $('#data-table-combines').DataTable({
         'paging'      : true,
@@ -315,6 +344,39 @@
         var polarAreaChart = new Chart(ctx4, {
             type: 'polarArea',
             data: polarAreaData
+        });
+    };
+
+    function handleLineChart() {
+        var randomScalingFactor = function() { 
+            return Math.round(Math.random()*100)
+        };
+
+        var lineChartData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+                label: 'Used OR',
+                borderColor: COLOR_BLUE,
+                pointBackgroundColor: COLOR_BLUE,
+                pointRadius: 2,
+                borderWidth: 2,
+                backgroundColor: COLOR_BLUE_TRANSPARENT_3,
+                data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+            }, {
+                label: 'Unused OR',
+                borderColor: COLOR_BLACK,
+                pointBackgroundColor: COLOR_BLACK,
+                pointRadius: 2,
+                borderWidth: 2,
+                backgroundColor: COLOR_BLACK_TRANSPARENT_3,
+                data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+            }]
+        };
+
+        var ctx = document.getElementById('line-chart').getContext('2d');
+        var lineChart = new Chart(ctx, {
+            type: 'line',
+            data: lineChartData
         });
     };
 
