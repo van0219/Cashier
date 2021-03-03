@@ -85,7 +85,7 @@
                 <!-- begin col-4 -->
                 <div class="col-lg-4 col-md-6">
                     <div class="widget widget-stats bg-orange">
-                        <div class="stats-icon"><i class="fa fa-link"></i></div>
+                        <div class="stats-icon"><i class="fas fa-circle-notch"></i></div>
                         <div class="stats-info">
                             <h4>TOTAL ISSUED OR</h4>
                             <p>700</p>	
@@ -96,7 +96,7 @@
                 <!-- begin col-3 -->
                 <div class="col-lg-4 col-md-6">
                     <div class="widget widget-stats bg-grey-darker">
-                        <div class="stats-icon"><i class="fa fa-users"></i></div>
+                        <div class="stats-icon"><i class="fas fa-copyright"></i></div>
                         <div class="stats-info">
                             <h4>CURRENT USED OR</h4>
                             <p>150</p>	
@@ -107,7 +107,7 @@
                 <!-- begin col-3 -->
                 <div class="col-lg-4 col-md-6">
                     <div class="widget widget-stats bg-black-lighter">
-                        <div class="stats-icon"><i class="fa fa-clock"></i></div>
+                        <div class="stats-icon"><i class="fas fa-registered"></i></div>
                         <div class="stats-info">
                             <h4>REMAINING OR</h4>
                             <p>550</p>	
@@ -141,102 +141,136 @@
         <!-- end col-6 -->
         <!-- begin col-6 -->
         <div class="col-lg-6">
-            <!-- begin panel -->
-            <div class="panel panel-inverse">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Used vs Unused</h4>
-                </div>
-                <div class="panel-body">
-                    <div>
-                        <canvas id="polar-area-chart" data-render="chart-js"></canvas>
+            <!-- begin row -->
+            <div class="row">
+                <!-- begin col-12 -->
+                <div class="col-lg-12">
+                    <!-- begin panel -->
+                    <div class="panel panel-inverse">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Used vs Unused</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div>
+                                <canvas id="polar-area-chart" data-render="chart-js"></canvas>
+                            </div>
+                        </div>
                     </div>
+                    <!-- end panel -->
                 </div>
+                <!-- end col-12 -->
             </div>
-            <!-- end panel -->
+            <!-- end row -->
+            <!-- begin row -->
+            <div class="row text-center m-t-20">
+                <!-- begin col-12 -->
+                <div class="col-lg-12">
+                    <a href="javascript:;" class="btn btn-m btn-primary" id="disp-acct-forms"><i class="fas fa-chevron-circle-right m-r-5"></i>Display Report</a>
+                </div>
+                <!-- end col-12 -->
+            </div>
+            <!-- end row -->
         </div>
         <!-- end col-6 -->
     </div>
     <!-- end row -->
-    <!-- begin row -->
-    <div class="row">
-        <!-- begin col-5 -->
-        <div class="col-lg-5">
-
-        </div>
-        <!-- end col-5 -->
-    </div>
-    <!-- end row -->
-    <div class="row">
-        <!-- begin col-12 -->
-        <div class="col-lg-12">
-            <!-- begin card -->
-            <div class="card text-left">
-                <div class="card-header">
-                    <i class="fas fa-file-alt m-r-5"></i>Accountable Forms
-                </div>
-                <div class="card-block">
-                    <div class="panel panel-white">
-                        <!-- begin panel-heading -->
-                        <div class="panel-heading">
-                            <h4 class="panel-title"></h4>
-                        </div>
-                        <!-- end panel-heading -->
-                        <!-- begin panel-body -->
-                        <div class="panel-body overflow-x-auto">
-                            <table id="data-table-combines" class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Accountable Forms</th>
-                                        <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Beginning Balance</th>
-                                        <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Receipt</th>
-                                        <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Issuance</th>
-                                        <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Ending Balance</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-nowrap" rowspan="2" colspan="3">Face Value</th>  
-                                        <th class="text-nowrap" colspan="1"></th>                                    
-                                        <th class="text-nowrap" colspan="2">Inclusive Serial Nos</th>
-                                        <th class="text-nowrap" colspan="1"></th>  
-                                        <th class="text-nowrap" colspan="2">Inclusive Serial Nos</th>
-                                        <th class="text-nowrap" colspan="1"></th>  
-                                        <th class="text-nowrap" colspan="2">Inclusive Serial Nos</th>
-                                        <th class="text-nowrap" colspan="1"></th>  
-                                        <th class="text-nowrap" colspan="2">Inclusive Serial Nos</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-nowrap">Qty</th>
-                                        <th class="text-nowrap">From</th>
-                                        <th class="text-nowrap">To</th>
-                                        <th class="text-nowrap">Qty</th>
-                                        <th class="text-nowrap">From</th>
-                                        <th class="text-nowrap">To</th>
-                                        <th class="text-nowrap">Qty</th>
-                                        <th class="text-nowrap">From</th>
-                                        <th class="text-nowrap">To</th>
-                                        <th class="text-nowrap">Qty</th>
-                                        <th class="text-nowrap">From</th>
-                                        <th class="text-nowrap">To</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- end panel-body -->
-                    </div>
-                </div>
-                <div class="card-footer text-muted">
-                    
-                </div>
-            </div>
-            <!-- end card -->
-        </div>
-        <!-- end col-12 -->
-    </div>
-    <!-- end row -->
 </div>
 <!-- end #content -->
+<!-- #acct-forms-modal -->
+<div class="modal fade" id="acct-forms-modal">
+    <div class="modal-dialog" style="max-width: fit-content">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="fas fa-file-alt m-r-5"></i>Accountable Forms</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- begin col-12 -->
+                <div class="col-lg-12">
+                    <!-- begin card -->
+                    <div class="card text-left">
+                        <div class="card-block">
+                            <div class="panel panel-white">
+                                <!-- begin panel-heading -->
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"></h4>
+                                </div>
+                                <!-- end panel-heading -->
+                                <!-- begin panel-body -->
+                                <div class="panel-body" style="overflow-x: auto;">
+                                    <table id="data-table-combines" class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Accountable Forms</th>
+                                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Beginning Balance</th>
+                                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Receipt</th>
+                                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Issuance</th>
+                                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Ending Balance</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-nowrap" rowspan="2" colspan="3">Face Value</th>  
+                                                <th class="text-nowrap" colspan="1"></th>                                    
+                                                <th class="text-nowrap" colspan="2">Inclusive Serial Nos</th>
+                                                <th class="text-nowrap" colspan="1"></th>  
+                                                <th class="text-nowrap" colspan="2">Inclusive Serial Nos</th>
+                                                <th class="text-nowrap" colspan="1"></th>  
+                                                <th class="text-nowrap" colspan="2">Inclusive Serial Nos</th>
+                                                <th class="text-nowrap" colspan="1"></th>  
+                                                <th class="text-nowrap" colspan="2">Inclusive Serial Nos</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-nowrap">Qty</th>
+                                                <th class="text-nowrap">From</th>
+                                                <th class="text-nowrap">To</th>
+                                                <th class="text-nowrap">Qty</th>
+                                                <th class="text-nowrap">From</th>
+                                                <th class="text-nowrap">To</th>
+                                                <th class="text-nowrap">Qty</th>
+                                                <th class="text-nowrap">From</th>
+                                                <th class="text-nowrap">To</th>
+                                                <th class="text-nowrap">Qty</th>
+                                                <th class="text-nowrap">From</th>
+                                                <th class="text-nowrap">To</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-nowrap"></td>
+                                                <td class="text-nowrap"></td>
+                                                <td class="text-nowrap"></td>
+                                                <td class="text-nowrap">700</td>
+                                                <td class="text-nowrap">0422157</td>
+                                                <td class="text-nowrap">0422180</td>
+                                                <td class="text-nowrap"></td>
+                                                <td class="text-nowrap"></td>
+                                                <td class="text-nowrap"></td>
+                                                <td class="text-nowrap">700</td>
+                                                <td class="text-nowrap">0422157</td>
+                                                <td class="text-nowrap">0422180</td>
+                                                <td class="text-nowrap">700</td>
+                                                <td class="text-nowrap">0422157</td>
+                                                <td class="text-nowrap">0422180</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end panel-body -->
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted">
+                            
+                        </div>
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col-12 -->
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block page-js %}
 <script src="{%static 'assets/plugins/DataTables/media/js/jquery.dataTables.js' %}"></script>
@@ -379,6 +413,10 @@
             data: lineChartData
         });
     };
+
+    $('#disp-acct-forms').on('click', function() {
+        $('#acct-forms-modal').modal('show');
+    });
 
 </script>
 {% endblock %}
