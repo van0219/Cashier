@@ -198,7 +198,7 @@
                                 <!-- end panel-heading -->
                                 <!-- begin panel-body -->
                                 <div class="panel-body" style="overflow-x: auto;">
-                                    <table id="data-table-combines" class="table table-hover">
+                                    <table id="acct-forms-table" class="table table-hover table-bordered">
                                         <thead>
                                             <tr>
                                                 <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Accountable Forms</th>
@@ -235,9 +235,7 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td class="text-nowrap"></td>
-                                                <td class="text-nowrap"></td>
-                                                <td class="text-nowrap"></td>
+                                                <td class="text-nowrap" colspan="3">With Face Value</td>
                                                 <td class="text-nowrap">700</td>
                                                 <td class="text-nowrap">0422157</td>
                                                 <td class="text-nowrap">0422180</td>
@@ -318,48 +316,9 @@
 <script>
     $(document).ready(function() {
         App.init();
-        TableManageCombine.init();
         FormPlugins.init();
         handlePolarChart();
         handleLineChart();
-    });
-    $('#data-table-combines').DataTable({
-        'paging'      : true,
-        'lengthChange': true,
-        'searching'   : true,
-        'ordering'    : false,
-        'info'        : true,
-        'autoWidth'   : false,
-        'aaSorting'   : [[1, "desc" ]],
-        'pagingType'  : 'full_numbers',
-        dom: 'lBfrtip',
-        buttons: [
-            {
-                extend:    'print',
-                text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
-                titleAttr: 'Print',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {
-                extend:    'excel',
-                text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
-                titleAttr: 'Excel',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {
-                extend:    'pdf',
-                text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
-                titleAttr: 'PDF',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            }
-        ],
-        "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
     });
 
     function handlePolarChart() {
