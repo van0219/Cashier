@@ -94,4 +94,6 @@ urlpatterns = [
     path('resched_deposit', views.resched_deposit, name="resched_deposit"),
     path('load_deposited', views.load_deposited, name="load_deposited"),
     path('done_deposit', views.done_deposit, name="done_deposit"),
+    path('load_acct_forms_dash', views.load_acct_forms_dash, name="load_acct_forms_dash"),
+    path('load_or_monthly_report', views.load_or_monthly_report, name="load_or_monthly_report")
 ]

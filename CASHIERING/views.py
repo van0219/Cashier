@@ -462,3 +462,17 @@ def done_deposit(request):
                     ,(request.POST['group_id'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_acct_forms_dash(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_ACCOUNTABLE_FORMS_REPORT"
+                    ,(request.POST['month']
+                    ,'CARD'))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_or_monthly_report(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_OR_MONTHLY_REPORT")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

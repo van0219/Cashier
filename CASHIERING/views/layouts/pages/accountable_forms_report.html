@@ -58,13 +58,23 @@
         <div class="col-lg-3">
             <div class="m-t-10 row">
                 <div class="col-lg-8">
-                    <div id="advance-daterange" class="btn btn-default btn-block text-left f-s-12">
-                        <span class="m-r-0 f-s-10"></span>  
-                        <i class="fa fa-caret-down pull-right m-t-2"></i>
-                    </div>
+                    <select class="form-control" id="select-month">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
                 </div>
                 <div class="col-lg-4">
-                    <a href="javascript:;" class="btn btn-primary btn-m"><i class="fas fa-file-code m-r-5"></i>Filter</a>
+                    <a href="javascript:;" class="btn btn-primary btn-m" id="acct-filter"><i class="fas fa-file-code m-r-5"></i>Filter</a>
                 </div>
             </div>
         </div>
@@ -88,7 +98,7 @@
                         <div class="stats-icon"><i class="fas fa-circle-notch"></i></div>
                         <div class="stats-info">
                             <h4>TOTAL OR COUNT</h4>
-                            <p>700</p>	
+                            <p id="tot_or"></p>	
                         </div>
                     </div>
                 </div>
@@ -99,7 +109,7 @@
                         <div class="stats-icon"><i class="fas fa-copyright"></i></div>
                         <div class="stats-info">
                             <h4>CURRENT USED OR</h4>
-                            <p>150</p>	
+                            <p id="tot_used"></p>	
                         </div>
                     </div>
                 </div>
@@ -110,7 +120,7 @@
                         <div class="stats-icon"><i class="fas fa-registered"></i></div>
                         <div class="stats-info">
                             <h4>REMAINING OR</h4>
-                            <p>550</p>	
+                            <p id="tot_unused"></p>	
                         </div>
                     </div>
                 </div>
@@ -306,19 +316,19 @@
     $(document).ready(function() {
         App.init();
         FormPlugins.init();
-        handlePolarChart();
-        handleLineChart();
+        $('#select-month').val((new Date).getMonth()+1);
+        loadAcctFormsDash();
+        loadORMonthlyReport();
     });
 
-    function handlePolarChart() {
+    function handlePolarChart(used, unused) {
         var polarAreaData = {
             labels: ['Used OR', 'Unused OR'],
             datasets: [{
-                data: [150, 550],
+                data: [used, unused],
                 backgroundColor: [COLOR_PURPLE_TRANSPARENT_7, COLOR_GREEN_TRANSPARENT_7],
                 borderColor: [COLOR_PURPLE, COLOR_GREEN],
                 borderWidth: 2,
-                label: 'My dataset'
             }]
         };
 
@@ -329,13 +339,18 @@
         });
     };
 
-    function handleLineChart() {
-        var randomScalingFactor = function() { 
-            return Math.round(Math.random()*100)
-        };
-
+    function handleLineChart(obj) {
+        var lbl = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var newlabels = [];
+        var used = [];
+        var unused = []
+        for (var i = 0; i < obj.length; i++) {
+            newlabels[i] = lbl[i];
+            used[i] = obj[i][1];
+            unused[i] = obj[i][2];
+        }
         var lineChartData = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            labels: newlabels,
             datasets: [{
                 label: 'Used OR',
                 borderColor: COLOR_BLUE,
@@ -343,7 +358,7 @@
                 pointRadius: 2,
                 borderWidth: 2,
                 backgroundColor: COLOR_BLUE_TRANSPARENT_3,
-                data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                data: used
             }, {
                 label: 'Unused OR',
                 borderColor: COLOR_BLACK,
@@ -351,7 +366,7 @@
                 pointRadius: 2,
                 borderWidth: 2,
                 backgroundColor: COLOR_BLACK_TRANSPARENT_3,
-                data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                data: unused
             }]
         };
 
@@ -405,7 +420,73 @@
         );
     });
 
+    function loadAcctFormsDash() {
+        var month = $('#select-month').val();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_acct_forms_dash' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                month: month,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                if (obj.length == 0) {
+                    $('#tot_or').text('0');
+                    $('#tot_used').text('0');
+                    $('#tot_unused').text('0');
+                }
+                else {
+                    $('#tot_or').text(obj[0][0]);
+                    $('#tot_used').text(obj[0][1]);
+                    $('#tot_unused').text(obj[0][2]);
+                    $('#polar-area-chart').empty();
+                    handlePolarChart(obj[0][1],obj[0][2]);
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
 
+    $('#acct-filter').on('click', function() {
+        loadAcctFormsDash($('#select-month').val());
+    });
 
+    function loadORMonthlyReport() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_or_monthly_report' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                if (obj.length != 0) {
+                    handleLineChart(obj);   
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
 </script>
 {% endblock %}
