@@ -87,7 +87,7 @@
                     <div class="widget widget-stats bg-orange">
                         <div class="stats-icon"><i class="fas fa-circle-notch"></i></div>
                         <div class="stats-info">
-                            <h4>TOTAL ISSUED OR</h4>
+                            <h4>TOTAL OR COUNT</h4>
                             <p>700</p>	
                         </div>
                     </div>
@@ -124,7 +124,7 @@
                     <!-- begin panel -->
                     <div class="panel panel-inverse">
                         <div class="panel-heading">
-                            <h4 class="panel-title">Line Chart</h4>
+                            <h4 class="panel-title">Monthly OR Report</h4>
                         </div>
                         <div class="panel-body">
                             <div>
@@ -181,7 +181,7 @@
     <div class="modal-dialog" style="max-width: fit-content">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title"><i class="fas fa-file-alt m-r-5"></i>Accountable Forms</h4>
+                <h4 class="modal-title"><i class="fas fa-file-alt m-r-5"></i>Accountable Forms Receipt</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
@@ -198,14 +198,20 @@
                                 <!-- end panel-heading -->
                                 <!-- begin panel-body -->
                                 <div class="panel-body" style="overflow-x: auto;">
-                                    <table id="acct-forms-table" class="table table-hover table-bordered">
+                                    <span class="label label-purple f-s-11">
+                                        Month of: <span id="month">March</span>
+                                    </span>
+                                    <span class="btn btn-xs btn-warning f-s-11 pull-right">
+                                        <i class="fas fa-print m-r-5"></i>Print
+                                    </span>
+                                    <table id="acct-forms-table" class="table table-hover table-bordered table-striped m-t-5">
                                         <thead>
                                             <tr>
-                                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Accountable Forms</th>
-                                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Beginning Balance</th>
-                                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Receipt</th>
-                                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Issuance</th>
-                                                <th class="text-nowrap f-w-700" colspan="3" style="text-align: center;">Ending Balance</th>
+                                                <th class="text-nowrap bg-inverse text-white f-s-13" colspan="3" style="text-align: center;">Accountable Forms</th>
+                                                <th class="text-nowrap bg-inverse text-white f-s-13" colspan="3" style="text-align: center;">Beginning Balance</th>
+                                                <th class="text-nowrap bg-inverse text-white f-s-13" colspan="3" style="text-align: center;">Receipt</th>
+                                                <th class="text-nowrap bg-inverse text-white f-s-13" colspan="3" style="text-align: center;">Issuance</th>
+                                                <th class="text-nowrap bg-inverse text-white f-s-13" colspan="3" style="text-align: center;">Ending Balance</th>
                                             </tr>
                                             <tr>
                                                 <th class="text-nowrap" rowspan="2" colspan="3">Face Value</th>  
@@ -234,29 +240,12 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td class="text-nowrap" colspan="3">With Face Value</td>
-                                                <td class="text-nowrap">700</td>
-                                                <td class="text-nowrap">0422157</td>
-                                                <td class="text-nowrap">0422180</td>
-                                                <td class="text-nowrap"></td>
-                                                <td class="text-nowrap"></td>
-                                                <td class="text-nowrap"></td>
-                                                <td class="text-nowrap">700</td>
-                                                <td class="text-nowrap">0422157</td>
-                                                <td class="text-nowrap">0422180</td>
-                                                <td class="text-nowrap">700</td>
-                                                <td class="text-nowrap">0422157</td>
-                                                <td class="text-nowrap">0422180</td>
-                                            </tr>
+                                            <!-- append <tr><td></td></tr> here -->
                                         </tbody>
                                     </table>
                                 </div>
                                 <!-- end panel-body -->
                             </div>
-                        </div>
-                        <div class="card-footer text-muted">
-                            
                         </div>
                     </div>
                     <!-- end card -->
@@ -375,7 +364,48 @@
 
     $('#disp-acct-forms').on('click', function() {
         $('#acct-forms-modal').modal('show');
+        $('#acct-forms-table tbody tr').remove();
+        $('#acct-forms-table tbody').append(
+            `<tr>
+                <td class="text-nowrap f-w-700" colspan="3">With Face Value</td>
+                <!-- beginning balance -->
+                <td class="text-nowrap f-w-700">458</td>
+                <td class="text-nowrap">0265393</td>
+                <td class="text-nowrap">0265850</td>
+                <td class="text-nowrap"></td>
+                <td class="text-nowrap"></td>
+                <td class="text-nowrap"></td>
+                <!-- issued -->
+                <td class="text-nowrap f-w-700">154</td>
+                <td class="text-nowrap">0265393</td>
+                <td class="text-nowrap">0265546</td>
+                <!-- ending balance -->
+                <td class="text-nowrap"></td>
+                <td class="text-nowrap"></td>
+                <td class="text-nowrap"></td>
+            </tr>
+            <tr>
+                <td class="text-nowrap f-w-700" colspan="3">Without Face Value</td>
+                <!-- beginning balance -->
+                <td class="text-nowrap f-w-700">458</td>
+                <td class="text-nowrap">0265393</td>
+                <td class="text-nowrap">0265850</td>
+                <td class="text-nowrap"></td>
+                <td class="text-nowrap"></td>
+                <td class="text-nowrap"></td>
+                <!-- issued -->
+                <td class="text-nowrap"></td>
+                <td class="text-nowrap"></td>
+                <td class="text-nowrap"></td>
+                <!-- ending balance -->
+                <td class="text-nowrap f-w-700">304</td>
+                <td class="text-nowrap">0265547</td>
+                <td class="text-nowrap">0265850</td>
+            </tr>`
+        );
     });
+
+
 
 </script>
 {% endblock %}
