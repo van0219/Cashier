@@ -55,34 +55,23 @@
             <!-- begin row -->
             <div class="row">
                 <!-- begin col-4 -->
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-6 col-md-6">
                     <div class="widget widget-stats bg-orange">
                         <div class="stats-icon"><i class="fas fa-circle-notch"></i></div>
                         <div class="stats-info">
-                            <h4>TOTAL OR COUNT</h4>
-                            <p id="tot_or"></p>	
+                            <h4>TOTAL DEPOSIT</h4>
+                            <p id="tot_dep">70,600</p>	
                         </div>
                     </div>
                 </div>
-                <!-- end col-3 -->
-                <!-- begin col-3 -->
-                <div class="col-lg-4 col-md-6">
+                <!-- end col-4 -->
+                <!-- begin col-4 -->
+                <div class="col-lg-6 col-md-6">
                     <div class="widget widget-stats bg-grey-darker">
                         <div class="stats-icon"><i class="fas fa-copyright"></i></div>
                         <div class="stats-info">
-                            <h4>CURRENT USED OR</h4>
-                            <p id="tot_used"></p>	
-                        </div>
-                    </div>
-                </div>
-                <!-- end col-3 -->
-                <!-- begin col-3 -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="widget widget-stats bg-black-lighter">
-                        <div class="stats-icon"><i class="fas fa-registered"></i></div>
-                        <div class="stats-info">
-                            <h4>REMAINING OR</h4>
-                            <p id="tot_unused"></p>	
+                            <h4>TOTAL DEPOSIT SLIP</h4>
+                            <p id="tot_slip">15</p>	
                         </div>
                     </div>
                 </div>
@@ -96,7 +85,7 @@
                     <!-- begin panel -->
                     <div class="panel panel-inverse">
                         <div class="panel-heading">
-                            <h4 class="panel-title">Monthly OR Report</h4>
+                            <h4 class="panel-title">Monthly Certified Deposits</h4>
                         </div>
                         <div class="panel-body">
                             <div>
@@ -175,9 +164,6 @@
                         <!-- end panel-body -->
                     </div>
                 </div>
-                <div class="card-footer text-muted">
-                    
-                </div>
             </div>
             <!-- end card -->
         </div>
@@ -226,6 +212,7 @@
 <script src="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.js' %}"></script>
 <script src="{%static 'assets/plugins/clipboard/clipboard.min.js' %}"></script>
 <script src="{%static 'assets/js/demo/form-plugins.demo.js' %}"></script>
+<script src="{%static 'assets/plugins/chart-js/Chart.min.js' %}"></script>
 {% endblock %}
 {% block init %}
 <script>
@@ -233,6 +220,7 @@
         App.init();
         TableManageCombine.init();
         FormPlugins.init();
+        handleLineChart();
     });
     $('#data-table-combines').DataTable({
         'paging'      : false,
@@ -273,5 +261,76 @@
     ],
         "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
     });
+
+    var randomScalingFactor = function() { 
+        return Math.round(Math.random()*100)
+    };
+
+    function handleLineChart() {
+        var lbl = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        // var newlabels = [];
+        // var used = [];
+        // var unused = []
+        // for (var i = 0; i < obj.length; i++) {
+        //     newlabels[i] = lbl[i];
+        //     used[i] = obj[i][1];
+        //     unused[i] = obj[i][2];
+        // }
+        var lineChartData = {
+            // labels: newlabels,
+            labels: lbl,
+            datasets: [{
+                label: 'Used OR',
+                borderColor: COLOR_BLUE,
+                pointBackgroundColor: COLOR_BLUE,
+                pointRadius: 2,
+                borderWidth: 2,
+                backgroundColor: COLOR_BLUE_TRANSPARENT_3,
+                // data: used
+                data: [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+            }, {
+                label: 'Unused OR',
+                borderColor: COLOR_BLACK,
+                pointBackgroundColor: COLOR_BLACK,
+                pointRadius: 2,
+                borderWidth: 2,
+                backgroundColor: COLOR_BLACK_TRANSPARENT_3,
+                // data: unused
+                data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+            }]
+        };
+
+        var ctx = document.getElementById('line-chart').getContext('2d');
+        var lineChart = new Chart(ctx, {
+            type: 'line',
+            data: lineChartData
+        });
+    };
+
+    function loadChart() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_chart' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                month: month,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
 </script>
 {% endblock %}

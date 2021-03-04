@@ -476,3 +476,9 @@ def load_or_monthly_report(request):
     cursor.callproc("SP_SELECT_OR_MONTHLY_REPORT")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_chart(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_CERT_CHART")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
