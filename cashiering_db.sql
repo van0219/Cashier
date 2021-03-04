@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 03, 2021 at 11:36 PM
+-- Generation Time: Mar 04, 2021 at 11:21 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.26
 
@@ -205,6 +205,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_SELECT_ACCOUNTABLE_FORMS_REPORT`
 															     WHERE OR_NUM BETWEEN (SELECT OR_NUM_START FROM or_set WHERE MONTH(OR_DATE_FROM) = P_MONTH)
 															  	    						AND
 																						     (SELECT OR_NUM_END FROM or_set WHERE MONTH(OR_DATE_FROM) = P_MONTH)) AS TOTAL_UNUSED
+				,OR_NUM_START
+				,OR_NUM_END
 		FROM OR_SET
 		WHERE MONTH(OR_DATE_FROM) = P_MONTH;
 	END IF;
