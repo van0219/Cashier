@@ -322,6 +322,7 @@
     });
 
     function handlePolarChart(used, unused) {
+        $('#polar-area-chart').empty();
         var polarAreaData = {
             labels: ['Used OR', 'Unused OR'],
             datasets: [{
@@ -384,6 +385,7 @@
     function acctFormsTableData(obj) {
         var issue_end = (parseInt(obj[0][3]) + parseInt(obj[0][1]) - 1).toString().padStart(obj[0][3].length, '0');
         var end_start = (parseInt(issue_end) + 1).toString().padStart(obj[0][3].length, '0');
+        $('#month').text($('#select-month').find('option:selected').text());
         $('#acct-forms-table tbody tr').remove();
         $('#acct-forms-table tbody').append(
             `<tr>
@@ -441,6 +443,7 @@
                     $('#tot_or').text('0');
                     $('#tot_used').text('0');
                     $('#tot_unused').text('0');
+                    handlePolarChart(0,0);
                 }
                 else {
                     $('#tot_or').text(obj[0][0]);
