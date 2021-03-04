@@ -379,21 +379,26 @@
 
     $('#disp-acct-forms').on('click', function() {
         $('#acct-forms-modal').modal('show');
+    });
+
+    function acctFormsTableData(obj) {
+        var issue_end = (parseInt(obj[0][3]) + parseInt(obj[0][1]) - 1).toString().padStart(obj[0][3].length, '0');
+        var end_start = (parseInt(issue_end) + 1).toString().padStart(obj[0][3].length, '0');
         $('#acct-forms-table tbody tr').remove();
         $('#acct-forms-table tbody').append(
             `<tr>
                 <td class="text-nowrap f-w-700" colspan="3">With Face Value</td>
                 <!-- beginning balance -->
-                <td class="text-nowrap f-w-700">458</td>
-                <td class="text-nowrap">0265393</td>
-                <td class="text-nowrap">0265850</td>
+                <td class="text-nowrap f-w-700">${obj[0][0]}</td>
+                <td class="text-nowrap">${obj[0][3]}</td>
+                <td class="text-nowrap">${obj[0][4]}</td>
                 <td class="text-nowrap"></td>
                 <td class="text-nowrap"></td>
                 <td class="text-nowrap"></td>
                 <!-- issued -->
-                <td class="text-nowrap f-w-700">154</td>
-                <td class="text-nowrap">0265393</td>
-                <td class="text-nowrap">0265546</td>
+                <td class="text-nowrap f-w-700">${obj[0][1]}</td>
+                <td class="text-nowrap">${obj[0][3]}</td>
+                <td class="text-nowrap">${issue_end}</td>
                 <!-- ending balance -->
                 <td class="text-nowrap"></td>
                 <td class="text-nowrap"></td>
@@ -402,9 +407,9 @@
             <tr>
                 <td class="text-nowrap f-w-700" colspan="3">Without Face Value</td>
                 <!-- beginning balance -->
-                <td class="text-nowrap f-w-700">458</td>
-                <td class="text-nowrap">0265393</td>
-                <td class="text-nowrap">0265850</td>
+                <td class="text-nowrap f-w-700">${obj[0][0]}</td>
+                <td class="text-nowrap">${obj[0][3]}</td>
+                <td class="text-nowrap">${obj[0][4]}</td>
                 <td class="text-nowrap"></td>
                 <td class="text-nowrap"></td>
                 <td class="text-nowrap"></td>
@@ -413,12 +418,12 @@
                 <td class="text-nowrap"></td>
                 <td class="text-nowrap"></td>
                 <!-- ending balance -->
-                <td class="text-nowrap f-w-700">304</td>
-                <td class="text-nowrap">0265547</td>
-                <td class="text-nowrap">0265850</td>
+                <td class="text-nowrap f-w-700">${obj[0][2]}</td>
+                <td class="text-nowrap">${end_start}</td>
+                <td class="text-nowrap">${obj[0][4]}</td>
             </tr>`
         );
-    });
+    };
 
     function loadAcctFormsDash() {
         var month = $('#select-month').val();
@@ -441,8 +446,8 @@
                     $('#tot_or').text(obj[0][0]);
                     $('#tot_used').text(obj[0][1]);
                     $('#tot_unused').text(obj[0][2]);
-                    $('#polar-area-chart').empty();
                     handlePolarChart(obj[0][1],obj[0][2]);
+                    acctFormsTableData(obj);
                 }
             },
             error: function(xhr, status, error) {
