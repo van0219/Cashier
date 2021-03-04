@@ -459,7 +459,8 @@ def load_deposited(request):
 def done_deposit(request):
     cursor = connection.cursor()
     cursor.callproc("SP_DONE_DEPOSIT"
-                    ,(request.POST['group_id'],))
+                    ,(request.POST['group_id']
+                    ,request.POST['slip_num']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 

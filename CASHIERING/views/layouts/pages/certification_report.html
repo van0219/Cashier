@@ -34,6 +34,12 @@
         display: none; 
     }
 </style>
+<style>
+    body {
+        overflow-y: scroll;
+        overflow-x: scroll;
+    }
+</style>
 {% endblock %}
 {% block content %}
 <!-- begin #content -->
@@ -54,7 +60,7 @@
         <div class="col-lg-6">
             <!-- begin row -->
             <div class="row">
-                <!-- begin col-4 -->
+                <!-- begin col-6 -->
                 <div class="col-lg-6 col-md-6">
                     <div class="widget widget-stats bg-orange">
                         <div class="stats-icon"><i class="fas fa-circle-notch"></i></div>
@@ -64,8 +70,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- end col-4 -->
-                <!-- begin col-4 -->
+                <!-- end col-6 -->
+                <!-- begin col-6 -->
                 <div class="col-lg-6 col-md-6">
                     <div class="widget widget-stats bg-grey-darker">
                         <div class="stats-icon"><i class="fas fa-copyright"></i></div>
@@ -75,7 +81,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- end col-3 -->
+                <!-- end col-6 -->
             </div>
             <!-- end row -->
             <!-- begin row -->
@@ -116,25 +122,14 @@
                         <!-- end panel-heading -->
                         <!-- begin panel-body -->
                         <div class="panel-body">
-                            <table id="data-table-combines" class="table table-hover">
+                            <table id="data-table-combines" class="table table-hover table-bordered table-striped">
                                 <thead>
-                                    <tr>
-                                        <th class="text-nowrap" style="text-align: center;">Date</th>
-                                        <th class="text-nowrap" style="text-align: center;">RA Deposit Slip No.</th>
-                                        <th class="text-nowrap" style="text-align: center;">Amount</th>
-                                    </tr>
+                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;">Date</th>
+                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;">RA Deposit Slip No.</th>
+                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;">Amount</th>
                                 </thead>
                                 <tbody>
-                                    <tr align="center">
-                                        <td>November 7, 2020</td>
-                                        <td>02424978742</td>
-                                        <td>5, 738.50</td>
-                                    </tr>
-                                    <tr align="center">
-                                        <td>November 15, 2020</td>
-                                        <td>87424234234</td>
-                                        <td>12, 125.25</td>
-                                    </tr>
+                                    <!-- append tbody tr here -->
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -228,11 +223,11 @@
         'searching'   : true,
         'ordering'    : false,
         'info'        : false,
-        'autoWidth'   : false,
+        'autoWidth'   : true,
         'aaSorting'   : [[1, "desc" ]],
-        'pagingType'  : 'full_numbers',
+        // 'pagingType'  : 'simple_numbers',
         // "aaSorting"   : [[2, "desc" ]],
-        dom: 'lBfrtip<"actions">',
+        dom: 'lBfrtip',
     buttons: [
         {
             extend:    'print',

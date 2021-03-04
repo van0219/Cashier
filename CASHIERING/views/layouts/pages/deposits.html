@@ -155,6 +155,26 @@
         </div>
     </div>
 </div>
+<!-- #modal-dep-slip -->
+<div class="modal fade" id="modal-dep-slip">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirmation</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <label>Input deposit slip number:</label>
+                <input type="text" class="form-control" id="input-dep-slip" />
+                <span class="text-danger" style="display: none;" id="dep-slip-err">* Please add the deposit slip number.</span>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-success" id="dep-slip-done">Done</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block page-js %}
 <!-- dito yung page-js -->
@@ -493,50 +513,75 @@
             });
         };
     });
-
+    var num = null;
     $('#sched-panel').on('click', '#check_but', function() {
-        var num = $(this).closest('.panel-body').prop('id').substring(10);
-        var group_id = $('#sched-head' + num).text().trim();
-        $('#check_icon'+num).removeClass('fa-check-circle');
-        $('#check_icon'+num).addClass('fa-spinner fa-pulse');
-        $.ajax({
-            type: "POST",
-            url: "{% url 'done_deposit' %}",
-            // cache: true,
-            dataType: 'json',
-            data: {
-                group_id: group_id,
-                csrfmiddlewaretoken:"{{csrf_token}}"
-            },
-            success: function(obj) {
-                setTimeout(function() {
+        $('#modal-dep-slip').modal('show');
+        num = $(this).closest('.panel-body').prop('id').substring(10);
+    });
+
+    $('#dep-slip-done').on('click', function() {
+        if ($('#input-dep-slip').val().length != 0 && $('#input-dep-slip').val().trim() != '') {
+            var group_id = $('#sched-head' + num).text().trim();
+            var slip_num = $('#input-dep-slip').val().trim();
+            $('#check_icon'+num).removeClass('fa-check-circle');
+            $('#check_icon'+num).addClass('fa-spinner fa-pulse');
+            $.ajax({
+                type: "POST",
+                url: "{% url 'done_deposit' %}",
+                // cache: true,
+                dataType: 'json',
+                data: {
+                    group_id: group_id,
+                    slip_num: slip_num,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                success: function(obj) {
+                    setTimeout(function() {
+                        swal({
+                            title: "Deposited Successfully", 
+                            text: group_id + " has been deposited successfully.", 
+                            type: "success",
+                            showLoaderOnConfirm: true,
+                            confirmButtonColor: "#5cb85c",
+                        },
+                        function(isConfirm){
+                            if (isConfirm){
+                                $('#check_icon'+num).removeClass('fa-spinner fa-pulse'); 
+                                $('#check_icon'+num).addClass('fa-check-circle');
+                                $('#sched-dep-tab').click();
+                            }
+                        });
+                    },1500);
+                },
+                error: function(xhr, status, error) {
+                    var errMsg = xhr.status + ': ' + xhr.statusText;
                     swal({
-                        title: "Deposited Successfully", 
-                        text: group_id + " has been deposited successfully.", 
-                        type: "success",
-                        showLoaderOnConfirm: true,
-                        confirmButtonColor: "#5cb85c",
-                    },
-                    function(isConfirm){
-                        if (isConfirm){
-                            $('#check_icon'+num).removeClass('fa-spinner fa-pulse'); 
-                            $('#check_icon'+num).addClass('fa-check-circle');
-                            $('#sched-dep-tab').click();
-                        }
+                        title: "Error!", 
+                        text: errMsg,
+                        type: "error",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
                     });
-                },1500);
-            },
-            error: function(xhr, status, error) {
-                var errMsg = xhr.status + ': ' + xhr.statusText;
-                swal({
-                    title: "Error!", 
-                    text: errMsg,
-                    type: "error",
-                    confirmButtonColor: "#428bca",
-                    showLoaderOnConfirm: true
-                });
-            }
-        });
+                }
+            });
+        }
+        else {
+            $('#input-dep-slip').addClass('is-invalid');
+            $('#dep-slip-err').prop('style', 'display:block');
+        }
+    });
+
+    $('#input-dep-slip').on('keypress', function() {
+        if ($('#input-dep-slip').val().length == 0) {
+            $('#input-dep-slip').removeClass('is-invalid');
+            $('#dep-slip-err').prop('style', 'display:none');
+        }
+    });
+
+    $('#modal-dep-slip').on('hidden.bs.modal', function() {
+        $('#input-dep-slip').removeClass('is-invalid');
+        $('#dep-slip-err').prop('style', 'display:none');
+        $('#input-dep-slip').val('');
     });
     
     $('#deposited-tab').on('click', function() {
