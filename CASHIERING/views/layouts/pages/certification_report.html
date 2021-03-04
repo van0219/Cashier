@@ -55,6 +55,40 @@
     <h1 class="page-header">Certification <small>View/Generate Report</small></h1>
     <!-- end page-header -->
     <!-- begin row -->
+    <div class="row m-b-10">
+        <!-- begin col-3 -->
+        <div class="col-lg-3">
+            <div class="m-t-10 row">
+                <div class="col-lg-8">
+                    <select class="form-control" id="select-month">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="col-lg-4">
+                    <a href="javascript:;" class="btn btn-primary btn-m" id="acct-filter"><i class="fas fa-file-code m-r-5"></i>Filter</a>
+                </div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-9 -->
+        <div class="col-lg-9">
+            <!-- filler -->
+        </div>
+        <!-- end col-9 -->
+    </div>
+    <!-- end row -->
+    <!-- begin row -->
     <div class="row">
         <!-- begin col-6 -->
         <div class="col-lg-6">
@@ -136,21 +170,21 @@
                                         <td class="f-w-600 p-t-20 p-b-5" style="border-color: white; border-top-color: lightgray;">Total Deposits</td>
                                         <td class="p-t-20 p-b-5" style="border-color: white; border-top-color: lightgray;"></td>
                                         <td class="text-center p-t-20 p-b-5" style="border-color: white; border-top-color: lightgray;">
-                                            <a href="javascript:;" class="btn btn-default btn-xs f-w-600">17, 863.75</a>
+                                            <span class="label label-purple f-s-11">17, 863.75</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="f-w-600 p-t-0" style="border-color: white;">Add Balance</td>
                                         <td class="p-t-0" style="border-color: white;"></td>
                                         <td class="text-center p-t-0" style="border-color: white;">
-                                            <a href="javascript:;" class="btn btn-default btn-xs f-w-600">1, 432.00</a>
+                                            <span class="label label-warning f-s-11">1, 432.00</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="f-w-700" style="border-color: white; border-bottom-color: lightgray;">TOTAL</td>
                                         <td style="border-color: white; border-bottom-color: lightgray;"></td>
                                         <td class="text-center" style="border-color: white; border-bottom-color: lightgray;">
-                                            <a href="javascript:;" class="btn btn-success btn-xs f-w-700">19, 295.75</a>
+                                            <span class="label label-success f-s-12">19, 295.75</span>
                                         </td>
                                     </tr>
                                 </tfoot>
@@ -215,9 +249,11 @@
         App.init();
         TableManageCombine.init();
         FormPlugins.init();
+        $('#select-month').val((new Date).getMonth()+1);
         handleLineChart();
+        loadDepositCertTable((new Date).getMonth()+1);
     });
-    $('#data-table-combines').DataTable({
+    var dt_combines = $('#data-table-combines').DataTable({
         'paging'      : false,
         'lengthChange': false,
         'searching'   : true,
@@ -254,7 +290,24 @@
             }
         }
     ],
-        "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
+    "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+    columnDefs:[
+        {
+            targets:0, render:function(data){
+                return moment(new Date(data)).format('MMM. DD, YYYY');
+            },
+        },
+        {
+            targets:[0,1,2],
+                className: 'text-center',  
+        },
+        {
+            targets:2, render:function(data){
+                return '₱'+data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+        }
+    ]
+
     });
 
     var randomScalingFactor = function() { 
@@ -314,6 +367,40 @@
             },
             success: function(obj) {
 
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
+    function loadDepositCertTable() {
+        var month = $('#select-month').val();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_cert_table' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                month: month,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                dt_combines.clear();
+                $.each(obj, function(index, data){
+                    dt_combines.row.add( [
+                         data[0]
+                        ,data[1]
+                        ,data[2]
+                    ] ).draw();
+                })
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;

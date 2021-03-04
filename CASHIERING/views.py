@@ -483,3 +483,10 @@ def load_chart(request):
     cursor.callproc("SP_LOAD_CERT_CHART")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_cert_table(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_CERT_TABLE"
+                        ,(request.POST['month'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
