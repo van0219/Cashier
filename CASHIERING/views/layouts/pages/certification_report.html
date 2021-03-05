@@ -76,7 +76,7 @@
                     </select>
                 </div>
                 <div class="col-lg-4">
-                    <a href="javascript:;" class="btn btn-primary btn-m" id="acct-filter"><i class="fas fa-file-code m-r-5"></i>Filter</a>
+                    <a href="javascript:;" class="btn btn-primary btn-m" id="cert-filter"><i class="fas fa-file-code m-r-5"></i>Filter</a>
                 </div>
             </div>
         </div>
@@ -97,10 +97,10 @@
                 <!-- begin col-6 -->
                 <div class="col-lg-6 col-md-6">
                     <div class="widget widget-stats bg-orange">
-                        <div class="stats-icon"><i class="fas fa-circle-notch"></i></div>
+                        <div class="stats-icon"><i class="fas fa-download"></i></div>
                         <div class="stats-info">
                             <h4>TOTAL DEPOSIT</h4>
-                            <p id="tot_dep">70,600</p>	
+                            <p id="tot-dep-card">70,600</p>	
                         </div>
                     </div>
                 </div>
@@ -108,10 +108,10 @@
                 <!-- begin col-6 -->
                 <div class="col-lg-6 col-md-6">
                     <div class="widget widget-stats bg-grey-darker">
-                        <div class="stats-icon"><i class="fas fa-copyright"></i></div>
+                        <div class="stats-icon"><i class="fas fa-bookmark"></i></div>
                         <div class="stats-info">
                             <h4>TOTAL DEPOSIT SLIP</h4>
-                            <p id="tot_slip">15</p>	
+                            <p id="tot-slip-card">15</p>	
                         </div>
                     </div>
                 </div>
@@ -158,9 +158,9 @@
                         <div class="panel-body">
                             <table id="data-table-combines" class="table table-hover table-bordered table-striped">
                                 <thead>
-                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;">Date</th>
-                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;">RA Deposit Slip No.</th>
-                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;">Amount</th>
+                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="30%">Date</th>
+                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="40%">RA Deposit Slip No.</th>
+                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="30%">Amount</th>
                                 </thead>
                                 <tbody>
                                     <!-- append tbody tr here -->
@@ -251,7 +251,7 @@
         FormPlugins.init();
         $('#select-month').val((new Date).getMonth()+1);
         handleLineChart();
-        loadDepositCertTable((new Date).getMonth()+1);
+        loadDepositCertTable($('#select-month').val());
     });
     var dt_combines = $('#data-table-combines').DataTable({
         'paging'      : false,
@@ -381,8 +381,7 @@
         });
     };
 
-    function loadDepositCertTable() {
-        var month = $('#select-month').val();
+    function loadDepositCertTable(month) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_cert_table' %}",
@@ -394,7 +393,7 @@
             },
             success: function(obj) {
                 var total_dep = 0;
-                dt_combines.clear();
+                dt_combines.clear().draw();
                 $.each(obj, function(index, data){
                     dt_combines.row.add( [
                          data[0]
@@ -405,8 +404,11 @@
                 });
                 var addBal = parseFloat($('#add-bal').text());
                 var superTot = total_dep + addBal;
-                $('#tot-dep').text('₱ ' + total_dep.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                var tot_dep = '₱ ' + total_dep.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                $('#tot-dep').text(tot_dep);
                 $('#super-tot').text('₱ ' + superTot.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#tot-dep-card').text(tot_dep);
+                $('#tot-slip-card').text(obj.length);
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -420,5 +422,9 @@
             }
         });
     };
+
+    $('#cert-filter').on('click', function() {
+        loadDepositCertTable($('#select-month').val());
+    });
 </script>
 {% endblock %}
