@@ -250,8 +250,8 @@
         TableManageCombine.init();
         FormPlugins.init();
         $('#select-month').val((new Date).getMonth()+1);
-        handleLineChart();
         loadDepositCertTable($('#select-month').val());
+        getMonthlyCollectionDeposit();
     });
     var dt_combines = $('#data-table-combines').DataTable({
         'paging'      : false,
@@ -310,23 +310,43 @@
 
     });
 
-    var randomScalingFactor = function() { 
-        return Math.round(Math.random()*100)
-    };
-
-    function handleLineChart() {
+    function handleLineChart(monthly_col_obj, monthly_dep_obj) {
         var lbl = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        // var newlabels = [];
-        // var used = [];
-        // var unused = []
-        // for (var i = 0; i < obj.length; i++) {
-        //     newlabels[i] = lbl[i];
-        //     used[i] = obj[i][1];
-        //     unused[i] = obj[i][2];
-        // }
+        var newlabels = [];
+        var tot_col = [];
+        var tot_dep = []
+        var start_month_col = parseInt(monthly_col_obj[0][0]);
+        var start_month_dep = parseInt(monthly_dep_obj[0][0]);
+        var j = 0;
+        // collection
+        if (start_month_col > 1) {
+            for (var i = 0; i < start_month_col-1; i++) {
+                newlabels[i] = lbl[i];
+                tot_col[i] = 0;
+            };
+        };
+        j = 0;
+        for (var i = start_month_col-1; i < monthly_col_obj.length; i++) { 
+            newlabels[i] = lbl[i];
+            tot_col[i] = monthly_col_obj[j][1];
+            j++;
+        };
+        // deposit
+        if (start_month_dep > 1) {
+            for (var i = 0; i < start_month_dep-1; i++) {
+                newlabels[i] = lbl[i];
+                tot_dep[i] = 0;
+            };
+        };
+        j = 0;
+        for (var i = start_month_dep-1; i < monthly_col_obj.length; i++) { 
+            newlabels[i] = lbl[i];
+            tot_dep[i] = monthly_dep_obj[j][1];
+            j++;
+        };
+        // 
         var lineChartData = {
-            // labels: newlabels,
-            labels: lbl,
+            labels: newlabels,
             datasets: [{
                 label: 'Total Collection',
                 borderColor: COLOR_BLUE,
@@ -334,8 +354,7 @@
                 pointRadius: 2,
                 borderWidth: 2,
                 backgroundColor: COLOR_BLUE_TRANSPARENT_3,
-                // data: used
-                data: [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+                data: tot_col
             }, {
                 label: 'Total Deposit',
                 borderColor: COLOR_BLACK,
@@ -343,8 +362,7 @@
                 pointRadius: 2,
                 borderWidth: 2,
                 backgroundColor: COLOR_BLACK_TRANSPARENT_3,
-                // data: unused
-                data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                data: tot_dep
             }]
         };
 
@@ -355,18 +373,20 @@
         });
     };
 
-    function loadChart() {
+    function getMonthlyCollectionDeposit() {
+        var monthly_col_obj = null;
+        var monthly_dep_obj = null;
         $.ajax({
             type: "POST",
-            url: "{% url 'load_chart' %}",
+            url: "{% url 'load_monthly_collection_deposit' %}",
             // cache: true,
+            async: false,
             dataType: 'json',
             data: {
-                month: month,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-
+                monthly_col_obj = obj;
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -379,6 +399,30 @@
                 });
             }
         });
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_monthly_collection_deposit2' %}",
+            // cache: true,
+            async: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                monthly_dep_obj = obj;
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+        handleLineChart(monthly_col_obj, monthly_dep_obj);
     };
 
     function loadDepositCertTable(month) {

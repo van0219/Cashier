@@ -478,15 +478,21 @@ def load_or_monthly_report(request):
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
-def load_chart(request):
-    cursor = connection.cursor()
-    cursor.callproc("SP_LOAD_CERT_CHART")
-    data = cursor.fetchall()
-    return JsonResponse(data, safe=False)
-
 def load_cert_table(request):
     cursor = connection.cursor()
     cursor.callproc("SP_LOAD_CERT_TABLE"
                         ,(request.POST['month'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_monthly_collection_deposit(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_MONTHLY_COLLECTION")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_monthly_collection_deposit2(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_MONTHLY_DEPOSIT")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
