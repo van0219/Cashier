@@ -167,24 +167,24 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td class="f-w-600 p-t-20 p-b-5" style="border-color: white; border-top-color: lightgray;">Total Deposits</td>
+                                        <td class="f-w-600 p-t-20 p-b-5 text-left" style="border-color: white; border-top-color: lightgray;">Total Deposits</td>
                                         <td class="p-t-20 p-b-5" style="border-color: white; border-top-color: lightgray;"></td>
-                                        <td class="text-center p-t-20 p-b-5" style="border-color: white; border-top-color: lightgray;">
-                                            <span class="label label-purple f-s-11">17, 863.75</span>
+                                        <td class="text-right p-t-20 p-b-5" style="border-color: white; border-top-color: lightgray;">
+                                            <span class="label label-purple f-s-11" id="tot-dep"></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="f-w-600 p-t-0" style="border-color: white;">Add Balance</td>
                                         <td class="p-t-0" style="border-color: white;"></td>
-                                        <td class="text-center p-t-0" style="border-color: white;">
-                                            <span class="label label-warning f-s-11">1, 432.00</span>
+                                        <td class="text-right p-t-0" style="border-color: white;">
+                                            <span class="label label-warning f-s-11" id="add-bal">0.00</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="f-w-700" style="border-color: white; border-bottom-color: lightgray;">TOTAL</td>
                                         <td style="border-color: white; border-bottom-color: lightgray;"></td>
-                                        <td class="text-center" style="border-color: white; border-bottom-color: lightgray;">
-                                            <span class="label label-success f-s-12">19, 295.75</span>
+                                        <td class="text-right" style="border-color: white; border-bottom-color: lightgray;">
+                                            <span class="label label-success f-s-12" id="super-tot"></span>
                                         </td>
                                     </tr>
                                 </tfoot>
@@ -303,7 +303,7 @@
         },
         {
             targets:2, render:function(data){
-                return '₱'+data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
         }
     ]
@@ -393,6 +393,7 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
+                var total_dep = 0;
                 dt_combines.clear();
                 $.each(obj, function(index, data){
                     dt_combines.row.add( [
@@ -400,7 +401,12 @@
                         ,data[1]
                         ,data[2]
                     ] ).draw();
-                })
+                    total_dep = total_dep + parseFloat(data[2].toString());
+                });
+                var addBal = parseFloat($('#add-bal').text());
+                var superTot = total_dep + addBal;
+                $('#tot-dep').text('₱ ' + total_dep.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#super-tot').text('₱ ' + superTot.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
