@@ -101,15 +101,11 @@
                                         <th class="text-nowrap bg-inverse text-white" rowspan="2" style="text-align: center;">Date</th>
                                         <th class="text-nowrap bg-inverse text-white" rowspan="2" style="text-align: center;">Reference No.<br>OR No.</th>
                                         <th class="text-nowrap bg-inverse text-white" rowspan="2" style="text-align: center;">Payor</th>
-                                        <th class="text-nowrap bg-inverse text-white" colspan="2" style="text-align: center;">UACS Code</th>
+                                        <th class="text-nowrap bg-inverse text-white" rowspan="2" style="text-align: center;">UACS Code</th>
                                         <th class="text-nowrap bg-inverse text-white" rowspan="2" style="text-align: center;">Nature of Collection</th>
                                         <th class="text-nowrap bg-inverse text-white" rowspan="2" style="text-align: center;">Collection</th>
                                         <th class="text-nowrap bg-inverse text-white" rowspan="2" style="text-align: center;">Deposit</th>
                                         <th class="text-nowrap bg-inverse text-white" rowspan="2" style="text-align: center;">Undeposited<br>Collection</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-nowrap bg-inverse text-white"><small>MFO/PAP</small></th>
-                                        <th class="text-nowrap bg-inverse text-white"><small>Object Code</small></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -179,7 +175,7 @@
         TableManageCombine.init();
         FormPlugins.init();
     });
-    $('#data-table-combines').DataTable({
+    var dt_combines = $('#data-table-combines').DataTable({
         'paging'      : false,
         'lengthChange': false,
         'searching'   : true,
@@ -217,5 +213,48 @@
         ],
             "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
     });
+
+    function loadCashReceiptTable(month) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_cash_receipt_table' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                month: month,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                var total_dep = 0;
+                dt_combines.clear().draw();
+                $.each(obj, function(index, data){
+                    dt_combines.row.add( [
+                         data[0]
+                        ,data[1]
+                        ,data[2]
+                    ] ).draw();
+                    total_dep = total_dep + parseFloat(data[2].toString());
+                });
+                var addBal = parseFloat($('#add-bal').text());
+                var superTot = total_dep + addBal;
+                var tot_dep = '₱ ' + total_dep.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                $('#tot-dep').text(tot_dep);
+                $('#super-tot').text('₱ ' + superTot.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#tot-dep-card').text(tot_dep);
+                $('#tot-slip-card').text(obj.length);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
 </script>
 {% endblock %}

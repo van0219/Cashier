@@ -24,13 +24,13 @@
             <div class="widget widget-stats bg-gradient-red">
                 <div class="stats-icon stats-icon-lg"><i class="fas fa-shopping-basket fa-fw"></i></div>
                 <div class="stats-content">
-                    <div class="stats-title">TODAY'S TOTAL COLLECTION</div>
-                    <div class="stats-number">₱15,853.00</div>
+                    <div class="stats-title f-s-14">TODAY'S TOTAL COLLECTION</div>
+                    <div class="stats-number" id="today-col"></div>
                     <div class="stats-progress progress">
                         <div class="progress-bar" style="width: 70.1%;"></div>
                     </div>
                     <!-- <div class="stats-desc">{% now "m/j/Y" %}</div> -->
-                    <div class="stats-desc">Count of used OR today: 10</div>
+                    <div class="stats-desc f-s-13">Count of used OR today: <span id="count-or-today"></span></div>
                 </div>
             </div>
         </div>
@@ -40,13 +40,13 @@
             <div class="widget widget-stats bg-gradient-orange">
                 <div class="stats-icon stats-icon-lg"><i class="fas fa-shopping-bag fa-fw"></i></div>
                 <div class="stats-content">
-                    <div class="stats-title">TODAY'S SIS TOTAL COLLECTION</div>
-                    <div class="stats-number">₱50,466.75</div>
+                    <div class="stats-title f-s-14">TODAY'S SIS TOTAL COLLECTION</div>
+                    <div class="stats-number" id="today-sis-col"></div>
                     <div class="stats-progress progress">
                         <div class="progress-bar" style="width: 40.5%;"></div>
                     </div>
                     <!-- <div class="stats-desc"><span id="yesterday"></span></div> -->
-                    <div class="stats-desc">Count of used OR for SIS today: 23</div>
+                    <div class="stats-desc f-s-13">Count of used OR for SIS today: <span id="count-sis-or-today"></span></div>
                 </div>
             </div>
         </div>
@@ -56,13 +56,13 @@
             <div class="widget widget-stats bg-gradient-lime">
                 <div class="stats-icon stats-icon-lg"><i class="fas fa-shopping-cart fa-fw"></i></div>
                 <div class="stats-content">
-                    <div class="stats-title">MONTH'S TOTAL COLLECTION</div>
-                    <div class="stats-number">₱400,125</div>
+                    <div class="stats-title f-s-14">MONTH'S TOTAL COLLECTION</div>
+                    <div class="stats-number" id="month-col"></div>
                     <div class="stats-progress progress">
                         <div class="progress-bar" style="width: 76.3%;"></div>
                     </div>
                     <!-- <div class="stats-desc"><span id="last_week"></span></div> -->
-                    <div class="stats-desc">Current Month: {% now "F" %}</div>
+                    <div class="stats-desc f-s-13">Current Month: {% now "F" %}</div>
                 </div>
             </div>
         </div>
@@ -72,13 +72,13 @@
             <div class="widget widget-stats bg-gradient-black">
                 <div class="stats-icon stats-icon-lg"><i class="fas fa-ship fa-fw"></i></div>
                 <div class="stats-content">
-                    <div class="stats-title">YEAR'S TOTAL COLLECTION</div>
-                    <div class="stats-number">₱2,674,399</div>
+                    <div class="stats-title f-s-14">YEAR'S TOTAL COLLECTION</div>
+                    <div class="stats-number" id="year-col"></div>
                     <div class="stats-progress progress">
                         <div class="progress-bar" style="width: 54.9%;"></div>
                     </div>
                     <!-- <div class="stats-desc"><span id="last_month"></span></div> -->
-                    <div class="stats-desc">Current Year: {% now "Y" %}</div>
+                    <div class="stats-desc f-s-13">Current Year: {% now "Y" %}</div>
                 </div>
             </div>
         </div>
@@ -156,6 +156,7 @@
             DashboardV2.init();
             Notification.init();
             Highlight.init();
+            loadDashboardCards();
             handleBarChart();
             handleLineChart();
 
@@ -322,6 +323,66 @@
                 return lineChart;
             });
         };
+    };
+
+    function loadDashboardCards() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_dashboard_cards' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#today-col').text('₱' + parseFloat(obj[0][0]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#today-sis-col').text('₱' + parseFloat(obj[0][1]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#month-col').text('₱' + parseFloat(obj[0][2]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#year-col').text('₱' + parseFloat(obj[0][3]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#count-or-today').text(obj[0][4]);
+                $('#count-sis-or-today').text(obj[0][5]);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
+    function loadDashboardBarGraph() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_dashboard_bar_graph' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#today-col').text('₱' + parseFloat(obj[0][0]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#today-sis-col').text('₱' + parseFloat(obj[0][1]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#month-col').text('₱' + parseFloat(obj[0][2]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#year-col').text('₱' + parseFloat(obj[0][3]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#count-or-today').text(obj[0][4]);
+                $('#count-sis-or-today').text(obj[0][5]);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
     };
 </script>
 {% endblock %}

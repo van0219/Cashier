@@ -339,10 +339,19 @@
             };
         };
         j = 0;
+        var dep_count = monthly_dep_obj.length;
         for (var i = start_month_dep-1; i < monthly_col_obj.length; i++) { 
-            newlabels[i] = lbl[i];
-            tot_dep[i] = monthly_dep_obj[j][1];
-            j++;
+            if (dep_count!=0) {
+                newlabels[i] = lbl[i];
+                tot_dep[i] = monthly_dep_obj[j][1];
+                j++;
+                dep_count--;
+            }
+            else {
+                newlabels[i] = lbl[i];
+                tot_dep[i] = 0;
+                j++;
+            }
         };
         // 
         var lineChartData = {

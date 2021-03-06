@@ -503,3 +503,22 @@ def load_radar_chart(request):
                     ,(request.POST['month'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_cash_receipt_table(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_CASH_RECEIPT_TABLE"
+                    ,(request.POST['month'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_dashboard_cards(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_DASHBOARD_CARDS")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_dashboard_bar_graph(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_DASHBOARD_CARDS")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
