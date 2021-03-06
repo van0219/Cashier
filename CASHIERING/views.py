@@ -528,3 +528,9 @@ def load_dashboard_line_graph(request):
     cursor.callproc("SP_SELECT_MONTHLY_DEPOSIT")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_admin_dashboard_cards(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_ADMIN_DASHBOARD_CARDS")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

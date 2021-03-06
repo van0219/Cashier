@@ -104,4 +104,5 @@ urlpatterns = [
     path('load_dashboard_cards', views.load_dashboard_cards, name="load_dashboard_cards"),
     path('load_dashboard_bar_graph', views.load_dashboard_bar_graph, name="load_dashboard_bar_graph"),
     path('load_dashboard_line_graph', views.load_dashboard_line_graph, name="load_dashboard_line_graph"),
+    path('load_admin_dashboard_cards', views.load_admin_dashboard_cards, name="load_admin_dashboard_cards"),
 ]

@@ -27,7 +27,7 @@
                 <div class="stats-icon"><i class="fas fa-users"></i></div>
                 <div class="stats-info">
                     <h4>TOTAL USERS</h4>
-                    <p>3</p>	
+                    <p><span id="tot-users"></span></p>	
                 </div>
                 <div class="stats-link">
                     <a href="javascript:;">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
@@ -40,8 +40,8 @@
             <div class="widget widget-stats bg-blue-lighter">
                 <div class="stats-icon"><i class="fas fa-chart-area"></i></div>
                 <div class="stats-info">
-                    <h4>WEEKLY USED "OR"</h4>
-                    <p>55</p>	
+                    <h4>NEWLY ADDED USERS</h4>
+                    <p><span id="new-users"></span></p>	
                 </div>
                 <div class="stats-link">
                     <a href="javascript:;">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
@@ -54,8 +54,8 @@
             <div class="widget widget-stats bg-grey-darker">
                 <div class="stats-icon"><i class="fas fa-chart-pie"></i></div>
                 <div class="stats-info">
-                    <h4>MONTHLY USED "OR"</h4>
-                    <p>126</p>	
+                    <h4>DEACTIVATED USERS</h4>
+                    <p><span id="deact-users"></span></p>	
                 </div>
                 <div class="stats-link">
                     <a href="javascript:;">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
@@ -66,10 +66,10 @@
         <!-- begin col-3 -->
         <div class="col-lg-3 col-md-6">
             <div class="widget widget-stats bg-danger">
-                <div class="stats-icon"><i class="fas fa-envelope"></i></div>
+                <div class="stats-icon"><i class="fas fa-list-ol"></i></div>
                 <div class="stats-info">
-                    <h4>WEEKLY MESSAGES</h4>
-                    <p>34</p>	
+                    <h4>UACS COUNT</h4>
+                    <p><span id="uacs-count"></span></p>	
                 </div>
                 <div class="stats-link">
                     <a href="javascript:;">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
@@ -216,6 +216,7 @@
                 $(document).ready(function() {
                     App.init();
                     Dashboard.init();
+                    loadDashboardCards();
                 });
             }
             else if (role == 2) {
@@ -233,5 +234,33 @@
             })
         }
     });
+
+    function loadDashboardCards() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_admin_dashboard_cards' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#tot-users').text(obj[0][0]);
+                $('#new-users').text(obj[0][1]);
+                $('#deact-users').text(obj[0][2]);
+                $('#uacs-count').text(obj[0][3]);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
 </script>
 {% endblock %}

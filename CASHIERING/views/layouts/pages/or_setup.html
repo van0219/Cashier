@@ -55,8 +55,8 @@
                                 <input type="text" id="max" class="form-control" data-parsley-required="true" data-parsley-required-message="Ending value is required"/>
                             </div>
                             <div class="col-lg-2 form-group" style="margin-top: 65px;">
-                                <button type="submit" id="set" class="btn btn-sm btn-primary m-r-5"><i class="fas fa-gavel"></i> Set</button>
-                                <button type="submit" class="btn btn-sm btn-default"><i class="fas fa-undo"></i> Clear</button>
+                                <a href="javascript:;" id="set" class="btn btn-sm btn-primary m-r-5"><i class="fas fa-gavel"></i> Set</a>
+                                <a href="javascript:;" class="btn btn-sm btn-default" id="clear"><i class="fas fa-undo"></i> Clear</a>
                             </div>
                         </div>
                         <!-- end row -->
@@ -147,6 +147,20 @@
             $('#to-label').removeClass('text-white');
             $('#to-label').addClass('text-inverse');
         }
+    });
+
+    $('#clear').on('click', function() {
+        $('#or-form').parsley().reset();
+        $('#from').val('');
+        $('#to').val('');
+        $('#min').val('');
+        $('#max').val('');
+        $('#or-div').removeClass('bg-grey-transparent-3');
+        $('#or-div').addClass('bg-gradient-blue');
+        $('#from-label').removeClass('text-inverse');
+        $('#from-label').addClass('text-white');
+        $('#to-label').removeClass('text-inverse');
+        $('#to-label').addClass('text-white');
     });
 </script>
 {% endblock %}

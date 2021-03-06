@@ -420,10 +420,14 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                $('#today-col').text('₱' + parseFloat(obj[0][0]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $('#today-sis-col').text('₱' + parseFloat(obj[0][1]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $('#month-col').text('₱' + parseFloat(obj[0][2]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $('#year-col').text('₱' + parseFloat(obj[0][3]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                var today_col = shortenNum(parseFloat(obj[0][0]));
+                var today_sis_col = shortenNum(parseFloat(obj[0][1]));
+                var month_col = shortenNum(parseFloat(obj[0][2]));
+                var year_col = shortenNum(parseFloat(obj[0][3]));
+                $('#today-col').text('₱' + today_col);
+                $('#today-sis-col').text('₱' + today_sis_col);
+                $('#month-col').text('₱' + month_col);
+                $('#year-col').text('₱' + year_col);
                 $('#count-or-today').text(obj[0][4]);
                 $('#count-sis-or-today').text(obj[0][5]);
             },
@@ -489,5 +493,26 @@
             }
         });
     };
+
+    function shortenNum(num) {
+        if (num < 1000) {
+            return num;
+        }
+        var si = [
+          {v: 1E3, s: "K"},
+          {v: 1E6, s: "M"},
+          {v: 1E9, s: "B"},
+          {v: 1E12, s: "T"},
+          {v: 1E15, s: "P"},
+          {v: 1E18, s: "E"}
+          ];
+        var i;
+        for (i = si.length - 1; i > 0; i--) {
+            if (num >= si[i].v) {
+                break;
+            }
+        }
+        return (num / si[i].v).toFixed(2).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") + si[i].s;
+    }
 </script>
 {% endblock %}
