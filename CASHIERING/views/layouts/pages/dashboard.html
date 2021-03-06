@@ -92,7 +92,7 @@
             <!-- begin panel -->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4 class="panel-title"><i class="fas fa-chart-bar"></i> Monthly Collection</h4>
+                    <h4 class="panel-title"><i class="fas fa-chart-bar m-r-5"></i>Monthly Collection</h4>
                 </div>
                 <div class="panel-body">
                     <div id="nv-bar-chart" class="height-sm"></div>
@@ -106,15 +106,17 @@
             <!-- begin panel -->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4 class="panel-title"><i class="fas fa-chart-line"></i> Line Graph</h4>
+                    <h4 class="panel-title"><i class="fas fa-chart-line m-r-5"></i>Collection vs Deposits</h4>
                 </div>
-                <div class="panel-body">
-                    <div id="nv-line-chart" class="height-sm"></div>
+                <div class="panel-body" style="height: 330px;">
+                    <div id="canvas-div" class="m-t-10">
+                        <canvas id="line-chart" data-render="chart-js"></canvas>
+                    </div>
                 </div>
             </div>
             <!-- end panel -->
         </div>
-        <!-- end col-6 -->
+        <!-- end col- -->
     </div>
     <!-- end row -->
 </div>
@@ -130,6 +132,7 @@
 <script src="{%static 'assets/js/demo/dashboard-v2.js' %}"></script>
 <!--  -->
 <script src="{%static 'assets/plugins/moment/moment.min.js' %}"></script>
+<script src="{%static 'assets/plugins/chart-js/Chart.min.js' %}"></script>
 <!-- ================== END PAGE LEVEL JS ================== -->
 {% endblock %}
 {% block init %}
@@ -157,9 +160,8 @@
             Notification.init();
             Highlight.init();
             loadDashboardCards();
-            handleBarChart();
-            handleLineChart();
-
+            loadDashboardBarGraph();
+            getMonthlyCollectionDeposit();
             var mon;
             var day = (d.getDate()==1) ? count_days_month()+1 : d.getDate();//if day today is 1 --> gets the previous month's number of days plus 1;
             if (d.getDate()==1) {
@@ -249,80 +251,163 @@
             }
             return _days; // returns the number of days of the current month
         }
-        var handleBarChart = function() {
-            "use strict";
+    };
+    function handleBarChart(obj) {
+        var bar_color = [COLOR_GREEN, 'lightblue', 'pink', COLOR_RED, COLOR_ORANGE, '#ff0000', COLOR_AQUA, COLOR_BLUE, COLOR_PURPLE, COLOR_GREY, COLOR_BLACK, "goldenrod"];
+        var bar_label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var bar_value = [];
+        var data= [];
+        var keyy = 0;
+        for (var i = 0; i < obj.length; i++) {
+            bar_value[i] = parseFloat(obj[i][1]);
+            data[i] = { 'label': bar_label[i], 'value': bar_value[i], 'color': bar_color[i]  };
+            keyy = bar_value[i] > keyy ? bar_value[i] : keyy;
+        }
+        var barChartData = [{
+            key: keyy,
+            values: data,
+        }]
 
-            var bar_color = [COLOR_RED, COLOR_ORANGE, COLOR_GREEN, COLOR_AQUA, COLOR_BLUE, COLOR_PURPLE, COLOR_GREY, COLOR_BLACK, "goldenrod",'#ff0000', 'lightblue', 'pink' ];
-            var bar_value = [29, 15, 32, 196, 44, 98, 13, 5, 87, 123, 99, 176];
-            var bar_label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            var data= [];
-            for (var i = 0; i < 12; i++) {
-                data[i] = { 'label': bar_label[i], 'value': bar_value[i], 'color': bar_color[i]  };
+        nv.addGraph(function() {
+            var barChart = nv.models.discreteBarChart()
+                .x(function(d) { return d.label })
+                .y(function(d) { return d.value })
+                .showValues(true)
+                .duration(250);
+            
+            // barChart.yAxis.axisLabel("Total Registered Residents");
+            // barChart.xAxis.axisLabel('Month');
+        
+            d3.select('#nv-bar-chart svg').remove();
+            d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
+            nv.utils.windowResize(barChart.update);
+        
+            return barChart;
+        });
+    };
+    function handleLineChart(monthly_col_obj, monthly_dep_obj) {
+        var lbl = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var newlabels = [];
+        var tot_col = [];
+        var tot_dep = []
+        var start_month_col = parseInt(monthly_col_obj[0][0]);
+        var start_month_dep = parseInt(monthly_dep_obj[0][0]);
+        var j = 0;
+        // collection
+        if (start_month_col > 1) {
+            for (var i = 0; i < start_month_col-1; i++) {
+                newlabels[i] = lbl[i];
+                tot_col[i] = 0;
+            };
+        };
+        j = 0;
+        for (var i = start_month_col-1; i < monthly_col_obj.length; i++) { 
+            newlabels[i] = lbl[i];
+            tot_col[i] = monthly_col_obj[j][1];
+            j++;
+        };
+        // deposit
+        if (start_month_dep > 1) {
+            for (var i = 0; i < start_month_dep-1; i++) {
+                newlabels[i] = lbl[i];
+                tot_dep[i] = 0;
+            };
+        };
+        j = 0;
+        var dep_count = monthly_dep_obj.length;
+        for (var i = start_month_dep-1; i < monthly_col_obj.length; i++) { 
+            if (dep_count!=0) {
+                newlabels[i] = lbl[i];
+                tot_dep[i] = monthly_dep_obj[j][1];
+                j++;
+                dep_count--;
             }
-            var barChartData = [{
-                key: 'Cumulative Return',
-                values: data,
+            else {
+                newlabels[i] = lbl[i];
+                tot_dep[i] = 0;
+                j++;
+            }
+        };
+        // 
+        var lineChartData = {
+            labels: newlabels,
+            datasets: [{
+                label: 'Total Collection',
+                borderColor: COLOR_BLUE,
+                pointBackgroundColor: COLOR_BLUE,
+                pointRadius: 2,
+                borderWidth: 2,
+                backgroundColor: COLOR_BLUE_TRANSPARENT_3,
+                data: tot_col
+            }, {
+                label: 'Total Deposit',
+                borderColor: COLOR_BLACK,
+                pointBackgroundColor: COLOR_BLACK,
+                pointRadius: 2,
+                borderWidth: 2,
+                backgroundColor: COLOR_BLACK_TRANSPARENT_3,
+                data: tot_dep
             }]
-
-            nv.addGraph(function() {
-                var barChart = nv.models.discreteBarChart()
-                    .x(function(d) { return d.label })
-                    .y(function(d) { return d.value })
-                    .showValues(true)
-                    .duration(250);
-                
-                barChart.yAxis.axisLabel("Total Registered Residents");
-                barChart.xAxis.axisLabel('Month');
-            
-                d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
-                nv.utils.windowResize(barChart.update);
-            
-                return barChart;
-            });
         };
-        var handleLineChart = function() {
-            "use strict";
-            
-            nv.addGraph(function() {
-                
-                var sin = [], cos = [];
-                for (var i = 0; i < 100; i++) {
-                    sin.push({x: i, y:  Math.sin(i/10) });
-                    cos.push({x: i, y: .5 * Math.cos(i/10)});
-                }
-                var lineChartData = [
-                    { values: sin, key: 'Sine Wave', color: COLOR_GREEN }, 
-                    { values: cos, key: 'Cosine Wave', color: COLOR_BLUE }
-                ];
-                
-                var lineChart = nv.models.lineChart()
-                    .options({
-                        transitionDuration: 300,
-                        useInteractiveGuideline: true
-                    });
 
-                lineChart.xAxis
-                    .axisLabel('Time (s)')
-                    .tickFormat(d3.format(',.1f'));
-
-                lineChart.yAxis
-                    .axisLabel('Voltage (v)')
-                    .tickFormat(function(d) {
-                        if (d == null) {
-                            return 'N/A';
-                        }
-                        return d3.format(',.2f')(d);
-                    });
-
-                d3.select('#nv-line-chart').append('svg')
-                    .datum(lineChartData)
-                    .call(lineChart);
-
-                nv.utils.windowResize(lineChart.update);
-
-                return lineChart;
-            });
-        };
+        var ctx = document.getElementById('line-chart').getContext('2d');
+        var lineChart = new Chart(ctx, {
+            type: 'line',
+            data: lineChartData
+        });
+    };
+    function getMonthlyCollectionDeposit() {
+        var monthly_col_obj = null;
+        var monthly_dep_obj = null;
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_monthly_collection_deposit' %}",
+            // cache: true,
+            async: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                monthly_col_obj = obj;
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_monthly_collection_deposit2' %}",
+            // cache: true,
+            async: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                monthly_dep_obj = obj;
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+        $('#canvas-div canvas').remove();
+        $('#canvas-div').append(`<canvas id="line-chart" data-render="chart-js"></canvas>`);
+        handleLineChart(monthly_col_obj, monthly_dep_obj);
     };
 
     function loadDashboardCards() {
@@ -365,12 +450,32 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                $('#today-col').text('₱' + parseFloat(obj[0][0]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $('#today-sis-col').text('₱' + parseFloat(obj[0][1]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $('#month-col').text('₱' + parseFloat(obj[0][2]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $('#year-col').text('₱' + parseFloat(obj[0][3]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $('#count-or-today').text(obj[0][4]);
-                $('#count-sis-or-today').text(obj[0][5]);
+                handleBarChart(obj);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
+    function loadDashboardLineGraph() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_dashboard_line_graph' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                handleLineChart(obj);
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;

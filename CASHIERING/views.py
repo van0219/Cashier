@@ -519,6 +519,12 @@ def load_dashboard_cards(request):
 
 def load_dashboard_bar_graph(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_LOAD_DASHBOARD_CARDS")
+    cursor.callproc("SP_SELECT_MONTHLY_COLLECTION")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_dashboard_line_graph(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_MONTHLY_DEPOSIT")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
