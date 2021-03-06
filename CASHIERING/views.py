@@ -496,3 +496,10 @@ def load_monthly_collection_deposit2(request):
     cursor.callproc("SP_SELECT_MONTHLY_DEPOSIT")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_radar_chart(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_RADAR_CHART"
+                    ,(request.POST['month'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

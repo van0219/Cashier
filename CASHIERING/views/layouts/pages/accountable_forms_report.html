@@ -137,7 +137,7 @@
                             <h4 class="panel-title">Monthly OR Report</h4>
                         </div>
                         <div class="panel-body">
-                            <div>
+                            <div id="canvas-div1">
                                 <canvas id="line-chart" data-render="chart-js"></canvas>
                             </div>
                         </div>
@@ -161,7 +161,7 @@
                             <h4 class="panel-title">Used vs Unused</h4>
                         </div>
                         <div class="panel-body">
-                            <div>
+                            <div id="canvas-div2">
                                 <canvas id="polar-area-chart" data-render="chart-js"></canvas>
                             </div>
                         </div>
@@ -449,6 +449,8 @@
                     $('#tot_or').text(obj[0][0]);
                     $('#tot_used').text(obj[0][1]);
                     $('#tot_unused').text(obj[0][2]);
+                    $('#canvas-div2 canvas').remove();
+                    $('#canvas-div2').append(`<canvas id="polar-area-chart" data-render="chart-js"></canvas>`);
                     handlePolarChart(obj[0][1],obj[0][2]);
                     acctFormsTableData(obj);
                 }
@@ -481,6 +483,8 @@
             },
             success: function(obj) {
                 if (obj.length != 0) {
+                    $('#canvas-div1 canvas').remove();
+                    $('#canvas-div1').append(`<canvas id="line-chart" data-render="chart-js"></canvas>`);
                     handleLineChart(obj);   
                 }
             },

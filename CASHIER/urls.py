@@ -99,4 +99,5 @@ urlpatterns = [
     path('load_cert_table', views.load_cert_table, name="load_cert_table"),
     path('load_monthly_collection_deposit', views.load_monthly_collection_deposit, name="load_monthly_collection_deposit"),
     path('load_monthly_collection_deposit2', views.load_monthly_collection_deposit2, name="load_monthly_collection_deposit2"),
+    path('load_radar_chart', views.load_radar_chart, name="load_radar_chart"),
 ]

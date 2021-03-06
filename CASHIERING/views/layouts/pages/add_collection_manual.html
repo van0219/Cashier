@@ -378,7 +378,7 @@
                 dataType: 'json',
                 data: {
                     or_num: or_num,
-                    desc: desc,
+                    desc: desc.trim(),
                     amt: amt,
                     csrfmiddlewaretoken:"{{csrf_token}}"
                 },
