@@ -420,10 +420,10 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                var today_col = shortenNum(parseFloat(obj[0][0]));
-                var today_sis_col = shortenNum(parseFloat(obj[0][1]));
-                var month_col = shortenNum(parseFloat(obj[0][2]));
-                var year_col = shortenNum(parseFloat(obj[0][3]));
+                var today_col = obj[0][0]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][0]));
+                var today_sis_col = obj[0][1]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][1]));
+                var month_col = obj[0][2]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][2]));
+                var year_col = obj[0][3]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][3]));
                 $('#today-col').text('₱' + today_col);
                 $('#today-sis-col').text('₱' + today_sis_col);
                 $('#month-col').text('₱' + month_col);
