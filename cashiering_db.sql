@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 06, 2021 at 10:36 PM
+-- Generation Time: Mar 08, 2021 at 09:53 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.26
 
@@ -791,12 +791,11 @@ INSERT INTO `collection` (`OR_NUM`, `ASSESSED`, `COLLECTED`, `STUD_NO`, `CLIENT_
 ('008862', '4593.00', '4593.00', NULL, 'PUP, QUEZON CITY', 'SIS Payment', '2021-02-17 01:20:20', 'FOR REMIT', 2),
 ('008863', '2850.00', '2850.00', '2017-00293-CM-0', 'SILLEZA, VAN ANTHONY', 'Bachelor\'s Degree', '2021-02-23 23:31:59', 'FOR REMIT', 2),
 ('008864', '792.00', '792.00', '2017-00273-CM-0', 'BRILLO, DAISY', 'Bachelor\'s Degree', '2021-03-02 17:24:22', 'FOR REMIT', 2),
-('008865', '25200.00', '25200.00', NULL, 'PUP, QUEZON CITY', 'SIS Payment', '2021-03-02 17:27:58', 'PENDING', 2),
-('008866', '590.00', '590.00', '2017-00257-CM-0', 'VILLACORTA, RICHARD', 'Bachelor\'s Degree', '2021-03-03 23:12:57', 'PENDING', 2),
-('008867', '1489.00', '1489.00', '2017-00188-CM-0', 'GUEVARRA, JAYSON', 'Bachelor\'s Degree', '2021-03-03 23:43:26', 'PENDING', 2),
+('008865', '25200.00', '25200.00', NULL, 'PUP, QUEZON CITY', 'SIS Payment', '2021-03-02 17:27:58', 'FOR REMIT', 2),
+('008866', '590.00', '590.00', '2017-00257-CM-0', 'VILLACORTA, RICHARD', 'Bachelor\'s Degree', '2021-03-03 23:12:57', 'FOR REMIT', 2),
+('008867', '1489.00', '1489.00', '2017-00188-CM-0', 'GUEVARRA, JAYSON', 'Bachelor\'s Degree', '2021-03-03 23:43:26', 'FOR REMIT', 2),
 ('008868', '1899.00', '1899.00', '2017-00011-CM-0', 'ERMITA, ALEXANDRA', 'Bachelor\'s Degree', '2021-03-03 23:44:44', 'FOR REMIT', 2),
-('008869', '654.00', '654.00', '2017-00034-CM-0', 'SORIA, ROSANO', 'Bachelor\'s Degree', '2021-03-03 23:47:57', 'PENDING', 2),
-('008970 ', '300.00', '300.00', '2018-00651-CM-1', 'PANLUBASAN, QUEEN KIMBERLY', 'Bachelor\'s Degree', '2021-03-07 00:00:58', 'PENDING', 2);
+('008869', '654.00', '654.00', '2017-00034-CM-0', 'SORIA, ROSANO', 'Bachelor\'s Degree', '2021-03-03 23:47:57', 'PENDING', 2);
 
 -- --------------------------------------------------------
 
@@ -865,7 +864,8 @@ INSERT INTO `collection_breakdown` (`ID`, `DESC`, `AMT`, `OR_NUM`) VALUES
 (98, 'RETRIEVAL', '1489.00', '008867'),
 (99, 'STATISTICAL CONSULTANCY', '1899.00', '008868'),
 (100, 'LABORATORY FEE', '654.00', '008869'),
-(101, 'ENTRANCE FEES', '300.00', '008970 ');
+(111, 'CULTURAL FEES', '77150.00', '008638'),
+(112, 'TUITION FEES', '850.00', '008638');
 
 -- --------------------------------------------------------
 
@@ -934,7 +934,10 @@ INSERT INTO `deposit` (`DEP_ID`, `OR_NUM`, `GROUP_ID`, `STATUS`, `DATE_SCHEDULED
 (245, '8245.00', '2021-DEPOSIT-00015', 'DEPOSITED', '2021-03-06 00:00:00', '2021-03-07 00:43:24', '2021-03-06 20:22:03', '', '110202', 2),
 (246, '8868.00', '2021-DEPOSIT-00016', 'DEPOSITED', '2021-03-06 00:00:00', '2021-03-06 20:25:58', '2021-03-06 20:25:43', '', '2021-162', 2),
 (247, '8971.00', '2021-DEPOSIT-00017', 'FOR REMIT', '2021-03-08 00:00:00', NULL, '2021-03-07 00:38:37', '', NULL, 2),
-(248, '8972.00', '2021-DEPOSIT-00017', 'FOR REMIT', '2021-03-08 00:00:00', NULL, '2021-03-07 00:38:37', '', NULL, 2);
+(248, '8972.00', '2021-DEPOSIT-00017', 'FOR REMIT', '2021-03-08 00:00:00', NULL, '2021-03-07 00:38:37', '', NULL, 2),
+(249, '8867.00', '2021-DEPOSIT-00018', 'DEPOSITED', '2021-03-08 00:00:00', '2021-03-07 13:41:26', '2021-03-07 13:40:15', '', '2344244', 2),
+(250, '8865.00', '2021-DEPOSIT-00018', 'DEPOSITED', '2021-03-08 00:00:00', '2021-03-07 13:41:26', '2021-03-07 13:40:15', '', '2344244', 2),
+(251, '8866.00', '2021-DEPOSIT-00018', 'DEPOSITED', '2021-03-08 00:00:00', '2021-03-07 13:41:26', '2021-03-07 13:40:16', '', '2344244', 2);
 
 -- --------------------------------------------------------
 
@@ -1032,6 +1035,7 @@ CREATE TABLE `django_session` (
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
 ('12fhqz6eqnryz0yopi7jtapjpkq3d61a', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-02-21 10:27:58.479928'),
 ('39k9up6fa6b3ky71ya62ru7lskl34r8k', 'ZjUyZmJmMTZmODQ2MGE0MGUzMmY5N2YzOGQyZjM0YzczYjgxMDU1YTp7fQ==', '2020-12-11 01:51:09.586188'),
+('3be5r7h41zdwu7lys01p189knsjqkg2x', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-03-21 05:24:05.453565'),
 ('3bnw7zbo5t2tg6vdq52du7rom1c42a30', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-02-22 17:01:13.071147'),
 ('5rwvfetzw6hb0r9a1wsln1xlw1g086md', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-02-21 00:14:40.378776'),
 ('c58i8zxkutqe3kz8y0mr3q0ptplc3m00', 'ZjUyZmJmMTZmODQ2MGE0MGUzMmY5N2YzOGQyZjM0YzczYjgxMDU1YTp7fQ==', '2020-12-10 21:08:56.555178'),
@@ -1040,11 +1044,14 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 ('hl8x81y7a17w08hpk373t7ryoppby6sy', 'MTZiMTZkMDkwOTlhZDVkYTViYTg1MzRlNDIxOTYwMDNmYTM4NmRlNDp7InVuYW1lIjoidmFuMDIxOSIsInJvbGUiOjF9', '2021-03-20 21:09:28.542591'),
 ('isnahii2vupglitekl9z42zd80dy7krb', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-01-01 02:02:04.737300'),
 ('istn575r9cmjpomrvv4dbjxl9lc5t7yr', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-03-08 08:27:25.905790'),
+('j4olfvzo098u5x2ze7h06d5wtnoavfgp', 'MTZiMTZkMDkwOTlhZDVkYTViYTg1MzRlNDIxOTYwMDNmYTM4NmRlNDp7InVuYW1lIjoidmFuMDIxOSIsInJvbGUiOjF9', '2021-03-22 08:15:20.945502'),
 ('m3o0vsbv45jh089vh3gydyu169mdtkvt', 'MTZiMTZkMDkwOTlhZDVkYTViYTg1MzRlNDIxOTYwMDNmYTM4NmRlNDp7InVuYW1lIjoidmFuMDIxOSIsInJvbGUiOjF9', '2020-12-19 02:28:10.950441'),
 ('qycoimexdsv8dcmiiips55koinaydnhc', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-03-17 10:34:45.737135'),
 ('r6qsjc8o20p2wwqotrht8xztxjaro5za', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-02-11 03:52:58.041237'),
 ('sqws77hgwmturelx3u166l22cqn7y7ve', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-03-09 08:48:03.674253'),
+('tn1hwwit49taeyck2qrk1uv67wwbnt3k', 'MTZiMTZkMDkwOTlhZDVkYTViYTg1MzRlNDIxOTYwMDNmYTM4NmRlNDp7InVuYW1lIjoidmFuMDIxOSIsInJvbGUiOjF9', '2021-03-21 01:47:49.164429'),
 ('vav52xes9rdnnyoqfei0qzxzeso757ti', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-02-21 09:34:23.696775'),
+('vvds0afcod9fkn9kkg4esdk2dnsxx64b', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-03-21 06:29:43.803693'),
 ('xi0r3zd813q750oolxtp2rzvves1i9aa', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-02-09 20:28:38.729315');
 
 -- --------------------------------------------------------
@@ -1065,6 +1072,7 @@ CREATE TABLE `fund` (
 --
 
 INSERT INTO `fund` (`FUND_TYPE`, `FUND_CODE`, `DATE_ADDED`, `IS_ACTIVE`) VALUES
+('NEW FUND TYPE', '12345', '2021-03-07 13:23:02', 0),
 ('NEW FUND TYPPE', '846', '2021-02-16 18:55:25', 0),
 ('NEW INC TYPE', '1238293', '2021-01-06 20:28:31', 0),
 ('REGULAR TRUST FUND', '5 02 06 441 (164)', '2020-12-30 02:05:20', 1),
@@ -1206,6 +1214,7 @@ CREATE TABLE `uacs` (
 
 INSERT INTO `uacs` (`UACS_CODE`, `OLD_CODE`, `FUND_TYPE`, `INCOME_TYPE`, `DESC`, `DATE_ADDED`, `IS_ACTIVE`, `LAST_UPDATED`) VALUES
 ('0821939902', 'N/A', 'REGULAR TRUST FUND', 'SERVICE INCOME', 'NEW PAYMENT New', '2021-02-16 18:54:18', 0, '2021-02-16 18:54:55'),
+('083 393 839739', 'N/A', 'REGULAR TRUST FUND', 'SERVICE INCOME', 'NEW FEE', '2021-03-07 13:22:27', 1, NULL),
 ('12444', 'N/A', 'REGULAR TRUST FUND', 'SERVICE INCOME', 'PENALTIES', '2021-03-06 23:21:38', 0, '2021-03-06 23:24:22'),
 ('2 99 99 990 00 00000', '439', 'SPECIAL TRUST FUND', NULL, 'OTHER PAYABLE', '2020-12-30 03:02:58', 1, '2021-01-06 17:27:25'),
 ('4 02 01 040 00 00000', '613', 'SPECIAL TRUST FUND', 'BUSINESS INCOME', 'CLEARANCE AND CERTIFICATION FEE', '2020-12-30 02:23:46', 1, '2021-01-05 01:03:21'),
@@ -1300,8 +1309,9 @@ INSERT INTO `user` (`USER_ID`, `FNAME`, `MNAME`, `LNAME`, `UNAME`, `PSWORD`, `DA
 (4, 'Nicolas', 'Q', 'Potter', 'nicky', '054eba9e024b4b0c4e7b5143ef573748', '2021-01-05 03:22:35', 2, 0),
 (5, 'Feliz', 'na', 'Vidad', 'feliznavidad', '40924e2909af51f448fc5d287aedb525', '2021-01-06 17:06:27', 2, 0),
 (6, 'Rose', '.', 'Escober', 'rosey', '45917634c7cac19dcadcc247665f65a8', '2021-01-06 18:38:33', 1, 1),
-(7, 'New User', '', 'Neeee', 'newuser', '878b3c5b9f1887aa74130b03894d23cf', '2021-02-16 18:49:19', 1, 1),
-(8, 'Queen ', 'Penedilla', 'Panlubasan', 'kim0006', '222c29a0a4ad5737dc632a0d905b0206', '2021-03-06 22:56:13', 2, 1);
+(7, 'New User', '', 'Neeee', 'newuser', '878b3c5b9f1887aa74130b03894d23cf', '2021-02-16 18:49:19', 1, 0),
+(8, 'Queen ', 'Penedilla', 'Panlubasan', 'kim0006', '222c29a0a4ad5737dc632a0d905b0206', '2021-03-06 22:56:13', 2, 1),
+(9, 'new', 'user', 'news', 'usernew', '7a0f98436ec7901f5bed8d6c94c50493', '2021-03-07 13:17:54', 2, 1);
 
 --
 -- Indexes for dumped tables
@@ -1495,13 +1505,13 @@ ALTER TABLE `auth_user_user_permissions`
 -- AUTO_INCREMENT for table `collection_breakdown`
 --
 ALTER TABLE `collection_breakdown`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT for table `deposit`
 --
 ALTER TABLE `deposit`
-  MODIFY `DEP_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=249;
+  MODIFY `DEP_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=252;
 
 --
 -- AUTO_INCREMENT for table `django_admin_log`
@@ -1525,7 +1535,7 @@ ALTER TABLE `django_migrations`
 -- AUTO_INCREMENT for table `or_set`
 --
 ALTER TABLE `or_set`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -1537,7 +1547,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `USER_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `USER_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables

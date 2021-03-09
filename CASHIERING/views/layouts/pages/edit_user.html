@@ -53,22 +53,23 @@
                         </div>
                         <!-- end panel-heading -->
                         <!-- begin panel-body -->
-                        <div class="panel-body">
-                            <table id="data-table-responsives" class="table table-hover" style="overflow-x: hidden;">
+                        <div class="panel-body" style="height: 500px; overflow-y: auto;">
+                            <table id="data-table-responsives" class="table table-hover table-striped" style="overflow-x: hidden;">
                                 <thead>
                                     <tr>
-                                        <th class="text-nowrap">ID</th>
-                                        <th class="text-nowrap">First Name</th>
-                                        <th class="text-nowrap">Middle Name</th>
-                                        <th class="text-nowrap">Last Name</th>
-                                        <th class="text-nowrap">Username</th>
-                                        <th class="text-nowrap">Date Added</th>
-                                        <th class="text-nowrap">Role</th>
-                                        <th width="20%" class="text-nowrap text-center">Option</th>
+                                        <th class="text-nowrap bg-inverse text-white">ID</th>
+                                        <th class="text-nowrap bg-inverse text-white">First Name</th>
+                                        <th class="text-nowrap bg-inverse text-white">Middle Name</th>
+                                        <th class="text-nowrap bg-inverse text-white">Last Name</th>
+                                        <th class="text-nowrap bg-inverse text-white">Username</th>
+                                        <th class="text-nowrap bg-inverse text-white">Date Added</th>
+                                        <th class="text-nowrap bg-inverse text-white">Role</th>
+                                        <th class="text-nowrap bg-inverse text-white">Status</th>
+                                        <th width="20%" class="text-nowrap text-center bg-inverse text-white">Option</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
+                                    <!--  -->
                                 </tbody>
                             </table>
                         </div>
@@ -262,7 +263,7 @@
         App.init();
         TableManageCombine.init();
     });
-    var dt_user = $('#data-table-responsives').DataTable({
+    var dt_user = $('#data-table-responsives').DataTable({ // eto ung table ntin, initialize as new datatable
             'paging'      : false,
             'lengthChange': false,
             'searching'   : false,
@@ -299,22 +300,24 @@
                         columns: [1,2,3,4]
                     }
                 },
-                {
+                { 
                     extend:    'pdf',
                     text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
                     titleAttr: 'PDF',
                     exportOptions: {
                         columns: [1,2,3,4]
                     }
-                }
+                } //eto ung tatlong buttons
             ],
             // ,columnDefs:[{targets:1, render:function(data){
             //     return moment(data).format('YYYY/MM/DD');
             // }}]
             columnDefs:[
                 {
-                    targets:7, render:function(data){
-                        return `<a href="#view_modal" class="btn btn-xs btn-primary viewBtn" data-toggle="modal"><i class="fas fa-eye m-r-5"></i>View</a>`;
+                    targets:8, render:function(data){
+                        return `<a href="#view_modal" class="btn btn-xs btn-primary viewBtn" data-toggle="modal" title="view"><i class="fas fa-eye"></i></a>
+                            <a href="javascript:;" class="btn btn-xs btn-danger deactBtn" title="deactivate"><i class="fas fa-ban"></i></a>
+                            <a href="javascript:;" class="btn btn-xs btn-success reactBtn" title="reactivate"><i class="fas fa-undo-alt"></i></a>`;
                     }
                 },
                 {
@@ -322,7 +325,7 @@
                     visible: false
                 },
                 {
-                    targets:6, render:function(data){
+                    targets:6, render:function(data) {
                         if (data == 'Admin') {
                             return `<span class="label label-purple f-s-11 role">${data}</span>`
                         }
@@ -334,6 +337,20 @@
                 {
                     targets:[1,2,3,6,7],
                     className: 'text-center'
+                },
+                {
+                    targets:7, render:function(data) {
+                        if (data == 1) {
+                            return `<span class="badge badge-lime f-s-11 role">Active</span>`
+                        }
+                        else {
+                            return `<span class="badge badge-secondary f-s-11 role">Inactive</span>`
+                        }
+                    }
+                },
+                {
+                    targets:8,
+                    className: 'text-nowrap text-center'
                 }
             ]
         });
@@ -399,17 +416,16 @@
             success: function(obj) {
                 dt_user.clear().draw();
                 $.each(obj, function(index, data){
-                    if (data[7] == 1) {
-                        dt_user.row.add([
-                            data[0],
-                            data[1],
-                            data[2],
-                            data[3],
-                            data[4],
-                            data[5],
-                            data[6]
-                        ]);
-                    }
+                    dt_user.row.add([
+                        data[0], // eto yung 
+                        data[1], // eto ung frsstname
+                        data[2], // middlename
+                        data[3], // ;astname
+                        data[4],
+                        data[5],
+                        data[6],
+                        data[7]
+                    ]);
                 })
                 dt_user.draw();
             },
@@ -520,6 +536,118 @@
                 }
             });
         }
+    });
+
+    $('#data-table-responsives tbody').on('click', '.deactBtn',function() {
+        dt_user.columns(0).visible(true);
+        var act_id = $(this).closest("tr").find("td:eq(0)").html();
+        var act = 'deact';
+        swal({
+            title: "Deactivate",
+            text: "Are you sure to deactivate User-"+act_id+"?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d9534f",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: true,
+            customClass: "Custom_Cancel"
+        },
+        function(isConfirm) {
+            if (isConfirm){
+                dt_user.columns(0).visible(false);
+                $.ajax({
+                    url: "{% url 'deactivate_user' %}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        act_id: act_id,
+                        act: act,
+                        csrfmiddlewaretoken: "{{csrf_token}}"
+                    },
+                    success: function(data) {
+                        loadViewdata();
+                        swal({
+                            title: "Deactivated Successfully", 
+                            text: "User-"+ act_id + "\nwas deactivated successfully!", 
+                            type: "success",
+                            showLoaderOnConfirm: true,
+                            confirmButtonColor: "#5cb85c",
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        var errMsg = xhr.status + ': ' + xhr.statusText;
+                        swal({
+                            title: "Error!", 
+                            text: errMsg,
+                            type: "error",
+                            confirmButtonColor: "#428bca",
+                            showLoaderOnConfirm: true
+                        })
+                    }
+                });
+            }
+            else {
+                dt_user.columns(0).visible(false);
+            }
+        });
+    });
+
+    $('#data-table-responsives tbody').on('click', '.reactBtn',function() {
+        dt_user.columns(0).visible(true);
+        var act_id = $(this).closest("tr").find("td:eq(0)").html();
+        var act = 'react';
+        swal({
+            title: "Deactivate",
+            text: "Are you sure to reactivate User-"+act_id+"?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d9534f",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: true,
+            customClass: "Custom_Cancel"
+        },
+        function(isConfirm) {
+            if (isConfirm){
+                dt_user.columns(0).visible(false);
+                $.ajax({
+                    url: "{% url 'deactivate_user' %}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        act_id: act_id,
+                        act: act,
+                        csrfmiddlewaretoken: "{{csrf_token}}"
+                    },
+                    success: function(data) {
+                        loadViewdata();
+                        swal({
+                            title: "Deactivated Successfully", 
+                            text: "User-"+ act_id + "\nwas deactivated successfully!", 
+                            type: "success",
+                            showLoaderOnConfirm: true,
+                            confirmButtonColor: "#5cb85c",
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        var errMsg = xhr.status + ': ' + xhr.statusText;
+                        swal({
+                            title: "Error!", 
+                            text: errMsg,
+                            type: "error",
+                            confirmButtonColor: "#428bca",
+                            showLoaderOnConfirm: true
+                        })
+                    }
+                });
+            }
+            else {
+                dt_user.columns(0).visible(false);
+            }
+        });
     });
 </script>
 {% endblock%}

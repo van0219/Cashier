@@ -297,6 +297,7 @@
     $(document).ready(function() {
         App.init();
         TableManageCombine.init();
+        highlightSideNav();
         get_sis_payments();
         get_sis_payments2();
         handleBarChart('DAILY');
@@ -802,6 +803,25 @@
             });
         };
         return;
+    };
+
+    function highlightSideNav() {
+        $('#li-dash').removeClass('text-white');
+        $('#add-col-caret').removeClass('text-white');
+        $('#add-col').removeClass('text-white');
+        $('#add-sis').removeClass('text-white');
+        $('#view-rec-caret').click();
+        $('#view-rec-caret').addClass('text-white');
+        $('#view-rec').removeClass('text-white');
+        $('#trans-log').removeClass('text-white');
+        $('#view-sis').addClass('text-white');
+        $('#col-rep-caret').removeClass('text-white');
+        $('#acct-forms').removeClass('text-white');
+        $('#cert').removeClass('text-white');
+        $('#mon-col').removeClass('text-white');
+        $('#sum-col').removeClass('text-white');
+        $('#cash-receipt').removeClass('text-white');
+        $('#deposit_but').removeClass('text-white');
     };
 </script>
 {% endblock%}

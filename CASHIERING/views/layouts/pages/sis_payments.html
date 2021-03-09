@@ -217,6 +217,7 @@
         App.init();
         Highlight.init();
         TableManageResponsive.init();
+        highlightSideNav();
         getCurrentORnum();
         getIncType();
         $('#or_lname').val('PUP');
@@ -565,5 +566,22 @@
         $('#total-fee').text(total_fee.toFixed(2));
         $(this).closest('tr').remove();
     });
+
+    function highlightSideNav() {
+        $('#li-dash').removeClass('text-white');
+        $('#add-col-caret').click();
+        $('#add-col-caret').addClass('text-white');
+        $('#add-col').removeClass('text-white');
+        $('#add-sis').addClass('text-white');
+        $('#view-rec-caret').removeClass('text-white');
+        $('#view-rec').removeClass('text-white');
+        $('#trans-log').removeClass('text-white');
+        $('#view-sis').removeClass('text-white');
+        $('#col-rep-caret').removeClass('text-white');
+        $('#acct-forms').removeClass('text-white');
+        $('#mon-col').removeClass('text-white');
+        $('#sum-col').removeClass('text-white');
+        $('#cash-receipt').removeClass('text-white');
+    };
 </script>
 {% endblock %}

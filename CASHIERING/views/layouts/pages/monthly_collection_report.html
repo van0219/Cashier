@@ -214,6 +214,7 @@
         App.init();
         TableManageCombine.init();
         FormPlugins.init();
+        highlightSideNav();
     });
     $('#data-table-combines').DataTable({
         'paging'      : false,
@@ -253,5 +254,24 @@
     ],
         "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
     });
+
+    function highlightSideNav() {
+        $('#li-dash').removeClass('text-white');
+        $('#add-col-caret').removeClass('text-white');
+        $('#add-col').removeClass('text-white');
+        $('#add-sis').removeClass('text-white');
+        $('#view-rec-caret').removeClass('text-white');
+        $('#view-rec').removeClass('text-white');
+        $('#trans-log').removeClass('text-white');
+        $('#view-sis').removeClass('text-white');
+        $('#col-rep-caret').click();
+        $('#col-rep-caret').addClass('text-white');
+        $('#acct-forms').removeClass('text-white');
+        $('#cert').removeClass('text-white');
+        $('#mon-col').addClass('text-white');
+        $('#sum-col').removeClass('text-white');
+        $('#cash-receipt').removeClass('text-white');
+        $('#deposit_but').removeClass('text-white');
+    };
 </script>
 {% endblock %}

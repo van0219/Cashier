@@ -270,11 +270,12 @@ def update_user_data(request):
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
-def load_user_data2(request):
+def load_user_data2(request): # eto na ung python function na tatawagin ung stored procedure
     cursor = connection.cursor()
-    cursor.callproc("SP_SELECT_ALL_USERS2")
+    cursor.callproc("SP_SELECT_ALL_USERS2") # eto ung stored procedure
     data = cursor.fetchall()
-    return JsonResponse(data, safe=False)
+    return JsonResponse(data, safe=False) # eto ung mag rereturn daladala ung nakuhang result, at makikita mo un sa inspect
+    # element, yung network..
 
 def deactivate_user(request):
     cursor = connection.cursor()

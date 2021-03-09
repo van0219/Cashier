@@ -697,10 +697,10 @@
         "aoColumns" : [ 
             { sWidth: '10%' },
             { sWidth: '30%' },
-            { sWidth: '25%' },
+            { sWidth: '40%' },
             { sWidth: '0%' },
             { sWidth: '0%' },
-            { sWidth: '25%' }
+            { sWidth: '15%' }
         ],
         dom: 'lBfrtip',
         buttons: [
@@ -733,8 +733,8 @@
         columnDefs:[
             {
                 targets:5, render:function(data){
-                    return `<a href="#view_modal" class="btn btn-xs btn-primary view" data-toggle="modal"><i class="fas fa-eye m-r-5"></i>View</a>
-                            <a href="javascript:;" class="btn btn-xs btn-danger remove"><i class="fas fa-trash m-r-5"></i>Remove</a>`;
+                    return `<a href="#view_modal" class="btn btn-xs btn-primary view" data-toggle="modal" title="View"><i class="fas fa-eye"></i></a>
+                            <a href="javascript:;" class="btn btn-xs btn-danger remove" title="Remove"><i class="fas fa-trash"></i></a>`;
                 }
             },
             {

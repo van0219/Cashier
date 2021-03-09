@@ -159,6 +159,7 @@
             DashboardV2.init();
             Notification.init();
             Highlight.init();
+            highlightSideNav();
             loadDashboardCards();
             loadDashboardBarGraph();
             getMonthlyCollectionDeposit();
@@ -513,6 +514,21 @@
             }
         }
         return (num / si[i].v).toFixed(2).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") + si[i].s;
-    }
+    };
+
+    function highlightSideNav() {
+        $('#li-dash').addClass('text-white');
+        $('#add-col').removeClass('text-white');
+        $('#add-sis').removeClass('text-white');
+        $('#view-rec').removeClass('text-white');
+        $('#trans-log').removeClass('text-white');
+        $('#view-sis').removeClass('text-white');
+        $('#acct-forms').removeClass('text-white');
+        $('#cert').removeClass('text-white');
+        $('#mon-col').removeClass('text-white');
+        $('#sum-col').removeClass('text-white');
+        $('#cash-receipt').removeClass('text-white');
+        $('#deposit_but').removeClass('text-white');
+    };
 </script>
 {% endblock %}

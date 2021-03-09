@@ -66,7 +66,8 @@ urlpatterns = [
     path('update_uacs_inc_type', views.update_uacs_inc_type, name="update_uacs_inc_type"),  
     path('load_user_data', views.load_user_data, name="load_user_data"), 
     path('update_user_data', views.update_user_data, name="update_user_data"),     
-    path('load_user_data2', views.load_user_data2, name="load_user_data2"), 
+    path('load_user_data2', views.load_user_data2, name="load_user_data2"), # eto ung url na pupuntan nung ajax call
+    # tapos pupuntahan nya tong views.load_user_data2 na nasa views.py
     path('deactivate_user', views.deactivate_user, name="deactivate_user"),
     path('get_uacs_code', views.get_uacs_code, name="get_uacs_code"),
     path('add_or_set', views.add_or_set, name="add_or_set"),
