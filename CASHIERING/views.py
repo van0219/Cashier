@@ -536,3 +536,51 @@ def load_admin_dashboard_cards(request):
     cursor.callproc("SP_LOAD_ADMIN_DASHBOARD_CARDS")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def send_password(request):
+    import smtplib
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+    from email.mime.image import MIMEImage
+    from email.mime.application import MIMEApplication
+
+    # setup credentials
+    sender = request.POST['sender']
+    password = request.POST['password']
+
+    receiver = request.POST['receiver']
+    
+    # header
+    msg = MIMEMultipart()
+    msg['Subject'] = request.POST['subject']
+    msg['From'] = 'Contact Tracing System'
+    msg['To'] = request.POST['receiver_fullname']
+    # end header
+
+    # message
+    message = "Your QR code is unique. Save a copy of this for emergency purposes."
+
+    # body
+    msgText = MIMEText('<b>%s</b>' % (message), 'html')
+    msg.attach(msgText)
+    # if with image attachment
+    imgFile = "CTSN_APP/static/assets/img/cts_qrcode/" + request.POST['qr_filename'] + '.jpg'
+    imgRename = "Your-QR.jpg"
+    with open(imgFile, 'rb') as fp:
+        img = MIMEImage(fp.read())
+        img.add_header('Content-Disposition', 'attachment', filename= imgRename)
+    msg.attach(img)
+    # end body
+
+    # send message
+    try:
+        # server = smtplib.SMTP(host='smtp-mail.outlook.com', port=587) # Outlook SMTP
+        server = smtplib.SMTP('smtp.gmail.com:587') # Gmail SMTP
+        server.ehlo()
+        server.starttls()
+        server.login(sender, password)
+        server.sendmail(sender, receiver, msg.as_string())
+        server.quit()
+    except:
+        pass
+    return JsonResponse('email sent', safe=False)

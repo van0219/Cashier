@@ -216,6 +216,7 @@
                 $(document).ready(function() {
                     App.init();
                     Dashboard.init();
+                    highlightSideNav();
                     loadDashboardCards();
                 });
             }
@@ -261,6 +262,17 @@
                 });
             }
         });
+    };
+
+    function highlightSideNav() {
+        $('#li-dash').addClass('text-white');
+        $('#li-user-mngt').removeClass('text-white');
+        $('#li-add').removeClass('text-white');
+        $('#li-edit').removeClass('text-white');
+        $('#li-conf').removeClass('text-white');
+        $('#li-orsetup').removeClass('text-white');
+        $('#setup').removeClass('text-white');
+        $('#li-email').removeClass('text-white');
     };
 </script>
 {% endblock %}

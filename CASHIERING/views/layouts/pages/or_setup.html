@@ -85,6 +85,7 @@
     $(document).ready(function() {
         App.init();
         Highlight.init();
+        highlightSideNav();
     });
 
     $('#set').on('click', function() {
@@ -162,5 +163,17 @@
         $('#to-label').removeClass('text-inverse');
         $('#to-label').addClass('text-white');
     });
+
+    function highlightSideNav() {
+        $('#li-dash').removeClass('text-white');
+        $('#li-user-mngt').removeClass('text-white');
+        $('#li-add').removeClass('text-white');
+        $('#li-edit').removeClass('text-white');
+        $('#li-conf').click();
+        $('#li-conf').addClass('text-white');
+        $('#li-orsetup').addClass('text-white');
+        $('#setup').removeClass('text-white');
+        $('#li-email').removeClass('text-white');
+    };
 </script>
 {% endblock %}

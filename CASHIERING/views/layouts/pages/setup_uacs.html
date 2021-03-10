@@ -569,6 +569,7 @@
         App.init();
         TableManageCombine.init();
         FormPlugins.init();
+        highlightSideNav();
 
         $.ajax({
             type: "POST",
@@ -1667,5 +1668,17 @@
             document.getElementById( "o_code" ).removeAttribute('disabled');
         }
     });
+
+    function highlightSideNav() {
+        $('#li-dash').removeClass('text-white');
+        $('#li-user-mngt').removeClass('text-white');
+        $('#li-add').removeClass('text-white');
+        $('#li-edit').removeClass('text-white');
+        $('#li-conf').click();
+        $('#li-conf').addClass('text-white');
+        $('#li-orsetup').removeClass('text-white');
+        $('#setup').addClass('text-white');
+        $('#li-email').removeClass('text-white');
+    };
 </script>
 {% endblock %}

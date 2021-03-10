@@ -127,6 +127,17 @@
 				}
 			});
 		};
+
+		$('#email_config').on('shown.bs.modal', function() {
+			$('#li-dash').removeClass('text-white');
+			$('#li-user-mngt').removeClass('text-white');
+			$('#li-add').removeClass('text-white');
+			$('#li-edit').removeClass('text-white');
+			$('#li-conf').removeClass('text-white');
+			$('#li-orsetup').removeClass('text-white');
+			$('#setup').removeClass('text-white');
+			$('#li-email').addClass('text-white');
+		});
 	</script>
 </body>
 </html>

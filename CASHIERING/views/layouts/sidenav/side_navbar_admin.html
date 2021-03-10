@@ -30,36 +30,36 @@
         <ul class="nav">
             <li class="nav-header">Navigation</li>
             <li>
-                <a href="admin_dashboard">
+                <a href="admin_dashboard" id="li-dash">
                     <i class="fa fa-th-large"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
             <li class="has-sub">
-                <a href="javascript:;">
+                <a href="javascript:;" id="li-user-mngt">
                     <b class="caret"></b>
                     <i class="fas fa-users"></i> 
                     <span>User Management</span>
                 </a>
                 <ul class="sub-menu">
-                    <li><a href="add_user"><i class="fas fa-user-plus f-s-10"></i> Add User</a></li>
-                    <li><a href="edit_user"><i class="fas fa-user f-s-9"><small><i class="fas fa-eye" style="font-size: 5px; margin-right: -2px;"></i></small></i> View User</a></li>
+                    <li><a href="add_user" id="li-add"><i class="fas fa-user-plus f-s-10"></i> Add User</a></li>
+                    <li><a href="edit_user" id="li-edit"><i class="fas fa-user f-s-9"><small><i class="fas fa-eye" style="font-size: 5px; margin-right: -2px;"></i></small></i> View User</a></li>
                 </ul>
             </li>
             <li class="has-sub">
-                <a href="javascript:;">
+                <a href="javascript:;" id="li-conf">
                     <b class="caret"></b>
                     <i class="fas fa-cogs"></i>
                     <span>System Configuration</span> 
                 </a>
                 <ul class="sub-menu">
-                    <li><a href="or_setup"><i class="fas fa-gavel"></i> Setup OR</a></li>
+                    <li><a href="or_setup" id="li-orsetup"><i class="fas fa-gavel"></i> Setup OR</a></li>
                     <li><a href="get_UACS_data_table" id="setup"><i class="fas fa-file-code"></i> Setup UACS</a></li>
                     <!-- <li><a href="activity_log"><i class="fas fa-tasks"></i> Activity Log</a></li> -->
                 </ul>
             </li>
             <li class="has-sub" onclick="onShowModal()">
-                <a href="#email_config" data-toggle="modal">
+                <a href="#email_config" data-toggle="modal" id="li-email">
                     <!-- <b class="caret"></b> -->
                     <i class="fas fa-envelope-open"></i>
                     <span>Email Configuration</span>

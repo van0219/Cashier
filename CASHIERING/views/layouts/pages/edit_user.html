@@ -262,6 +262,7 @@
     $(document).ready(function() {
         App.init();
         TableManageCombine.init();
+        highlightSideNav();
     });
     var dt_user = $('#data-table-responsives').DataTable({ // eto ung table ntin, initialize as new datatable
             'paging'      : false,
@@ -279,6 +280,7 @@
                 { sWidth: '20%' },
                 { sWidth: '0%' },
                 { sWidth: '0%' },
+                { sWidth: '0%' },
                 { sWidth: '20%' },
                 { sWidth: '20%' },
             ],
@@ -289,7 +291,7 @@
                     text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
                     titleAttr: 'Print',
                     exportOptions: {
-                        columns: [1,2,3,4]
+                        columns: [1,2,3,4,5]
                     }
                 },
                 {
@@ -297,7 +299,7 @@
                     text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
                     titleAttr: 'Excel',
                     exportOptions: {
-                        columns: [1,2,3,4]
+                        columns: [1,2,3,4,5]
                     }
                 },
                 { 
@@ -305,7 +307,7 @@
                     text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
                     titleAttr: 'PDF',
                     exportOptions: {
-                        columns: [1,2,3,4]
+                        columns: [1,2,3,4,5]
                     }
                 } //eto ung tatlong buttons
             ],
@@ -315,9 +317,14 @@
             columnDefs:[
                 {
                     targets:8, render:function(data){
-                        return `<a href="#view_modal" class="btn btn-xs btn-primary viewBtn" data-toggle="modal" title="view"><i class="fas fa-eye"></i></a>
-                            <a href="javascript:;" class="btn btn-xs btn-danger deactBtn" title="deactivate"><i class="fas fa-ban"></i></a>
+                        if (data == 1) {
+                            return `<a href="#view_modal" class="btn btn-xs btn-primary viewBtn" data-toggle="modal" title="view"><i class="fas fa-eye"></i></a>
+                            <a href="javascript:;" class="btn btn-xs btn-danger deactBtn" title="deactivate"><i class="fas fa-ban"></i></a>`;
+                        }
+                        else if (data == 0) {
+                            return `<a href="#view_modal" class="btn btn-xs btn-primary viewBtn" data-toggle="modal" title="view"><i class="fas fa-eye"></i></a>
                             <a href="javascript:;" class="btn btn-xs btn-success reactBtn" title="reactivate"><i class="fas fa-undo-alt"></i></a>`;
+                        }
                     }
                 },
                 {
@@ -424,6 +431,7 @@
                         data[4],
                         data[5],
                         data[6],
+                        data[7],
                         data[7]
                     ]);
                 })
@@ -596,14 +604,14 @@
 
     $('#data-table-responsives tbody').on('click', '.reactBtn',function() {
         dt_user.columns(0).visible(true);
-        var act_id = $(this).closest("tr").find("td:eq(0)").html();
+        var act_id = $(this).closest("tbody tr").find("td:eq(0)").html();
         var act = 'react';
         swal({
-            title: "Deactivate",
+            title: "Reactivate",
             text: "Are you sure to reactivate User-"+act_id+"?",
             type: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#d9534f",
+            confirmButtonColor: "#5cb85c",
             confirmButtonText: "Yes",
             cancelButtonText: "No",
             closeOnConfirm: false,
@@ -625,8 +633,8 @@
                     success: function(data) {
                         loadViewdata();
                         swal({
-                            title: "Deactivated Successfully", 
-                            text: "User-"+ act_id + "\nwas deactivated successfully!", 
+                            title: "Reactivated Successfully", 
+                            text: "User-"+ act_id + "\nwas reactivated successfully!", 
                             type: "success",
                             showLoaderOnConfirm: true,
                             confirmButtonColor: "#5cb85c",
@@ -649,5 +657,17 @@
             }
         });
     });
+
+    function highlightSideNav() {
+        $('#li-dash').removeClass('text-white');
+        $('#li-user-mngt').click();
+        $('#li-user-mngt').removeClass('text-white');
+        $('#li-add').removeClass('text-white');
+        $('#li-edit').addClass('text-white');
+        $('#li-conf').removeClass('text-white');
+        $('#li-orsetup').removeClass('text-white');
+        $('#setup').removeClass('text-white');
+        $('#li-email').removeClass('text-white');
+    };
 </script>
 {% endblock%}

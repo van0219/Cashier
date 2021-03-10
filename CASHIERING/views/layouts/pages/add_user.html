@@ -57,9 +57,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
-                                    <label class="col-md-4 col-sm-4 col-form-label" for="email">Username <span class="text-red">*</span> :</label>
+                                    <label class="col-md-4 col-sm-4 col-form-label" for="uname">Username <span class="text-red">*</span> :</label>
                                     <div class="col-md-8 col-sm-8">
                                         <input class="form-control" type="text" id="uname" name="uname" placeholder="Username" data-parsley-required="true" data-parsley-required-message="Username is required"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row m-b-15">
+                                    <label class="col-md-4 col-sm-4 col-form-label" for="email">Username <span class="text-red">*</span> :</label>
+                                    <div class="col-md-8 col-sm-8">
+                                        <input class="form-control" type="email" id="email" name="email" placeholder="Email Address" data-parsley-required="true" data-parsley-required-message="Username is required"/>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
@@ -130,6 +136,7 @@
     $(document).ready(function() {
         App.init();
         Highlight.init();
+        highlightSideNav();
     });
 
     function uploadProfile(input) {
@@ -149,9 +156,9 @@
 
     function addClick(event) {
         event.preventDefault();
-        valid_email();
+        valid_uname();
     };
-    function check_email(cond) {
+    function check_uname(cond) {
         if(cond == 0) {
             $('#addForm').parsley();
             if($('#addForm').parsley().validate()) {
@@ -227,7 +234,7 @@
             });
         }
     };
-    function valid_email() {
+    function valid_uname() {
         var uname = $.trim($('#uname').val());
         $.ajax({
             url: "{% url 'check_username' %}",
@@ -240,7 +247,7 @@
             },
             success:function(obj) {
                 cond = (obj[0] == 1);
-                check_email(cond);
+                check_uname(cond);
             },
             error:function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -251,7 +258,45 @@
                     showLoaderOnConfirm: true
                 })
             }
-        })
+        });
+    };
+
+    function send_password() {
+        $.ajax({
+            url: "{% url 'send_password' %}",
+            type: "POST",
+            dataType: 'json',
+            cache: false,
+            data: { 
+                uname: uname,
+                pass: pass,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success:function(obj) {
+
+            },
+            error:function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+
+    function highlightSideNav() {
+        $('#li-dash').removeClass('text-white');
+        $('#li-user-mngt').click();
+        $('#li-user-mngt').addClass('text-white');
+        $('#li-add').addClass('text-white');
+        $('#li-edit').removeClass('text-white');
+        $('#li-conf').removeClass('text-white');
+        $('#li-orsetup').removeClass('text-white');
+        $('#setup').removeClass('text-white');
+        $('#li-email').removeClass('text-white');
     };
 </script>
 {% endblock %}
