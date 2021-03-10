@@ -7,6 +7,24 @@
 <link href="{%static 'assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css' %}" rel="stylesheet" />
 <!--  -->
+<link href="{%static 'assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/ionRangeSlider/css/ion.rangeSlider.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/ionRangeSlider/css/ion.rangeSlider.skinNice.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/password-indicator/css/password-indicator.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-combobox/css/bootstrap-combobox.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-tag-it/css/jquery.tagit.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/select2/dist/css/select2.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-eonasdan-datetimepicker/build/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-colorpalette/css/bootstrap-colorpalette.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker-fontawesome.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker-glyphicons.css' %}" rel="stylesheet" />
 <style>
     .nameBox {
         background-color: white !important;
@@ -17,6 +35,9 @@
         background-color: #363636 !important;
         color: white !important;
         font-weight: bold !important;
+    }
+    .#uacs_select {
+        z-index: 9999;
     }
 </style>
 <style type="text/css" media="print">
@@ -85,8 +106,8 @@
                                         </div>                                    
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" id="or_studnum" class="form-control m-b-5 studno" data-parsley-required="true" data-parsley-required-message="Student number is required" placeholder="Student Number"/>
-                                        <select class="form-control selectpicker individual_sel m-b-5" name="selectBox">;">
+                                        <input type="text" id="or_studnum" class="form-control m-b-5 studno" data-parsley-required="true" data-parsley-required-message="Student number is required" placeholder="Student Number" />
+                                        <select class="form-control selectpicker individual_sel m-b-5" data-size="10" data-style="btn-white">
                                             <option selected disabled>Select level of education</option>
                                             <option value="Diploma">Diploma</option>
                                             <option value="Bachelor's Degree">Bachelor's Degree</option>
@@ -126,7 +147,7 @@
                                         <div class="form-group row m-b-15">
                                             <label class="col-md-4 col-sm-4 col-form-label">Income Type :</label>
                                             <div class="col-md-8 col-sm-8">
-                                                <select class="form-control" id="inc-select" name="selectBox" data-parsley-excluded="true" on>
+                                                <select class="form-control" data-size="10" data-live-search="false" data-style="btn-white"  id="inc-select" data-parsley-excluded="true">
                                                     <option value="Please choose" selected disabled>Please choose</option>
                                                 </select>
                                             </div>
@@ -134,7 +155,7 @@
                                         <div class="form-group row m-b-15">
                                             <label class="col-md-4 col-sm-4 col-form-label">UAC Code :</label>
                                             <div class="col-md-8 col-sm-8">
-                                                <select class="form-control selectpicker text-ellipsis" id="uacs_select" name="selectBox" data-parsley-excluded="true">
+                                                <select class="form-control" data-size="10" data-live-search="true" data-style="btn-white" id="uacs_select" data-parsley-excluded="true">
                                                     <option value="Please choose" selected disabled>Please choose</option>
                                                 </select>
                                             </div>
@@ -218,6 +239,27 @@
 <script src="{%static 'assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js' %}"></script>
 <script src="{%static 'assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js' %}"></script>
 <script src="{%static 'assets/js/demo/table-manage-responsive.demo.min.js' %}"></script>
+<!--  -->
+<script src="{%static 'assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+<script src="{%static 'assets/plugins/ionRangeSlider/js/ion-rangeSlider/ion.rangeSlider.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js' %}"></script>
+<script src="{%static 'assets/plugins/masked-input/masked-input.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js' %}"></script>
+<script src="{%static 'assets/plugins/password-indicator/js/password-indicator.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-combobox/js/bootstrap-combobox.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput-typeahead.js' %}"></script>
+<script src="{%static 'assets/plugins/jquery-tag-it/js/tag-it.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-daterangepicker/moment.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<script src="{%static 'assets/plugins/select2/dist/js/select2.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-eonasdan-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-show-password/bootstrap-show-password.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-colorpalette/js/bootstrap-colorpalette.js' %}"></script>
+<script src="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.js' %}"></script>
+<script src="{%static 'assets/plugins/clipboard/clipboard.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/form-plugins.demo.min.js' %}"></script>
 {% endblock %}
 {% block init %}
 <script>
@@ -226,6 +268,8 @@
         Highlight.init();
         highlightSideNav();
         TableManageResponsive.init();
+        // FormPlugins.init();
+        $('select').selectpicker('render');
         getCurrentORnum();
         getIncType();
     });
@@ -242,6 +286,8 @@
                 $.each(obj, function(index, option){
                     $('#inc-select').append( new Option(option,option)); //value and text
                 });
+                $('#inc-select option').prop('style', 'font-size: 11px;')
+                $('#inc-select').selectpicker('refresh');
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -268,10 +314,12 @@
             success: function(obj) {
                 $('#uacs_select').empty();
                 $('#uacs_select').append(new Option('Please choose')).select();
-                $('#uacs_select').find('option:selected').prop('disabled',true);
+                $('#uacs_select').find('option:selected').prop('disabled',true);                
                 $.each(obj, function(index, option){
-                    $('#uacs_select').append( new Option(option[0]+' - '+option[1])); //text and value
+                    $('#uacs_select').append( new Option(option[0]+' - '+option[1],option[0])); //text and value
                 });
+                $('#uacs_select option').prop('style', 'font-size: 11px;');
+                $('#uacs_select').selectpicker('refresh');
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -401,16 +449,22 @@
         return;
     };
 
-    $('#inc-select').on('input', function() {
-        getUacsCode($('#inc-select').find('option:selected').text());
+    $('#inc-select').on('change', function() {
+        getUacsCode($('#inc-select').val());
     });
 
-    $('#or_studnum').on('focusin', function() {
-        $('#or_studnum').mask('2099-99999-CM-9'); //masked input for student number
-    });
+    // $('#or_studnum').on('focusin', function() {
+    //     $('#or_studnum').mask('2099-99999-CM-9'); //masked input for student number
+    // });
 
     $('#or_studnum').on('keyup', function() {
-        var studno = $('#or_studnum').val();
+        var studno = $('#or_studnum').val().trim();
+        if (studno.length > 11) {
+            $('#or_studnum').prop('style', 'text-transform: uppercase;'); 
+        }
+        else {
+            $('#or_studnum').prop('style', 'text-transform: capitalize;'); 
+        }
         $.ajax({
             type: "POST",
             url: "{% url 'get_student_name' %}",
@@ -552,6 +606,7 @@
         $('.studno').show();
         $('#or_comp').val('');
         $('#addForm').parsley().reset();
+        $('#or_studnum').prop('style', 'text-transform: capitalize;');
     });
     var total_fee = 0;
     var minus_fee = '';
@@ -562,11 +617,11 @@
         var uacs = $('#uacs_select').find('option:selected').text();
         var amt = parseFloat($('#number').val());
         var amtBox = $('#number').val().trim();
-        if ($('#inc-select').find('option:selected').text() == 'Please choose' || $('#uacs_select').find('option:selected').text() == 'Please choose') {
-            if ($('#inc-select').find('option:selected').text() == 'Please choose') {
+        if (inctype == 'Please choose' || uacs == 'Please choose') {
+            if ($('#inc-select').val() == 'Please choose') {
                 $('#inc-select').addClass('is-invalid');
             }
-            if ($('#uacs_select').find('option:selected').text() == 'Please choose') {
+            if ($('#uacs_select').val() == 'Please choose') {
                 $('#uacs_select').addClass('is-invalid');
             }
             if (amtBox == '' && amtBox.length == 0) {
@@ -580,10 +635,10 @@
                 $('#number').removeClass('is-invalid');
                 $('#data-table-responsives tbody').append(
                     `<tr>
-                        <td>
-                            <a href="javascript:;" class="btn btn-white btn-xs">${inctype}</a>
+                        <td class="text-nowrap">
+                            <span class="label label-default f-s-11">${inctype}</span>
                         </td>
-                        <td>${uacs}</td>
+                        <td class="text-nowrap">${uacs}</td>
                         <td>${amt.toFixed(2)}</td>
                         <td align="center">
                             <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove" title="remove"><i class="fas fa-times"></i></a>
@@ -602,7 +657,7 @@
         }
     });
     $('#inc-select').on('change', function() {
-        if ($('#inc-select').find('option:selected').text() == 'Please choose') {
+        if ($('#inc-select').val() == 'Please choose') {
             $('#inc-select').addClass('is-invalid');
         }
         else {
@@ -610,7 +665,7 @@
         }
     });
     $('#uacs_select').on('change', function() {
-        if ($('#uacs_select').find('option:selected').text() == 'Please choose') {
+        if ($('#uacs_select').val() == 'Please choose') {
             $('#uacs_select').addClass('is-invalid');
         }
         else {

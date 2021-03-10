@@ -398,7 +398,8 @@ def get_sis_bar_chart(request):
 def load_collection_history(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_COLLECTION_LOG"
-                    ,(request.POST['range'],))
+                    ,(request.POST['date_start']
+                    ,request.POST['date_end']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 

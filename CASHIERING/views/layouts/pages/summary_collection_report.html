@@ -79,8 +79,8 @@
     <!-- end row -->
     <!-- begin row -->
     <div class="row">
-        <!-- begin col-6 -->
-        <div class="col-lg-6">
+        <!-- begin col-5 -->
+        <div class="col-lg-5">
             <!-- begin panel -->
             <div class="panel panel-inverse">
                 <div class="panel-heading">
@@ -94,9 +94,9 @@
             </div>
             <!-- end panel -->
         </div>
-        <!-- end col-6 -->
-        <!-- begin col-6 -->
-        <div class="col-lg-6">
+        <!-- end col-5 -->
+        <!-- begin col-7 -->
+        <div class="col-lg-7">
             <!-- begin card -->
             <div class="card text-left">
                 <div class="card-header">
@@ -142,7 +142,7 @@
             </div>
             <!-- end card -->
         </div>
-        <!-- end col-6 -->
+        <!-- end col-7 -->
     </div>
     <!-- end row -->
 </div>
@@ -193,7 +193,6 @@
 <script>
     $(document).ready(function() {
         App.init();
-        $('#minify').click();
         FormPlugins.init();
         highlightSideNav();
         $('#select-month').val((new Date).getMonth()+1);
@@ -241,14 +240,14 @@
         // }}]
         columnDefs:[
             {
-                targets:[0],
+                targets:[0,1],
                     className: 'text-nowrap',  
             },
             {
                 targets:2, render:function(data){
                     return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 },
-                className: 'text-right'
+                className: 'text-right text-nowrap'
             }
         ]
     });

@@ -110,7 +110,7 @@
                 </div>
                 <div class="panel-body" style="height: 330px;">
                     <div id="canvas-div" class="m-t-10">
-                        <canvas id="line-chart" data-render="chart-js"></canvas>
+                        <canvas id="line-chart" data-render="chart-js" class="p-l-20"></canvas>
                     </div>
                 </div>
             </div>
@@ -276,11 +276,13 @@
                 .showValues(true)
                 .duration(250);
             
-            // barChart.yAxis.axisLabel("Total Registered Residents");
+            // barChart.yAxis.axisLabel("Amount");
             // barChart.xAxis.axisLabel('Month');
         
             d3.select('#nv-bar-chart svg').remove();
             d3.select('#nv-bar-chart').append('svg').datum(barChartData).call(barChart);
+            document.querySelector("#nv-bar-chart > svg > g > g > g.nv-y.nv-axis.nvd3-svg > g.nvd3.nv-wrap.nv-axis > g.nv-axisMaxMin.nv-axisMaxMin-y.nv-axisMax-y > text").setAttribute('style','font-size: 10px');
+            document.querySelector("#nv-bar-chart > svg > g > g > g.nv-y.nv-axis.nvd3-svg > g.nvd3.nv-wrap.nv-axis > g:nth-child(1) > g:nth-child(2) > text").setAttribute('hidden', true);
             nv.utils.windowResize(barChart.update);
         
             return barChart;

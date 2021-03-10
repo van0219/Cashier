@@ -15,7 +15,28 @@
     #col-hist-table2 {
         cursor: pointer;
     }
+    .input-daterange { 
+        z-index: 1000;
+    }
 </style>
+<link href="{%static 'assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/ionRangeSlider/css/ion.rangeSlider.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/ionRangeSlider/css/ion.rangeSlider.skinNice.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/password-indicator/css/password-indicator.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-combobox/css/bootstrap-combobox.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-tag-it/css/jquery.tagit.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/select2/dist/css/select2.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-eonasdan-datetimepicker/build/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-colorpalette/css/bootstrap-colorpalette.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker-fontawesome.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker-glyphicons.css' %}" rel="stylesheet" />
 {% endblock %}
 {% block content %}
 <!-- begin #content -->
@@ -50,28 +71,43 @@
                         <div class="tab-pane fade active show" id="card-pill-1">
                             <!-- begin row -->
                             <div class="row">
-                                <!-- begin col-2 -->
+                                <!-- begin col-12 -->
+                                <div class="col-lg-12">
+                                    <h4 class="card-title">Collection Log</h4>
+                                </div>
+                                <!-- end col-12 -->
+                            </div>
+                            <!-- end row -->
+                            <!-- begin row -->
+                            <div class="row">
+                                <!-- begin col-6 -->
                                 <div class="col-lg-2" style="margin-top: 15px;">
-                                    <span class="label label-purple f-s-11">
+                                    <span class="label label-purple f-s-11 pull-left">
                                         Total Results: <span id="table-count"></span>
                                     </span>
                                 </div>
-                                <!-- end col-2 -->
-                                <!-- begin col-8 -->
-                                <div class="col-lg-8">
-                                    <h4 class="card-title">Collection Log</h4>
+                                <!-- end col-6 -->
+                                <!-- begin col-6 -->
+                                <!-- begin col-6 -->
+                                <div class="col-lg-6">
+                                    <!-- filler -->
                                 </div>
-                                <!-- end col-8 -->
-                                <!-- begin col-2 -->
-                                <div class="col-lg-2">
-                                    <select class="form-control" id="col-hist-sel">
+                                <!-- end col-6 -->
+                                <!-- begin col-4 -->
+                                <div class="col-lg-4 m-b-5">
+                                    <!--<select class="form-control" id="col-hist-sel">
                                         <option value="1">Today</option>
                                         <option value="7">Last 7 days</option>
                                         <option value="15">Last 15 days</option>
                                         <option value="30">Last 30 days</option>
-                                    </select>
+                                    </select> -->
+                                    <div class="input-group input-daterange">
+                                        <input type="text" class="form-control" id="startDate" name="start" placeholder="Date Start" autocomplete="off" />
+                                        <span class="input-group-addon">to</span>
+                                        <input type="text" class="form-control" id="endDate" name="end" placeholder="Date End" autocomplete="off" />
+                                    </div>
                                 </div>
-                                <!-- end col-2 -->
+                                <!-- end col-4 -->
                             </div>
                             <!-- end row -->
                             <div style="height: 370px;" class="overflow-auto">
@@ -128,34 +164,61 @@
 <script src="{%static 'assets/plugins/sparkline/jquery.sparkline.js' %}"></script>
 <script src="{%static 'assets/plugins/jquery-knob/js/jquery.knob.js' %}"></script>
 <script src="{%static 'assets/js/demo/page-with-two-sidebar.demo.min.js' %}"></script>
+<!--  -->
+<script src="{%static 'assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+<script src="{%static 'assets/plugins/ionRangeSlider/js/ion-rangeSlider/ion.rangeSlider.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js' %}"></script>
+<script src="{%static 'assets/plugins/masked-input/masked-input.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js' %}"></script>
+<script src="{%static 'assets/plugins/password-indicator/js/password-indicator.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-combobox/js/bootstrap-combobox.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput-typeahead.js' %}"></script>
+<script src="{%static 'assets/plugins/jquery-tag-it/js/tag-it.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-daterangepicker/moment.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<script src="{%static 'assets/plugins/select2/dist/js/select2.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-eonasdan-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-show-password/bootstrap-show-password.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-colorpalette/js/bootstrap-colorpalette.js' %}"></script>
+<script src="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.js' %}"></script>
+<script src="{%static 'assets/plugins/clipboard/clipboard.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/form-plugins.demo.min.js' %}"></script>
 {% endblock %}
 {% block init %}
 <script>
     $(document).ready(function() {
         App.init();
         PageWithTwoSidebar.init();
+        FormPlugins.init();
         highlightSideNav();
-        load_collection_history($('#col-hist-sel').val());
+        load_collection_history(d_today, d_today);
     });
 
-    function load_collection_history(range) {
+    var d = new Date();
+    var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+
+    function load_collection_history(date_start, date_end) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_collection_history' %}",
             // cache: true,
             dataType: 'json',
             data: {
-                range: range,
+                date_start,
+                date_end,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
                 $('#col-hist-table tbody tr').remove();
                 for (var i = 0; i < obj.length; i++) {   
-                    var payor = obj[i][5] == 'SIS PAYMENT' ? 'danger' : obj[i][5] == 'COMPANY' ? 'primary' : 'success'; 
+                    var payor = obj[i][5] == 'SIS PAYMENT' ? 'danger' : obj[i][5] == 'COMPANY' ? 'primary' : 'success';
+                    var title = payor == 'danger' ? 'SIS Payment' : payor == 'primary' ? 'Company' : 'On-site student payment';
                     var dummyClass = payor.substr(0,2);
                     $('#col-hist-table tbody').append(
                         `<tr>
-                            <td class="${dummyClass}"><span class="label label-${payor} f-s-12">${obj[i][0]}</span></td>
+                            <td class="${dummyClass}"><span class="label label-${payor} f-s-12" title="${title}" style="cursor: pointer;">${obj[i][0]}</span></td>
                             <td class="text-nowrap">${obj[i][1]}</td>
                             <td class="text-nowrap">${obj[i][2]}</td>
                             <td>${obj[i][3]}</td>
@@ -179,8 +242,20 @@
         });
     };
 
-    $('#col-hist-sel').on('change', function() {
-        load_collection_history(parseInt($('#col-hist-sel').val()));
+    $('#startDate').on('change', function(event) {
+        if ($('endDate').val() != '') {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+            load_collection_history(start,end);
+        }
+    });
+
+    $('#endDate').on('change', function(event) {
+        if ($('startDate').val() != '') {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+            load_collection_history(start,end);
+        }
     });
 
     function loadKnobData() {
