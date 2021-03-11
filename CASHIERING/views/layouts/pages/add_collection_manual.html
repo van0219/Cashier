@@ -36,7 +36,7 @@
         color: white !important;
         font-weight: bold !important;
     }
-    .#uacs_select {
+    #uacs_select {
         z-index: 9999;
     }
 </style>
@@ -582,7 +582,7 @@
         $('.company').hide();
         $('.studno').hide();
         $('.individual').show();
-        $('.individual_sel').show();
+        $('.individual_sel').selectpicker('show');
         $('#or_lname').val('');
         $('#or_fname').val('');
         $('#or_comp').val('');
@@ -591,7 +591,7 @@
     });
     $("#radiorequired2").click(function() { //company radio
         $('.individual').hide();
-        $('.individual_sel').hide();
+        $('.individual_sel').selectpicker('hide');
         $('.studno').hide();
         $('.company').show();
         $('#or_lname').val('');
@@ -600,7 +600,7 @@
         $('#addForm').parsley().reset();
     });
     $("#radiorequired3").click(function() { //student radio
-        $('.individual_sel').show();
+        $('.individual_sel').selectpicker('show');
         $('.individual').show();
         $('.company').hide();
         $('.studno').show();
