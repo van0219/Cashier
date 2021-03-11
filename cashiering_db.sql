@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 08, 2021 at 09:53 AM
+-- Generation Time: Mar 11, 2021 at 03:43 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.26
 
@@ -140,12 +140,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_INSERT_UACS_TABLE` (IN `P_FNDTYP
 			,NOW());
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_INSERT_USER_CMS` (IN `P_FNAME` VARCHAR(50), IN `P_MNAME` VARCHAR(50), IN `P_LNAME` VARCHAR(50), IN `P_UNAME` VARCHAR(50), IN `P_PSWORD` VARCHAR(50), IN `P_ROLEID` INT)  BEGIN
-	INSERT INTO `USER`(`FNAME`, `MNAME`, `LNAME`, `UNAME`, `PSWORD`, `DATE_ADDED`, `ROLE_ID`)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_INSERT_USER_CMS` (IN `P_FNAME` VARCHAR(50), IN `P_MNAME` VARCHAR(50), IN `P_LNAME` VARCHAR(50), IN `P_UNAME` VARCHAR(50), IN `P_EMAIL` VARCHAR(50), IN `P_PSWORD` VARCHAR(50), IN `P_ROLEID` INT)  BEGIN
+	INSERT INTO `USER`(`FNAME`, `MNAME`, `LNAME`, `UNAME`, `EMAIL`, `PSWORD`, `DATE_ADDED`, `ROLE_ID`)
 	VALUES(`P_FNAME`
 			,`P_MNAME`
 			,`P_LNAME`
 			,`P_UNAME`
+			,`P_EMAIL`
 			,MD5(MD5(SHA1(`P_PSWORD`)))
 			,CURRENT_TIMESTAMP
 			,`P_ROLEID`);
@@ -326,44 +327,26 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_SELECT_ALL_USERS2` ()  BEGIN
 	SELECT USER_ID
-			,CONCAT(FNAME,' ',MNAME,' ',LNAME) AS FULLNAME
+			,FNAME
+			,MNAME
+			,LNAME
+			,UNAME
+			,DATE_ADDED
 			,IF(ROLE_ID=1, 'Admin', 'Cashier') AS USER_ROLE
-			,IF(IS_ACTIVE=1,'Active', 'Inactive')
+			,IS_ACTIVE
 	FROM `USER`;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_SELECT_COLLECTION_LOG` (IN `P_RANGE` INT)  BEGIN
-	IF P_RANGE = 1 THEN
-			SELECT OR_NUM
-					,CLIENT_NAME
-					,ASSESSED
-					,COLLECTED
-					,TRANS_DATE
-					,UPPER(EDUC_LEVEL)
-			FROM collection
-			WHERE DATE(TRANS_DATE) = DATE(CURRENT_TIMESTAMP)
-			ORDER BY OR_NUM DESC;
-	ELSEIF P_RANGE = 0 THEN
-		SELECT OR_NUM
-				,CLIENT_NAME
-				,ASSESSED
-				,COLLECTED
-				,TRANS_DATE
-				,UPPER(EDUC_LEVEL)
-		FROM collection
-		WHERE `STATUS` = 'PENDING'
-		ORDER BY OR_NUM ASC;
-	ELSE
-		SELECT OR_NUM
-				,CLIENT_NAME
-				,ASSESSED
-				,COLLECTED
-				,TRANS_DATE
-				,UPPER(EDUC_LEVEL)
-		FROM collection
-		WHERE DATEDIFF(DATE(NOW()), TRANS_DATE) <= P_RANGE
-		ORDER BY OR_NUM DESC;
-	END IF;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_SELECT_COLLECTION_LOG` (IN `P_START` DATETIME, IN `P_END` DATETIME)  BEGIN
+	SELECT OR_NUM
+			,CLIENT_NAME
+			,ASSESSED
+			,COLLECTED
+			,TRANS_DATE
+			,UPPER(EDUC_LEVEL)
+	FROM collection
+	WHERE DATE(TRANS_DATE) BETWEEN DATE(P_START) AND DATE(P_END)
+	ORDER BY OR_NUM DESC;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_SELECT_CURRENT_GROUP_ID` ()  BEGIN
@@ -396,6 +379,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_SELECT_CURRENT_OR` ()  BEGIN
 										WHERE ID = (SELECT MAX(ID) FROM or_set)
 											AND DATE(OR_DATE_TO) >= DATE(CURRENT_TIMESTAMP))								  
 			 )) AS CURRENT_OR;			  	
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_SELECT_EMAIL_CREDENTIALS` ()  BEGIN 
+	SELECT CASHIER_EMAIL
+			,CASHIER_PASS
+	FROM EMAIL_CONFIG
+	WHERE IS_ACTIVE = 1;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_SELECT_FNAME_CMS` (IN `P_USERNAME` VARCHAR(50))  BEGIN
@@ -568,6 +558,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_SELECT_UACS_TABLE` ()  BEGIN
 			,`DESC`
 			,IS_ACTIVE
 	FROM uacs;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_SET_CASHIER_EMAIL` (IN `P_EMAIL` VARCHAR(50), IN `P_PASS` VARCHAR(50))  BEGIN 
+	INSERT INTO email_config(CASHIER_EMAIL, CASHIER_PASS, DATE_ADDED, DATE_UPDATED, IS_ACTIVE)
+	VALUES(P_EMAIL
+			,P_PASS
+			,CURRENT_TIMESTAMP
+			,CURRENT_TIMESTAMP
+			,1);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATE_FUND_TYPE` (IN `P_FNDTYPE_ORIG` VARCHAR(50), IN `P_FNDTYPE_UPD` VARCHAR(50), IN `P_FNDCODE` VARCHAR(50))  BEGIN
@@ -795,7 +794,7 @@ INSERT INTO `collection` (`OR_NUM`, `ASSESSED`, `COLLECTED`, `STUD_NO`, `CLIENT_
 ('008866', '590.00', '590.00', '2017-00257-CM-0', 'VILLACORTA, RICHARD', 'Bachelor\'s Degree', '2021-03-03 23:12:57', 'FOR REMIT', 2),
 ('008867', '1489.00', '1489.00', '2017-00188-CM-0', 'GUEVARRA, JAYSON', 'Bachelor\'s Degree', '2021-03-03 23:43:26', 'FOR REMIT', 2),
 ('008868', '1899.00', '1899.00', '2017-00011-CM-0', 'ERMITA, ALEXANDRA', 'Bachelor\'s Degree', '2021-03-03 23:44:44', 'FOR REMIT', 2),
-('008869', '654.00', '654.00', '2017-00034-CM-0', 'SORIA, ROSANO', 'Bachelor\'s Degree', '2021-03-03 23:47:57', 'PENDING', 2);
+('008869', '654.00', '654.00', '2017-00034-CM-0', 'SORIA, ROSANO', 'Bachelor\'s Degree', '2021-03-03 23:47:57', 'FOR REMIT', 2);
 
 -- --------------------------------------------------------
 
@@ -937,7 +936,8 @@ INSERT INTO `deposit` (`DEP_ID`, `OR_NUM`, `GROUP_ID`, `STATUS`, `DATE_SCHEDULED
 (248, '8972.00', '2021-DEPOSIT-00017', 'FOR REMIT', '2021-03-08 00:00:00', NULL, '2021-03-07 00:38:37', '', NULL, 2),
 (249, '8867.00', '2021-DEPOSIT-00018', 'DEPOSITED', '2021-03-08 00:00:00', '2021-03-07 13:41:26', '2021-03-07 13:40:15', '', '2344244', 2),
 (250, '8865.00', '2021-DEPOSIT-00018', 'DEPOSITED', '2021-03-08 00:00:00', '2021-03-07 13:41:26', '2021-03-07 13:40:15', '', '2344244', 2),
-(251, '8866.00', '2021-DEPOSIT-00018', 'DEPOSITED', '2021-03-08 00:00:00', '2021-03-07 13:41:26', '2021-03-07 13:40:16', '', '2344244', 2);
+(251, '8866.00', '2021-DEPOSIT-00018', 'DEPOSITED', '2021-03-08 00:00:00', '2021-03-07 13:41:26', '2021-03-07 13:40:16', '', '2344244', 2),
+(252, '8869.00', '2021-DEPOSIT-00019', 'DEPOSITED', '2021-03-09 00:00:00', '2021-03-09 19:42:14', '2021-03-09 19:40:58', 'collection 3/9/21', '2021-163', 2);
 
 -- --------------------------------------------------------
 
@@ -1044,7 +1044,7 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 ('hl8x81y7a17w08hpk373t7ryoppby6sy', 'MTZiMTZkMDkwOTlhZDVkYTViYTg1MzRlNDIxOTYwMDNmYTM4NmRlNDp7InVuYW1lIjoidmFuMDIxOSIsInJvbGUiOjF9', '2021-03-20 21:09:28.542591'),
 ('isnahii2vupglitekl9z42zd80dy7krb', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-01-01 02:02:04.737300'),
 ('istn575r9cmjpomrvv4dbjxl9lc5t7yr', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-03-08 08:27:25.905790'),
-('j4olfvzo098u5x2ze7h06d5wtnoavfgp', 'MTZiMTZkMDkwOTlhZDVkYTViYTg1MzRlNDIxOTYwMDNmYTM4NmRlNDp7InVuYW1lIjoidmFuMDIxOSIsInJvbGUiOjF9', '2021-03-22 08:15:20.945502'),
+('j4olfvzo098u5x2ze7h06d5wtnoavfgp', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-03-25 02:35:42.901076'),
 ('m3o0vsbv45jh089vh3gydyu169mdtkvt', 'MTZiMTZkMDkwOTlhZDVkYTViYTg1MzRlNDIxOTYwMDNmYTM4NmRlNDp7InVuYW1lIjoidmFuMDIxOSIsInJvbGUiOjF9', '2020-12-19 02:28:10.950441'),
 ('qycoimexdsv8dcmiiips55koinaydnhc', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-03-17 10:34:45.737135'),
 ('r6qsjc8o20p2wwqotrht8xztxjaro5za', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-02-11 03:52:58.041237'),
@@ -1053,6 +1053,28 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 ('vav52xes9rdnnyoqfei0qzxzeso757ti', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-02-21 09:34:23.696775'),
 ('vvds0afcod9fkn9kkg4esdk2dnsxx64b', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-03-21 06:29:43.803693'),
 ('xi0r3zd813q750oolxtp2rzvves1i9aa', 'N2RiNmI1ZTcyNmE5NDVjOTJjNzYxYzI3YzVlMzg1MDgzMDE1NWJlNzp7InVuYW1lIjoibWVncyIsInJvbGUiOjJ9', '2021-02-09 20:28:38.729315');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `email_config`
+--
+
+CREATE TABLE `email_config` (
+  `EMAIL_ID` int(11) NOT NULL,
+  `CASHIER_EMAIL` varchar(50) DEFAULT NULL,
+  `CASHIER_PASS` varchar(50) DEFAULT NULL,
+  `DATE_ADDED` datetime DEFAULT NULL,
+  `DATE_UPDATED` datetime DEFAULT NULL,
+  `IS_ACTIVE` tinyint(4) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `email_config`
+--
+
+INSERT INTO `email_config` (`EMAIL_ID`, `CASHIER_EMAIL`, `CASHIER_PASS`, `DATE_ADDED`, `DATE_UPDATED`, `IS_ACTIVE`) VALUES
+(1, 'van.silleza@gmail.com', 'evohelmet09@', '2021-03-11 07:34:14', '2021-03-11 07:34:14', 1);
 
 -- --------------------------------------------------------
 
@@ -1214,7 +1236,7 @@ CREATE TABLE `uacs` (
 
 INSERT INTO `uacs` (`UACS_CODE`, `OLD_CODE`, `FUND_TYPE`, `INCOME_TYPE`, `DESC`, `DATE_ADDED`, `IS_ACTIVE`, `LAST_UPDATED`) VALUES
 ('0821939902', 'N/A', 'REGULAR TRUST FUND', 'SERVICE INCOME', 'NEW PAYMENT New', '2021-02-16 18:54:18', 0, '2021-02-16 18:54:55'),
-('083 393 839739', 'N/A', 'REGULAR TRUST FUND', 'SERVICE INCOME', 'NEW FEE', '2021-03-07 13:22:27', 1, NULL),
+('083 393 839739', 'N/A', 'REGULAR TRUST FUND', 'SERVICE INCOME', 'NEW FEE', '2021-03-07 13:22:27', 0, NULL),
 ('12444', 'N/A', 'REGULAR TRUST FUND', 'SERVICE INCOME', 'PENALTIES', '2021-03-06 23:21:38', 0, '2021-03-06 23:24:22'),
 ('2 99 99 990 00 00000', '439', 'SPECIAL TRUST FUND', NULL, 'OTHER PAYABLE', '2020-12-30 03:02:58', 1, '2021-01-06 17:27:25'),
 ('4 02 01 040 00 00000', '613', 'SPECIAL TRUST FUND', 'BUSINESS INCOME', 'CLEARANCE AND CERTIFICATION FEE', '2020-12-30 02:23:46', 1, '2021-01-05 01:03:21'),
@@ -1292,6 +1314,7 @@ CREATE TABLE `user` (
   `MNAME` varchar(50) DEFAULT NULL,
   `LNAME` varchar(50) NOT NULL,
   `UNAME` varchar(50) NOT NULL,
+  `EMAIL` varchar(50) DEFAULT NULL,
   `PSWORD` varchar(50) NOT NULL,
   `DATE_ADDED` datetime NOT NULL,
   `ROLE_ID` int(11) DEFAULT NULL,
@@ -1302,16 +1325,10 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`USER_ID`, `FNAME`, `MNAME`, `LNAME`, `UNAME`, `PSWORD`, `DATE_ADDED`, `ROLE_ID`, `IS_ACTIVE`) VALUES
-(1, 'Van Anthony', '', 'Silleza', 'van0219', '054eba9e024b4b0c4e7b5143ef573748', '2020-11-21 07:23:36', 1, 1),
-(2, 'Merly', 'B', 'Gonzalbo', 'megs', '054eba9e024b4b0c4e7b5143ef573748', '2020-11-27 09:21:26', 2, 1),
-(3, 'Marinel', 'B', 'Cantuja', 'manel', '45917634c7cac19dcadcc247665f65a8', '2020-12-17 14:15:35', 1, 1),
-(4, 'Nicolas', 'Q', 'Potter', 'nicky', '054eba9e024b4b0c4e7b5143ef573748', '2021-01-05 03:22:35', 2, 0),
-(5, 'Feliz', 'na', 'Vidad', 'feliznavidad', '40924e2909af51f448fc5d287aedb525', '2021-01-06 17:06:27', 2, 0),
-(6, 'Rose', '.', 'Escober', 'rosey', '45917634c7cac19dcadcc247665f65a8', '2021-01-06 18:38:33', 1, 1),
-(7, 'New User', '', 'Neeee', 'newuser', '878b3c5b9f1887aa74130b03894d23cf', '2021-02-16 18:49:19', 1, 0),
-(8, 'Queen ', 'Penedilla', 'Panlubasan', 'kim0006', '222c29a0a4ad5737dc632a0d905b0206', '2021-03-06 22:56:13', 2, 1),
-(9, 'new', 'user', 'news', 'usernew', '7a0f98436ec7901f5bed8d6c94c50493', '2021-03-07 13:17:54', 2, 1);
+INSERT INTO `user` (`USER_ID`, `FNAME`, `MNAME`, `LNAME`, `UNAME`, `EMAIL`, `PSWORD`, `DATE_ADDED`, `ROLE_ID`, `IS_ACTIVE`) VALUES
+(1, 'Van Anthony', '', 'Silleza', 'van0219', 'van.silleza@gmail.com', '054eba9e024b4b0c4e7b5143ef573748', '2020-11-21 07:23:36', 1, 1),
+(2, 'Merly', 'B', 'Gonzalbo', 'megs', NULL, '054eba9e024b4b0c4e7b5143ef573748', '2020-11-27 09:21:26', 2, 1),
+(16, 'Van Anthony', '', 'Silleza', 'van1994', 'vasilleza@iskolarngbayan.pup.edu.ph', '5519ab0bd5416e69c69de03aeaa167e4', '2021-03-11 10:05:36', 2, 1);
 
 --
 -- Indexes for dumped tables
@@ -1413,6 +1430,12 @@ ALTER TABLE `django_session`
   ADD KEY `django_session_expire_date_a5c62663` (`expire_date`);
 
 --
+-- Indexes for table `email_config`
+--
+ALTER TABLE `email_config`
+  ADD PRIMARY KEY (`EMAIL_ID`);
+
+--
 -- Indexes for table `fund`
 --
 ALTER TABLE `fund`
@@ -1511,7 +1534,7 @@ ALTER TABLE `collection_breakdown`
 -- AUTO_INCREMENT for table `deposit`
 --
 ALTER TABLE `deposit`
-  MODIFY `DEP_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=252;
+  MODIFY `DEP_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=253;
 
 --
 -- AUTO_INCREMENT for table `django_admin_log`
@@ -1532,6 +1555,12 @@ ALTER TABLE `django_migrations`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
+-- AUTO_INCREMENT for table `email_config`
+--
+ALTER TABLE `email_config`
+  MODIFY `EMAIL_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `or_set`
 --
 ALTER TABLE `or_set`
@@ -1547,7 +1576,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `USER_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `USER_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Constraints for dumped tables
