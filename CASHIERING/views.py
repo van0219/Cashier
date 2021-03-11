@@ -92,6 +92,7 @@ def add_user_btn_click(request):
         request.POST['mname'],
         request.POST['lname'],
         request.POST['uname'],
+        request.POST['receiver'],
         request.POST['psword'],
         request.POST['roleid'],
     ))
@@ -537,6 +538,12 @@ def load_admin_dashboard_cards(request):
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
+def get_email_credentials():
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_EMAIL_CREDENTIALS")
+    data = cursor.fetchall()
+    return data
+
 def send_password(request):
     import smtplib
     from email.mime.multipart import MIMEMultipart
@@ -544,28 +551,29 @@ def send_password(request):
     from email.mime.image import MIMEImage
     from email.mime.application import MIMEApplication
 
+    cred = get_email_credentials()
     # setup credentials
-    sender = request.POST['sender']
-    password = request.POST['password']
+    sender = cred[0][0]
+    password = cred[0][1]
 
     receiver = request.POST['receiver']
     
     # header
     msg = MIMEMultipart()
-    msg['Subject'] = request.POST['subject']
-    msg['From'] = 'Contact Tracing System'
-    msg['To'] = request.POST['receiver_fullname']
+    msg['Subject'] = 'Your Login Credentials'
+    msg['From'] = 'PUP Cashiering Admin'
+    msg['To'] = request.POST['fullname']
     # end header
 
     # message
-    message = "Your QR code is unique. Save a copy of this for emergency purposes."
-
+    message1 = 'You can now login to your Cashiering account.<br>We recommend that you change your password after logging in.<br>Thank you!<br>'
+    message2 = '<br>Username: ' + request.POST['uname'] + '<br>Password: ' + request.POST['pass']
     # body
-    msgText = MIMEText('<b>%s</b>' % (message), 'html')
+    msgText = MIMEText('<b>%s</b>' % (message1 + '<br>' + message2), 'html')
     msg.attach(msgText)
     # if with image attachment
-    imgFile = "CTSN_APP/static/assets/img/cts_qrcode/" + request.POST['qr_filename'] + '.jpg'
-    imgRename = "Your-QR.jpg"
+    imgFile = "CASHIERING/static/assets/img/logo/key.png"
+    imgRename = " "
     with open(imgFile, 'rb') as fp:
         img = MIMEImage(fp.read())
         img.add_header('Content-Disposition', 'attachment', filename= imgRename)
@@ -584,3 +592,11 @@ def send_password(request):
     except:
         pass
     return JsonResponse('email sent', safe=False)
+
+def set_email(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SET_CASHIER_EMAIL"
+                    ,(request.POST['email']
+                    ,request.POST['pass']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

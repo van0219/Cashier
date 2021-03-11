@@ -63,15 +63,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
-                                    <label class="col-md-4 col-sm-4 col-form-label" for="email">Username <span class="text-red">*</span> :</label>
+                                    <label class="col-md-4 col-sm-4 col-form-label" for="email">Email Address <span class="text-red">*</span> :</label>
                                     <div class="col-md-8 col-sm-8">
                                         <input class="form-control" type="email" id="email" name="email" placeholder="Email Address" data-parsley-required="true" data-parsley-required-message="Username is required"/>
-                                    </div>
-                                </div>
-                                <div class="form-group row m-b-15">
-                                    <label class="col-md-4 col-sm-4 col-form-label" for="message">Password <span class="text-red">*</span> :</label>
-                                    <div class="col-md-8 col-sm-8">
-                                        <input class="form-control" type="text" id="pword" name="pword" maxlength="15" placeholder="Password" data-parsley-required="true" data-parsley-required-message="Password is required"/>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
@@ -166,9 +160,11 @@
                 var mname = $.trim($('#mname').val());
                 var lname = $.trim($('#lname').val());
                 var uname = $.trim($('#uname').val());
-                var psword = $.trim($('#pword').val());
+                var psword = Math.random().toString().substr(2,8);
                 var role_name = $.trim($(".radiocss:checked").val());
                 var roleid = role_name == "admin" ? 1 : 2; 
+                var receiver = $.trim($('#email').val());
+                var fullname = $.trim($('#fname').val()) + ' ' + $.trim($('#mname').val()) + ' ' + $.trim($('#lname').val());;
                 swal({
                     title: "Add User",
                     text: "Are you sure to add this user?",
@@ -191,6 +187,7 @@
                                     mname:mname,
                                     lname:lname,
                                     uname:uname,
+                                    receiver: receiver,
                                     psword:psword,
                                     roleid:roleid,
                                     csrfmiddlewaretoken:"{{csrf_token}}"
@@ -206,8 +203,9 @@
                                     function(isConfirm){
                                         if (isConfirm){
                                             $('.form-control').val('');
+                                            send_password(uname, psword, receiver, fullname);
                                         }
-                                    })
+                                    });
                                 },
                                 error:function(xhr, status, error) {
                                     var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -261,7 +259,7 @@
         });
     };
 
-    function send_password() {
+    function send_password(uname, pass, receiver, fullname) {
         $.ajax({
             url: "{% url 'send_password' %}",
             type: "POST",
@@ -270,10 +268,12 @@
             data: { 
                 uname: uname,
                 pass: pass,
+                receiver: receiver,
+                fullname: fullname,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success:function(obj) {
-
+                console.log('Email sent successfully!');
             },
             error:function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;

@@ -74,67 +74,6 @@
     <!-- end sidebar scrollbar -->
 </div>
 <div class="sidebar-bg"></div>
-<!-- #modal-dialog -->
-<div class="modal fade" id="email_config">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Email Configuration</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body">
-            <!-- begin card -->
-            <div class="card card-inverse bg-gradient-silver">
-                <div class="card-block">
-                    <form class="form-horizontal" data-parsley-validate="true" id="email_config_form">
-                        <div class="form-group row m-b-15">
-                            <label class="col-md-4 col-sm-4 col-form-label">Email Provider <span class="text-red">*</span> :</label>
-                            <div class="col-md-4 col-sm-4">
-                                <div class="radio radio-css">
-                                    <input type="radio" name="radio_css" id="gmail" checked />
-                                    <label for="gmail" class="text-inverse f-w-700">
-                                        <i class="fas fa-envelope-square m-r-5" style="color: #BB001B; background-color: white; font-size: medium;"></i>
-                                        <span class="text-primary">G</span>
-                                        <span class="text-danger">m</span>
-                                        <span class="text-warning">a</span>
-                                        <span class="text-primary">i</span>
-                                        <span class="text-success">l</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-4">
-                                <div class="radio radio-css">
-                                    <input type="radio" name="radio_css" id="outlook" />
-                                    <label for="outlook" class="text-inverse" style="font-family: Arial, Helvetica, sans-serif;">
-                                        <i class="fas fa-envelope-square m-r-5" style="color: #01A6F0; background-color: white; font-size: medium;"></i>Outlook
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row m-b-15">
-                            <label class="col-md-4 col-sm-4 col-form-label" for="fullname">Email Address <span class="text-red">*</span> :</label>
-                            <div class="col-md-8 col-sm-8">
-                                <input class="form-control" type="text" id="start" name="start" placeholder="Email" data-parsley-type="email" data-parsley-required="true" />
-                            </div>
-                        </div>
-                        <div class="form-group row m-b-15">
-                            <label class="col-md-4 col-sm-4 col-form-label" for="fullname">Password <span class="text-red">*</span> :</label>
-                            <div class="col-md-8 col-sm-8">
-                                <input class="form-control" type="text" id="end" name="end" placeholder="Password" data-parsley-type="alphanum" data-parsley-required="true" />
-                            </div>
-                        </div>
-                        <div class="modal-footer form-group m-b-0">
-                            <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
-                            <button type="submit" class="btn btn-success">Set</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <!-- end card -->
-            </div>
-        </div>
-    </div>
-</div>
 <script>
     function onShowModal() {
         $('#email_config_form').parsley().reset();
