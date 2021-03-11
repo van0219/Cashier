@@ -561,7 +561,7 @@ def send_password(request):
     # header
     msg = MIMEMultipart()
     msg['Subject'] = 'Your Login Credentials'
-    msg['From'] = 'PUP Cashiering Admin'
+    msg['From'] = 'PUPQC Cashiering Admin'
     msg['To'] = request.POST['fullname']
     # end header
 
