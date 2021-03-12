@@ -296,9 +296,7 @@ def get_uacs_code(request):
 def add_or_set(request):
     cursor = connection.cursor()
     cursor.callproc("SP_INSERT_OR_SET"
-                    ,(request.POST['startDate']
-                    ,request.POST['endDate']
-                    ,request.POST['startVal']
+                    ,(request.POST['startVal']
                     ,request.POST['endVal']))
     return HttpResponse("")
 

@@ -34,7 +34,7 @@
                         <form action="" method="POST" id="or-form" data-parsley-focus="none">
                         <!-- begin row -->
                         <div class="row">
-                            <div class="col-lg-3 m-b-10 m-l-20">
+                            <!-- <div class="col-lg-3 m-b-10 m-l-20">
                                 <div class="bg-gradient-blue p-20" style="border-radius: 5px;"  id="or-div">
                                     <div class="m-r-9 m-l-6">
                                         <small class="col-form-label m-r-10 text-white" for="from" id="from-label">From :</small>
@@ -45,18 +45,21 @@
                                         <input type="date" id="to" class="form-control" data-parsley-required="true" data-parsley-required-message="Ending date is required"/>
                                     </div>
                                 </div>
+                            </div> -->
+                            <!-- <div class="col-lg-2"> -->
+                                <!-- filler -->
+                            <!-- </div> -->
+                            <div class="col-lg-4 form-group m-r-10 m-l-20 m-t-40">
+                                <label class="form-label m-r-10" for="min"><i class="fas fa-hourglass-start m-r-5"></i>Starting Value :</label>
+                                <input type="text" id="min" class="form-control" data-parsley-required="true" data-parsley-required-message="Starting value is required" autocomplete="off"/>
                             </div>
-                            <div class="col-lg-3 form-group m-r-10 m-l-20 m-t-40">
-                                <label class="form-label m-r-10" for="min">Starting Value :</label>
-                                <input type="text" id="min" class="form-control" data-parsley-required="true" data-parsley-required-message="Starting value is required"/>
-                            </div>
-                            <div class="col-lg-3 form-group m-r-10 m-l-20 m-t-40">
-                                <label class="form-label m-r-10" for="max">Ending Value :</label>
-                                <input type="text" id="max" class="form-control" data-parsley-required="true" data-parsley-required-message="Ending value is required"/>
+                            <div class="col-lg-4 form-group m-r-10 m-l-20 m-t-40">
+                                <label class="form-label m-r-10" for="max"><i class="fas fa-hourglass-end m-r-5"></i>Ending Value :</label>
+                                <input type="text" id="max" class="form-control" data-parsley-required="true" data-parsley-required-message="Ending value is required" autocomplete="off"/>
                             </div>
                             <div class="col-lg-2 form-group" style="margin-top: 65px;">
-                                <a href="javascript:;" id="set" class="btn btn-sm btn-primary m-r-5"><i class="fas fa-gavel"></i> Set</a>
-                                <a href="javascript:;" class="btn btn-sm btn-default" id="clear"><i class="fas fa-undo"></i> Clear</a>
+                                <a href="javascript:;" id="set" class="btn btn-md btn-primary m-r-5"><i class="fas fa-gavel"></i> Set</a>
+                                <a href="javascript:;" class="btn btn-md btn-default" id="clear"><i class="fas fa-undo"></i> Clear</a>
                             </div>
                         </div>
                         <!-- end row -->
@@ -88,6 +91,8 @@
         highlightSideNav();
     });
 
+    var dt = new Date();
+
     $('#set').on('click', function() {
         event.preventDefault();
         $('#or-form').parsley();
@@ -99,18 +104,13 @@
             $('#to-label').removeClass('text-inverse');
             $('#to-label').addClass('text-white');
             
-            var startDate = $('#from').val();
-            var endDate = $('#to').val();
-            var startVal = $('#min').val();
-            var endVal = $('#max').val();
-            var month = moment(new Date(startDate)).format("MMMM");
+            var startVal = $.trim($('#min').val());
+            var endVal = $.trim($('#max').val());
             $.ajax({
                 type: "POST",
                 url: "{% url 'add_or_set' %}",
                 cache: true,
                 data: {
-                    startDate: startDate,
-                    endDate: endDate,
                     startVal: startVal,
                     endVal: endVal,
                     csrfmiddlewaretoken:"{{csrf_token}}"
@@ -118,7 +118,7 @@
                 success: function(obj) {
                     swal({
                         title: "Added Successfully", 
-                        text: "OR set for the month of "+ month +" was added successfully!", 
+                        text: "A new OR set has been added successfully.",
                         type: "success",
                         showLoaderOnConfirm: true,
                         confirmButtonColor: "#5cb85c",
@@ -152,8 +152,6 @@
 
     $('#clear').on('click', function() {
         $('#or-form').parsley().reset();
-        $('#from').val('');
-        $('#to').val('');
         $('#min').val('');
         $('#max').val('');
         $('#or-div').removeClass('bg-grey-transparent-3');
