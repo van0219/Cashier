@@ -402,6 +402,14 @@ def load_collection_history(request):
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
+def load_collection_history2(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_COLLECTION_PENDING"
+                    ,(request.POST['date_start']
+                    ,request.POST['date_end']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
 def deposits(request):
     return render(request, 'views/layouts/pages/deposits.html')
 

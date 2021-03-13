@@ -28,7 +28,7 @@
         <!-- begin col-10 -->
         <div class="col-lg-10">
             <!-- begin card -->
-            <div class="card" style="height: 500px; overflow-y: auto;">
+            <div class="card">
                 <div class="card-header">
                     <ul class="nav nav-pills card-header-pills">
                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1-deposits">Pending</a></li>
@@ -38,7 +38,7 @@
                 </div>
                 <div class="card-block">
                     <div class="tab-content p-0 m-0">
-                        <div class="tab-pane fade active show" id="card-pill-1-deposits">
+                        <div class="tab-pane fade active show" id="card-pill-1-deposits" style="height: 420px; overflow-y: auto;">
                             <h4 class="card-title text-center">Pending</h4>
                             <div style="height: 350px;" class="overflow-auto">
                                 <table class="table table-hover table-striped" id="col-hist-table2" >
@@ -67,7 +67,7 @@
                                 <span class="label label-success">ON-SITE STUDENT PAYMENT</span>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="card-pill-2-deposits">
+                        <div class="tab-pane fade" id="card-pill-2-deposits" style="max-height: 800px; overflow-y: auto;">
                             <h4 class="card-title text-center">Scheduled Deposits</h4>
                             <!-- begin col-12 -->
                             <div class="col-lg-12" id="sched-panel">
@@ -75,7 +75,7 @@
                             </div>
                             <!-- end col-12 -->
                         </div>
-                        <div class="tab-pane fade" id="card-pill-3-deposits">
+                        <div class="tab-pane fade" id="card-pill-3-deposits" style="height: 420px; overflow-y: auto;">
                             <h4 class="card-title text-center">Deposited</h4>
                             <div style="height: 350px; overflow: auto;">
                                 <table class="table table-striped table-hover table-bordered" id="deposited-table">
@@ -183,18 +183,24 @@
 <script>
     $(document).ready(function() {
         App.init();
-        load_collection_history2(0,0);
+        load_collection_history2(d_7day,d_today,0);
         get_current_group_id();
         highlightSideNav();
     });
-    function load_collection_history2(range,fromSaveRemittance) {
+
+    var d = new Date();  
+    var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+    var d_7day = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + (d.getDate()-6);
+
+    function load_collection_history2(date_start,date_end,fromSaveRemittance) {
         $.ajax({
             type: "POST",
-            url: "{% url 'load_collection_history' %}",
+            url: "{% url 'load_collection_history2' %}",
             // cache: true,
             dataType: 'json',
             data: {
-                range: range,
+                date_start: date_start,
+                date_end: date_end,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -218,7 +224,7 @@
                     get_current_group_id();
                     swal({
                         title: "Scheduled Successfully", 
-                        text: "Your scheduled deposits are stored in the deposits tab", 
+                        text: "Your scheduled deposits are stored in the scheduled deposits tab", 
                         type: "success",
                         showLoaderOnConfirm: true,
                         confirmButtonColor: "#5cb85c",
@@ -400,7 +406,7 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                load_collection_history2(0,1);
+                load_collection_history2(d_7day,d_today,1);
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -650,53 +656,57 @@
                             <div class="panel panel-inverse panel-sched">
                                 <!-- begin panel-heading -->
                                 <div class="panel-heading" id="sched-head${i}">
-                                    <h3 class="panel-title">
-                                        <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion" href="#sched-body${i}">
-                                            <i class="fa fa-plus-circle pull-right text-success"></i> 
-                                            ${obj[i][0]}
-                                        </a>
-                                    </h3>
+                                    <div class="panel-heading-btn">
+                                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                                    </div>
+                                    <h4 class="panel-title">
+                                        ${obj[i][0]}
+                                    </h4>
                                 </div>
                                 <!-- end panel-heading -->
-                                <div id="sched-body${i}" class="panel-collapse collapse" >
+                                <div id="sched-body${i}" class="panel-collapse" >
                                     <!-- begin panel-body -->
                                     <div class="panel-body" id="panel-body${i}">
                                         <!-- begin row -->
                                         <div class="row height-60">
-                                            <!-- begin col-5 -->
-                                            <div class="col-lg-5">
+                                            <!-- begin col-6 -->
+                                            <div class="col-lg-6">
                                                 <label class="" for="sched-date${i}"><small>Date Scheduled:</small></label>
                                                 <input type="text" class="form-control f-w-700" value="${moment(new Date(obj[i][1])).format('MMM. DD,YYYY')}" name="sched-date${i}" id="sched-date${i}" onfocus="this.blur()" tabindex="-1"/>
                                             </div>
-                                            <!-- end col-5 -->
+                                            <!-- end col-6 -->
                                             <!-- begin col-6 -->
                                             <div class="col-lg-6">
                                                 <label class="" for="dep-notes${i}"><small>Notes:</small></label>
-                                                <textarea class="form-control" style="height: 94px;" name="dep-notes${i}" id="dep-notes${i}" onfocus="this.blur()" tabindex="-1">${obj[i][3]}</textarea>
+                                                <textarea class="form-control" style="height: 94px;" name="dep-notes${i}" id="dep-notes${i}">${obj[i][3]}</textarea>
                                             </div>
                                             <!-- end col-6 -->
                                         </div>
                                         <!-- end row -->
                                         <!-- begin row -->
                                         <div class="row">
-                                            <!-- begin col-5 -->
-                                            <div class="col-lg-5">
+                                            <!-- begin col-6 -->
+                                            <div class="col-lg-6">
                                                 <label class="" for="dep-amount${i}"><small>Amount:</small></label>
                                                 <input type="text" class="form-control f-w-700" value="${'₱' + parseFloat(obj[i][2]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}" name="dep-amount${i}" id="dep-amount${i}" onfocus="this.blur()" tabindex="-1"/>
                                             </div>
-                                            <!-- end col-5 -->
+                                            <!-- end col-6 -->
                                             <!-- begin col-6 -->
                                             <div class="col-lg-6">
                                                 <!-- filler -->
                                             </div>
                                             <!-- end col-6 -->
-                                            <!-- begin col-1 -->
-                                            <div class="col-lg-1 pull-right" style="margin-top: -36px;">
-                                                <a href="javascript:;" class="btn btn-xs btn-success" title="Deposited" id="check_but"><i class="fas fa-check-circle" id="check_icon${i}"></i></a><br>
-                                                <a href="javascript:;" class="btn btn-xs btn-warning m-t-5" title="Re-schedule" id="resched_but"><i class="fas fa-calendar-alt" id="resched-icon${i}"></i></a><br>
-                                                <a href="javascript:;" class="btn btn-xs btn-danger m-t-5" title="Remove" id="remove_but"><i class="fas fa-trash-alt"></i></a>
+                                        </div>
+                                        <!-- end row -->
+                                        <!-- begin row -->
+                                        <div class="row">
+                                            <!-- begin col-12 -->
+                                            <div class="col-lg-12 text-center">
+                                                <a href="javascript:;" class="btn btn-xs btn-success m-t-10" title="Deposited" id="check_but"><i class="fas fa-check-circle" id="check_icon${i}"></i></a>
+                                                <a href="javascript:;" class="btn btn-xs btn-warning m-t-10" title="Re-schedule" id="resched_but"><i class="fas fa-calendar-alt" id="resched-icon${i}"></i></a>
+                                                <a href="javascript:;" class="btn btn-xs btn-danger m-t-10" title="Remove" id="remove_but"><i class="fas fa-trash-alt"></i></a>
                                             </div>
-                                            <!-- end col-1 -->
+                                            <!-- end col-12 -->
                                         </div>
                                         <!-- end row -->
                                     </div>
