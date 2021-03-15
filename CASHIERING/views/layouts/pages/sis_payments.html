@@ -454,6 +454,7 @@
         if ($('#check_1').prop('checked')) {
             $('#check_2').prop('checked', false);
             $('#inc-select').val('SERVICE INCOME');
+            $('#inc-select').selectpicker('refresh');
             getUacsCode($('#inc-select').find('option:selected').text());
         }
         else {
@@ -465,9 +466,10 @@
         if ($('#check_2').prop('checked')) {
             $('#check_1').prop('checked', false);
             $('#inc-select').val('Please choose');
-            $('#uacs_select').val('Please choose');
+            $('#inc-select').selectpicker('refresh');
             $('#uacs_select').empty();
             $('#uacs_select').append(new Option('Please choose')).prop('selected', true);
+            $('#uacs_select').selectpicker('refresh');
             $('#uacs_select').find('option:selected').prop('disabled',true);
             $('.remove').click();            
         }
@@ -534,7 +536,9 @@
         $('or_num').val(getCurrentORnum());
         $('#total-fee').text(parseFloat('0').toFixed(2));
         $('#inc-select').val('Please choose');
+        $('#inc-select').selectpicker('refresh');
         $('#uacs_select').val('Please choose');
+        $('#uacs_select').selectpicker('refresh');
         $('#number').val('');
         $('#data-table-responsives tbody tr').remove();
     });

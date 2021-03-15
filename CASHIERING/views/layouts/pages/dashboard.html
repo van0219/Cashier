@@ -261,7 +261,7 @@
         var keyy = 0;
         for (var i = 0; i < obj.length; i++) {
             bar_value[i] = parseFloat(obj[i][1]);
-            data[i] = { 'label': bar_label[i], 'value': bar_value[i], 'color': bar_color[i]  };
+            data[i] = { 'label': bar_label[parseFloat(obj[i][0])-1], 'value': bar_value[i], 'color': bar_color[parseFloat(obj[i][0])-1]  };
             keyy = bar_value[i] > keyy ? bar_value[i] : keyy;
         }
         var barChartData = [{
