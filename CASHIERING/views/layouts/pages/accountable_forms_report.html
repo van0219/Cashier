@@ -175,7 +175,7 @@
             <div class="row text-center m-t-20">
                 <!-- begin col-12 -->
                 <div class="col-lg-12">
-                    <a href="javascript:;" class="btn btn-m btn-primary" id="disp-acct-forms"><i class="fas fa-chevron-circle-right m-r-5"></i>Display Report</a>
+                    <a href="javascript:;" class="btn btn-m btn-primary" id="disp-acct-forms"><i class="fas fa-chevron-circle-right m-r-5"></i>Display Tabulated Report</a>
                 </div>
                 <!-- end col-12 -->
             </div>
@@ -322,14 +322,14 @@
         loadORMonthlyReport();
     });
 
-    function handlePolarChart(sis, comp, site) {
+    function handlePolarChart(sis, comp, non, site) {
         $('#polar-area-chart').empty();
         var polarAreaData = {
-            labels: ['SIS Payments', 'Company', 'On-Site Student'],
+            labels: ['SIS Payments', 'Company', 'Non-Student', 'On-Site Student'],
             datasets: [{
-                data: [sis, comp, site],
-                backgroundColor: [COLOR_PURPLE_TRANSPARENT_7, COLOR_GREEN_TRANSPARENT_7],
-                borderColor: [COLOR_PURPLE, COLOR_GREEN],
+                data: [parseInt(sis), parseInt(comp), parseInt(non), parseInt(site)],
+                backgroundColor: [COLOR_RED_TRANSPARENT_7,COLOR_BLUE_TRANSPARENT_7, COLOR_ORANGE_TRANSPARENT_7, COLOR_GREEN_TRANSPARENT_7],
+                borderColor: [COLOR_RED, COLOR_BLUE, COLOR_ORANGE, COLOR_GREEN],
                 borderWidth: 2,
             }]
         };
@@ -435,7 +435,7 @@
                     $('#tot_or').text('0');
                     $('#begin_or').text('0');
                     $('#end_or').text('0');
-                    handlePolarChart(0,0);
+                    handlePolarChart(0,0,0,0);
                 }
                 else {
                     $('#tot_or').text(obj[0][0]);
@@ -443,7 +443,7 @@
                     $('#end_or').text(obj[0][2]);
                     $('#canvas-div2 canvas').remove();
                     $('#canvas-div2').append(`<canvas id="polar-area-chart" data-render="chart-js"></canvas>`);
-                    handlePolarChart(obj[0][1],obj[0][2]);
+                    handlePolarChart(obj[0][3],obj[0][4],obj[0][5],obj[0][6]);
                     acctFormsTableData(obj);
                 }
             },

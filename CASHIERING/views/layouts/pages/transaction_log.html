@@ -124,6 +124,7 @@
                             <div class="pull-right">
                                 <span class="label label-danger">SIS PAYMENT</span>
                                 <span class="label label-primary">COMPANY</span>
+                                <span class="label label-warning">NON-STUDENT</span>
                                 <span class="label label-success">ON-SITE STUDENT PAYMENT</span>
                             </div>
                         </div>
@@ -187,11 +188,10 @@
         PageWithTwoSidebar.init();
         FormPlugins.init();
         highlightSideNav();
+        var d = new Date();
+        var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
         load_collection_history(d_today, d_today);
     });
-
-    var d = new Date();
-    var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
 
     function load_collection_history(date_start, date_end) {
         $.ajax({
@@ -207,8 +207,8 @@
             success: function(obj) {
                 $('#col-hist-table tbody tr').remove();
                 for (var i = 0; i < obj.length; i++) {   
-                    var payor = obj[i][5] == 'SIS PAYMENT' ? 'danger' : obj[i][5] == 'COMPANY' ? 'primary' : 'success';
-                    var title = payor == 'danger' ? 'SIS Payment' : payor == 'primary' ? 'Company' : 'On-site student payment';
+                    var payor = obj[i][5] == 'SIS PAYMENT' ? 'danger' : obj[i][5] == 'COMPANY' ? 'primary' : obj[i][5] == 'NON-STUDENT' ? 'warning' : 'success';
+                    var title = payor == 'danger' ? 'SIS Payment' : payor == 'primary' ? 'Company' : payor == 'warning' ? 'Non-Student' : 'On-site student payment';
                     var dummyClass = payor.substr(0,2);
                     $('#col-hist-table tbody').append(
                         `<tr>
@@ -256,11 +256,13 @@
         var rows = $('#col-hist-table tbody tr').length
         var knob_on_site = 0;
         var knob_sis = 0;
+        var knob_non = 0;
         var knob_company = 0;
         var knob_total = 0;
         var total_on_site = 0;
         var total_company = 0;
         var total_sis = 0;
+        var total_non = 0;
         var total_collection = 0;
         for (var i = 0; i < rows; i++) {
             if ($('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(0)').attr('class') == 'su') {
@@ -278,17 +280,22 @@
                 var temp = $('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(3)').html();
                 total_sis += parseFloat(temp);
             }
+            else if ($('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(0)').attr('class') == 'wa') {
+                knob_non++;
+                var temp = $('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(3)').html();
+                total_non += parseFloat(temp);
+            }
         }
-        knob_total = knob_on_site + knob_company + knob_sis;
-        total_collection = total_on_site + total_company + total_sis;
+        total_collection = total_on_site + total_company + total_sis + total_non;
         $('#knob-on-site').val(knob_on_site);
         $('#knob-company').val(knob_company);
         $('#knob-sis').val(knob_sis);
-        $('#knob-total').val(knob_total);
+        $('#knob-non').val(knob_non);
         // 
         $('#total-on-site').text('₱' + total_on_site.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         $('#total-company').text('₱' + total_company.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         $('#total-sis').text('₱' + total_sis.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+        $('#total-non').text('₱' + total_non.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         $('#total-collection').text('₱' + total_collection.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     };
 
