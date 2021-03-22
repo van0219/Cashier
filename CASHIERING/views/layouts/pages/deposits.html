@@ -64,6 +64,7 @@
                             <div class="pull-right">
                                 <span class="label label-danger">SIS PAYMENT</span>
                                 <span class="label label-primary">COMPANY</span>
+                                <span class="label label-warning">NON-STUDENT</span>
                                 <span class="label label-success">ON-SITE STUDENT PAYMENT</span>
                             </div>
                         </div>
@@ -184,7 +185,6 @@
     $(document).ready(function() {
         App.init();
         load_collection_history2(d_7day,d_today,0);
-        get_current_group_id();
         highlightSideNav();
     });
 
@@ -206,7 +206,7 @@
             success: function(obj) {
                 $('#col-hist-table2 tbody tr').remove();
                 for (var i = 0; i < obj.length; i++) {   //eto ung loop
-                    var payor = obj[i][5] == 'SIS PAYMENT' ? 'danger' : obj[i][5] == 'COMPANY' ? 'primary' : 'success';
+                    var payor = obj[i][5] == 'SIS PAYMENT' ? 'danger' : obj[i][5] == 'COMPANY' ? 'primary' : obj[i][5] == 'NON-STUDENT' ? 'warning' : 'success';
                     $('#col-hist-table2 tbody').append( //pakita ko ung sa chart diba same lang
                         `<tr>
                             <td><input type="checkbox" name="col-hist-check" value="${obj[i][0]}"/></td>
@@ -276,6 +276,8 @@
 
     $('#sched-deposit').on('hidden.bs.modal', function() {
         $('#sched-deposit-table tbody tr').remove();
+        $('#pick-sched-group').val('');
+        $('#pick-sched-notes').val('');
     });
 
     $('#col-hist-table2 tbody').on('click','tr', function() {
@@ -299,6 +301,8 @@
 
     var checked_cell = [];
     $('#pending_save').on('click', function() {
+        checked_cell = [];
+        get_current_group_id();
         var tot = 0;
         $('#pick-sched-date').val('mm/dd/yyyy');
         $('#pick-sched-note').val('');
@@ -458,7 +462,7 @@
                         function(isConfirm){
                             if (isConfirm){
                                 $('#sched-dep-tab').click();
-                                load_collection_history2(0,0);
+                                load_collection_history2(d_7day,d_today,0);
                             }
                         });
                     },

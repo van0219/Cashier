@@ -327,7 +327,7 @@
             };
         };
         j = 0;
-        for (var i = start_month_col-1; i < monthly_col_obj.length; i++) { 
+        for (var i = start_month_col-1; j < monthly_col_obj.length; i++) { 
             newlabels[i] = lbl[i];
             tot_col[i] = monthly_col_obj[j][1];
             j++;
@@ -341,7 +341,7 @@
         };
         j = 0;
         var dep_count = monthly_dep_obj.length;
-        for (var i = start_month_dep-1; i < monthly_col_obj.length; i++) { 
+        for (var i = start_month_dep-1; i < dep_count; i++) { 
             if (dep_count!=0) {
                 newlabels[i] = lbl[i];
                 tot_dep[i] = monthly_dep_obj[j][1];
@@ -356,7 +356,7 @@
         };
         // 
         var lineChartData = {
-            labels: newlabels,
+            labels: lbl,
             datasets: [{
                 label: 'Total Collection',
                 borderColor: COLOR_BLUE,
