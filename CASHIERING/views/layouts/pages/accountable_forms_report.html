@@ -102,8 +102,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- end col-3 -->
-                <!-- begin col-3 -->
+                <!-- end col-4 -->
+                <!-- begin col-4 -->
                 <div class="col-lg-4 col-md-6">
                     <div class="widget widget-stats bg-grey-darker">
                         <div class="stats-icon"><i class="fas fa-copyright"></i></div>
@@ -113,8 +113,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- end col-3 -->
-                <!-- begin col-3 -->
+                <!-- end col-4 -->
+                <!-- begin col-4 -->
                 <div class="col-lg-4 col-md-6">
                     <div class="widget widget-stats bg-black-lighter">
                         <div class="stats-icon"><i class="fas fa-registered"></i></div>
@@ -124,7 +124,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- end col-3 -->
+                <!-- end col-4 -->
             </div>
             <!-- end row -->
             <!-- begin row -->
@@ -343,15 +343,13 @@
 
     function handleLineChart(obj) {
         var lbl = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        var newlabels = [];
         var used = [];
         var unused = []
         for (var i = 0; i < obj.length; i++) {
-            newlabels[i] = lbl[i];
             used[i] = obj[i][0];
         }
         var lineChartData = {
-            labels: newlabels,
+            labels: lbl,
             datasets: [{
                 label: 'Used OR',
                 borderColor: COLOR_BLUE,

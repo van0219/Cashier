@@ -606,3 +606,10 @@ def set_email(request):
                     ,request.POST['pass']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_sumcol_cards(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SUMCOL_CARDS"
+                    ,(request.POST['month'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

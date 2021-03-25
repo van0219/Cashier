@@ -81,18 +81,55 @@
     <div class="row">
         <!-- begin col-5 -->
         <div class="col-lg-5">
-            <!-- begin panel -->
-            <div class="panel panel-inverse">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Nature of Collection</h4>
+            <!-- begin row -->
+            <div class="row">
+                <!-- begin col-12 -->
+                <div class="col-lg-12 col-md-12">
+                    <div class="widget widget-stats bg-orange height-90">
+                        <div class="stats-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="stats-info">
+                            <h4>TOTAL COLLECTION BREAKDOWN</h4>
+                            <p id="tot_col_break"></p>	
+                        </div>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    <div class="m-t-20" style="margin-bottom: -20px;" id="canvas-div">
-                        <canvas id="bar-chart" data-render="chart-js"></canvas>
+                <!-- end col-12 -->
+            </div>
+            <!-- end row -->
+            <!-- begin row -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="widget widget-stats bg-grey-darker height-90">
+                        <div class="stats-icon"><i class="fas fa-exclamation"></i></div>
+                        <div class="stats-info">
+                            <h4>TOTAL COLLECTION W/O BREAKDOWN</h4>
+                            <p id="tot_no_break"></p>	
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- end panel -->
+            <!-- end row -->
+            <!-- begin row -->
+            <div class="row">
+                <!-- begin col-12 -->
+                <div class="col-lg-12">
+                    <!-- begin panel -->
+                    <div class="panel panel-inverse">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Nature of Collection</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="m-t-20" style="margin-bottom: -20px;" id="canvas-div">
+                                <canvas id="bar-chart" data-render="chart-js"></canvas>
+                                <h3 id="bar-chart-no-data-text" style="display: none;" class="text-center m-t-40">No Data Available</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end panel -->
+                </div>
+                <!-- end col-12 -->
+            </div>
+            <!-- end row -->
         </div>
         <!-- end col-5 -->
         <!-- begin col-7 -->
@@ -196,6 +233,7 @@
         FormPlugins.init();
         highlightSideNav();
         $('#select-month').val((new Date).getMonth()+1);
+        loadCards($('#select-month').val());
         loadBarChart($('#select-month').val());
     });
     var dt_combines = $('#data-table-combines').DataTable({
@@ -277,6 +315,43 @@
         });
     };
 
+    function loadCards(month) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_sumcol_cards' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                month:month,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                if (obj[0][0] != null) {
+                    var tot_col_break = parseFloat(obj[0][0]);
+                    var tot_no_break = parseFloat(obj[0][1]);
+                    $('#tot_col_break').text('₱ ' + tot_col_break.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                    $('#tot_no_break').text('₱ ' + tot_no_break.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                }
+                else {
+                    var tot_col_break = 0;
+                    var tot_no_break = 0;
+                    $('#tot_col_break').text('₱ ' + tot_col_break.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                    $('#tot_no_break').text('₱ ' + tot_no_break.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
     function loadBarChart(month) {
         $.ajax({
             type: "POST",
@@ -288,20 +363,31 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                $('#canvas-div canvas').remove();
-                $('#canvas-div').append(`<canvas id="bar-chart"></canvas>`);
-                handleBarChart(obj);
-                var tot_amt = 0;
-                dt_combines.clear().draw();
-                $.each(obj, function(index, data){
-                    dt_combines.row.add( [
-                         data[0]
-                        ,data[1]
-                        ,data[2]
-                    ] ).draw();
-                    tot_amt = tot_amt + parseFloat(data[2].toString());
-                });
-                $('#tot-amt').text('₱ ' + tot_amt.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                if (obj.length != 0) {
+                    $('#canvas-div canvas').remove();
+                    $('#canvas-div').append(`<canvas id="bar-chart"></canvas>`);
+                    $('#bar-chart-no-data-text').prop('style','display:none');
+                    handleBarChart(obj);
+                    var tot_amt = 0;
+                    dt_combines.clear().draw();
+                    $.each(obj, function(index, data){
+                        dt_combines.row.add( [
+                            data[0]
+                            ,data[1]
+                            ,data[2]
+                        ] ).draw();
+                        tot_amt = tot_amt + parseFloat(data[2].toString());
+                    });
+                    $('#tot-amt').text('₱ ' + tot_amt.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                }
+                else {
+                    var tot_amt = 0;
+                    dt_combines.clear().draw();
+                    $('#tot-amt').text('₱ ' + tot_amt.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                    $('#canvas-div canvas').remove();
+                    $('#canvas-div').append(`<canvas id="bar-chart"></canvas>`);
+                    $('#bar-chart-no-data-text').prop('style','display:block');
+                }
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -317,6 +403,7 @@
     };
 
     $('#sum-filter').on('click', function() {
+        loadCards($('#select-month').val());
         loadBarChart($('#select-month').val());
     });
 

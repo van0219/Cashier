@@ -109,4 +109,5 @@ urlpatterns = [
     path('load_admin_dashboard_cards', views.load_admin_dashboard_cards, name="load_admin_dashboard_cards"),
     path('send_password', views.send_password, name="send_password"),
     path('set_email', views.set_email, name="set_email"),
+    path('load_sumcol_cards', views.load_sumcol_cards, name="load_sumcol_cards"),
 ]

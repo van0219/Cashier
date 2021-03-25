@@ -106,7 +106,7 @@
             <!-- begin panel -->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4 class="panel-title"><i class="fas fa-chart-line m-r-5"></i>Collection vs Deposits</h4>
+                    <h4 class="panel-title"><i class="fas fa-chart-line m-r-5"></i>Collection vs Deposit</h4>
                 </div>
                 <div class="panel-body" style="height: 330px;">
                     <div id="canvas-div" class="m-t-10">
@@ -258,10 +258,21 @@
         var bar_label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         var bar_value = [];
         var data= [];
-        var keyy = 0;
-        for (var i = 0; i < obj.length; i++) {
-            bar_value[i] = parseFloat(obj[i][1]);
-            data[i] = { 'label': bar_label[parseFloat(obj[i][0])-1], 'value': bar_value[i], 'color': bar_color[parseFloat(obj[i][0])-1]  };
+        var keyy = j = 0;
+        for (var i = parseInt(obj[0][0])-1; j < obj.length; i++) {
+            bar_value[i] = parseInt(obj[j][1]);
+            j++;
+        }
+        for (var i = 0; i < bar_label.length; i++) {
+            if (bar_value[i] == null) {
+                if (i >= (parseInt(obj[0][0])-1) + parseInt(obj.length)) {
+                    bar_value[i] = null;
+                }
+                else {
+                    bar_value[i] = 0;
+                }
+            }
+            data[i] = { 'label': bar_label[i], 'value': bar_value[i], 'color': bar_color[i]  };
             keyy = bar_value[i] > keyy ? bar_value[i] : keyy;
         }
         var barChartData = [{
@@ -304,7 +315,7 @@
             };
         };
         j = 0;
-        for (var i = start_month_col-1; i < monthly_col_obj.length; i++) { 
+        for (var i = start_month_col-1; j < monthly_col_obj.length; i++) { 
             newlabels[i] = lbl[i];
             tot_col[i] = monthly_col_obj[j][1];
             j++;
@@ -318,7 +329,7 @@
         };
         j = 0;
         var dep_count = monthly_dep_obj.length;
-        for (var i = start_month_dep-1; i < monthly_col_obj.length; i++) { 
+        for (var i = start_month_dep-1; j < dep_count; i++) { 
             if (dep_count!=0) {
                 newlabels[i] = lbl[i];
                 tot_dep[i] = monthly_dep_obj[j][1];
@@ -333,7 +344,7 @@
         };
         // 
         var lineChartData = {
-            labels: newlabels,
+            labels: lbl,
             datasets: [{
                 label: 'Total Collection',
                 borderColor: COLOR_BLUE,
@@ -359,6 +370,7 @@
             data: lineChartData
         });
     };
+
     function getMonthlyCollectionDeposit() {
         var monthly_col_obj = null;
         var monthly_dep_obj = null;
