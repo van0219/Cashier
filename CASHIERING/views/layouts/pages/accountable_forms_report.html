@@ -325,7 +325,7 @@
     function handlePolarChart(sis, comp, non, site) {
         $('#polar-area-chart').empty();
         var polarAreaData = {
-            labels: ['SIS Payments', 'Company', 'Non-Student', 'On-Site Student'],
+            labels: ['SIS', 'Company', 'Non-Student', 'On-Site Student'],
             datasets: [{
                 data: [parseInt(sis), parseInt(comp), parseInt(non), parseInt(site)],
                 backgroundColor: [COLOR_RED_TRANSPARENT_7,COLOR_BLUE_TRANSPARENT_7, COLOR_ORANGE_TRANSPARENT_7, COLOR_GREEN_TRANSPARENT_7],
