@@ -613,3 +613,10 @@ def load_sumcol_cards(request):
                     ,(request.POST['month'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_nature_col(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_NATURE_COL"
+                    ,(request.POST['uacs'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

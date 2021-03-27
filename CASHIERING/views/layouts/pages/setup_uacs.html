@@ -40,6 +40,16 @@
         white-space: nowrap;
     }
 </style>
+<style>
+    div.dropdown-menu.open{
+        max-height: 314px !important;
+        overflow: hidden;
+    }
+    ul.dropdown-menu.inner{
+        max-height: 260px !important;
+        overflow-y: auto;
+    }
+</style>
 {% endblock %}
 {% block content %}6
 <!-- begin #content -->
@@ -245,6 +255,59 @@
         <!-- end col-8 -->
     </div>
     <!-- end row -->
+    <!-- begin row -->
+        <!-- begin col-12 -->
+        <div class="col-lg-12">
+            <h3>Nature of Collection</h3>
+            <div class="panel panel-inverse">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">
+                    <h4 class="panel-title">Setup Nature of Collection</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin panel-body -->
+                <div class="panel-body">
+                    <!-- begin row -->
+                    <div class="row">
+                        <div class="form-group m-b-15 col-lg-6">
+                            <label class="form-label" for="inc-select">Income Type :</label>
+                            <div class="">
+                                <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="false" data-style="btn-white"  id="inc-select" data-parsley-excluded="true">
+                                    <option value="Please choose" selected disabled>Please choose</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group m-b-15 col-lg-6">
+                            <label class="form-label" for="uacs_select">UACS Code :</label>
+                            <div class="">
+                                <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="true" data-style="btn-white" id="uacs_select" data-parsley-excluded="true">
+                                    <option value="Please choose" selected disabled>Please choose</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+                    <table class="table table-bordered table-striped table-hover" id="nature-col-tbl">
+                        <thead>
+                            <th class="text-nowrap">UACS Code</th>
+                            <th class="text-nowrap">Description</th>
+                            <th class="text-nowrap">Nature of Collection</th>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                    <!-- begin col-12 -->
+                    <div class="col-lg-12">
+                        <a href="javascript:;" class="btn btn-sm btn-success pull-right" style="display: none;" id="plus-but"><i class="fas fa-plus-square fa-lg"></i></a>
+                    </div>
+                    <!-- end col-12 -->
+                </div>
+                <!-- end panel-body -->
+            </div>
+        </div>
+        <!-- end col-12 -->
+    <!-- end row -->
 </div>
 <!-- end #content -->
 <!-- #modal-dialog 1-->
@@ -394,7 +457,7 @@
                                     <div class="form-group row m-b-15">
                                         <label class="col-md-4 col-sm-4 col-form-label" for="fnd-type">Fund Type <span class="text-red">*</span> :</label>
                                         <div class="col-md-8 col-sm-8">
-                                            <select class="form-control selectpicker3" id="fnd-type" data-style="btn-white" data-parsley-required="true" data-parsley-required-message="Fund Type is required">
+                                            <select class="form-control selectpicker3" id="fnd-type" data-style="btn-white" data-size="10" data-parsley-required="true" data-parsley-required-message="Fund Type is required">
                                             
                                             </select>
                                         </div>
@@ -402,7 +465,7 @@
                                     <div class="form-group row m-b-15">
                                         <label class="col-md-4 col-sm-4 col-form-label" for="inc-type">Income Type <span class="text-red">*</span> :</label>
                                         <div class="col-md-8 col-sm-8">
-                                            <select class="form-control selectpicker4" id="inc-type" data-style="btn-white" data-parsley-required="true" data-parsley-required-message="Income Type is required">
+                                            <select class="form-control selectpicker4" id="inc-type" data-style="btn-white" data-size="10" data-parsley-required="true" data-parsley-required-message="Income Type is required">
                                             
                                             </select>
                                         </div>
@@ -570,6 +633,9 @@
         TableManageCombine.init();
         FormPlugins.init();
         highlightSideNav();
+        $('#inc-select').selectpicker('render');
+        $('#uacs_select').selectpicker('render');
+        getIncType();
 
         $.ajax({
             type: "POST",
@@ -585,12 +651,6 @@
                     $('.selectpicker1').append( new Option(option,option)); //value and text
                     $('.selectpicker3').append( new Option(option,option));
                 });
-                // for (var i = 0; i < obj.length; i++) {
-                //     var val = obj[i];
-                //     var text = obj[i];
-                //     $('.selectpicker1').append(`<option value=${val}>${text}</option>`);
-                //     $('.selectpicker3').append(`<option value=${val}>${text}</option>`);
-                // }
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -631,6 +691,134 @@
                 })
             }
         });
+
+        $('#inc-select').on('change', function() {
+            getUacsCode($('#inc-select').val());
+        });
+        $('#inc-select').on('change', function() {
+            if ($('#inc-select').val() == 'Please choose') {
+                $('#inc-select').selectpicker().addClass('is-invalid');
+            }
+            else {
+                $('#inc-select').selectpicker().removeClass('is-invalid');
+            }
+        });
+        $('#uacs_select').on('change', function() {
+            if ($('#uacs_select').val() == 'Please choose') {
+                $('#uacs_select').addClass('is-invalid');
+            }
+            else {
+                $('#uacs_select').removeClass('is-invalid');
+                var uacs = $('#uacs_select').val().trim();
+                var desc = $('#uacs_select').find('option:selected').text().split('-')[1];
+                loadNatureCol(uacs,desc);
+            }
+        });
+
+        function loadNatureCol(uacs,desc) {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'load_nature_col' %}",
+                // cache: true,
+                dataType: 'json',
+                data: {
+                    uacs: uacs,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                success: function(obj) {
+                    $('#nature-col-tbl tbody tr').remove();
+                    if (obj.length != 0) {
+                        for (var i = 0;  i < obj.length; i++) {
+                            $('#nature-col-tbl tbody').append(
+                                `<tr>
+                                    <td class="text-nowrap">${uacs}</td>
+                                    <td class="text-nowrap">${desc}</td>
+                                    <td class="text-nowrap">${obj[i][0]}</td>
+                                </tr>`
+                            );
+                        }
+                        $('#plus-but').prop('style', 'display: block;');
+                    }
+                    else {
+                        $('#nature-col-tbl tbody').append(
+                            `<tr><td colspan="3" class="text-center">No results found</td></tr>`  
+                        );
+                        $('#plus-but').prop('style', 'display: block;');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errMsg = xhr.status + ': ' + xhr.statusText;
+                    swal({
+                        title: "Error!", 
+                        text: errMsg,
+                        type: "error",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    })
+                }
+            });
+        };
+
+        function getIncType() {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'get_income_type' %}",
+                // cache: true,
+                dataType: 'json',
+                data: {
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                success: function(obj) {
+                    $.each(obj, function(index, option){
+                        $('#inc-select').append( new Option(option,option)); //value and text
+                    });
+                    $('#inc-select option').prop('style', 'font-size: 11px;')
+                    $('#inc-select').selectpicker('refresh');
+                },
+                error: function(xhr, status, error) {
+                    var errMsg = xhr.status + ': ' + xhr.statusText;
+                    swal({
+                        title: "Error!", 
+                        text: errMsg,
+                        type: "error",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    })
+                }
+            });
+        };
+        function getUacsCode(incomeType) {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'get_uacs_code' %}",
+                cache: false,
+                dataType: 'json',
+                data: {
+                    incomeType: incomeType,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                success: function(obj) {
+                    $('#uacs_select').empty();
+                    $('#uacs_select').append(new Option('Please choose')).select();
+                    $('#uacs_select').find('option:selected').prop('disabled',true);                
+                    $.each(obj, function(index, option){
+                        $('#uacs_select').append( new Option(option[0]+' - '+option[1],option[0])); //text and value
+                    });
+                    $('#uacs_select option').prop('style', 'font-size: 11px;');
+                    $('#uacs_select').selectpicker('refresh');
+                },
+                error: function(xhr, status, error) {
+                    var errMsg = xhr.status + ': ' + xhr.statusText;
+                    swal({
+                        title: "Error!", 
+                        text: errMsg,
+                        type: "error",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    })
+                }
+            });
+        };
 
         $('#expand').on('click', function(){
             if($('#expand').text()=='Expand') {
@@ -1667,6 +1855,10 @@
             $('#o_code').val('');
             document.getElementById( "o_code" ).removeAttribute('disabled');
         }
+    });
+
+    $('#plus-but').on('click', function() {
+        // lalabas ung modal to add nature of collection for a specified uacs code.
     });
 
     function highlightSideNav() {
