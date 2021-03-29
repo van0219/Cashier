@@ -111,4 +111,5 @@ urlpatterns = [
     path('set_email', views.set_email, name="set_email"),
     path('load_sumcol_cards', views.load_sumcol_cards, name="load_sumcol_cards"),
     path('load_nature_col', views.load_nature_col, name="load_nature_col"),
+    path('add_new_nature', views.add_new_nature, name="add_new_nature"),
 ]

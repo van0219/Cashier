@@ -620,3 +620,11 @@ def load_nature_col(request):
                     ,(request.POST['uacs'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def add_new_nature(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_INSERT_NEW_NATURE"
+                    ,(request.POST['uacs']
+                    ,request.POST['nature'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

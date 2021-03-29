@@ -168,6 +168,14 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="form-group row m-b-15" id="nature-div" style="display: none;">
+                                            <label class="col-md-4 col-sm-4 col-form-label">Nature :</label>
+                                            <div class="col-md-8 col-sm-8">
+                                                <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="true" data-style="btn-white" id="nature-select" data-parsley-excluded="true">
+                                                    <option value="Please choose" selected disabled>Please choose</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                         <div class="form-group row m-b-15">
                                             <label class="col-md-4 col-sm-4 col-form-label" for="message">Amount :</label>
                                             <div class="col-md-8 col-sm-8">
@@ -198,6 +206,7 @@
                                                 <tr>
                                                     <th class="text-nowrap">Income Type</th>
                                                     <th class="text-nowrap">UAC Code</th>
+                                                    <th class="text-nowrap">Nature</th>
                                                     <th class="text-nowrap">Amount</th>
                                                     <th style="max-width: 20px;" class="text-nowrap"></th>
                                                 </tr>
@@ -667,6 +676,7 @@
         var init_tot_fee = parseFloat(tot_fee_txt);
         var inctype = $('#inc-select').find('option:selected').text();
         var uacs = $('#uacs_select').find('option:selected').text();
+        var nature = $('#nature-select').find('option:selected').text() == 'Please choose' ? '' : $('#nature-select').find('option:selected').text();
         var amt = parseFloat($('#number').val());
         var amtBox = $('#number').val().trim();
         if (inctype == 'Please choose' || uacs == 'Please choose') {
@@ -682,7 +692,7 @@
             else if (uacs == 'Please choose') {
                 swal({
                     title: "Missing Data", 
-                    text: "Please select nature of collection.",
+                    text: "Please select UACS.",
                     type: "info",
                     confirmButtonColor: "#428bca",
                     showLoaderOnConfirm: true
@@ -703,6 +713,7 @@
                             <span class="label label-default f-s-11">${inctype}</span>
                         </td>
                         <td class="f-s-10">${uacs}</td>
+                        <td class="f-s-10">${nature}</td>
                         <td>${amt.toFixed(2)}</td>
                         <td align="center">
                             <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove" title="remove"><i class="fas fa-times"></i></a>
@@ -713,6 +724,7 @@
                 $('#total-fee').text(parseFloat(total_fee).toFixed(2));
                 $('#inc-select').selectpicker('val','Please choose');
                 $('#uacs_select').selectpicker('val','Please choose');
+                $('#nature-select').selectpicker('val','Please choose');
                 $('#number').val('');
             }
             else {
@@ -734,6 +746,43 @@
         }
         else {
             $('#uacs_select').removeClass('is-invalid');
+            var uacs = $('#uacs_select').val();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'load_nature_col' %}",
+                cache: true,
+                dataType: 'json',
+                data: {
+                    uacs: uacs,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                success: function(obj) {
+                    if (obj.length != 0) {
+                        $('#nature-div').show();
+                        $('#nature-select').empty();
+                        $('#nature-select').append(new Option('Please choose')).select();
+                        $('#nature-select').find('option:selected').prop('disabled',true);                
+                        $.each(obj, function(index, option){
+                            $('#nature-select').append( new Option(option[0],option[0])); //text and value
+                        });
+                        $('#nature-select option').prop('style', 'font-size: 11px;');
+                        $('#nature-select').selectpicker('refresh');
+                    }
+                    else {
+                        $('#nature-div').hide();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errMsg = xhr.status + ': ' + xhr.statusText;
+                    swal({
+                        title: "Error!", 
+                        text: errMsg,
+                        type: "error",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    })
+                }
+            }); 
         }
     });
     $('#number').on('input', function() {

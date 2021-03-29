@@ -582,6 +582,24 @@
         </div>
     </div>
 </div>
+<!-- #add-nature -->
+<div class="modal fade" id="add-nature">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="nature-header"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" placeholder="nature of collection" style="text-transform: uppercase;" id="desc-nature"/>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal" id="closebut-nature"><i class="fas fa-times m-r-5"></i>Close</a>
+                <a href="javascript:;" class="btn btn-success" id="addbut-nature"><i class="fas fa-plus-circle m-r-5"></i>Add</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block page-js %}
 <!--  -->
@@ -715,50 +733,6 @@
             }
         });
 
-        function loadNatureCol(uacs,desc) {
-            $.ajax({
-                type: "POST",
-                url: "{% url 'load_nature_col' %}",
-                // cache: true,
-                dataType: 'json',
-                data: {
-                    uacs: uacs,
-                    csrfmiddlewaretoken:"{{csrf_token}}"
-                },
-                success: function(obj) {
-                    $('#nature-col-tbl tbody tr').remove();
-                    if (obj.length != 0) {
-                        for (var i = 0;  i < obj.length; i++) {
-                            $('#nature-col-tbl tbody').append(
-                                `<tr>
-                                    <td class="text-nowrap">${uacs}</td>
-                                    <td class="text-nowrap">${desc}</td>
-                                    <td class="text-nowrap">${obj[i][0]}</td>
-                                </tr>`
-                            );
-                        }
-                        $('#plus-but').prop('style', 'display: block;');
-                    }
-                    else {
-                        $('#nature-col-tbl tbody').append(
-                            `<tr><td colspan="3" class="text-center">No results found</td></tr>`  
-                        );
-                        $('#plus-but').prop('style', 'display: block;');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    var errMsg = xhr.status + ': ' + xhr.statusText;
-                    swal({
-                        title: "Error!", 
-                        text: errMsg,
-                        type: "error",
-                        confirmButtonColor: "#428bca",
-                        showLoaderOnConfirm: true
-                    })
-                }
-            });
-        };
-
         function getIncType() {
             $.ajax({
                 type: "POST",
@@ -840,6 +814,51 @@
             loadUACSdata();
         });
     });
+
+    function loadNatureCol(uacs,desc) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_nature_col' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                uacs: uacs,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#nature-col-tbl tbody tr').remove();
+                if (obj.length != 0) {
+                    for (var i = 0;  i < obj.length; i++) {
+                        $('#nature-col-tbl tbody').append(
+                            `<tr>
+                                <td class="text-nowrap">${uacs}</td>
+                                <td class="text-nowrap">${desc}</td>
+                                <td class="text-nowrap">${obj[i][0]}</td>
+                            </tr>`
+                        );
+                    }
+                    $('#plus-but').prop('style', 'display: block;');
+                }
+                else {
+                    $('#nature-col-tbl tbody').append(
+                        `<tr><td colspan="3" class="text-center">No results found</td></tr>`  
+                    );
+                    $('#plus-but').prop('style', 'display: block;');
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+
     var dt_fund = $('#data-table-modal-fund').DataTable({
         'paging'      : false,
         'lengthChange': false,
@@ -1816,7 +1835,6 @@
                 inctype_upd: inctype_upd,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
-            timeout: 5000,
             success:function(data) {
                 loadIncData();
                 var txt = '"'+inctype_orig+'"' + ' was updated successfully.';
@@ -1858,7 +1876,53 @@
     });
 
     $('#plus-but').on('click', function() {
-        // lalabas ung modal to add nature of collection for a specified uacs code.
+        $('#nature-header').text($('#uacs_select').find('option:selected').text().split('-')[1]);
+        $('#add-nature').modal('show');
+    });
+
+    $('#add-nature').on('hidden.bs.modal', function() {
+        $('#desc-nature').val('');
+    });
+
+    $('#addbut-nature').on('click', function() {
+        var uacs = $('#uacs_select').find('option:selected').text().split('-')[0];
+        var nature = $('#desc-nature').val();
+        $.ajax({
+            url: "{% url 'add_new_nature' %}",
+            type: "POST",
+            data: { 
+                uacs: uacs,
+                nature: nature,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success:function(obj) {
+                swal({
+                    title: "Added Successfully", 
+                    text: 'You have added ' + nature + ' to ' + uacs,
+                    type: "success",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                },
+                function(isConfirm){
+                    if (isConfirm){
+                        $('#closebut-nature').click();
+                        var uacs = $('#uacs_select').val().trim();
+                        var desc = $('#uacs_select').find('option:selected').text().split('-')[1];
+                        loadNatureCol(uacs,desc);
+                    }
+                })
+            },
+            error:function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        })
     });
 
     function highlightSideNav() {
