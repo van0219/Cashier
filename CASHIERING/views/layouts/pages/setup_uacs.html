@@ -288,12 +288,13 @@
                     </div>
                     <!-- end row -->
                     <table class="table table-bordered table-striped table-hover" id="nature-col-tbl">
-                        <thead>
+                        <thead class="text-center">
                             <th class="text-nowrap">UACS Code</th>
                             <th class="text-nowrap">Description</th>
                             <th class="text-nowrap">Nature of Collection</th>
+                            <th class="text-nowrap">Options</th>
                         </thead>
-                        <tbody>
+                        <tbody class="text-center">
 
                         </tbody>
                     </table>
@@ -600,6 +601,24 @@
         </div>
     </div>
 </div>
+<!-- #update-nature -->
+<div class="modal fade" id="update-nature">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="update-header"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" placeholder="nature of collection" style="text-transform: uppercase;" id="desc-nature-upd"/>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal" id="closebut-nature-upd"><i class="fas fa-times m-r-5"></i>Close</a>
+                <a href="javascript:;" class="btn btn-primary" id="updbut-nature"><i class="fas fa-check-circle m-r-5"></i>Update</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block page-js %}
 <!--  -->
@@ -834,6 +853,10 @@
                                 <td class="text-nowrap">${uacs}</td>
                                 <td class="text-nowrap">${desc}</td>
                                 <td class="text-nowrap">${obj[i][0]}</td>
+                                <td>
+                                    <a href="javascript:;" class="btn btn-xs btn-primary" title="edit" id="edit-nature"><i class="fas fa-edit"></i></a>
+                                    <a href="javascript:;" class="btn btn-xs btn-danger" title="remove" id="remove-nature"><i class="fas fa-trash"></i></a>
+                                </td>
                             </tr>`
                         );
                     }
@@ -841,7 +864,7 @@
                 }
                 else {
                     $('#nature-col-tbl tbody').append(
-                        `<tr><td colspan="3" class="text-center">No results found</td></tr>`  
+                        `<tr><td colspan="4" class="text-center">No results found</td></tr>`  
                     );
                     $('#plus-but').prop('style', 'display: block;');
                 }
@@ -858,6 +881,113 @@
             }
         });
     };
+
+    $('#nature-col-tbl tbody').on('click', '#remove-nature', function() {
+        var name = $(this).closest('tr').find('td:eq(2)').html();
+        var uacs = $('#uacs_select').val().trim();
+        var desc = $('#uacs_select').find('option:selected').text().split('-')[1];
+        swal({
+            title: "Remove",
+            text: "Are you sure to remove "+name+"?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d9534f",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: true,
+            customClass: "Custom_Cancel"
+        },
+        function(isConfirm) {
+            if (isConfirm){
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'remove_nature' %}",
+                    // cache: true,
+                    dataType: 'json',
+                    data: {
+                        name: name,
+                        csrfmiddlewaretoken:"{{csrf_token}}"
+                    },
+                    success: function(obj) {
+                        swal({
+                            title: "Removed Successfully", 
+                            text: 'You have removed ' + name + ' to ' + uacs,
+                            type: "success",
+                            confirmButtonColor: "#428bca",
+                            showLoaderOnConfirm: true
+                        },
+                        function(isConfirm){
+                            if (isConfirm){
+                                loadNatureCol(uacs,desc);
+                            }
+                        })
+                    },
+                    error: function(xhr, status, error) {
+                        var errMsg = xhr.status + ': ' + xhr.statusText;
+                        swal({
+                            title: "Error!", 
+                            text: errMsg,
+                            type: "error",
+                            confirmButtonColor: "#428bca",
+                            showLoaderOnConfirm: true
+                        })
+                    }
+                });
+            }
+        });
+    });
+
+    $('#nature-col-tbl tbody').on('click', '#edit-nature', function() {
+        $('#update-header').text($(this).closest('tr').find('td:eq(1)').html());
+        $('#desc-nature-upd').val($(this).closest('tr').find('td:eq(2)').html());
+        $('#update-nature').modal('show');
+        old_name = $('#desc-nature-upd').val();
+    });
+
+    var old_name = '';
+
+    $('#updbut-nature').on('click', function() {
+        var new_name = $('#desc-nature-upd').val().trim();
+        var uacs = $('#uacs_select').val().trim();
+        var desc = $('#uacs_select').find('option:selected').text().split('-')[1];
+        $.ajax({
+            type: "POST",
+            url: "{% url 'update_nature' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                old_name: old_name,
+                new_name: new_name,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                swal({
+                    title: "Updated Successfully", 
+                    text: 'You have updated ' + old_name.toUpperCase() +' to ' + new_name.toUpperCase() + '.',
+                    type: "success",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                },
+                function(isConfirm){
+                    if (isConfirm){
+                        $('#update-nature').modal('hide');
+                        loadNatureCol(uacs,desc);
+                    }
+                })
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    });
 
     var dt_fund = $('#data-table-modal-fund').DataTable({
         'paging'      : false,

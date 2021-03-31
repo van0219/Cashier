@@ -337,6 +337,7 @@ def insert_collection_breakdown(request):
     cursor.callproc("SP_INSERT_COLLECTION_BREAKDOWN"
                     ,(request.POST['or_num']
                     ,request.POST['desc']
+                    ,request.POST['nature']
                     ,request.POST['amt']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
@@ -626,5 +627,20 @@ def add_new_nature(request):
     cursor.callproc("SP_INSERT_NEW_NATURE"
                     ,(request.POST['uacs']
                     ,request.POST['nature'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def remove_nature(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_REMOVE_NATURE"
+                    ,(request.POST['name'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def update_nature(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_UPDATE_NATURE"
+                    ,(request.POST['old_name']
+                    ,request.POST['new_name']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)

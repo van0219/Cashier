@@ -456,7 +456,8 @@
         var dt_res_len = $('#data-table-responsives tbody tr').length;
         for (var i = 0; i < dt_res_len; i++) {
             var desc = dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text().split('-')[1];
-            var amt = dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text();
+            var nature = dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()
+            var amt = dt_res.find('tr:eq('+ i +')').find('td:eq(3)').text();
             $.ajax({
                 type: "POST",
                 url: "{% url 'insert_collection_breakdown' %}",
@@ -465,6 +466,7 @@
                 data: {
                     or_num: or_num,
                     desc: desc.trim(),
+                    nature: nature.trim(),
                     amt: amt,
                     csrfmiddlewaretoken:"{{csrf_token}}"
                 },
@@ -571,9 +573,9 @@
                 $('.table-invoice tbody').append(
                     `<tr>
                         <td>
-                            <span class="text-inverse" id="r_desc">${dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text().split('-')[1]}</span><br />
+                            <span class="text-inverse" id="r_desc">${dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text().split('-')[1] + (dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text() != '' ? ' ('+dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()+')' : '')}</span><br />
                         </td>
-                        <td class="text-center" id="r_amount">${dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()}</td>
+                        <td class="text-center" id="r_amount">${dt_res.find('tr:eq('+ i +')').find('td:eq(3)').text()}</td>
                     </tr>`
                 );
             }
@@ -801,7 +803,7 @@
     });
 
     $('#data-table-responsives tbody').on('click', '.remove', function() {
-        minus_fee = $(this).closest('tr').find('td:eq(2)').html();
+        minus_fee = $(this).closest('tr').find('td:eq(3)').html();
         total_fee = total_fee - parseFloat(minus_fee);
         $('#total-fee').text(total_fee.toFixed(2));
         $(this).closest('tr').remove();

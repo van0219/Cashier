@@ -112,4 +112,6 @@ urlpatterns = [
     path('load_sumcol_cards', views.load_sumcol_cards, name="load_sumcol_cards"),
     path('load_nature_col', views.load_nature_col, name="load_nature_col"),
     path('add_new_nature', views.add_new_nature, name="add_new_nature"),
+    path('remove_nature', views.remove_nature, name="remove_nature"),
+    path('update_nature', views.update_nature, name="update_nature"),
 ]
