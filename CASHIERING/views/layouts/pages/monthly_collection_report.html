@@ -49,7 +49,7 @@
     </ol>
     <!-- end breadcrumb -->
     <!-- begin page-header -->
-    <h1 class="page-header">Monthly Collection <small>View/Generate Report</small></h1>
+    <h1 class="page-header">Monthly Report of Collections and Deposits <small>View/Generate Report</small></h1>
     <!-- end page-header -->
     
     <!-- begin row -->
@@ -88,28 +88,28 @@
     <!-- end row -->
     <!-- begin row -->
     <div class="row">
-        <!-- begin col-6 -->
-        <div class="col-lg-6">
+        <!-- begin col-5 -->
+        <div class="col-lg-5">
             <!-- begin row -->
             <div class="row">
                 <!-- begin col-6 -->
                 <div class="col-lg-6 col-md-6">
-                    <div class="widget widget-stats bg-orange">
-                        <div class="stats-icon"><i class="fas fa-download"></i></div>
+                    <div class="widget widget-stats bg-gradient-lime">
+                        <div class="stats-icon"><i class="fas fa-archive"></i></div>
                         <div class="stats-info">
                             <h4>TOTAL COLLECTION</h4>
-                            <p id="tot-dep-card"></p>	
+                            <p id="tot-col-card"></p>	
                         </div>
                     </div>
                 </div>
                 <!-- end col-6 -->
                 <!-- begin col-6 -->
                 <div class="col-lg-6 col-md-6">
-                    <div class="widget widget-stats bg-grey-darker">
-                        <div class="stats-icon"><i class="fas fa-bookmark"></i></div>
+                    <div class="widget widget-stats bg-gradient-black">
+                        <div class="stats-icon"><i class="fas fa-download"></i></div>
                         <div class="stats-info">
                             <h4>TOTAL DEPOSIT</h4>
-                            <p id="tot-slip-card"></p>	
+                            <p id="tot-dep-card"></p>	
                         </div>
                     </div>
                 </div>
@@ -137,13 +137,13 @@
             </div>
             <!-- end row -->
         </div>
-        <!-- end col-6 -->
-        <!-- begin col-6 -->
-        <div class="col-lg-6">
+        <!-- end col-5 -->
+        <!-- begin col-7 -->
+        <div class="col-lg-7">
             <!-- begin card -->
             <div class="card text-left">
                 <div class="card-header">
-                    <i class="fas fa-certificate m-r-5"></i>Certification
+                    <i class="fas fa-shopping-basket m-r-5"></i>Collection Group (by Nature)
                 </div>
                 <div class="card-block">
                     <div class="panel panel-white">
@@ -156,33 +156,30 @@
                         <div class="panel-body">
                             <table id="data-table-combines" class="table table-hover table-bordered table-striped">
                                 <thead>
-                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="30%">Date</th>
-                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="40%">RA Deposit Slip No.</th>
-                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="30%">Amount</th>
+                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="10%">Count</th>
+                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="60%">Nature of Collection</th>
+                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="30%">Total Amount</th>
                                 </thead>
                                 <tbody>
                                     <!-- append tbody tr here -->
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td class="f-w-600 p-t-20 p-b-5 text-left" style="border-color: white; border-top-color: lightgray;">Total Deposits</td>
-                                        <td class="p-t-20 p-b-5" style="border-color: white; border-top-color: lightgray;"></td>
-                                        <td class="text-right p-t-20 p-b-5" style="border-color: white; border-top-color: lightgray;">
-                                            <span class="label label-purple f-s-11" id="tot-dep"></span>
+                                        <td class="f-w-600 p-t-20 text-left" style="border-color: white; border-top-color: lightgray;" colspan="2">TOTAL</td>
+                                        <td class="text-right p-t-20" style="border-color: white; border-top-color: lightgray;">
+                                            <span class="label label-purple f-s-11" id="super-tot">0.00</span>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="f-w-600 p-t-0" style="border-color: white;">Add Balance</td>
-                                        <td class="p-t-0" style="border-color: white;"></td>
-                                        <td class="text-right p-t-0" style="border-color: white;">
-                                            <span class="label label-warning f-s-11" id="add-bal">0.00</span>
+                                        <td class="f-w-600 text-left" style="border-color: white;" colspan="2">Total Deposited</td>
+                                        <td class="text-right" style="border-color: white;">
+                                            <span class="label label-success f-s-11" id="tot-dep">0.00</span>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="f-w-700" style="border-color: white; border-bottom-color: lightgray;">TOTAL</td>
-                                        <td style="border-color: white; border-bottom-color: lightgray;"></td>
+                                        <td class="f-w-600 text-left" style="border-color: white; border-bottom-color: lightgray;" colspan="2">Total Undeposited</td>
                                         <td class="text-right" style="border-color: white; border-bottom-color: lightgray;">
-                                            <span class="label label-success f-s-12" id="super-tot"></span>
+                                            <span class="label label-danger f-s-11" id="tot-undep">0.00</span>
                                         </td>
                                     </tr>
                                 </tfoot>
@@ -194,7 +191,7 @@
             </div>
             <!-- end card -->
         </div>
-        <!-- end col-10 -->
+        <!-- end col-7 -->
     </div>
     <!-- end row -->
 </div>
@@ -249,45 +246,57 @@
         FormPlugins.init();
         $('#select-month').val((new Date).getMonth()+1);
         highlightSideNav();
+        getColDepCard($('#select-month').val());
+        getColDepGroup($('#select-month').val());
         getMonthlyCollectionDeposit();
     });
-    $('#data-table-combines').DataTable({
-        'paging'      : false,
-        'lengthChange': false,
+    var dt_combines = $('#data-table-combines').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
         'searching'   : true,
         'ordering'    : false,
-        'info'        : false,
+        'info'        : true,
         'autoWidth'   : false,
         'aaSorting'   : [[1, "desc" ]],
-        'pagingType'  : 'full_numbers',
+        'pagingType'  : 'simple_numbers',
         dom: 'lBfrtip<"actions">',
-    buttons: [
-        {
-            extend:    'print',
-            text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
-            titleAttr: 'Print',
-            exportOptions: {
-                columns: ':visible'
+        buttons: [
+            {
+                extend:    'print',
+                text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
+                titleAttr: 'Print',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend:    'excel',
+                text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
+                titleAttr: 'Excel',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend:    'pdf',
+                text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
+                titleAttr: 'PDF',
+                exportOptions: {
+                    columns: ':visible'
+                }
             }
-        },
-        {
-            extend:    'excel',
-            text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
-            titleAttr: 'Excel',
-            exportOptions: {
-                columns: ':visible'
+        ],
+        columnDefs: [
+            {
+                targets: [0,1],
+                className: 'text-center'
+            },
+            {
+                targets: 2,
+                className: 'text-right'
             }
-        },
-        {
-            extend:    'pdf',
-            text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
-            titleAttr: 'PDF',
-            exportOptions: {
-                columns: ':visible'
-            }
-        }
-    ],
-        "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
+        ],
+        "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ]
     });
 
     function handleLineChart(monthly_col_obj, monthly_dep_obj) {
@@ -417,6 +426,92 @@
         handleLineChart(monthly_col_obj, monthly_dep_obj);
     };
 
+    function getColDepCard(month) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_coldep_card' %}",
+            // cache: true,
+            async: false,
+            dataType: 'json',
+            data: {
+                month: month,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                var col = obj[0][0] != null ? parseFloat(obj[0][0]) : 0;
+                var dep = obj[0][1] != null ? parseFloat(obj[0][1]) : 0;
+                $('#tot-col-card').text('₱ ' + col.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#tot-dep-card').text('₱ ' + dep.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
+    function getColDepGroup(month) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_coldep_group' %}",
+            // cache: true,
+            async: false,
+            dataType: 'json',
+            data: {
+                month: month,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                var super_tot = 0;
+                var tot_dep = 0;
+                var tot_undep = 0;
+                dt_combines.clear().draw();
+                $.each(obj, function(index, data){
+                    dt_combines.row.add( [
+                         data[0]
+                        ,data[1]
+                        ,data[2]
+                    ] ).draw();
+                    super_tot = super_tot + parseFloat(data[2].toString());
+                    if (data[3] == 'YES') {
+                        tot_dep = tot_dep + parseFloat(data[2].toString());
+                    }
+                    else {
+                        tot_undep = tot_undep + parseFloat(data[2].toString());
+                    }
+                });
+                // var addBal = parseFloat($('#add-bal').text());
+                // var superTot = total_dep + addBal;
+                // var tot_dep = '₱ ' + total_dep.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                $('#super-tot').text('₱ ' + super_tot.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#tot-dep').text('₱ ' + tot_dep.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#tot-undep').text('₱ ' + tot_undep.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                // $('#tot-dep-card').text(tot_dep);
+                // $('#tot-slip-card').text(obj.length);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
+    $('#cert-filter').on('click', function() {
+        getColDepCard($('#select-month').val());
+        getColDepGroup($('#select-month').val());
+    });
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');

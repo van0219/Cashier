@@ -114,4 +114,6 @@ urlpatterns = [
     path('add_new_nature', views.add_new_nature, name="add_new_nature"),
     path('remove_nature', views.remove_nature, name="remove_nature"),
     path('update_nature', views.update_nature, name="update_nature"),
+    path('load_coldep_card', views.load_coldep_card, name="load_coldep_card"),
+    path('load_coldep_group', views.load_coldep_group, name="load_coldep_group"),
 ]

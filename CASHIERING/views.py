@@ -644,3 +644,17 @@ def update_nature(request):
                     ,request.POST['new_name']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_coldep_card(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_COLDEP_CARD"
+                    ,(request.POST['month']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_coldep_group(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_COLLECTION_GROUP"
+                    ,(request.POST['month']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
