@@ -53,111 +53,143 @@
     <!-- end page-header -->
     
     <!-- begin row -->
-    <div class="row">
-        <!-- begin col-2 -->
-        <div class="col-lg-2">
-            <h5>Generate Custom Report</h5>
-            <div class="m-t-10">
-                <div>
-                    <div id="advance-daterange" class="btn btn-default btn-block text-left f-s-12">
-                        <span class="m-r-0 f-s-10"></span>  
-                        <i class="fa fa-caret-down pull-right m-t-2"></i>
-                    </div>
+    <div class="row m-b-10">
+        <!-- begin col-3 -->
+        <div class="col-lg-3">
+            <div class="m-t-10 row">
+                <div class="col-lg-8">
+                    <select class="form-control" id="select-month">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="col-lg-4">
+                    <a href="javascript:;" class="btn btn-primary btn-m" id="cert-filter"><i class="fas fa-file-code m-r-5"></i>Filter</a>
                 </div>
             </div>
-            <div class="m-t-10">
-                <a href="javascript:;" class="btn btn-success btn-m"><i class="fas fa-file-code"></i> Create</a>
-            </div>
-            <hr class="m-t-20 bg-black-transparent-2">
-            <h5 class="m-t-20">Generate Monthly Report</h5>
-            <select class="form-control selectpicker" data-style="btn-default">
-                <option selected disabled>Select Month</option>
-                <option>January</option>
-                <option>February</option>
-                <option>March</option>
-                <option>April</option>
-                <option>May</option>
-                <option>June</option>
-                <option>July</option>
-                <option>August</option>
-                <option>September</option>
-                <option>October</option>
-                <option>November</option>
-                <option>December</option>
-            </select>
-            <div>
-                <a href="javascript:;" class="btn btn-success btn-m"><i class="fas fa-file-code"></i> Create</a>
-            </div>
         </div>
-        <!-- end col-2 -->
-        <!-- begin col-10 -->
-        <div class="col-lg-10">
+        <!-- end col-3 -->
+        <!-- begin col-9 -->
+        <div class="col-lg-9">
+            <!-- filler -->
+        </div>
+        <!-- end col-9 -->
+    </div>
+    <!-- end row -->
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-6 -->
+        <div class="col-lg-6">
+            <!-- begin row -->
+            <div class="row">
+                <!-- begin col-6 -->
+                <div class="col-lg-6 col-md-6">
+                    <div class="widget widget-stats bg-orange">
+                        <div class="stats-icon"><i class="fas fa-download"></i></div>
+                        <div class="stats-info">
+                            <h4>TOTAL COLLECTION</h4>
+                            <p id="tot-dep-card"></p>	
+                        </div>
+                    </div>
+                </div>
+                <!-- end col-6 -->
+                <!-- begin col-6 -->
+                <div class="col-lg-6 col-md-6">
+                    <div class="widget widget-stats bg-grey-darker">
+                        <div class="stats-icon"><i class="fas fa-bookmark"></i></div>
+                        <div class="stats-info">
+                            <h4>TOTAL DEPOSIT</h4>
+                            <p id="tot-slip-card"></p>	
+                        </div>
+                    </div>
+                </div>
+                <!-- end col-6 -->
+            </div>
+            <!-- end row -->
+            <!-- begin row -->
+            <div class="row">
+                <!-- begin col-12 -->
+                <div class="col-lg-12">
+                    <!-- begin panel -->
+                    <div class="panel panel-inverse">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Monthly Collection vs Deposit</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div id="canvas-div">
+                                <canvas id="line-chart" data-render="chart-js"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end panel -->
+                </div>
+                <!-- end col-12 -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end col-6 -->
+        <!-- begin col-6 -->
+        <div class="col-lg-6">
             <!-- begin card -->
             <div class="card text-left">
                 <div class="card-header">
-                    <i class="fas fa-chart-line m-r-5"></i>Monthly Report of Collections and Deposits
+                    <i class="fas fa-certificate m-r-5"></i>Certification
                 </div>
                 <div class="card-block">
                     <div class="panel panel-white">
                         <!-- begin panel-heading -->
                         <div class="panel-heading">
-                            <h4 class="panel-title"></h4> 
+                            <h4 class="panel-title text-inverse"></h4>
                         </div>
                         <!-- end panel-heading -->
                         <!-- begin panel-body -->
-                        <div class="panel-body overflow-x-scroll">
-                            <table id="data-table-combines" class="table table-hover overflow-x-scroll">
+                        <div class="panel-body">
+                            <table id="data-table-combines" class="table table-hover table-bordered table-striped">
                                 <thead>
-                                    <tr>
-                                        <th class="text-nowrap" colspan="2" style="text-align: center;">Official Receipt/<br>Deposit Slip</th>
-                                        <th class="text-nowrap" rowspan="3" style="text-align: center;">Payor</th>
-                                        <th class="text-nowrap" style="text-align: center;">Cash Collecting<br>Officer</th>
-                                        <th class="text-nowrap" colspan="7" style="text-align: center;">BREAKDOWN OF RECEIPTS</th>
-                                    </tr>
-                                    <tr>
-                                        <th colspan="2"></th>
-                                        <th colspan="8"></th>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-nowrap" style="text-align: center;">Date</th>
-                                        <th class="text-nowrap" style="text-align: center;">Number</th>
-                                        <th class="text-nowrap" style="text-align: center;">Receipts</th>
-                                        <th class="text-nowrap" style="text-align: center;">Total</th>
-                                        <th class="text-nowrap" style="text-align: center;">Clearance and<br>Certification Fee</th>
-                                        <th class="text-nowrap" style="text-align: center;">Verification</th>
-                                        <th class="text-nowrap" style="text-align: center;">Tuition<br>Fee</th>
-                                        <th class="text-nowrap" style="text-align: center;">Compre<br>Exam</th>
-                                        <th class="text-nowrap" style="text-align: center;">Graduation<br>Fee</th>
-                                        <th class="text-nowrap" style="text-align: center;">Transcript of<br>Records Fee</th>
-                                    </tr>
+                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="30%">Date</th>
+                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="40%">RA Deposit Slip No.</th>
+                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="30%">Amount</th>
                                 </thead>
                                 <tbody>
-                                    <!-- <tr class="odd gradeX">
-                                        <td width="1%" class="f-s-600 text-inverse">1</td>
-                                        <td></td>
-                                        <td>Trident</td>
-                                        <td>Internet Explorer 4.0</td>
-                                        <td>Win 95+</td>
-                                        <td>4</td>
-                                        <td>X</td>
-                                    </tr>
-                                    <tr class="even gradeC">
-                                        <td width="1%" class="f-s-600 text-inverse">2</td>
-                                        <td width="1%" class="with-img"><img src="../assets/img/user/user-2.jpg" class="img-rounded height-30" /></td>
-                                        <td>Trident</td>
-                                        <td>Internet Explorer 5.0</td>
-                                        <td>Win 95+</td>
-                                        <td>5</td>
-                                        <td>C</td>
-                                    </tr> -->
+                                    <!-- append tbody tr here -->
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td class="f-w-600 p-t-20 p-b-5 text-left" style="border-color: white; border-top-color: lightgray;">Total Deposits</td>
+                                        <td class="p-t-20 p-b-5" style="border-color: white; border-top-color: lightgray;"></td>
+                                        <td class="text-right p-t-20 p-b-5" style="border-color: white; border-top-color: lightgray;">
+                                            <span class="label label-purple f-s-11" id="tot-dep"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="f-w-600 p-t-0" style="border-color: white;">Add Balance</td>
+                                        <td class="p-t-0" style="border-color: white;"></td>
+                                        <td class="text-right p-t-0" style="border-color: white;">
+                                            <span class="label label-warning f-s-11" id="add-bal">0.00</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="f-w-700" style="border-color: white; border-bottom-color: lightgray;">TOTAL</td>
+                                        <td style="border-color: white; border-bottom-color: lightgray;"></td>
+                                        <td class="text-right" style="border-color: white; border-bottom-color: lightgray;">
+                                            <span class="label label-success f-s-12" id="super-tot"></span>
+                                        </td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                         <!-- end panel-body -->
                     </div>
-                </div>
-                <div class="card-footer text-muted">
-                    
                 </div>
             </div>
             <!-- end card -->
@@ -207,6 +239,7 @@
 <script src="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.js' %}"></script>
 <script src="{%static 'assets/plugins/clipboard/clipboard.min.js' %}"></script>
 <script src="{%static 'assets/js/demo/form-plugins.demo.js' %}"></script>
+<script src="{%static 'assets/plugins/chart-js/Chart.min.js' %}"></script>
 {% endblock %}
 {% block init %}
 <script>
@@ -214,7 +247,9 @@
         App.init();
         TableManageCombine.init();
         FormPlugins.init();
+        $('#select-month').val((new Date).getMonth()+1);
         highlightSideNav();
+        getMonthlyCollectionDeposit();
     });
     $('#data-table-combines').DataTable({
         'paging'      : false,
@@ -254,6 +289,134 @@
     ],
         "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]
     });
+
+    function handleLineChart(monthly_col_obj, monthly_dep_obj) {
+        var lbl = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var newlabels = [];
+        var tot_col = [];
+        var tot_dep = []
+        var start_month_col = parseInt(monthly_col_obj[0][0]);
+        var start_month_dep = parseInt(monthly_dep_obj[0][0]);
+        var j = 0;
+        // collection
+        if (start_month_col > 1) {
+            for (var i = 0; i < start_month_col-1; i++) {
+                newlabels[i] = lbl[i];
+                tot_col[i] = 0;
+            };
+        };
+        j = 0;
+        for (var i = start_month_col-1; j < monthly_col_obj.length; i++) { 
+            newlabels[i] = lbl[i];
+            tot_col[i] = monthly_col_obj[j][1];
+            j++;
+        };
+        // deposit
+        if (start_month_dep > 1) {
+            for (var i = 0; i < start_month_dep-1; i++) {
+                newlabels[i] = lbl[i];
+                tot_dep[i] = 0;
+            };
+        };
+        j = 0;
+        var dep_count = monthly_dep_obj.length;
+        for (var i = start_month_dep-1; j <= dep_count; i++) { 
+            if (dep_count!=0) {
+                newlabels[i] = lbl[i];
+                tot_dep[i] = monthly_dep_obj[j][1];
+                j++;
+                dep_count--;
+            }
+            else {
+                newlabels[i] = lbl[i];
+                tot_dep[i] = 0;
+                j++;
+            }
+        };
+        // 
+        var lineChartData = {
+            labels: lbl,
+            datasets: [{
+                    label: 'Total Collection',
+                    borderColor: COLOR_BLUE,
+                    pointBackgroundColor: COLOR_BLUE,
+                    pointRadius: 2,
+                    borderWidth: 2,
+                    backgroundColor: COLOR_BLUE_TRANSPARENT_3,
+                    data: tot_col
+                }, 
+                {
+                    label: 'Total Deposit',
+                    borderColor: COLOR_BLACK,
+                    pointBackgroundColor: COLOR_BLACK,
+                    pointRadius: 2,
+                    borderWidth: 2,
+                    backgroundColor: COLOR_BLACK_TRANSPARENT_3,
+                    data: tot_dep
+                }]
+        };
+
+        var ctx = document.getElementById('line-chart').getContext('2d');
+        var lineChart = new Chart(ctx, {
+            type: 'line',
+            data: lineChartData
+        });
+    };
+
+    function getMonthlyCollectionDeposit() {
+        var monthly_col_obj = null;
+        var monthly_dep_obj = null;
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_monthly_collection_deposit' %}",
+            // cache: true,
+            async: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                monthly_col_obj = obj;
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_monthly_collection_deposit2' %}",
+            // cache: true,
+            async: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                monthly_dep_obj = obj;
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+        $('#canvas-div canvas').remove();
+        $('#canvas-div').append(`<canvas id="line-chart" data-render="chart-js"></canvas>`);
+        handleLineChart(monthly_col_obj, monthly_dep_obj);
+    };
+
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');
