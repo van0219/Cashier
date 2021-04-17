@@ -506,6 +506,10 @@
         else {
             $('#or_studnum').prop('style', 'text-transform: capitalize;'); 
         }
+        getStudName(studno);
+    });
+
+    function getStudName(studno) {
         $.ajax({
             type: "POST",
             url: "{% url 'get_student_name' %}",
@@ -537,7 +541,7 @@
                 })
             }
         }); 
-    });
+    }
 
     $("#save").on('click', function() { //save entry is clicked
         $('#addForm').parsley();
