@@ -514,9 +514,9 @@ def load_radar_chart(request):
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
-def load_cash_receipt_table(request):
+def load_cash_receipt_cards(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_LOAD_CASH_RECEIPT_TABLE"
+    cursor.callproc("SP_SELECT_CASH_RECEIPT_CARDS"
                     ,(request.POST['month'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
@@ -655,6 +655,13 @@ def load_coldep_card(request):
 def load_coldep_group(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_COLLECTION_GROUP"
+                    ,(request.POST['month']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_top_contrib(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_TOP_CONTRIB"
                     ,(request.POST['month']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)

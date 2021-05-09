@@ -102,7 +102,7 @@ urlpatterns = [
     path('load_monthly_collection_deposit', views.load_monthly_collection_deposit, name="load_monthly_collection_deposit"),
     path('load_monthly_collection_deposit2', views.load_monthly_collection_deposit2, name="load_monthly_collection_deposit2"),
     path('load_radar_chart', views.load_radar_chart, name="load_radar_chart"),
-    path('load_cash_receipt_table', views.load_cash_receipt_table, name="load_cash_receipt_table"),
+    path('load_cash_receipt_cards', views.load_cash_receipt_cards, name="load_cash_receipt_cards"),
     path('load_dashboard_cards', views.load_dashboard_cards, name="load_dashboard_cards"),
     path('load_dashboard_bar_graph', views.load_dashboard_bar_graph, name="load_dashboard_bar_graph"),
     path('load_dashboard_line_graph', views.load_dashboard_line_graph, name="load_dashboard_line_graph"),
@@ -116,4 +116,5 @@ urlpatterns = [
     path('update_nature', views.update_nature, name="update_nature"),
     path('load_coldep_card', views.load_coldep_card, name="load_coldep_card"),
     path('load_coldep_group', views.load_coldep_group, name="load_coldep_group"),
+    path('load_top_contrib', views.load_top_contrib, name="load_top_contrib"),
 ]
