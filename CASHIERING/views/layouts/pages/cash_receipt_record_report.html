@@ -29,7 +29,6 @@
 <link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker-fontawesome.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker-glyphicons.css' %}" rel="stylesheet" />
-<link href="{%static 'assets/plugins/morris/morris.css' %}" rel="stylesheet" />
 {% endblock %}
 {% block content %}
 <!-- begin #content -->
@@ -207,13 +206,13 @@
         <!-- begin col-6 -->
         <div class="col-lg-6">
             <!-- begin panel -->
-            <div class="panel panel-inverse" data-sortable-id="morris-chart-2">
+            <div class="panel panel-inverse" data-sortable-id="flot-chart-8">
                 <div class="panel-heading">
-                    <h4 class="panel-title"></h4>
+                    <h4 class="panel-title"><i class="fas fa-chart-pie m-r-5"></i>Deposits of the Month</h4>
                 </div>
                 <div class="panel-body">
-                    <h4 class="text-center">Quarterly Apple iOS device unit sales</h4>
-                    <div id="morris-area-chart" class="height-sm"></div>
+                    <p id="dep-month-tot"></p>
+                    <div id="donut-chart" class="height-sm"></div>
                 </div>
             </div>
             <!-- end panel -->
@@ -263,8 +262,14 @@
 <script src="{%static 'assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.js' %}"></script>
 <script src="{%static 'assets/plugins/clipboard/clipboard.min.js' %}"></script>
 <script src="{%static 'assets/js/demo/form-plugins.demo.js' %}"></script>
-<script src="{%static 'assets/plugins/morris/raphael.min.js' %}"></script>
-<script src="{%static 'assets/plugins/morris/morris.js' %}"></script>
+<script src="{%static 'assets/plugins/flot/jquery.flot.min.js' %}"></script>
+<script src="{%static 'assets/plugins/flot/jquery.flot.time.min.js' %}"></script>
+<script src="{%static 'assets/plugins/flot/jquery.flot.resize.min.js' %}"></script>
+<script src="{%static 'assets/plugins/flot/jquery.flot.pie.min.js' %}"></script>
+<script src="{%static 'assets/plugins/flot/jquery.flot.stack.min.js' %}"></script>
+<script src="{%static 'assets/plugins/flot/jquery.flot.crosshair.min.js' %}"></script>
+<script src="{%static 'assets/plugins/flot/jquery.flot.categories.js' %}"></script>
+<script src="{%static 'assets/plugins/moment/moment.min.js' %}"></script>
 {% endblock %}
 {% block init %}
 <script>
@@ -275,7 +280,7 @@
         $('#select-month').val(new Date().getMonth() + 1);
         loadCashReceiptCards($('#select-month').val());
         loadTopContrib($('#select-month').val());
-        handleMorrisAreaChart();
+        loadDepositOfTheMonthChart($('#select-month').val());
     });
 
     var dt_top_contrib = $('#table-top-contrib').DataTable({
@@ -333,6 +338,9 @@
     $('#cash-filter').on('click', function() {
         loadCashReceiptCards($('#select-month').val());
         loadTopContrib($('#select-month').val());
+        $('#dep-month-tot').text('');
+        $('#donut-chart').empty();
+        loadDepositOfTheMonthChart($('#select-month').val());
     });
 
     function loadTopContrib(month) {
@@ -370,33 +378,66 @@
         });
     };
 
-    function handleMorrisAreaChart() {
-        Morris.Bar({
-            element: 'morris-area-chart',
-            data: [
-                {period: '2010 Q1', iphone: 2666, ipad: null, itouch: 2647},
-                {period: '2010 Q2', iphone: 2778, ipad: 2294, itouch: 2441},
-                {period: '2010 Q3', iphone: 4912, ipad: 1969, itouch: 2501},
-                {period: '2010 Q4', iphone: 3767, ipad: 3597, itouch: 5689},
-                {period: '2011 Q1', iphone: 6810, ipad: 1914, itouch: 2293},
-                {period: '2011 Q2', iphone: 5670, ipad: 4293, itouch: 1881},
-                {period: '2011 Q3', iphone: 4820, ipad: 3795, itouch: 1588},
-                {period: '2011 Q4', iphone: 15073, ipad: 5967, itouch: 5175},
-                {period: '2012 Q1', iphone: 10687, ipad: 4460, itouch: 2028},
-                {period: '2012 Q2', iphone: 8432, ipad: 5713, itouch: 1791}
-            ],
-            xkey: 'period',
-            ykeys: ['iphone', 'ipad', 'itouch'],
-            labels: ['iPhone', 'iPad', 'iPod Touch'],
-            pointSize: 2.5,
-            resize: true,
-            gridLineColor: [COLOR_GREY_LIGHTER],
-            gridTextFamily: FONT_FAMILY,
-            gridTextColor: FONT_COLOR,
-            gridTextWeight: FONT_WEIGHT,
-            gridTextSize: FONT_SIZE,
-            lineColors: [COLOR_RED, COLOR_ORANGE, COLOR_BLACK]
+    function loadDepositOfTheMonthChart(month) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_cert_table' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                month: month,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                if (obj.length > 0) {
+                    var tot_dep = 0;
+                    for (i = 0; i < obj.length; i++) {
+                        tot_dep = tot_dep + parseFloat(obj[i][2]);
+                    }
+                    $('#dep-month-tot').append(`Total Deposits for the Month of ${moment(new Date(obj[0][0])).format('MMMM')}: <b>${'₱ ' + tot_dep.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b>`);
+                    handleDonutChart(obj);
+                    }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
         });
+    };
+
+    function handleDonutChart(obj) {
+        if ($('#donut-chart').length !== 0) {
+            var data = [];
+            var colorArray = [COLOR_RED, COLOR_BLACK,  COLOR_ORANGE, '#ff0000', COLOR_GREEN, 'lightblue', 'pink', COLOR_AQUA, COLOR_BLUE, COLOR_GREY, COLOR_PURPLE, "goldenrod"];
+            for( var i = 0; i < obj.length; i++)
+            {
+                var dt = new Date(obj[i][0]).toLocaleDateString();
+                data[i] = { label: obj[i][1] + '('+ dt +')', data: obj[i][2], color: colorArray[i] };
+            }
+            
+            $.plot($('#donut-chart'), data, 
+            {
+                series: {
+                    pie: { 
+                        innerRadius: 0.5,
+                        show: true,
+                        combine: {
+                            threshold: 0.1
+                        }
+                    }
+                },
+                grid:{borderWidth:0, hoverable: true, clickable: true},
+                legend: {
+                    show: false
+                }
+            });
+        }
     };
 
     function highlightSideNav() {
