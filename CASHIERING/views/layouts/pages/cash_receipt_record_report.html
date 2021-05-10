@@ -414,11 +414,11 @@
     function handleDonutChart(obj) {
         if ($('#donut-chart').length !== 0) {
             var data = [];
-            var colorArray = [COLOR_RED, COLOR_BLACK,  COLOR_ORANGE, '#ff0000', COLOR_GREEN, 'lightblue', 'pink', COLOR_AQUA, COLOR_BLUE, COLOR_GREY, COLOR_PURPLE, "goldenrod"];
+            var colorArray = [COLOR_RED, COLOR_BLACK_LIGHTER,  COLOR_ORANGE, '#ff0000', COLOR_GREEN, 'lightblue', 'pink', COLOR_AQUA, COLOR_BLUE, COLOR_BLACK, COLOR_PURPLE, "goldenrod"];
             for( var i = 0; i < obj.length; i++)
             {
                 var dt = new Date(obj[i][0]).toLocaleDateString();
-                data[i] = { label: obj[i][1] + '('+ dt +')', data: obj[i][2], color: colorArray[i] };
+                data[i] = { label: obj[i][1] + ' ('+ dt +')', data: obj[i][2], color: colorArray[i] };
             }
             
             $.plot($('#donut-chart'), data, 
