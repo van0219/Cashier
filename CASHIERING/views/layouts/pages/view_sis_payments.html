@@ -351,6 +351,11 @@
                     return '<a href="#sis-done" data-toggle="modal" id="viewSIS" class="btn btn-primary btn-xs"><i class="fas fa-eye m-r-5"></i>View</a>';
                 }
             },
+            {
+                targets:1, render:function(data){
+                    return data.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            }
         ]
     });
     var dt_combines2 = $('#data-table-combines2').DataTable({
@@ -402,6 +407,11 @@
                     return '<a href="#add_breakdown_modal" data-toggle="modal" id="addBreakdown" class="btn btn-warning btn-xs"><i class="fas fa-plus-circle m-r-5"></i>Add Breakdown</a>';
                 }
             },
+            {
+                targets:1, render:function(data){
+                    return data.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            }
         ]
     });
     
@@ -528,7 +538,7 @@
         load_specific_sis_done(or_num);
         $('#s_or').text(or_num);
         $('#s_date').text(moment(new Date($(this).closest('tr').find('td:eq(2)').html())).format("MMM. DD, YYYY"));
-        $('#s_total').text('₱' + $(this).closest('tr').find('td:eq(1)').html());
+        $('#s_total').text('₱' + $(this).closest('tr').find('td:eq(1)').html().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     });
 
     function load_specific_sis_done(or_num) {

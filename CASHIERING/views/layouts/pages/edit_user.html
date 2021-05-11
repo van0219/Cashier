@@ -256,6 +256,7 @@
 <script src="{%static 'assets/plugins/DataTables/extensions/RowReorder/js/dataTables.rowReorder.min.js' %}"></script>
 <script src="{%static 'assets/plugins/DataTables/extensions/Select/js/dataTables.select.min.js' %}"></script>
 <script src="{%static 'assets/js/demo/table-manage-combine.demo.min.js' %}"></script>
+<script src="{%static 'assets/plugins/moment/moment.min.js' %}"></script>
 {% endblock %}
 {% block init %}
 <script>
@@ -466,7 +467,7 @@
         $('#vmname').val($(this).closest('tr').find('td:eq(2)').html());
         $('#vlname').val($(this).closest('tr').find('td:eq(3)').html());
         $('#vuname').val($(this).closest('tr').find('td:eq(4)').html());
-        $('#vdate-added').val($(this).closest('tr').find('td:eq(5)').html());
+        $('#vdate-added').val(moment(new Date($(this).closest('tr').find('td:eq(5)').html())).format("MMM. DD, YYYY"));
         $('#vrole').val($(this).closest('tr').find('.role').html());
         document.getElementById( "vfname" ).setAttribute('readonly',true);
         document.getElementById( "vmname" ).setAttribute('readonly',true);

@@ -81,9 +81,10 @@
                             <div style="height: 350px; overflow: auto;">
                                 <table class="table table-striped table-hover table-bordered" id="deposited-table">
                                     <thead class="thead text-center">
-                                        <th width="30%" class="text-nowrap">Date Deposited</th>
-                                        <th width="40%" class="text-nowrap">Group ID</th>
-                                        <th width="30%" class="text-nowrap">Amount</th>
+                                        <th width="20%" class="text-nowrap">Date Deposited</th>
+                                        <th width="30%" class="text-nowrap">Group ID</th>
+                                        <th width="30" class="text-nowrap">Reference No.</th>
+                                        <th width="20%" class="text-nowrap">Amount</th>
                                     </thead>
                                     <tbody class="text-center">
                                         <!-- append tbody tr here -->
@@ -617,7 +618,8 @@
                             `<tr>
                                 <td><span class="label label-success f-s-12">${moment(new Date(obj[i][0])).format('MMM. DD, YYYY')}</span></td>
                                 <td class="text-nowrap">${obj[i][1]}</td>
-                                <td class="text-nowrap f-w-700">${'₱' + parseFloat(obj[i][2]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+                                <td class="text-nowrap">${obj[i][2]}</td>
+                                <td class="text-nowrap f-w-700">${'₱' + parseFloat(obj[i][3]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
                             </tr>`
                         );
                     };
