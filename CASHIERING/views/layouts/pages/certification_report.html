@@ -314,25 +314,9 @@
     function handleLineChart(monthly_col_obj, monthly_dep_obj) {
         var lbl = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         var newlabels = [];
-        // var tot_col = [];
         var tot_dep = []
-        // var start_month_col = parseInt(monthly_col_obj[0][0]);
         var start_month_dep = parseInt(monthly_dep_obj[0][0]);
         var j = 0;
-        // collection
-        // if (start_month_col > 1) {
-        //     for (var i = 0; i < start_month_col-1; i++) {
-        //         newlabels[i] = lbl[i];
-        //         tot_col[i] = 0;
-        //     };
-        // };
-        // j = 0;
-        // for (var i = start_month_col-1; j < monthly_col_obj.length; i++) { 
-        //     newlabels[i] = lbl[i];
-        //     tot_col[i] = monthly_col_obj[j][1];
-        //     j++;
-        // };
-        // deposit
         if (start_month_dep > 1) {
             for (var i = 0; i < start_month_dep-1; i++) {
                 newlabels[i] = lbl[i];
@@ -341,32 +325,15 @@
         };
         j = 0;
         var dep_count = monthly_dep_obj.length;
-        for (var i = start_month_dep-1; j <= dep_count; i++) { 
-            if (dep_count!=0) {
-                newlabels[i] = lbl[i];
-                tot_dep[i] = monthly_dep_obj[j][1];
-                j++;
-                dep_count--;
-            }
-            else {
-                newlabels[i] = lbl[i];
-                tot_dep[i] = 0;
-                j++;
-            }
+        for (var i = start_month_dep-1; j < dep_count; i++) { 
+            newlabels[i] = lbl[i];
+            tot_dep[i] = monthly_dep_obj[j][1];
+            j++;
         };
         // 
         var lineChartData = {
             labels: lbl,
             datasets: [
-                // {
-                // label: 'Total Collection',
-                // borderColor: COLOR_BLUE,
-                // pointBackgroundColor: COLOR_BLUE,
-                // pointRadius: 2,
-                // borderWidth: 2,
-                // backgroundColor: COLOR_BLUE_TRANSPARENT_3,
-                // data: tot_col
-                // }, 
                 {
                     label: 'Total Deposit',
                     borderColor: COLOR_BLACK,
