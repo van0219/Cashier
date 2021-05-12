@@ -157,6 +157,14 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="form-group row m-b-15" id="nature-div" style="display: none;">
+                                            <label class="col-md-4 col-sm-4 col-form-label">Nature :</label>
+                                            <div class="col-md-8 col-sm-8">
+                                                <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="true" data-style="btn-white" id="nature-select" data-parsley-excluded="true">
+                                                    <option value="Please choose" selected disabled>Please choose</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                         <div class="form-group row m-b-15">
                                             <label class="col-md-4 col-sm-4 col-form-label" for="message">Amount :</label>
                                             <div class="col-md-8 col-sm-8">
@@ -187,6 +195,7 @@
                                                 <tr>
                                                     <th class="text-nowrap">Income Type</th>
                                                     <th class="text-nowrap">UAC Code</th>
+                                                    <th class="text-nowrap">Nature</th>
                                                     <th class="text-nowrap">Amount</th>
                                                     <th style="max-width: 20px;" class="text-nowrap"></th>
                                                 </tr>
@@ -207,7 +216,7 @@
                                 </table>
                                 <table class="pull-right">
                                     <td>
-                                        <a href="javascript:;" id="save" class="btn btn-success"><i class="fas fa-save m-r-5"></i>Save Entry</a>
+                                        <a href="javascript:;" id="save" class="btn btn-success"><i class="fas fa-save m-r-5" id="save-icon"></i>Save Entry</a>
                                     </td>
                                 </table>
                             </div>
@@ -420,7 +429,8 @@
         var dt_res_len = $('#data-table-responsives tbody tr').length;
         for (var i = 0; i < dt_res_len; i++) {
             var desc = dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text().split('-')[1];
-            var amt = dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text();
+            var nature = dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text();
+            var amt = dt_res.find('tr:eq('+ i +')').find('td:eq(3)').text();
             $.ajax({
                 type: "POST",
                 url: "{% url 'insert_collection_breakdown' %}",
@@ -429,6 +439,7 @@
                 data: {
                     or_num: or_num,
                     desc: desc,
+                    nature: nature,
                     amt: amt,
                     csrfmiddlewaretoken:"{{csrf_token}}"
                 },
@@ -485,62 +496,67 @@
     $("#save").on('click', function() { //save entry is clicked
         $('#addForm').parsley();
         if ($('#addForm').parsley().validate()) {
-            if ($('#data-table-responsives tbody tr').length > 0) {
-                $('#receipt').modal('show');
-                var dt_res = $('#data-table-responsives tbody');
-                var dt_res_len = $('#data-table-responsives tbody tr').length;
-                for (i = 0; i < dt_res_len; i++) {
-                    $('.table-invoice tbody').append(
-                        `<tr>
-                            <td>
-                                <span class="text-inverse" id="r_desc">${dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text().split('-')[1]}</span><br />
-                            </td>
-                            <td class="text-center" id="r_amount">${dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()}</td>
-                        </tr>`
-                    );
-                }
-
-                $('#r_ornum').text($('#or_num').val());
-                var fullname = $('#or_lname').val()+', '+$('#or_fname').val();
-                $('#r_name').text(fullname.toUpperCase());
-                $('#r_studnum').text('');
-
-                $('#r_date').text($('#or_date').val());
-                var dt = new Date();
-                var hrs = dt.getHours();
-                var mins = dt.getMinutes();
-                var ampm = (hrs >= 12) ? "PM" : "AM";
-                var time = (hrs % 12 || 12) + ":" + ((mins<10?'0':'') + mins) + ' ' + ampm;
-                $('#r_time').text(time);
-                $('#r_grandtotal').text('₱'+$('#total-fee').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")).delay(2000);
-                //
-                saveCollection();
-                if ($('#check_2').prop('checked')) {
-                    saveCollectionBreakdown();
-                }
-            }
-            else {
-                swal({
-                    title: "No Payment Added", 
-                    text: "Please add particular fees to generate a receipt.",
-                    type: "info",
-                    confirmButtonColor: "#428bca",
-                    showLoaderOnConfirm: true
-                })
-            }
+            $('#save-icon').removeClass('fa-save');
+            $('#save-icon').addClass('fa-spinner fa-pulse');
+                no_err_when_save_collection();
         }
     });
+
+    function no_err_when_save_collection() {
+        if ($('#data-table-responsives tbody tr').length > 0) {
+            $('#receipt').modal('show');
+            var dt_res = $('#data-table-responsives tbody');
+            var dt_res_len = $('#data-table-responsives tbody tr').length;
+            for (i = 0; i < dt_res_len; i++) {
+                $('.table-invoice tbody').append(
+                    `<tr>
+                        <td>
+                            <span class="text-inverse" id="r_desc">${dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text().split('-')[1] + (dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text() != '' ? ' ('+dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()+')' : '')}</span><br />
+                        </td>
+                        <td class="text-center" id="r_amount">${dt_res.find('tr:eq('+ i +')').find('td:eq(3)').text()}</td>
+                    </tr>`
+                );
+            }
+
+            $('#r_ornum').text($('#or_num').val());
+            var fullname = $('#or_lname').val()+', '+$('#or_fname').val();
+            $('#r_name').text(fullname.toUpperCase());
+            $('#r_studnum').text('');
+            $('#r_date').text($('#or_date').val());
+            var dt = new Date();
+            var hrs = dt.getHours();
+            var mins = dt.getMinutes();
+            var ampm = (hrs >= 12) ? "PM" : "AM";
+            var time = (hrs % 12 || 12) + ":" + ((mins<10?'0':'') + mins) + ' ' + ampm;
+            $('#r_time').text(time);
+            $('#r_grandtotal').text('₱'+$('#total-fee').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")).delay(2000);
+            //
+            saveCollection();
+            saveCollectionBreakdown();
+        }
+        else {
+            $('#save-icon').removeClass('fa-spinner fa-pulse');
+            $('#save-icon').addClass('fa-save');
+            swal({
+                title: "No Payment Added", 
+                text: "Please add particular fees to generate a receipt.",
+                type: "info",
+                confirmButtonColor: "#428bca",
+                showLoaderOnConfirm: true
+            });
+        }
+    };
 
     $('#receipt').on('hidden.bs.modal', function (e) { //when receipt modal is closed
         $('.table-invoice tbody tr').remove();
         $('or_num').val(getCurrentORnum());
         $('#total-fee').text(parseFloat('0').toFixed(2));
         $('#inc-select').val('Please choose');
-        $('#inc-select').selectpicker('refresh');
         $('#uacs_select').val('Please choose');
-        $('#uacs_select').selectpicker('refresh');
         $('#number').val('');
         $('#data-table-responsives tbody tr').remove();
+        $('#save-icon').removeClass('fa-spinner fa-pulse');
+        $('#save-icon').addClass('fa-save');
     });
 
     var total_fee = 0;
@@ -550,6 +566,7 @@
         var init_tot_fee = parseFloat(tot_fee_txt);
         var inctype = $('#inc-select').find('option:selected').text();
         var uacs = $('#uacs_select').find('option:selected').text();
+        var nature = $('#nature-select').find('option:selected').text() == 'Please choose' ? '' : $('#nature-select').find('option:selected').text();
         var amt = parseFloat($('#number').val());
         var amtBox = $('#number').val().trim();
         if ($('#inc-select').find('option:selected').text() == 'Please choose' || $('#uacs_select').find('option:selected').text() == 'Please choose') {
@@ -570,10 +587,11 @@
                 $('#number').removeClass('is-invalid');
                 $('#data-table-responsives tbody').append(
                     `<tr>
-                        <td>
-                            <a href="javascript:;" class="btn btn-white btn-xs">${inctype}</a>
+                        <td class="text-nowrap">
+                            <span class="label label-default f-s-11">${inctype}</span>
                         </td>
-                        <td>${uacs}</td>
+                        <td class="f-s-10">${uacs}</td>
+                        <td class="f-s-10">${nature}</td>
                         <td>${amt.toFixed(2)}</td>
                         <td align="center">
                             <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove" title="remove"><i class="fas fa-times"></i></a>
@@ -584,6 +602,7 @@
                 $('#total-fee').text(parseFloat(total_fee).toFixed(2));
                 $('#inc-select').val('Please choose');
                 $('#uacs_select').val('Please choose');
+                $('#nature-select').selectpicker('val','Please choose');
                 $('#number').val('');
             }
             else {
@@ -600,11 +619,48 @@
         }
     });
     $('#uacs_select').on('change', function() {
-        if ($('#uacs_select').find('option:selected').text() == 'Please choose') {
+        if ($('#uacs_select').val() == 'Please choose') {
             $('#uacs_select').addClass('is-invalid');
         }
         else {
             $('#uacs_select').removeClass('is-invalid');
+            var uacs = $('#uacs_select').val();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'load_nature_col' %}",
+                cache: true,
+                dataType: 'json',
+                data: {
+                    uacs: uacs,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                success: function(obj) {
+                    if (obj.length != 0) {
+                        $('#nature-div').show();
+                        $('#nature-select').empty();
+                        $('#nature-select').append(new Option('Please choose')).select();
+                        $('#nature-select').find('option:selected').prop('disabled',true);                
+                        $.each(obj, function(index, option){
+                            $('#nature-select').append( new Option(option[0],option[0])); //text and value
+                        });
+                        $('#nature-select option').prop('style', 'font-size: 11px;');
+                        $('#nature-select').selectpicker('refresh');
+                    }
+                    else {
+                        $('#nature-div').hide();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errMsg = xhr.status + ': ' + xhr.statusText;
+                    swal({
+                        title: "Error!", 
+                        text: errMsg,
+                        type: "error",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    })
+                }
+            }); 
         }
     });
     $('#number').on('input', function() {

@@ -456,7 +456,7 @@
         var dt_res_len = $('#data-table-responsives tbody tr').length;
         for (var i = 0; i < dt_res_len; i++) {
             var desc = dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text().split('-')[1];
-            var nature = dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()
+            var nature = dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text();
             var amt = dt_res.find('tr:eq('+ i +')').find('td:eq(3)').text();
             $.ajax({
                 type: "POST",
