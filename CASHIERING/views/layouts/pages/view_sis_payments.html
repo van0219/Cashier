@@ -11,6 +11,18 @@
 <link href="{%static 'assets/plugins/DataTables/extensions/RowReorder/css/rowReorder.bootstrap.min.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/DataTables/extensions/Select/css/select.bootstrap.min.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/nvd3/build/nv.d3.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/select2/dist/css/select2.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+<style>
+    div.dropdown-menu.open{
+        max-height: 314px !important;
+        overflow: hidden;
+    }
+    ul.dropdown-menu.inner{
+        max-height: 260px !important;
+        overflow-y: auto;
+    }
+</style>
 <style type="text/css" media="print">
     @page {
         size: landscape;
@@ -155,7 +167,7 @@
 <!-- end #sis-done modal-->
 <!-- begin #add_breakdown-modal -->
 <div class="modal fade" id="add_breakdown_modal">
-    <div class="modal-dialog" style="max-width: 50%;">
+    <div class="modal-dialog" style="width: 50%;">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title"><i class="fas fa-object-ungroup m-r-5"></i>SIS Breakdown</h4>
@@ -191,7 +203,7 @@
                             <div class="col-lg-3">
                                 <div class="form-group row m-b-10">
                                     <div class="col-md-12 col-sm-12">
-                                        <select class="form-control" id="inc-select" name="selectBox" data-parsley-excluded="true" on>
+                                        <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="false" data-style="btn-white"  id="inc-select" data-parsley-excluded="true">
                                             <option value="Income Type" selected disabled>Income Type</option>
                                         </select>
                                     </div>
@@ -200,8 +212,17 @@
                             <div class="col-lg-3">
                                 <div class="form-group row m-b-10">
                                     <div class="col-md-12 col-sm-12">
-                                        <select class="form-control selectpicker text-ellipsis" id="uacs_select" name="selectBox" data-parsley-excluded="true">
+                                        <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="true" data-style="btn-white" id="uacs_select" data-parsley-excluded="true">
                                             <option value="UACS Code" selected disabled>UACS Code</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3" style="display: none;" id="nature-div">
+                                <div class="form-group row m-b-10">
+                                    <div class="col-md-12 col-sm-12">
+                                        <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="true" data-style="btn-white" id="nature-select" data-parsley-excluded="true">
+                                            <option value="UACS Code" selected disabled>Nature</option>
                                         </select>
                                     </div>
                                 </div>
@@ -288,6 +309,9 @@
 <script src="{%static 'assets/plugins/DataTables/extensions/Select/js/dataTables.select.min.js' %}"></script>
 <script src="{%static 'assets/js/demo/table-manage-combine.demo.min.js' %}"></script>
 <!--  -->
+<script src="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<script src="{%static 'assets/plugins/select2/dist/js/select2.min.js' %}"></script>
+<!--  -->
 <script src="{%static 'assets/plugins/nvd3/build/d3.js' %}"></script>
 <script src="{%static 'assets/plugins/nvd3/build/nv.d3.js' %}"></script>
 <script src="{%static 'assets/plugins/moment/moment.min.js' %}"></script>
@@ -301,6 +325,9 @@
         get_sis_payments();
         get_sis_payments2();
         handleBarChart('DAILY');
+        $('#inc-select').selectpicker('render');
+        $('#uacs_select').selectpicker('render');
+        $('#nature-select').selectpicker('render');
     });
     var dt_combines = $('#data-table-combines').DataTable({
         'paging'      : true,
@@ -674,11 +701,48 @@
         }
     });
     $('#uacs_select').on('change', function() {
-        if ($('#uacs_select').find('option:selected').text() == 'UACS Code') {
+        if ($('#uacs_select').val() == 'Please choose') {
             $('#uacs_select').addClass('is-invalid');
         }
         else {
             $('#uacs_select').removeClass('is-invalid');
+            var uacs = $('#uacs_select').val();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'load_nature_col' %}",
+                cache: true,
+                dataType: 'json',
+                data: {
+                    uacs: uacs,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
+                },
+                success: function(obj) {
+                    if (obj.length != 0) {
+                        $('#nature-div').show();
+                        $('#nature-select').empty();
+                        $('#nature-select').append(new Option('Please choose')).select();
+                        $('#nature-select').find('option:selected').prop('disabled',true);                
+                        $.each(obj, function(index, option){
+                            $('#nature-select').append( new Option(option[0],option[0])); //text and value
+                        });
+                        $('#nature-select option').prop('style', 'font-size: 11px;');
+                        $('#nature-select').selectpicker('refresh');
+                    }
+                    else {
+                        $('#nature-div').hide();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errMsg = xhr.status + ': ' + xhr.statusText;
+                    swal({
+                        title: "Error!", 
+                        text: errMsg,
+                        type: "error",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    })
+                }
+            }); 
         }
     });
     $('#number').on('input', function() {
@@ -699,12 +763,11 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                $('#inc-select').empty();
-                $('#inc-select').append(new Option('Income Type')).select();
-                $('#inc-select').find('option:selected').prop('disabled',true);
                 $.each(obj, function(index, option){
                     $('#inc-select').append( new Option(option,option)); //value and text
                 });
+                $('#inc-select option').prop('style', 'font-size: 11px;')
+                $('#inc-select').selectpicker('refresh');
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -731,10 +794,12 @@
             success: function(obj) {
                 $('#uacs_select').empty();
                 $('#uacs_select').append(new Option('UACS Code')).select();
-                $('#uacs_select').find('option:selected').prop('disabled',true);
+                $('#uacs_select').find('option:selected').prop('disabled',true);                
                 $.each(obj, function(index, option){
-                    $('#uacs_select').append( new Option(option[0]+' - '+option[1])); //text and value
+                    $('#uacs_select').append( new Option(option[0]+' - '+option[1],option[0])); //text and value
                 });
+                $('#uacs_select option').prop('style', 'font-size: 11px;');
+                $('#uacs_select').selectpicker('refresh');
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -749,8 +814,8 @@
         });
     };
 
-    $('#inc-select').on('input', function() {
-        getUacsCode($('#inc-select').find('option:selected').text());
+    $('#inc-select').on('change', function() {
+        getUacsCode($('#inc-select').val());
     });
 
     $('.table-invoice tbody').on('click', '.remove', function() {
@@ -785,7 +850,8 @@
         var dt_res_len = $('#table-invoice tbody tr').length;
         for (var i = 0; i < dt_res_len; i++) {
             var desc = dt_res.find('tr:eq('+ i +')').find('td:eq(0)').text();
-            var amt = dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text();
+            var nature = dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text();
+            var amt = dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text();
             $.ajax({
                 type: "POST",
                 url: "{% url 'insert_collection_breakdown' %}",
@@ -794,6 +860,7 @@
                 data: {
                     or_num: or_num,
                     desc: desc,
+                    nature: nature.trim(),
                     amt: amt,
                     csrfmiddlewaretoken:"{{csrf_token}}"
                 },
