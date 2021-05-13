@@ -529,10 +529,15 @@
             var ampm = (hrs >= 12) ? "PM" : "AM";
             var time = (hrs % 12 || 12) + ":" + ((mins<10?'0':'') + mins) + ' ' + ampm;
             $('#r_time').text(time);
-            $('#r_grandtotal').text('₱'+$('#total-fee').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")).delay(2000);
+            $('#r_grandtotal').text('₱'+$('#total-fee').text().toString()).delay(2000);
             //
-            saveCollection();
-            saveCollectionBreakdown();
+            if ($('#check_1').prop('checked')) {
+                saveCollection();
+            }
+            else {
+                saveCollection();
+                saveCollectionBreakdown();
+            }
         }
         else {
             $('#save-icon').removeClass('fa-spinner fa-pulse');
@@ -673,7 +678,7 @@
     });
 
     $('#data-table-responsives tbody').on('click', '.remove', function() {
-        minus_fee = $(this).closest('tr').find('td:eq(2)').html();
+        minus_fee = $(this).closest('tr').find('td:eq(3)').html();
         total_fee = total_fee - parseFloat(minus_fee);
         $('#total-fee').text(total_fee.toFixed(2));
         $(this).closest('tr').remove();
