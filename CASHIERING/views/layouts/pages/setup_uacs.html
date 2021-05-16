@@ -587,17 +587,19 @@
 <div class="modal fade" id="add-nature">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="nature-header"></h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body">
-                <input type="text" class="form-control" placeholder="nature of collection" style="text-transform: uppercase;" id="desc-nature"/>
-            </div>
-            <div class="modal-footer">
-                <a href="javascript:;" class="btn btn-white" data-dismiss="modal" id="closebut-nature"><i class="fas fa-times m-r-5"></i>Close</a>
-                <a href="javascript:;" class="btn btn-success" id="addbut-nature"><i class="fas fa-plus-circle m-r-5"></i>Add</a>
-            </div>
+            <form name="add-nature-form" id="add-nature-form" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="nature-header"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" placeholder="nature of collection" style="text-transform: uppercase;" id="desc-nature" data-parsley-required="true" data-parsley-required-message="Name is required."/>
+                </div>
+                <div class="modal-footer">
+                    <a href="javascript:;" class="btn btn-white" data-dismiss="modal" id="closebut-nature"><i class="fas fa-times m-r-5"></i>Close</a>
+                    <a href="javascript:;" class="btn btn-success" id="addbut-nature"><i class="fas fa-plus-circle m-r-5"></i>Add</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -2012,47 +2014,51 @@
 
     $('#add-nature').on('hidden.bs.modal', function() {
         $('#desc-nature').val('');
+        $('#add-nature-form').parsley().reset();
     });
 
     $('#addbut-nature').on('click', function() {
-        var uacs = $('#uacs_select').find('option:selected').text().split('-')[0];
-        var nature = $('#desc-nature').val();
-        $.ajax({
-            url: "{% url 'add_new_nature' %}",
-            type: "POST",
-            data: { 
-                uacs: uacs,
-                nature: nature,
-                csrfmiddlewaretoken:"{{csrf_token}}"
-            },
-            success:function(obj) {
-                swal({
-                    title: "Added Successfully", 
-                    text: 'You have added ' + nature + ' to ' + uacs,
-                    type: "success",
-                    confirmButtonColor: "#428bca",
-                    showLoaderOnConfirm: true
+        $('#add-nature-form').parsley();
+        if ($('#add-nature-form').parsley().validate()) {
+            var uacs = $('#uacs_select').find('option:selected').text().split('-')[0];
+            var nature = $('#desc-nature').val();
+            $.ajax({
+                url: "{% url 'add_new_nature' %}",
+                type: "POST",
+                data: { 
+                    uacs: uacs,
+                    nature: nature,
+                    csrfmiddlewaretoken:"{{csrf_token}}"
                 },
-                function(isConfirm){
-                    if (isConfirm){
-                        $('#closebut-nature').click();
-                        var uacs = $('#uacs_select').val().trim();
-                        var desc = $('#uacs_select').find('option:selected').text().split('-')[1];
-                        loadNatureCol(uacs,desc);
-                    }
-                })
-            },
-            error:function(xhr, status, error) {
-                var errMsg = xhr.status + ': ' + xhr.statusText;
-                swal({
-                    title: "Error!", 
-                    text: errMsg,
-                    type: "error",
-                    confirmButtonColor: "#428bca",
-                    showLoaderOnConfirm: true
-                })
-            }
-        })
+                success:function(obj) {
+                    swal({
+                        title: "Added Successfully", 
+                        text: 'You have added ' + nature + ' to ' + uacs,
+                        type: "success",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    },
+                    function(isConfirm){
+                        if (isConfirm){
+                            $('#closebut-nature').click();
+                            var uacs = $('#uacs_select').val().trim();
+                            var desc = $('#uacs_select').find('option:selected').text().split('-')[1];
+                            loadNatureCol(uacs,desc);
+                        }
+                    })
+                },
+                error:function(xhr, status, error) {
+                    var errMsg = xhr.status + ': ' + xhr.statusText;
+                    swal({
+                        title: "Error!", 
+                        text: errMsg,
+                        type: "error",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    })
+                }
+            })
+        }
     });
 
     function highlightSideNav() {

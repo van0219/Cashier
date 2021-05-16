@@ -167,7 +167,7 @@
 <!-- end #sis-done modal-->
 <!-- begin #add_breakdown-modal -->
 <div class="modal fade" id="add_breakdown_modal">
-    <div class="modal-dialog" style="width: 50%;">
+    <div class="modal-dialog" style="max-width: 60%;">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title"><i class="fas fa-object-ungroup m-r-5"></i>SIS Breakdown</h4>
@@ -175,7 +175,7 @@
             </div>
             <div class="modal-body">
                 <!-- begin invoice -->
-                <div class="invoice">
+                <div class="invoice" style="margin: 10px;">
                     <!-- begin invoice-header -->
                     <div class="invoice-header">
                         <div class="invoice-from">
@@ -218,7 +218,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3" style="display: none;" id="nature-div">
+                            <div class="col-lg-2" style="display: none;" id="nature-div">
                                 <div class="form-group row m-b-10">
                                     <div class="col-md-12 col-sm-12">
                                         <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="true" data-style="btn-white" id="nature-select" data-parsley-excluded="true">
@@ -230,14 +230,14 @@
                             <div class="col-lg-3">
                                 <div class="form-group row m-b-10">
                                     <div class="col-md-12 col-sm-12">
-                                        <input class="form-control" type="number" id="number" name="number" data-parsley-excluded="true" placeholder="Amount in peso"/>
+                                        <input class="form-control" type="number" id="number" name="number" data-parsley-excluded="true" placeholder="Amount(₱)"/>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="form-group row m-b-0">
+                            <div class="col-lg-1">
+                                <div class="form-group row m-b-10">
                                     <div class="col-md-12 col-sm-12">
-                                        <a href="javascript:;" class="btn btn-success btn-sm" id="addB"><i class="fa fa-plus-circle m-r-5"></i>Add</a>
+                                        <a href="javascript:;" class="btn btn-success btn-md" id="addB"><i class="fa fa-plus-circle m-r-5"></i>Add</a>
                                     </div>
                                 </div>
                             </div>
@@ -684,10 +684,9 @@
                 );
                 var total = parseFloat($('#b_currtotal').text().replace(',','')) + parseFloat(amtBox);
                 $('#b_currtotal').text(total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $('#inc-select').val('Income Type');
-                $('#uacs_select').empty();
-                $('#uacs_select').append(new Option('UACS Code')).select();
-                $('#uacs_select').find('option:selected').prop('disabled',true);
+                $('#inc-select').selectpicker('val', 'Income Type');
+                $('#uacs_select').selectpicker('val', 'UACS Code');
+                $('#nature-select').selectpicker('val', 'Nature');
                 $('#number').val('');
             }
         }
@@ -720,7 +719,7 @@
                     if (obj.length != 0) {
                         $('#nature-div').show();
                         $('#nature-select').empty();
-                        $('#nature-select').append(new Option('Please choose')).select();
+                        $('#nature-select').append(new Option('Nature')).select();
                         $('#nature-select').find('option:selected').prop('disabled',true);                
                         $.each(obj, function(index, option){
                             $('#nature-select').append( new Option(option[0],option[0])); //text and value
