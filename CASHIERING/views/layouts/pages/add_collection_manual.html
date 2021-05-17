@@ -408,8 +408,7 @@
         }
     });
 
-    function saveCollection() {
-        var or_num = $('#r_ornum').text();
+    function saveCollection(or_num) {
         var assessed = parseFloat($('#r_grandtotal').text().substring(1).replace(/,/g,''));
         var collected = parseFloat($('#r_grandtotal').text().substring(1).replace(/,/g,''));
         var studno = $('#r_studnum').text();
@@ -450,8 +449,7 @@
         });
     };
 
-    function saveCollectionBreakdown() {
-        var or_num = $('#r_ornum').text();
+    function saveCollectionBreakdown(or_num) {
         var dt_res = $('#data-table-responsives tbody');
         var dt_res_len = $('#data-table-responsives tbody tr').length;
         for (var i = 0; i < dt_res_len; i++) {
@@ -471,7 +469,7 @@
                     csrfmiddlewaretoken:"{{csrf_token}}"
                 },
                 success: function(obj) {
-                    console.log(obj);
+                    // console.log(obj);
                 },
                 error: function(xhr, status, error) {
                     $('save-icon').removeClass('fa-spinner fa-pulse');
@@ -610,8 +608,8 @@
             $('#r_time').text(time);
             $('#r_grandtotal').text('₱'+$('#total-fee').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")).delay(2000);
             //
-            saveCollection();
-            saveCollectionBreakdown();
+            saveCollection($('#or_num').val());
+            saveCollectionBreakdown($('#or_num').val());
         }
         else {
             $('#save-icon').removeClass('fa-spinner fa-pulse');

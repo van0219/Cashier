@@ -384,8 +384,7 @@
         }
     });
 
-    function saveCollection() {
-        var or_num = $('#r_ornum').text();
+    function saveCollection(or_num) {
         var assessed = parseFloat($('#r_grandtotal').text().substring(1).replace(/,/g,''));
         var collected = parseFloat($('#r_grandtotal').text().substring(1).replace(/,/g,''));
         var studno = '';
@@ -423,8 +422,7 @@
         });
     };
 
-    function saveCollectionBreakdown() {
-        var or_num = $('#r_ornum').text();
+    function saveCollectionBreakdown(or_num) {
         var dt_res = $('#data-table-responsives tbody');
         var dt_res_len = $('#data-table-responsives tbody tr').length;
         for (var i = 0; i < dt_res_len; i++) {
@@ -532,11 +530,11 @@
             $('#r_grandtotal').text('₱'+$('#total-fee').text().toString()).delay(2000);
             //
             if ($('#check_1').prop('checked')) {
-                saveCollection();
+                saveCollection($('#or_num').val());
             }
             else {
-                saveCollection();
-                saveCollectionBreakdown();
+                saveCollection($('#or_num').val());
+                saveCollectionBreakdown($('#or_num').val());
             }
         }
         else {
