@@ -212,6 +212,7 @@
                 </div>
                 <div class="panel-body">
                     <p id="dep-month-tot"></p>
+                    <h3 class="text-center m-t-20" style="display: none;" id="no-data-donut">No data available in table</h3>
                     <div id="donut-chart" class="height-sm"></div>
                 </div>
             </div>
@@ -386,13 +387,17 @@
             },
             success: function(obj) {
                 if (obj.length > 0) {
+                    $('#no-data-donut').hide();
                     var tot_dep = 0;
                     for (i = 0; i < obj.length; i++) {
                         tot_dep = tot_dep + parseFloat(obj[i][2]);
                     }
                     $('#dep-month-tot').append(`Total Deposits for the Month of ${moment(new Date(obj[0][0])).format('MMMM')}: <b>${'₱ ' + tot_dep.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b>`);
                     handleDonutChart(obj);
-                    }
+                }
+                else {
+                    $('#no-data-donut').show();
+                }
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -410,7 +415,7 @@
     function handleDonutChart(obj) {
         if ($('#donut-chart').length !== 0) {
             var data = [];
-            var colorArray = [COLOR_RED, COLOR_BLACK_LIGHTER,  COLOR_ORANGE, '#ff0000', COLOR_GREEN, 'lightblue', 'pink', COLOR_AQUA, COLOR_BLUE, COLOR_BLACK, COLOR_PURPLE, "goldenrod"];
+            var colorArray = [COLOR_RED, COLOR_BLACK, COLOR_BLACK_LIGHTER, COLOR_ORANGE, '#ff0000', COLOR_GREEN, 'lightblue', 'pink', COLOR_AQUA, COLOR_BLUE, COLOR_PURPLE, "goldenrod"];
             for( var i = 0; i < obj.length; i++)
             {
                 var dt = new Date(obj[i][0]).toLocaleDateString();
