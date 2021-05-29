@@ -6,9 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-
 from fpdf import *
-
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 # Create your views here.
@@ -274,12 +272,11 @@ def update_user_data(request):
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
-def load_user_data2(request): # eto na ung python function na tatawagin ung stored procedure
+def load_user_data2(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_SELECT_ALL_USERS2") # eto ung stored procedure
+    cursor.callproc("SP_SELECT_ALL_USERS2")
     data = cursor.fetchall()
-    return JsonResponse(data, safe=False) # eto ung mag rereturn daladala ung nakuhang result, at makikita mo un sa inspect
-    # element, yung network..
+    return JsonResponse(data, safe=False)
 
 def deactivate_user(request):
     cursor = connection.cursor()
@@ -669,7 +666,7 @@ def load_top_contrib(request):
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
-def certification_pdf():
+def load_cert_pdf(request):
     class PDF(FPDF):
         # Load data
         def load_data(self, name):
@@ -742,7 +739,7 @@ def certification_pdf():
     # Column titles
     header = ['Country', 'Capital', 'Area (sq km)', 'Pop. (thousands)']
     # Data loading
-    data = pdf.load_data('countries.txt')
+    data = pdf.load_data(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\textfiles\countries.txt')
     pdf.set_font('Arial', '', 14)
     # pdf.set_margins(left=20, top=20)
     pdf.add_page()
@@ -751,5 +748,10 @@ def certification_pdf():
     pdf.improved_table(header, data)
     pdf.add_page()
     pdf.fancy_table(header, data)
-    pdf.output('tuto5.pdf', 'F')
+    pdf.output(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\reports\tuto5.pdf', 'F')
+
+    import webbrowser
+    webbrowser.open_new(r'file://C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\reports\tuto5.pdf')
+
+    return JsonResponse('OK', safe=False)
 

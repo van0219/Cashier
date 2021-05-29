@@ -117,4 +117,5 @@ urlpatterns = [
     path('load_coldep_card', views.load_coldep_card, name="load_coldep_card"),
     path('load_coldep_group', views.load_coldep_group, name="load_coldep_group"),
     path('load_top_contrib', views.load_top_contrib, name="load_top_contrib"),
+    path('load_cert_pdf', views.load_cert_pdf, name="load_cert_pdf"),
 ]

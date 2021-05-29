@@ -65,7 +65,7 @@
                     <!-- begin row -->
                     <div class="row">
                         <div class="col-lg-3 col-sm-5">
-                            <select class="form-control bg-secondary text-white" id="select-month">
+                            <select class="form-control bg-inverse text-white" id="select-month">
                                 <option value="1">January</option>
                                 <option value="2">February</option>
                                 <option value="3">March</option>
@@ -81,7 +81,7 @@
                             </select>
                         </div>
                         <div class="col-lg-3 col-sm-5">
-                            <select class="form-control bg-secondary text-white" id="select-mo">
+                            <select class="form-control bg-inverse text-white" id="select-year">
                                 <option value="1">2021</option>
                                 <option value="2">2020</option>
                                 <option value="3">2019</option>
@@ -101,7 +101,7 @@
                 <!-- begin col-6 -->
                 <div class="col-lg-6 m-t-10">
                     <div class="pull-right">
-                        <a href="javascript:;" class="btn btn-primary btn-md" id="cert-pdf"><i class="fas fa-print m-r-5"></i>Cert PDF</a>
+                        <a href="javascript:;" class="btn btn-primary btn-md" id="cert-pdf"><i class="fas fa-file-pdf m-r-5"></i>Certification Report (PDF)</a>
                     </div>
                 </div>
                 <!-- end col-6 -->
@@ -471,8 +471,37 @@
         });
     };
 
+    function loadCertPDF() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_cert_pdf' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
     $('#cert-filter').on('click', function() {
         loadDepositCertTable($('#select-month').val());
+    });
+
+    $('#cert-pdf').on('click', function() {
+        loadCertPDF();
     });
 
     function highlightSideNav() {
