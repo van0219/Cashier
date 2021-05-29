@@ -567,6 +567,7 @@
     });
 
     function no_err_when_save_collection() {
+        var ornum = $('#or_num').val();
         if ($('#data-table-responsives tbody tr').length > 0) {
             $('#receipt').modal('show');
             var dt_res = $('#data-table-responsives tbody');
@@ -582,7 +583,7 @@
                 );
             }
 
-            $('#r_ornum').text($('#or_num').val());
+            $('#r_ornum').text(ornum);
 
             if ($('#radiorequired3').prop('checked')) { //student is selected
                 var fullname = $('#or_lname').val()+', '+$('#or_fname').val();
@@ -608,8 +609,8 @@
             $('#r_time').text(time);
             $('#r_grandtotal').text('₱'+$('#total-fee').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")).delay(2000);
             //
-            saveCollection($('#or_num').val());
-            saveCollectionBreakdown($('#or_num').val());
+            saveCollection(ornum);
+            saveCollectionBreakdown(ornum);
         }
         else {
             $('#save-icon').removeClass('fa-spinner fa-pulse');
