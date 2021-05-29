@@ -493,6 +493,11 @@ def load_cert_table(request):
     cursor.callproc("SP_LOAD_CERT_TABLE"
                     ,(request.POST['month'],))
     data = cursor.fetchall()
+    import csv
+    csv_rowlist = data
+    with open(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\textfiles\countries.txt', 'w', newline='') as f:
+        writer = csv.writer(f, delimiter=';')
+        writer.writerows(csv_rowlist)
     return JsonResponse(data, safe=False)
 
 def load_monthly_collection_deposit(request):
@@ -692,17 +697,16 @@ def load_cert_pdf(request):
         # Better table
         def improved_table(self, header, data):
             # Column widths
-            w = [40, 35, 40, 45]
+            w = [60, 60, 60]
             # Header
             for i in range(0, len(header)):
                 self.cell(w[i], 7, header[i], 1, 0, 'C')
             self.ln()
             # Data
             for row in data:
-                self.cell(w[0], 6, row[0], 'LR')
-                self.cell(w[1], 6, row[1], 'LR')
+                self.cell(w[0], 6, row[0], 'LR', 0, 'C')
+                self.cell(w[1], 6, row[1], 'LR', 0, 'C')
                 self.cell(w[2], 6, row[2], 'LR', 0, 'R')
-                self.cell(w[3], 6, row[3], 'LR', 0, 'R')
                 self.ln()
             # Closure line
             self.cell(sum(w), 0, '', 'T')
@@ -716,7 +720,7 @@ def load_cert_pdf(request):
             self.set_line_width(0.3)
             self.set_font('', 'B')
             # Header
-            w = [40, 35, 40, 45]
+            w = [60, 50, 60]
             for i in range(0, len(header)):
                 self.cell(w[i], 7, header[i], 1, 0, 'C', 1)
             self.ln()
@@ -728,30 +732,24 @@ def load_cert_pdf(request):
             fill=0
             for row in data:
                 self.cell(w[0], 6, row[0], 'LR', 0, 'L', fill)
-                self.cell(w[1], 6, row[1], 'LR', 0, 'L', fill)
+                self.cell(w[1], 6, row[1], 'LR', 0, 'LR', fill)
                 self.cell(w[2], 6, row[2], 'LR', 0, 'R', fill)
-                self.cell(w[3], 6, row[3], 'LR', 0, 'R', fill)
                 self.ln()
                 fill = not fill
             self.cell(sum(w), 0, '', 'T')
 
     pdf = PDF()
     # Column titles
-    header = ['Country', 'Capital', 'Area (sq km)', 'Pop. (thousands)']
+    header = ['Date', 'RA Deposit Slip No.', 'Amount']
     # Data loading
     data = pdf.load_data(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\textfiles\countries.txt')
     pdf.set_font('Arial', '', 14)
-    # pdf.set_margins(left=20, top=20)
-    pdf.add_page()
-    pdf.basic_table(header, data)
+    pdf.set_margins(left=15, top=20)
     pdf.add_page()
     pdf.improved_table(header, data)
-    pdf.add_page()
-    pdf.fancy_table(header, data)
     pdf.output(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\reports\tuto5.pdf', 'F')
 
     import webbrowser
-    webbrowser.open_new(r'file://C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\reports\tuto5.pdf')
-
+    webbrowser.open_new(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\reports\tuto5.pdf')
     return JsonResponse('OK', safe=False)
 
