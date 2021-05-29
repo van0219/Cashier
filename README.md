@@ -1,7 +1,7 @@
 # Cashier
 # This is still an on-going project
 
-### Database location (CASHIER\cashiering_db.sql), updated constantly.
+### Database location (https://drive.google.com/drive/folders/1UsOt7QQLEGsvFbi1pMC9MDzt8LaB_VrX?usp=sharing), updated constantly.
 
 ### To run the system, type:
 ### 127.0.0.1:8000 in the address bar.
