@@ -673,6 +673,55 @@ def load_top_contrib(request):
 
 def load_cert_pdf(request):
     class PDF(FPDF):
+        # Page header
+        def header(self):
+            # Arial bold 15
+            self.set_font('Arial', 'B', 15)
+            # Calculate width of title and position
+            w = self.get_string_width('Certification Report') + 6
+            self.set_x((210 - w) / 2)
+            # Colors of frame, background and text
+            self.set_draw_color(0, 80, 180)
+            self.set_fill_color(230, 230, 0)
+            self.set_text_color(220, 50, 50)
+            # Thickness of frame (1 mm)
+            self.set_line_width(1)
+            # Title
+            self.cell(w, 9, 'Certification Report', 1, 1, 'C', 1)
+            # Line break
+            self.ln(10)
+
+        # Page footer
+        def footer(self):
+            # Position at 1.5 cm from bottom
+            self.set_y(-15)
+            # Arial 11 Normal
+            self.set_font('Arial', '', 11) 
+            # Text String
+            self.ln(10)
+            self.text(15, 220, txt='I hereby certify on my official oath that the above is a true statement of all collections and deposits')
+            self.text(15, 225, txt='had by me during the period stated above for which Official Receipts Nos. 0265393-0265546 inclusive,')
+            self.text(15, 230, txt='were actually issued by me in the amounts shown thereon. I also certify that I have not received')       
+            self.text(15, 235, txt='money from whatever source without saving issued the necessary Official Receipt in')          
+            self.text(15, 240, txt='Acknowledgement thereof. Collections received by sub-collectors are recorded above in lump-sum')
+            self.text(15, 245, txt='opposite their respective report numbers. I certify further that the balance shown above agrees with the')
+            self.text(15, 250, txt='balance appearing in my Cash Receipt Record.')
+            self.text(130, 260, txt='Prepared & certified correct:')
+            # Arial 11 Bold
+            self.set_font('Arial', 'B', 11) 
+            self.text(130, 275, txt='Ms. MERLY B. GONZALBO')
+            # Arial 11 Normal
+            self.set_font('Arial', '', 11) 
+            self.text(130, 280, txt='Collecting Officer')
+            # Text color in gray
+            self.set_text_color(128)
+            # Arial italic 8
+            self.set_font('Arial', 'I', 8)
+            # Footer line
+            self.line(10, 285, 200, 285)
+            # Page number
+            self.cell(0, 10, 'Page ' + str(self.page_no()), 0, 0, 'C')
+
         # Load data
         def load_data(self, name):
             # Read file lines
@@ -742,14 +791,14 @@ def load_cert_pdf(request):
     # Column titles
     header = ['Date', 'RA Deposit Slip No.', 'Amount']
     # Data loading
-    data = pdf.load_data(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\textfiles\countries.txt')
-    pdf.set_font('Arial', '', 14)
+    data = pdf.load_data(r'CASHIERING\views\layouts\textfiles\cert_obj.txt')
+    pdf.set_font('Arial', '', 12)
     pdf.set_margins(left=15, top=20)
     pdf.add_page()
     pdf.improved_table(header, data)
-    pdf.output(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\reports\tuto5.pdf', 'F')
+    pdf.output(r'CASHIERING\views\layouts\reports\certification_report.pdf', 'F')
 
     import webbrowser
-    webbrowser.open_new(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\reports\tuto5.pdf')
+    webbrowser.open_new(r'CASHIERING\views\layouts\reports\certification_report.pdf')
     return JsonResponse('OK', safe=False)
 
