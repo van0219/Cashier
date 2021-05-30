@@ -7,6 +7,7 @@ from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import *
+from datetime import datetime
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 # Create your views here.
@@ -495,7 +496,7 @@ def load_cert_table(request):
     data = cursor.fetchall()
     import csv
     csv_rowlist = data
-    with open(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\textfiles\countries.txt', 'w', newline='') as f:
+    with open(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\textfiles\cert_obj.txt', 'w', newline='') as f:
         writer = csv.writer(f, delimiter=';')
         writer.writerows(csv_rowlist)
     return JsonResponse(data, safe=False)
@@ -675,52 +676,47 @@ def load_cert_pdf(request):
     class PDF(FPDF):
         # Page header
         def header(self):
-            # Arial bold 15
-            self.set_font('Arial', 'B', 15)
-            # Calculate width of title and position
-            w = self.get_string_width('Certification Report') + 6
-            self.set_x((210 - w) / 2)
-            # Colors of frame, background and text
-            self.set_draw_color(0, 80, 180)
-            self.set_fill_color(230, 230, 0)
-            self.set_text_color(220, 50, 50)
-            # Thickness of frame (1 mm)
-            self.set_line_width(1)
-            # Title
-            self.cell(w, 9, 'Certification Report', 1, 1, 'C', 1)
+            # Arial bold 13
+            self.set_font('Arial', 'B', 13)
+            self.text(61, 15, txt='Polytechnic University of the Philippines')
+            self.set_font('Arial', '', 12)
+            self.text(86, 20, txt='Quezon City Branch')
+            self.text(90, 25, txt='Cashier\'s Office')
+            self.set_font('Arial', 'B', 13)
+            self.text(85, 30, txt='REVOLVING FUND')
             # Line break
-            self.ln(10)
+            self.ln(20)
 
         # Page footer
         def footer(self):
-            # Position at 1.5 cm from bottom
-            self.set_y(-15)
+            # Position from bottom
+            self.set_y(-100)
             # Arial 11 Normal
             self.set_font('Arial', '', 11) 
             # Text String
             self.ln(10)
-            self.text(15, 220, txt='I hereby certify on my official oath that the above is a true statement of all collections and deposits')
-            self.text(15, 225, txt='had by me during the period stated above for which Official Receipts Nos. 0265393-0265546 inclusive,')
-            self.text(15, 230, txt='were actually issued by me in the amounts shown thereon. I also certify that I have not received')       
-            self.text(15, 235, txt='money from whatever source without saving issued the necessary Official Receipt in')          
-            self.text(15, 240, txt='Acknowledgement thereof. Collections received by sub-collectors are recorded above in lump-sum')
-            self.text(15, 245, txt='opposite their respective report numbers. I certify further that the balance shown above agrees with the')
-            self.text(15, 250, txt='balance appearing in my Cash Receipt Record.')
-            self.text(130, 260, txt='Prepared & certified correct:')
+            self.multi_cell(w=0, h=5, txt='I hereby certify on my official oath that the above is a true statement of all collections and deposits had by me during the period stated above for which Official Receipts Nos. 0265393-0265546 inclusive, were actually issued by me in the amounts shown thereon. I also certify that I have not received money from whatever source without saving issued the necessary Official Receipt in Acknowledgement thereof. Collections received by sub-collectors are recorded above in lump-sum opposite their respective report numbers. I certify further that the balance shown above agrees with the balance appearing in my Cash Receipt Record.', border=0, align='J', fill=0, split_only=False)
+            self.ln(10)
             # Arial 11 Bold
             self.set_font('Arial', 'B', 11) 
-            self.text(130, 275, txt='Ms. MERLY B. GONZALBO')
+            self.cell(0, 0, 'Prepared & certified correct:', 0, 0, 'R')
+            self.ln(10)
+            self.cell(0, 0, 'Ms. MERLY B. GONZALBO', 0, 0, 'R')
             # Arial 11 Normal
             self.set_font('Arial', '', 11) 
-            self.text(130, 280, txt='Collecting Officer')
+            self.ln(5)
+            self.cell(0, 0, 'Collecting Officer         ', 0, 0, 'R')
             # Text color in gray
             self.set_text_color(128)
-            # Arial italic 8
+            # Arial 8 Italic
             self.set_font('Arial', 'I', 8)
             # Footer line
-            self.line(10, 285, 200, 285)
+            self.line(10, 280, 200, 280)
+            # Line break
+            self.ln(20)
             # Page number
-            self.cell(0, 10, 'Page ' + str(self.page_no()), 0, 0, 'C')
+            self.cell(0, 0, 'Page ' + str(self.page_no())  + '/{nb}', 0, 0, 'C')
+            self.cell(0, 0, 'Date Generated: ' + str(datetime.now()), 0, 0, 'R')
 
         # Load data
         def load_data(self, name):
@@ -731,23 +727,31 @@ def load_cert_pdf(request):
                     data += [line[:-1].split(';')]
             return data
 
-        # Simple table
-        def basic_table(self, header, data):
-            # Header
-            for col in header:
-                self.cell(40, 7, col, 1)
-            self.ln()
-            # Data
-            for row in data:
-                for col in row:
-                    self.cell(40, 6, col, 1)
-                self.ln()
-
         # Better table
         def improved_table(self, header, data):
+            # Data before table
+            self.set_font('Arial', 'B', 11)
+            self.text(15, 50, txt='Account Current: ')
+            self.set_font('Arial', '', 11)
+            self.text(55, 50, txt='LBP ACCOUNT NO. 0682-1020-47')
+            self.ln(20)
+            self.set_font('Arial', 'B', 11)
+            self.text(15, 70, txt='Beginning Balance:')
+            self.set_font('Arial', '', 11)
+            self.cell(0, 20, '0.00', 0, 0, 'R')
+            self.set_font('Arial', 'B', 11)
+            self.text(15, 75, txt='Add: ')
+            self.set_font('Arial', '', 11)
+            self.text(25, 75, txt='Collection per this report May 1-31, 2021')
+            self.cell(0, 28, '203,469.00', 0, 0, 'R')
+            self.set_font('Arial', 'B', 11)
+            self.text(15, 80, txt='Total: ')
+            self.cell(0, 36, '203,469.00', 0, 0, 'R')
+            self.ln(30)
             # Column widths
             w = [60, 60, 60]
             # Header
+            self.set_font('Arial', '', 12)
             for i in range(0, len(header)):
                 self.cell(w[i], 7, header[i], 1, 0, 'C')
             self.ln()
@@ -759,33 +763,17 @@ def load_cert_pdf(request):
                 self.ln()
             # Closure line
             self.cell(sum(w), 0, '', 'T')
+            self.ln(20)
+            self.cell(0, 0, 'Total Deposits: ', 0, 0, 'L')
+            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.ln(5)
+            self.cell(0, 0, 'Add Balance:', 0, 0, 'L')
+            self.cell(0, 0, '0.00', 0, 0, 'R')
+            self.ln(5)
+            self.set_font('Arial', 'B', 12)
+            self.cell(0, 0, 'TOTAL:', 0, 0, 'L')
+            self.cell(0, 0, '203,469.00', 0, 0, 'R')
 
-        # Colored table
-        def fancy_table(self, header, data):
-            # Colors, line width and bold font
-            self.set_fill_color(255, 0, 0)
-            self.set_text_color(255)
-            self.set_draw_color(128, 0, 0)
-            self.set_line_width(0.3)
-            self.set_font('', 'B')
-            # Header
-            w = [60, 50, 60]
-            for i in range(0, len(header)):
-                self.cell(w[i], 7, header[i], 1, 0, 'C', 1)
-            self.ln()
-            # Color and font restoration
-            self.set_fill_color(224, 235, 255)
-            self.set_text_color(0)
-            self.set_font('')
-            # Data
-            fill=0
-            for row in data:
-                self.cell(w[0], 6, row[0], 'LR', 0, 'L', fill)
-                self.cell(w[1], 6, row[1], 'LR', 0, 'LR', fill)
-                self.cell(w[2], 6, row[2], 'LR', 0, 'R', fill)
-                self.ln()
-                fill = not fill
-            self.cell(sum(w), 0, '', 'T')
 
     pdf = PDF()
     # Column titles
@@ -794,8 +782,10 @@ def load_cert_pdf(request):
     data = pdf.load_data(r'CASHIERING\views\layouts\textfiles\cert_obj.txt')
     pdf.set_font('Arial', '', 12)
     pdf.set_margins(left=15, top=20)
+    pdf.set_auto_page_break(1, 100)
     pdf.add_page()
     pdf.improved_table(header, data)
+    pdf.alias_nb_pages()
     pdf.output(r'CASHIERING\views\layouts\reports\certification_report.pdf', 'F')
 
     import webbrowser
