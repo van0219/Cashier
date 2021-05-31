@@ -492,7 +492,8 @@ def load_or_monthly_report(request):
 def load_cert_table(request):
     cursor = connection.cursor()
     cursor.callproc("SP_LOAD_CERT_TABLE"
-                    ,(request.POST['month'],))
+                    ,(request.POST['month']
+                    ,request.POST['year']))
     data = cursor.fetchall()
     import csv
     csv_rowlist = data
@@ -503,39 +504,45 @@ def load_cert_table(request):
 
 def load_monthly_collection_deposit(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_SELECT_MONTHLY_COLLECTION")
+    cursor.callproc("SP_SELECT_MONTHLY_COLLECTION"
+                   ,(request.POST['year'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
 def load_monthly_collection_deposit2(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_SELECT_MONTHLY_DEPOSIT")
+    cursor.callproc("SP_SELECT_MONTHLY_DEPOSIT"
+                   ,(request.POST['year'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
 def load_radar_chart(request):
     cursor = connection.cursor()
     cursor.callproc("SP_LOAD_RADAR_CHART"
-                    ,(request.POST['month'],))
+                    ,(request.POST['month']
+                    ,request.POST['year']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
 def load_cash_receipt_cards(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_CASH_RECEIPT_CARDS"
-                    ,(request.POST['month'],))
+                    ,(request.POST['month']
+                    ,request.POST['year']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
 def load_dashboard_cards(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_LOAD_DASHBOARD_CARDS")
+    cursor.callproc("SP_LOAD_DASHBOARD_CARDS"
+                   ,(request.POST['year'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
 def load_dashboard_bar_graph(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_SELECT_MONTHLY_COLLECTION")
+    cursor.callproc("SP_SELECT_MONTHLY_COLLECTION"
+                   ,(request.POST['year'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -617,7 +624,8 @@ def set_email(request):
 def load_sumcol_cards(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_SUMCOL_CARDS"
-                    ,(request.POST['month'],))
+                    ,(request.POST['month']
+                    ,request.POST['year']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -668,7 +676,8 @@ def load_coldep_group(request):
 def load_top_contrib(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_TOP_CONTRIB"
-                    ,(request.POST['month']))
+                    ,(request.POST['month']
+                    ,request.POST['year']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 

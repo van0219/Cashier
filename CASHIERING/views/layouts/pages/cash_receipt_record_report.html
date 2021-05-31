@@ -45,36 +45,54 @@
     <!-- end page-header -->
     <!-- begin row -->
     <div class="row m-b-10">
-        <!-- begin col-3 -->
-        <div class="col-lg-3">
-            <div class="m-t-10 row">
-                <div class="col-lg-8">
-                    <select class="form-control" id="select-month">
-                        <option value="1">January</option>
-                        <option value="2">February</option>
-                        <option value="3">March</option>
-                        <option value="4">April</option>
-                        <option value="5">May</option>
-                        <option value="6">June</option>
-                        <option value="7">July</option>
-                        <option value="8">August</option>
-                        <option value="9">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
+        <!-- begin col-12 -->
+        <div class="col-lg-12">
+            <!-- begin row -->
+            <div class="row">
+                <!-- begin col-6 -->
+                <div class="col-lg-6 m-t-10">
+                    <!-- begin row -->
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-5">
+                            <select class="form-control bg-inverse text-white" id="select-month">
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-sm-5">
+                            <select class="form-control bg-inverse text-white" id="select-year"></select>
+                        </div>
+                        <div class="col-lg-2 col-sm-2">
+                            <a href="javascript:;" class="btn btn-primary btn-sm m-t-5" id="cash-filter"><i class="fas fa-filter m-r-5"></i>Filter</a>
+                        </div>
+                        <div class="col-lg-4">
+                            <!-- filler -->
+                        </div>
+                    </div>
+                    <!-- end row -->
                 </div>
-                <div class="col-lg-4">
-                    <a href="javascript:;" class="btn btn-primary btn-m" id="cash-filter"><i class="fas fa-file-code m-r-5"></i>Filter</a>
+                <!-- end col-6 -->
+                <!-- begin col-6 -->
+                <div class="col-lg-6 m-t-10">
+                    <div class="pull-right">
+                        <a href="javascript:;" class="btn btn-primary btn-md" id="cash-pdf"><i class="fas fa-file-pdf m-r-5" id="cash-pdf-icon"></i>Cash Receipt Record (PDF)</a>
+                    </div>
                 </div>
+                <!-- end col-6 -->
             </div>
+            <!-- end row -->
         </div>
-        <!-- end col-3 -->
-        <!-- begin col-9 -->
-        <div class="col-lg-9">
-            <!-- filler -->
-        </div>
-        <!-- end col-9 -->
+        <!-- end col-12 -->
     </div>
     <!-- end row -->
     <!-- begin row -->
@@ -278,10 +296,12 @@
         App.init();
         FormPlugins.init();
         highlightSideNav();
+        loadYears();
         $('#select-month').val(new Date().getMonth() + 1);
-        loadCashReceiptCards($('#select-month').val());
-        loadTopContrib($('#select-month').val());
-        loadDepositOfTheMonthChart($('#select-month').val());
+        $('#select-year').val((new Date).getFullYear());
+        loadCashReceiptCards($('#select-month').val(), $('#select-year').val());
+        loadTopContrib($('#select-month').val(), $('#select-year').val());
+        loadDepositOfTheMonthChart($('#select-month').val(), $('#select-year').val());
     });
 
     var dt_top_contrib = $('#table-top-contrib').DataTable({
@@ -301,8 +321,17 @@
         ]
     });
 
+    function loadYears() {
+        var yearNow = (new Date).getFullYear();
+        for (var i = yearNow; i > 2014; i--) {
+            $('#select-year').append(
+                `<option value="${i}">${i}</option>`
+            )
+        }
+    };
 
-    function loadCashReceiptCards(month) {
+
+    function loadCashReceiptCards(month, year) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_cash_receipt_cards' %}",
@@ -310,6 +339,7 @@
             dataType: 'json',
             data: {
                 month: month,
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -333,14 +363,16 @@
     };
 
     $('#cash-filter').on('click', function() {
-        loadCashReceiptCards($('#select-month').val());
-        loadTopContrib($('#select-month').val());
+        var mon = $('#select-month').val();
+        var yr = $('#select-year').val();
+        loadCashReceiptCards(mon, yr);
+        loadTopContrib(mon, yr);
         $('#dep-month-tot').text('');
         $('#donut-chart').empty();
-        loadDepositOfTheMonthChart($('#select-month').val());
+        loadDepositOfTheMonthChart(mon, yr);
     });
 
-    function loadTopContrib(month) {
+    function loadTopContrib(month, year) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_top_contrib' %}",
@@ -348,6 +380,7 @@
             dataType: 'json',
             data: {
                 month: month,
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -375,7 +408,7 @@
         });
     };
 
-    function loadDepositOfTheMonthChart(month) {
+    function loadDepositOfTheMonthChart(month, year) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_cert_table' %}",
@@ -383,6 +416,7 @@
             dataType: 'json',
             data: {
                 month: month,
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {

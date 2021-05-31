@@ -18,6 +18,33 @@
     <h1 class="page-header">Dashboard <small>Cashier</small></h1>
     <!-- end page-header -->
     <!-- begin row -->
+    <div class="row m-b-10">
+        <!-- begin col-3 -->
+        <div class="col-lg-3">
+            <!-- begin row -->
+            <div class="row">
+                <!-- begin col-8 -->
+                <div class="col-lg-8 col-md-8">
+                    <select id="dashboard-select" class="form-control bg-inverse text-white"></select>
+                </div>
+                <!-- end col-8 -->
+                <!-- begin col-4 -->
+                <div class="col-lg-4 col-md-4">
+                    <a href="javascript:;" class="btn btn-primary btn-md" id="dashboard-filter"><i class="fas fa-filter m-r-5"></i>Filter</a>
+                </div>
+                <!-- end col-4 -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-9 -->
+        <div class="col-lg-9">
+            <!-- filler -->
+        </div>
+        <!-- end col-9 -->
+    </div>
+    <!-- end row -->
+    <!-- begin row -->
     <div class="row">
         <!-- begin col-3 -->
         <div class="col-lg-3 col-md-6">
@@ -95,7 +122,10 @@
                     <h4 class="panel-title"><i class="fas fa-chart-bar m-r-5"></i>Monthly Collection</h4>
                 </div>
                 <div class="panel-body">
-                    <div id="nv-bar-chart" class="height-sm"></div>
+                    <h3 class="text-center m-t-40" id="monthly-col-no-data" style="display: none;">No data available</h3>
+                    <div id="bar-chart-div">
+                        <div id="nv-bar-chart" class="height-sm"></div>
+                    </div>
                 </div>
             </div>
             <!-- end panel -->
@@ -109,6 +139,7 @@
                     <h4 class="panel-title"><i class="fas fa-chart-line m-r-5"></i>Collection vs Deposit</h4>
                 </div>
                 <div class="panel-body" style="height: 330px;">
+                    <h3 class="text-center m-t-40" id="col-v-dep-no-data" style="display: none;">No data available</h3>
                     <div id="canvas-div" class="m-t-10">
                         <canvas id="line-chart" data-render="chart-js" class="p-l-20"></canvas>
                     </div>
@@ -160,9 +191,11 @@
             Notification.init();
             Highlight.init();
             highlightSideNav();
-            loadDashboardCards();
-            loadDashboardBarGraph();
-            getMonthlyCollectionDeposit();
+            loadYears();
+            $('#dashboard-select').val((new Date).getFullYear());
+            loadDashboardCards($('#dashboard-select').val());
+            loadDashboardBarGraph($('#dashboard-select').val());
+            getMonthlyCollectionDeposit($('#dashboard-select').val());
             var mon;
             var day = (d.getDate()==1) ? count_days_month()+1 : d.getDate();//if day today is 1 --> gets the previous month's number of days plus 1;
             if (d.getDate()==1) {
@@ -175,6 +208,15 @@
             $('#last_week').text(last_week(moment(new Date(d)).format("dddd").toLowerCase()));
             var lastMonth = new Date(d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear());
             $('#last_month').text(moment(lastMonth).format("MMMM"));
+    
+            function loadYears() {
+                var yearNow = (new Date).getFullYear();
+                for (var i = yearNow; i > 2014; i--) {
+                    $('#dashboard-select').append(
+                        `<option value="${i}">${i}</option>`
+                    )
+                }
+            };
         });
 
         var d = new Date();
@@ -253,6 +295,7 @@
             return _days; // returns the number of days of the current month
         }
     };
+
     function handleBarChart(obj) {
         var bar_color = [COLOR_GREEN, 'lightblue', 'pink', COLOR_RED, COLOR_ORANGE, '#ff0000', COLOR_AQUA, COLOR_BLUE, COLOR_PURPLE, COLOR_GREY, COLOR_BLACK, "goldenrod"];
         var bar_label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -363,7 +406,7 @@
         });
     };
 
-    function getMonthlyCollectionDeposit() {
+    function getMonthlyCollectionDeposit(year) {
         var monthly_col_obj = null;
         var monthly_dep_obj = null;
         $.ajax({
@@ -373,6 +416,7 @@
             async: false,
             dataType: 'json',
             data: {
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -396,6 +440,7 @@
             async: false,
             dataType: 'json',
             data: {
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -414,16 +459,23 @@
         });
         $('#canvas-div canvas').remove();
         $('#canvas-div').append(`<canvas id="line-chart" data-render="chart-js"></canvas>`);
-        handleLineChart(monthly_col_obj, monthly_dep_obj);
+        if (monthly_col_obj.length > 0) {
+            $('#col-v-dep-no-data').hide();
+            handleLineChart(monthly_col_obj, monthly_dep_obj);
+        }
+        else {
+            $('#col-v-dep-no-data').show();
+        }
     };
 
-    function loadDashboardCards() {
+    function loadDashboardCards(year) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_dashboard_cards' %}",
             // cache: true,
             dataType: 'json',
             data: {
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -451,17 +503,25 @@
         });
     };
 
-    function loadDashboardBarGraph() {
+    function loadDashboardBarGraph(year) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_dashboard_bar_graph' %}",
             // cache: true,
             dataType: 'json',
             data: {
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                handleBarChart(obj);
+                if (obj.length > 0) {
+                    $('#monthly-col-no-data').hide();
+                    handleBarChart(obj);
+                }
+                else {
+                    $('#nv-bar-chart').empty();
+                    $('#monthly-col-no-data').show();
+                }
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -476,30 +536,12 @@
         });
     };
 
-    function loadDashboardLineGraph() {
-        $.ajax({
-            type: "POST",
-            url: "{% url 'load_dashboard_line_graph' %}",
-            // cache: true,
-            dataType: 'json',
-            data: {
-                csrfmiddlewaretoken:"{{csrf_token}}"
-            },
-            success: function(obj) {
-                handleLineChart(obj);
-            },
-            error: function(xhr, status, error) {
-                var errMsg = xhr.status + ': ' + xhr.statusText;
-                swal({
-                    title: "Error!", 
-                    text: errMsg,
-                    type: "error",
-                    confirmButtonColor: "#428bca",
-                    showLoaderOnConfirm: true
-                });
-            }
-        });
-    };
+    $('#dashboard-filter').on('click', function() {
+        var year = $('#dashboard-select').val();
+        getMonthlyCollectionDeposit(year);
+        loadDashboardBarGraph(year);
+        loadDashboardCards(year);
+    });
 
     function shortenNum(num) {
         if (num < 1000) {

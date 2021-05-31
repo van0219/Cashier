@@ -45,36 +45,54 @@
     <!-- end page-header -->
     <!-- begin row -->
     <div class="row m-b-10">
-        <!-- begin col-3 -->
-        <div class="col-lg-3">
-            <div class="m-t-10 row">
-                <div class="col-lg-8">
-                    <select class="form-control" id="select-month">
-                        <option value="1">January</option>
-                        <option value="2">February</option>
-                        <option value="3">March</option>
-                        <option value="4">April</option>
-                        <option value="5">May</option>
-                        <option value="6">June</option>
-                        <option value="7">July</option>
-                        <option value="8">August</option>
-                        <option value="9">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
+        <!-- begin col-12 -->
+        <div class="col-lg-12">
+            <!-- begin row -->
+            <div class="row">
+                <!-- begin col-6 -->
+                <div class="col-lg-6 m-t-10">
+                    <!-- begin row -->
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-5">
+                            <select class="form-control bg-inverse text-white" id="select-month">
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-sm-5">
+                            <select class="form-control bg-inverse text-white" id="select-year"></select>
+                        </div>
+                        <div class="col-lg-2 col-sm-2">
+                            <a href="javascript:;" class="btn btn-primary btn-sm m-t-5" id="sum-filter"><i class="fas fa-filter m-r-5"></i>Filter</a>
+                        </div>
+                        <div class="col-lg-4">
+                            <!-- filler -->
+                        </div>
+                    </div>
+                    <!-- end row -->
                 </div>
-                <div class="col-lg-4">
-                    <a href="javascript:;" class="btn btn-primary btn-m" id="sum-filter"><i class="fas fa-file-code m-r-5"></i>Filter</a>
+                <!-- end col-6 -->
+                <!-- begin col-6 -->
+                <div class="col-lg-6 m-t-10">
+                    <div class="pull-right">
+                        <a href="javascript:;" class="btn btn-primary btn-md" id="sum-pdf"><i class="fas fa-file-pdf m-r-5" id="sum-pdf-icon"></i>Summary of Collection (PDF)</a>
+                    </div>
                 </div>
+                <!-- end col-6 -->
             </div>
+            <!-- end row -->
         </div>
-        <!-- end col-3 -->
-        <!-- begin col-9 -->
-        <div class="col-lg-9">
-            <!-- filler -->
-        </div>
-        <!-- end col-9 -->
+        <!-- end col-12 -->
     </div>
     <!-- end row -->
     <!-- begin row -->
@@ -230,9 +248,11 @@
         App.init();
         FormPlugins.init();
         highlightSideNav();
+        loadYears();
         $('#select-month').val((new Date).getMonth()+1);
-        loadCards($('#select-month').val());
-        loadBarChart($('#select-month').val());
+        $('$select-year').val((new Date).getFullYear());
+        loadCards($('#select-month').val(), $('#select-year').val());
+        loadBarChart($('#select-month').val(), $('#select-year').val());
     });
     var dt_combines = $('#data-table-combines').DataTable({
         'paging'      : true,
@@ -288,6 +308,15 @@
         ]
     });
 
+    function loadYears() {
+        var yearNow = (new Date).getFullYear();
+        for (var i = yearNow; i > 2014; i--) {
+            $('#select-year').append(
+                `<option value="${i}">${i}</option>`
+            )
+        }
+    };
+
     function handleBarChart(obj) {
         var newLabels = [];
         var newData = [];
@@ -313,7 +342,7 @@
         });
     };
 
-    function loadCards(month) {
+    function loadCards(month, year) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_sumcol_cards' %}",
@@ -321,6 +350,7 @@
             dataType: 'json',
             data: {
                 month:month,
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -350,7 +380,7 @@
         });
     };
 
-    function loadBarChart(month) {
+    function loadBarChart(month, year) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_radar_chart' %}",
@@ -358,6 +388,7 @@
             dataType: 'json',
             data: {
                 month:month,
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -401,8 +432,10 @@
     };
 
     $('#sum-filter').on('click', function() {
-        loadCards($('#select-month').val());
-        loadBarChart($('#select-month').val());
+        var mon = $('#select-month').val();
+        var yr = $('#select-year').val();
+        loadCards(mon, yr);
+        loadBarChart(mon, yr);
     });
 
     function highlightSideNav() {

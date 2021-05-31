@@ -81,12 +81,7 @@
                             </select>
                         </div>
                         <div class="col-lg-3 col-sm-5">
-                            <select class="form-control bg-inverse text-white" id="select-year">
-                                <option value="1">2021</option>
-                                <option value="2">2020</option>
-                                <option value="3">2019</option>
-                                <option value="4">2018</option>
-                            </select>
+                            <select class="form-control bg-inverse text-white" id="select-year"></select>
                         </div>
                         <div class="col-lg-2 col-sm-2">
                             <a href="javascript:;" class="btn btn-primary btn-sm m-t-5" id="cert-filter"><i class="fas fa-filter m-r-5"></i>Filter</a>
@@ -101,7 +96,7 @@
                 <!-- begin col-6 -->
                 <div class="col-lg-6 m-t-10">
                     <div class="pull-right">
-                        <a href="javascript:;" class="btn btn-primary btn-md" id="cert-pdf"><i class="fas fa-file-pdf m-r-5"></i>Certification Report (PDF)</a>
+                        <a href="javascript:;" class="btn btn-primary btn-md" id="cert-pdf"><i class="fas fa-file-pdf m-r-5" id="cert-pdf-icon"></i>Certification Report (PDF)</a>
                     </div>
                 </div>
                 <!-- end col-6 -->
@@ -148,10 +143,11 @@
                     <!-- begin panel -->
                     <div class="panel panel-inverse">
                         <div class="panel-heading">
-                            <h4 class="panel-title">Monthly Certified Deposits</h4>
+                            <h4 class="panel-title"><i class="fas fa-chart-line m-r-5"></i>Monthly Certified Deposits (<span id="year-span"></span>)</h4>
                         </div>
                         <div class="panel-body">
                             <div id="canvas-div">
+                                <h3 id="line-chart-no-data" class="text-center m-t-40" style="display: none;">No data available</h3>
                                 <canvas id="line-chart" data-render="chart-js"></canvas>
                             </div>
                         </div>
@@ -273,10 +269,22 @@
         TableManageCombine.init();
         FormPlugins.init();
         highlightSideNav();
+        loadYears();
         $('#select-month').val((new Date).getMonth()+1);
-        loadDepositCertTable($('#select-month').val());
-        getMonthlyCollectionDeposit();
+        $('#select-year').val((new Date).getFullYear());
+        loadDepositCertTable($('#select-month').val(), $('#select-year').val());
+        getMonthlyCollectionDeposit($('#select-year').val());
     });
+
+    function loadYears() {
+        var yearNow = (new Date).getFullYear();
+        for (var i = yearNow; i > 2014; i--) {
+            $('#select-year').append(
+                `<option value="${i}">${i}</option>`
+            )
+        }
+    };
+
     var dt_combines = $('#data-table-combines').DataTable({
         'paging'      : false,
         'lengthChange': false,
@@ -375,7 +383,7 @@
         });
     };
 
-    function getMonthlyCollectionDeposit() {
+    function getMonthlyCollectionDeposit(year) {
         var monthly_col_obj = null;
         var monthly_dep_obj = null;
         $.ajax({
@@ -385,6 +393,7 @@
             async: false,
             dataType: 'json',
             data: {
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -408,6 +417,7 @@
             async: false,
             dataType: 'json',
             data: {
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -424,12 +434,20 @@
                 });
             }
         });
+        $('#year-span').text($('#select-year').val());
+        $('#year-span').show();
         $('#canvas-div canvas').remove();
         $('#canvas-div').append(`<canvas id="line-chart" data-render="chart-js"></canvas>`);
-        handleLineChart(monthly_col_obj, monthly_dep_obj);
+        if (monthly_dep_obj.length == 0) {
+            $('#line-chart-no-data').show();
+        }
+        else {
+            $('#line-chart-no-data').hide();
+            handleLineChart(monthly_col_obj, monthly_dep_obj);
+        }
     };
 
-    function loadDepositCertTable(month) {
+    function loadDepositCertTable(month, year) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_cert_table' %}",
@@ -437,6 +455,7 @@
             dataType: 'json',
             data: {
                 month: month,
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -481,9 +500,12 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-
+                $('#cert-pdf-icon').removeClass('fa-spinner fa-pulse');
+                $('#cert-pdf-icon').addClass('fa-file-pdf');
             },
             error: function(xhr, status, error) {
+                $('#cert-pdf-icon').removeClass('fa-spinner fa-pulse');
+                $('#cert-pdf-icon').addClass('fa-file-pdf');
                 var errMsg = xhr.status + ': ' + xhr.statusText;
                 swal({
                     title: "Error!", 
@@ -497,10 +519,13 @@
     };
 
     $('#cert-filter').on('click', function() {
-        loadDepositCertTable($('#select-month').val());
+        loadDepositCertTable($('#select-month').val(), $('#select-year').val());
+        getMonthlyCollectionDeposit($('#select-year').val())
     });
 
     $('#cert-pdf').on('click', function() {
+        $('#cert-pdf-icon').removeClass('fa-file-pdf');
+        $('#cert-pdf-icon').addClass('fa-spinner fa-pulse');
         loadCertPDF();
     });
 
