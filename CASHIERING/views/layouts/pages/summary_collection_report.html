@@ -438,6 +438,40 @@
         loadBarChart(mon, yr);
     });
 
+    $('#sum-pdf').on('click', function() {
+        $('#sum-pdf-icon').removeClass('fa-file-pdf');
+        $('#sum-pdf-icon').addClass('fa-spinner fa-pulse');
+        loadSumPDF();
+    });
+
+    function loadSumPDF() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_sum_pdf' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#sum-pdf-icon').removeClass('fa-spinner fa-pulse');
+                $('#sum-pdf-icon').addClass('fa-file-pdf');
+            },
+            error: function(xhr, status, error) {
+                $('#sum-pdf-icon').removeClass('fa-spinner fa-pulse');
+                $('#sum-pdf-icon').addClass('fa-file-pdf');
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');
         $('#add-col-caret').removeClass('text-white');

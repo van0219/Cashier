@@ -118,4 +118,7 @@ urlpatterns = [
     path('load_coldep_group', views.load_coldep_group, name="load_coldep_group"),
     path('load_top_contrib', views.load_top_contrib, name="load_top_contrib"),
     path('load_cert_pdf', views.load_cert_pdf, name="load_cert_pdf"),
+    path('load_sum_pdf', views.load_sum_pdf, name="load_sum_pdf"),
+    path('load_cash_pdf', views.load_cash_pdf, name="load_cash_pdf"),
+    path('load_mon_pdf', views.load_mon_pdf, name="load_mon_pdf"),
 ]

@@ -475,6 +475,39 @@
         }
     };
 
+    $('#cash-pdf').on('click', function() {
+        $('#cash-pdf-icon').removeClass('fa-file-pdf');
+        $('#cash-pdf-icon').addClass('fa-spinner fa-pulse');
+        loadCashPDF();
+    });
+
+    function loadCashPDF() {
+        $.ajax({
+            type: "POST",
+            url: "load_cash_pdf",
+            dataType: "json",
+            data: {
+                csrfmiddlewaretoken: "{{csrf_token}}",
+            },
+            success: function(obj) {
+                $('#cash-pdf-icon').removeClass('fa-spinner fa-pulse');
+                $('#cash-pdf-icon').addClass('fa-file-pdf');
+            },
+            error: function(xhr, status, error) {
+                $('#cash-pdf-icon').removeClass('fa-spinner fa-pulse');
+                $('#cash-pdf-icon').addClass('fa-file-pdf');
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');
         $('#add-col-caret').removeClass('text-white');

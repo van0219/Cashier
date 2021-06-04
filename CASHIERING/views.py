@@ -662,14 +662,16 @@ def update_nature(request):
 def load_coldep_card(request):
     cursor = connection.cursor()
     cursor.callproc("SP_LOAD_COLDEP_CARD"
-                    ,(request.POST['month']))
+                    ,(request.POST['month']
+                    ,request.POST['year']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
 def load_coldep_group(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_COLLECTION_GROUP"
-                    ,(request.POST['month']))
+                    ,(request.POST['month']
+                    ,request.POST['year']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -814,3 +816,401 @@ def load_cert_pdf(request):
     webbrowser.open_new(r'CASHIERING\views\layouts\reports\certification_report.pdf')
     return JsonResponse('OK', safe=False)
 
+def load_sum_pdf(request):
+    class PDF(FPDF):
+        # Page header
+        def header(self):
+            # PUP Logo
+            self.image(r'CASHIERING\static\assets\img\logo\PUPLogo.png', 15, 8, 30, 30)
+            # QR Code
+            self.image(r'CASHIERING\static\assets\img\QR-code\qrsample.png', 168, 8, 30, 30)
+            # Arial bold 13
+            self.set_font('Arial', 'B', 13)
+            self.cell(0, 0, 'Polytechnic University of the Philippines', 0, 0, 'C')
+            self.ln(5)
+            self.set_font('Arial', '', 13)
+            self.cell(0, 0, 'Quezon City Branch', 0, 0, 'C')
+            self.ln(5)
+            self.set_font('Arial', '', 12)
+            self.cell(0, 0, 'Cashier\'s Office', 0, 0, 'C')
+            self.ln(5)
+            self.set_font('Arial', 'B', 13)
+            self.cell(0, 0, 'REVOLVING FUND', 0, 0, 'C')
+            # Line break
+            self.ln(20)
+
+        # Page footer
+        def footer(self):
+            # Position from bottom
+            self.set_y(-15)
+            # Text color in gray
+            self.set_text_color(128)
+            # Arial 8 Italic
+            self.set_font('Arial', 'I', 9)
+            # Footer line
+            self.line(10, 280, 200, 280)
+            # Line break
+            self.ln(5)
+            # Page number and other notes
+            self.cell(0, 0, 'Page ' + str(self.page_no())  + '/{nb}', 0, 0, 'C')
+            self.ln(5)
+            self.set_font('Arial', 'I', 8)
+            self.cell(0, 0, 'Report No. 00000001', 0, 0, 'L')
+            self.cell(0, 0, 'Date Generated: ' + str(datetime.now()), 0, 0, 'R')
+
+        # Load data
+        def load_data(self, name):
+            # Read file lines
+            data = []
+            with open(name) as file:
+                for line in file:
+                    data += [line[:-1].split(';')]
+            return data
+
+        # Better table
+        def improved_table(self, header, data):
+            # Data before table
+            self.set_font('Arial', 'B', 11)
+            self.cell(0, 0, 'Account Current: ', 0, 0, 'L')
+            self.set_font('Arial', '', 11)
+            self.cell(0, 0, 'LBP ACCOUNT NO. 0682-1020-47', 0, 0, 'R')
+            self.ln(20)
+            self.set_font('Arial', 'B', 11)
+            self.cell(0, 0, 'Beginning Balance:', 0, 0, 'L')
+            self.set_font('Arial', '', 11)
+            self.cell(0, 0, '0.00', 0, 0, 'R')
+            self.ln(5)
+            self.set_font('Arial', 'B', 11)
+            self.cell(0, 0, 'Add: ', 0, 0, 'L')
+            self.set_font('Arial', '', 11)
+            self.text(26, 81.2,'Collection per this report May 1-31, 2021')
+            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.ln(5)
+            self.set_font('Arial', 'B', 11)
+            self.cell(0, 0, 'Total: ', 0, 0, 'L')
+            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.ln(10)
+            # Column widths
+            w = [60, 60, 60]
+            # Header
+            self.set_font('Arial', '', 12)
+            for i in range(0, len(header)):
+                self.cell(w[i], 7, header[i], 1, 0, 'C')
+            self.ln()
+            # Data
+            for row in data:
+                self.cell(w[0], 6, row[0], 'LR', 0, 'C')
+                self.cell(w[1], 6, row[1], 'LR', 0, 'C')
+                self.cell(w[2], 6, row[2], 'LR', 0, 'R')
+                self.ln()
+            # Closure line
+            self.cell(sum(w), 0, '', 'T')
+            self.ln(20)
+            self.cell(0, 0, 'Total Deposits: ', 0, 0, 'L')
+            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.ln(5)
+            self.cell(0, 0, 'Add Balance:', 0, 0, 'L')
+            self.cell(0, 0, '0.00', 0, 0, 'R')
+            self.ln(5)
+            self.set_font('Arial', 'B', 12)
+            self.cell(0, 0, 'TOTAL:', 0, 0, 'L')
+            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            # Text String
+            self.set_font('Arial', '', 11)
+            self.ln(20)
+            self.set_fill_color(255,255,240)
+            self.multi_cell(w=0, h=5, txt='I hereby certify on my official oath that the above is a true statement of all collections and deposits had by me during the period stated above for which Official Receipts Nos. 0265393-0265546 inclusive, were actually issued by me in the amounts shown thereon. I also certify that I have not received money from whatever source without saving issued the necessary Official Receipt in Acknowledgement thereof. Collections received by sub-collectors are recorded above in lump-sum opposite their respective report numbers. I certify further that the balance shown above agrees with the balance appearing in my Cash Receipt Record.', border=0, align='J', fill=1, split_only=False)
+            self.ln(10)
+            # Arial 11 Bold
+            self.set_font('Arial', 'B', 11) 
+            self.cell(0, 10, 'Prepared & certified correct:', 0, 0, 'R')
+            self.ln(10)
+            self.cell(0, 10, 'Ms. MERLY B. GONZALBO', 0, 0, 'R')
+            # Arial 11 Normal
+            self.set_font('Arial', '', 11) 
+            self.ln(5)
+            self.cell(0, 10, 'Collecting Officer         ', 0, 0, 'R')
+
+
+    pdf = PDF()
+    # Column titles
+    # header = ['Date', 'RA Deposit Slip No.', 'Amount']
+    # Data loading
+    # data = pdf.load_data(r'CASHIERING\views\layouts\textfiles\sum_obj.txt')
+    pdf.set_font('Arial', '', 12)
+    pdf.set_margins(left=15, top=20)
+    pdf.set_auto_page_break(1, 20)
+    pdf.add_page()
+    # pdf.improved_table(header, data)
+    pdf.alias_nb_pages()
+    pdf.output(r'CASHIERING\views\layouts\reports\summary_report.pdf', 'F')
+
+    import webbrowser
+    webbrowser.open_new(r'CASHIERING\views\layouts\reports\summary_report.pdf')
+    return JsonResponse('OK', safe=False)
+
+def load_cash_pdf(request):
+    class PDF(FPDF):
+        # Page header
+        def header(self):
+            # PUP Logo
+            self.image(r'CASHIERING\static\assets\img\logo\PUPLogo.png', 15, 8, 30, 30)
+            # QR Code
+            self.image(r'CASHIERING\static\assets\img\QR-code\qrsample.png', 168, 8, 30, 30)
+            # Arial bold 13
+            self.set_font('Arial', 'B', 13)
+            self.cell(0, 0, 'Polytechnic University of the Philippines', 0, 0, 'C')
+            self.ln(5)
+            self.set_font('Arial', '', 13)
+            self.cell(0, 0, 'Quezon City Branch', 0, 0, 'C')
+            self.ln(5)
+            self.set_font('Arial', '', 12)
+            self.cell(0, 0, 'Cashier\'s Office', 0, 0, 'C')
+            self.ln(5)
+            self.set_font('Arial', 'B', 13)
+            self.cell(0, 0, 'REVOLVING FUND', 0, 0, 'C')
+            # Line break
+            self.ln(20)
+
+        # Page footer
+        def footer(self):
+            # Position from bottom
+            self.set_y(-15)
+            # Text color in gray
+            self.set_text_color(128)
+            # Arial 8 Italic
+            self.set_font('Arial', 'I', 9)
+            # Footer line
+            self.line(10, 280, 200, 280)
+            # Line break
+            self.ln(5)
+            # Page number and other notes
+            self.cell(0, 0, 'Page ' + str(self.page_no())  + '/{nb}', 0, 0, 'C')
+            self.ln(5)
+            self.set_font('Arial', 'I', 8)
+            self.cell(0, 0, 'Report No. 00000001', 0, 0, 'L')
+            self.cell(0, 0, 'Date Generated: ' + str(datetime.now()), 0, 0, 'R')
+
+        # Load data
+        def load_data(self, name):
+            # Read file lines
+            data = []
+            with open(name) as file:
+                for line in file:
+                    data += [line[:-1].split(';')]
+            return data
+
+        # Better table
+        def improved_table(self, header, data):
+            # Data before table
+            self.set_font('Arial', 'B', 11)
+            self.cell(0, 0, 'Account Current: ', 0, 0, 'L')
+            self.set_font('Arial', '', 11)
+            self.cell(0, 0, 'LBP ACCOUNT NO. 0682-1020-47', 0, 0, 'R')
+            self.ln(20)
+            self.set_font('Arial', 'B', 11)
+            self.cell(0, 0, 'Beginning Balance:', 0, 0, 'L')
+            self.set_font('Arial', '', 11)
+            self.cell(0, 0, '0.00', 0, 0, 'R')
+            self.ln(5)
+            self.set_font('Arial', 'B', 11)
+            self.cell(0, 0, 'Add: ', 0, 0, 'L')
+            self.set_font('Arial', '', 11)
+            self.text(26, 81.2,'Collection per this report May 1-31, 2021')
+            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.ln(5)
+            self.set_font('Arial', 'B', 11)
+            self.cell(0, 0, 'Total: ', 0, 0, 'L')
+            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.ln(10)
+            # Column widths
+            w = [60, 60, 60]
+            # Header
+            self.set_font('Arial', '', 12)
+            for i in range(0, len(header)):
+                self.cell(w[i], 7, header[i], 1, 0, 'C')
+            self.ln()
+            # Data
+            for row in data:
+                self.cell(w[0], 6, row[0], 'LR', 0, 'C')
+                self.cell(w[1], 6, row[1], 'LR', 0, 'C')
+                self.cell(w[2], 6, row[2], 'LR', 0, 'R')
+                self.ln()
+            # Closure line
+            self.cell(sum(w), 0, '', 'T')
+            self.ln(20)
+            self.cell(0, 0, 'Total Deposits: ', 0, 0, 'L')
+            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.ln(5)
+            self.cell(0, 0, 'Add Balance:', 0, 0, 'L')
+            self.cell(0, 0, '0.00', 0, 0, 'R')
+            self.ln(5)
+            self.set_font('Arial', 'B', 12)
+            self.cell(0, 0, 'TOTAL:', 0, 0, 'L')
+            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            # Text String
+            self.set_font('Arial', '', 11)
+            self.ln(20)
+            self.set_fill_color(255,255,240)
+            self.multi_cell(w=0, h=5, txt='I hereby certify on my official oath that the above is a true statement of all collections and deposits had by me during the period stated above for which Official Receipts Nos. 0265393-0265546 inclusive, were actually issued by me in the amounts shown thereon. I also certify that I have not received money from whatever source without saving issued the necessary Official Receipt in Acknowledgement thereof. Collections received by sub-collectors are recorded above in lump-sum opposite their respective report numbers. I certify further that the balance shown above agrees with the balance appearing in my Cash Receipt Record.', border=0, align='J', fill=1, split_only=False)
+            self.ln(10)
+            # Arial 11 Bold
+            self.set_font('Arial', 'B', 11) 
+            self.cell(0, 10, 'Prepared & certified correct:', 0, 0, 'R')
+            self.ln(10)
+            self.cell(0, 10, 'Ms. MERLY B. GONZALBO', 0, 0, 'R')
+            # Arial 11 Normal
+            self.set_font('Arial', '', 11) 
+            self.ln(5)
+            self.cell(0, 10, 'Collecting Officer         ', 0, 0, 'R')
+
+
+    pdf = PDF()
+    # Column titles
+    # header = ['Date', 'RA Deposit Slip No.', 'Amount']
+    # Data loading
+    # data = pdf.load_data(r'CASHIERING\views\layouts\textfiles\sum_obj.txt')
+    pdf.set_font('Arial', '', 12)
+    pdf.set_margins(left=15, top=20)
+    pdf.set_auto_page_break(1, 20)
+    pdf.add_page()
+    # pdf.improved_table(header, data)
+    pdf.alias_nb_pages()
+    pdf.output(r'CASHIERING\views\layouts\reports\cash_receipt_report.pdf', 'F')
+
+    import webbrowser
+    webbrowser.open_new(r'CASHIERING\views\layouts\reports\cash_receipt_report.pdf')
+    return JsonResponse('OK', safe=False)
+
+def load_mon_pdf(request):
+    class PDF(FPDF):
+        # Page header
+        def header(self):
+            # PUP Logo
+            self.image(r'CASHIERING\static\assets\img\logo\PUPLogo.png', 15, 8, 30, 30)
+            # QR Code
+            self.image(r'CASHIERING\static\assets\img\QR-code\qrsample.png', 168, 8, 30, 30)
+            # Arial bold 13
+            self.set_font('Arial', 'B', 13)
+            self.cell(0, 0, 'Polytechnic University of the Philippines', 0, 0, 'C')
+            self.ln(5)
+            self.set_font('Arial', '', 13)
+            self.cell(0, 0, 'Quezon City Branch', 0, 0, 'C')
+            self.ln(5)
+            self.set_font('Arial', '', 12)
+            self.cell(0, 0, 'Cashier\'s Office', 0, 0, 'C')
+            self.ln(5)
+            self.set_font('Arial', 'B', 13)
+            self.cell(0, 0, 'REVOLVING FUND', 0, 0, 'C')
+            # Line break
+            self.ln(20)
+
+        # Page footer
+        def footer(self):
+            # Position from bottom
+            self.set_y(-15)
+            # Text color in gray
+            self.set_text_color(128)
+            # Arial 8 Italic
+            self.set_font('Arial', 'I', 9)
+            # Footer line
+            self.line(10, 280, 200, 280)
+            # Line break
+            self.ln(5)
+            # Page number and other notes
+            self.cell(0, 0, 'Page ' + str(self.page_no())  + '/{nb}', 0, 0, 'C')
+            self.ln(5)
+            self.set_font('Arial', 'I', 8)
+            self.cell(0, 0, 'Report No. 00000001', 0, 0, 'L')
+            self.cell(0, 0, 'Date Generated: ' + str(datetime.now()), 0, 0, 'R')
+
+        # Load data
+        def load_data(self, name):
+            # Read file lines
+            data = []
+            with open(name) as file:
+                for line in file:
+                    data += [line[:-1].split(';')]
+            return data
+
+        # Better table
+        def improved_table(self, header, data):
+            # Data before table
+            self.set_font('Arial', 'B', 11)
+            self.cell(0, 0, 'Account Current: ', 0, 0, 'L')
+            self.set_font('Arial', '', 11)
+            self.cell(0, 0, 'LBP ACCOUNT NO. 0682-1020-47', 0, 0, 'R')
+            self.ln(20)
+            self.set_font('Arial', 'B', 11)
+            self.cell(0, 0, 'Beginning Balance:', 0, 0, 'L')
+            self.set_font('Arial', '', 11)
+            self.cell(0, 0, '0.00', 0, 0, 'R')
+            self.ln(5)
+            self.set_font('Arial', 'B', 11)
+            self.cell(0, 0, 'Add: ', 0, 0, 'L')
+            self.set_font('Arial', '', 11)
+            self.text(26, 81.2,'Collection per this report May 1-31, 2021')
+            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.ln(5)
+            self.set_font('Arial', 'B', 11)
+            self.cell(0, 0, 'Total: ', 0, 0, 'L')
+            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.ln(10)
+            # Column widths
+            w = [60, 60, 60]
+            # Header
+            self.set_font('Arial', '', 12)
+            for i in range(0, len(header)):
+                self.cell(w[i], 7, header[i], 1, 0, 'C')
+            self.ln()
+            # Data
+            for row in data:
+                self.cell(w[0], 6, row[0], 'LR', 0, 'C')
+                self.cell(w[1], 6, row[1], 'LR', 0, 'C')
+                self.cell(w[2], 6, row[2], 'LR', 0, 'R')
+                self.ln()
+            # Closure line
+            self.cell(sum(w), 0, '', 'T')
+            self.ln(20)
+            self.cell(0, 0, 'Total Deposits: ', 0, 0, 'L')
+            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.ln(5)
+            self.cell(0, 0, 'Add Balance:', 0, 0, 'L')
+            self.cell(0, 0, '0.00', 0, 0, 'R')
+            self.ln(5)
+            self.set_font('Arial', 'B', 12)
+            self.cell(0, 0, 'TOTAL:', 0, 0, 'L')
+            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            # Text String
+            self.set_font('Arial', '', 11)
+            self.ln(20)
+            self.set_fill_color(255,255,240)
+            self.multi_cell(w=0, h=5, txt='I hereby certify on my official oath that the above is a true statement of all collections and deposits had by me during the period stated above for which Official Receipts Nos. 0265393-0265546 inclusive, were actually issued by me in the amounts shown thereon. I also certify that I have not received money from whatever source without saving issued the necessary Official Receipt in Acknowledgement thereof. Collections received by sub-collectors are recorded above in lump-sum opposite their respective report numbers. I certify further that the balance shown above agrees with the balance appearing in my Cash Receipt Record.', border=0, align='J', fill=1, split_only=False)
+            self.ln(10)
+            # Arial 11 Bold
+            self.set_font('Arial', 'B', 11) 
+            self.cell(0, 10, 'Prepared & certified correct:', 0, 0, 'R')
+            self.ln(10)
+            self.cell(0, 10, 'Ms. MERLY B. GONZALBO', 0, 0, 'R')
+            # Arial 11 Normal
+            self.set_font('Arial', '', 11) 
+            self.ln(5)
+            self.cell(0, 10, 'Collecting Officer         ', 0, 0, 'R')
+
+
+    pdf = PDF()
+    # Column titles
+    # header = ['Date', 'RA Deposit Slip No.', 'Amount']
+    # Data loading
+    # data = pdf.load_data(r'CASHIERING\views\layouts\textfiles\sum_obj.txt')
+    pdf.set_font('Arial', '', 12)
+    pdf.set_margins(left=15, top=20)
+    pdf.set_auto_page_break(1, 20)
+    pdf.add_page()
+    # pdf.improved_table(header, data)
+    pdf.alias_nb_pages()
+    pdf.output(r'CASHIERING\views\layouts\reports\mon_coldep_report.pdf', 'F')
+
+    import webbrowser
+    webbrowser.open_new(r'CASHIERING\views\layouts\reports\mon_coldep_report.pdf')
+    return JsonResponse('OK', safe=False)

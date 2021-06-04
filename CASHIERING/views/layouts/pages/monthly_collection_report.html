@@ -51,41 +51,58 @@
     <!-- begin page-header -->
     <h1 class="page-header">Monthly Report of Collections and Deposits <small>View/Generate Report</small></h1>
     <!-- end page-header -->
-    
-    <!-- begin row -->
-    <div class="row m-b-10">
-        <!-- begin col-3 -->
-        <div class="col-lg-3">
-            <div class="m-t-10 row">
-                <div class="col-lg-8">
-                    <select class="form-control" id="select-month">
-                        <option value="1">January</option>
-                        <option value="2">February</option>
-                        <option value="3">March</option>
-                        <option value="4">April</option>
-                        <option value="5">May</option>
-                        <option value="6">June</option>
-                        <option value="7">July</option>
-                        <option value="8">August</option>
-                        <option value="9">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
+<!-- begin row -->
+<div class="row m-b-10">
+    <!-- begin col-12 -->
+    <div class="col-lg-12">
+        <!-- begin row -->
+        <div class="row">
+            <!-- begin col-6 -->
+            <div class="col-lg-6 m-t-10">
+                <!-- begin row -->
+                <div class="row">
+                    <div class="col-lg-3 col-sm-5">
+                        <select class="form-control bg-inverse text-white" id="select-month">
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3 col-sm-5">
+                        <select class="form-control bg-inverse text-white" id="select-year"></select>
+                    </div>
+                    <div class="col-lg-2 col-sm-2">
+                        <a href="javascript:;" class="btn btn-primary btn-sm m-t-5" id="mon-filter"><i class="fas fa-filter m-r-5"></i>Filter</a>
+                    </div>
+                    <div class="col-lg-4">
+                        <!-- filler -->
+                    </div>
                 </div>
-                <div class="col-lg-4">
-                    <a href="javascript:;" class="btn btn-primary btn-m" id="cert-filter"><i class="fas fa-file-code m-r-5"></i>Filter</a>
+                <!-- end row -->
+            </div>
+            <!-- end col-6 -->
+            <!-- begin col-6 -->
+            <div class="col-lg-6 m-t-10">
+                <div class="pull-right">
+                    <a href="javascript:;" class="btn btn-primary btn-md" id="mon-pdf"><i class="fas fa-file-pdf m-r-5" id="mon-pdf-icon"></i>Monthly Collection and Deposit Report (PDF)</a>
                 </div>
             </div>
+            <!-- end col-6 -->
         </div>
-        <!-- end col-3 -->
-        <!-- begin col-9 -->
-        <div class="col-lg-9">
-            <!-- filler -->
-        </div>
-        <!-- end col-9 -->
+        <!-- end row -->
     </div>
-    <!-- end row -->
+    <!-- end col-12 -->
+</div>
+<!-- end row -->
     <!-- begin row -->
     <div class="row">
         <!-- begin col-5 -->
@@ -244,12 +261,24 @@
         App.init();
         TableManageCombine.init();
         FormPlugins.init();
+        loadYears();
         $('#select-month').val((new Date).getMonth()+1);
+        $('#select-year').val((new Date).getFullYear());
         highlightSideNav();
-        getColDepCard($('#select-month').val());
-        getColDepGroup($('#select-month').val());
-        getMonthlyCollectionDeposit();
+        getColDepCard($('#select-month').val(), $('#select-year').val());
+        getColDepGroup($('#select-month').val(), $('#select-year').val());
+        getMonthlyCollectionDeposit($('#select-year').val());
     });
+
+    function loadYears() {
+        var yearNow = (new Date).getFullYear();
+        for (var i = yearNow; i > 2014; i--) {
+            $('#select-year').append(
+                `<option value="${i}">${i}</option>`
+            )
+        }
+    };
+
     var dt_combines = $('#data-table-combines').DataTable({
         'paging'      : true,
         'lengthChange': true,
@@ -364,7 +393,7 @@
         });
     };
 
-    function getMonthlyCollectionDeposit() {
+    function getMonthlyCollectionDeposit(year) {
         var monthly_col_obj = null;
         var monthly_dep_obj = null;
         $.ajax({
@@ -374,6 +403,7 @@
             async: false,
             dataType: 'json',
             data: {
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -397,6 +427,7 @@
             async: false,
             dataType: 'json',
             data: {
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -418,7 +449,7 @@
         handleLineChart(monthly_col_obj, monthly_dep_obj);
     };
 
-    function getColDepCard(month) {
+    function getColDepCard(month, year) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_coldep_card' %}",
@@ -427,6 +458,7 @@
             dataType: 'json',
             data: {
                 month: month,
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -448,7 +480,7 @@
         });
     };
 
-    function getColDepGroup(month) {
+    function getColDepGroup(month, year) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_coldep_group' %}",
@@ -457,6 +489,7 @@
             dataType: 'json',
             data: {
                 month: month,
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -500,10 +533,46 @@
         });
     };
 
-    $('#cert-filter').on('click', function() {
-        getColDepCard($('#select-month').val());
-        getColDepGroup($('#select-month').val());
+    $('#mon-filter').on('click', function() {
+        var mon = $('#select-month').val();
+        var yr = $('#select-year').val();
+        getColDepCard(mon, yr);
+        getColDepGroup(mon, yr);
     });
+
+    $('#mon-pdf').on('click', function() {
+        $('#mon-pdf-icon').removeClass('fa-file-pdf');
+        $('#mon-pdf-icon').addClass('fa-spinner fa-pulse');
+        loadMonPDF();
+    });
+
+    function loadMonPDF() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_mon_pdf' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#mon-pdf-icon').removeClass('fa-spinner fa-pulse');
+                $('#mon-pdf-icon').addClass('fa-file-pdf');
+            },
+            error: function(xhr, status, error) {
+                $('#mon-pdf-icon').removeClass('fa-spinner fa-pulse');
+                $('#mon-pdf-icon').addClass('fa-file-pdf');
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');
