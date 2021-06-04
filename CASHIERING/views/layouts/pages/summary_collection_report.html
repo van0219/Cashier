@@ -250,7 +250,7 @@
         highlightSideNav();
         loadYears();
         $('#select-month').val((new Date).getMonth()+1);
-        $('$select-year').val((new Date).getFullYear());
+        $('#select-year').val((new Date).getFullYear());
         loadCards($('#select-month').val(), $('#select-year').val());
         loadBarChart($('#select-month').val(), $('#select-year').val());
     });

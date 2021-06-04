@@ -121,4 +121,5 @@ urlpatterns = [
     path('load_sum_pdf', views.load_sum_pdf, name="load_sum_pdf"),
     path('load_cash_pdf', views.load_cash_pdf, name="load_cash_pdf"),
     path('load_mon_pdf', views.load_mon_pdf, name="load_mon_pdf"),
+    path('load_acc_pdf', views.load_acc_pdf, name="load_acc_pdf"),
 ]
