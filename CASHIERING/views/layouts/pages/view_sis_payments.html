@@ -247,9 +247,10 @@
                             <table class="table table-invoice" id="table-invoice">
                                 <thead>
                                     <tr>
-                                        <th width="50%">DESCRIPTION</th>
-                                        <th width="40%" class="text-center">AMOUNT</th>
-                                        <th width="10%" class="text-nowrap"></th>
+                                        <th width="40%" class="text-center text-nowrap">DESCRIPTION</th>
+                                        <th width="30%" class="text-center text-nowrap">Nature</th>
+                                        <th width="20%" class="text-right text-nowrap">AMOUNT</th>
+                                        <th width="10%" class="text-center text-nowrap"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -657,11 +658,11 @@
 
     $('#addB').on('click', function() {
         var amtBox = $('#number').val().trim();
-        if ($('#inc-select').find('option:selected').text() == 'Income Type' || $('#uacs_select').find('option:selected').text() == 'UACS Code') {
-            if ($('#inc-select').find('option:selected').text() == 'Income Type') {
+        if ($('#inc-select').val() == 'Income Type' || $('#uacs_select').val() == 'UACS Code') {
+            if ($('#inc-select').val() == 'Income Type') {
                 $('#inc-select').addClass('is-invalid');
             }
-            if ($('#uacs_select').find('option:selected').text() == 'UACS Code') {
+            if ($('#uacs_select').val() == 'UACS Code') {
                 $('#uacs_select').addClass('is-invalid');
             }
             if (amtBox == '' && amtBox.length == 0) {
@@ -675,9 +676,10 @@
                 $('#number').removeClass('is-invalid');
                 $('.table-invoice tbody').append(
                     `<tr>
-                        <td>${$('#uacs_select').find('option:selected').text().split('-')[1]}</td>
-                        <td class='text-center'>${amtBox}</td>
-                        <td>
+                        <td class="text-center">${$('#uacs_select').find('option:selected').text().split('-')[1]}</td>
+                        <td class="text-center">${$('#nature-select').val()==null ? '' : $('#nature-select').val()}</td>
+                        <td class="text-right">${amtBox}</td>
+                        <td class="text-center">
                             <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove"><i class="fas fa-times"></i></a>
                         </td>
                     </tr>`
@@ -692,7 +694,7 @@
         }
     });
     $('#inc-select').on('change', function() {
-        if ($('#inc-select').find('option:selected').text() == 'Income Type') {
+        if ($('#inc-select').val() == 'Income Type') {
             $('#inc-select').addClass('is-invalid');
         }
         else {
@@ -704,6 +706,11 @@
             $('#uacs_select').addClass('is-invalid');
         }
         else {
+            if ($('#nature-div').is(':visible')) {
+                $('#nature-select').append(new Option('Nature')).select();
+                $('#nature-select').find('option:selected').prop('disabled',true);  
+                $('#nature-select').selectpicker('refresh');
+            }
             $('#uacs_select').removeClass('is-invalid');
             var uacs = $('#uacs_select').val();
             $.ajax({
@@ -837,8 +844,8 @@
         else {
             saveCollectionBreakdown();
             $('#add_breakdown_modal').modal('hide');
-            get_sis_payments2();
             setInterval(function() {
+                get_sis_payments2();
                 get_sis_payments();
             }, 3000);
         }
