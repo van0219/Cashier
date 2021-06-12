@@ -272,6 +272,7 @@
         loadYears();
         $('#select-month').val((new Date).getMonth()+1);
         $('#select-year').val((new Date).getFullYear());
+        var end_day = (new Date).getDate();
         loadDepositCertTable($('#select-month').val(), $('#select-year').val());
         getMonthlyCollectionDeposit($('#select-year').val());
     });
@@ -289,38 +290,14 @@
         'paging'      : false,
         'lengthChange': false,
         'searching'   : true,
-        'ordering'    : false,
+        'ordering'    : true,
         'info'        : false,
         'autoWidth'   : true,
-        'aaSorting'   : [[1, "desc" ]],
+        'order'       : [[1, "desc" ]],
         // 'pagingType'  : 'simple_numbers',
         // "aaSorting"   : [[2, "desc" ]],
         dom: 'lBfrtip',
     buttons: [
-        {
-            extend:    'print',
-            text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
-            titleAttr: 'Print',
-            exportOptions: {
-                columns: ':visible'
-            }
-        },
-        {
-            extend:    'excel',
-            text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
-            titleAttr: 'Excel',
-            exportOptions: {
-                columns: ':visible'
-            }
-        },
-        {
-            extend:    'pdf',
-            text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
-            titleAttr: 'PDF',
-            exportOptions: {
-                columns: ':visible'
-            }
-        }
     ],
     "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
     columnDefs:[
@@ -447,6 +424,8 @@
         }
     };
 
+    var total_dep = 0;
+
     function loadDepositCertTable(month, year) {
         $.ajax({
             type: "POST",
@@ -459,7 +438,7 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                var total_dep = 0;
+                total_dep = 0;
                 dt_combines.clear().draw();
                 $.each(obj, function(index, data){
                     dt_combines.row.add( [
@@ -490,13 +469,19 @@
         });
     };
 
-    function loadCertPDF() {
+    function loadCertPDF(end_day, total_dep) {
+        var month = $('#select-month').val();
+        var year = $('#select-year').val();
         $.ajax({
             type: "POST",
             url: "{% url 'load_cert_pdf' %}",
             // cache: true,
             dataType: 'json',
             data: {
+                end_day: end_day,
+                total_dep: total_dep,
+                month: month,
+                year: year,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -526,8 +511,15 @@
     $('#cert-pdf').on('click', function() {
         $('#cert-pdf-icon').removeClass('fa-file-pdf');
         $('#cert-pdf-icon').addClass('fa-spinner fa-pulse');
-        loadCertPDF();
+        var mon = $('#select-month').val();
+        var yr = $('#select-year').val();
+        var end_day = mon == (new Date).getMonth()+1 && yr == (new Date).getFullYear() ?  (new Date).getDate() : daysInMonth(mon, yr);
+        loadCertPDF(end_day, total_dep);
     });
+
+    function daysInMonth(month, year) {
+        return new Date(year, month, 0).getDate();
+    }
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');

@@ -687,6 +687,13 @@ def load_top_contrib(request):
     return JsonResponse(data, safe=False)
 
 def load_cert_pdf(request):
+    import calendar
+    total = "{0:,.2f}".format(float(request.POST['total_dep']))
+    month = int(request.POST['month'])
+    year = int(request.POST['year'])
+    # month_l_day = calendar.monthrange(year,month)[1]  # this is to get the last day of the month
+    month_l_day = request.POST['end_day']
+    month_object = datetime.strptime(str(month), "%m")
     class PDF(FPDF):
         # Page header
         def header(self):
@@ -753,12 +760,12 @@ def load_cert_pdf(request):
             self.set_font('Arial', 'B', 11)
             self.cell(0, 0, 'Add: ', 0, 0, 'L')
             self.set_font('Arial', '', 11)
-            self.text(26, 81.2,'Collection per this report May 1-31, 2021')
-            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.text(26, 81.2,'Collection per this report ' + month_object.strftime("%B") + ' 1-'+ str(month_l_day) +', ' + str(year))
+            self.cell(0, 0, total, 0, 0, 'R')
             self.ln(5)
             self.set_font('Arial', 'B', 11)
             self.cell(0, 0, 'Total: ', 0, 0, 'L')
-            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.cell(0, 0, total, 0, 0, 'R')
             self.ln(10)
             # Column widths
             w = [60, 60, 60]
@@ -771,20 +778,20 @@ def load_cert_pdf(request):
             for row in data:
                 self.cell(w[0], 6, row[0], 'LR', 0, 'C')
                 self.cell(w[1], 6, row[1], 'LR', 0, 'C')
-                self.cell(w[2], 6, row[2], 'LR', 0, 'R')
+                self.cell(w[2], 6, "{0:,.2f}".format(float(row[2])), 'LR', 0, 'R')
                 self.ln()
             # Closure line
             self.cell(sum(w), 0, '', 'T')
             self.ln(20)
             self.cell(0, 0, 'Total Deposits: ', 0, 0, 'L')
-            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.cell(0, 0, total, 0, 0, 'R')
             self.ln(5)
             self.cell(0, 0, 'Add Balance:', 0, 0, 'L')
             self.cell(0, 0, '0.00', 0, 0, 'R')
             self.ln(5)
             self.set_font('Arial', 'B', 12)
             self.cell(0, 0, 'TOTAL:', 0, 0, 'L')
-            self.cell(0, 0, '258,284.00', 0, 0, 'R')
+            self.cell(0, 0, total, 0, 0, 'R')
             # Text String
             self.set_font('Arial', '', 11)
             self.ln(20)
