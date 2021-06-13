@@ -94,7 +94,7 @@
                 <!-- begin col-6 -->
                 <div class="col-lg-6 m-t-10">
                     <div class="pull-right">
-                        <a href="javascript:;" class="btn btn-primary btn-md" id="acc-pdf"><i class="fas fa-file-pdf m-r-5" id="acc-pdf-icon"></i>Summary of Collection (PDF)</a>
+                        <a href="javascript:;" class="btn btn-primary btn-md" id="acc-pdf"><i class="fas fa-file-pdf m-r-5" id="acc-pdf-icon"></i>Accountable Forms Report (PDF)</a>
                     </div>
                 </div>
                 <!-- end col-6 -->
@@ -462,7 +462,7 @@
                     $('#canvas-div2 canvas').remove();
                     $('#canvas-div2').append(`<canvas id="polar-area-chart" data-render="chart-js"></canvas>`);
                     handlePolarChart(obj[0][3],obj[0][4],obj[0][5],obj[0][6]);
-                    acctFormsTableData(obj);
+                    // acctFormsTableData(obj);
                 }
             },
             error: function(xhr, status, error) {
@@ -522,14 +522,25 @@
         loadAccPDF();
     });
 
+    function daysInMonth(month, year) {
+        return new Date(year, month, 0).getDate();
+    };
     
     function loadAccPDF() {
+        var month = $('#select-month').val();
+        var year = $('#select-year').val();
+        var end_day = month == (new Date).getMonth()+1 && year == (new Date).getFullYear() ?  (new Date).getDate() : daysInMonth(month, year);
+        var cashier_name = $('.side_name').text();
         $.ajax({
             type: "POST",
             url: "{% url 'load_acc_pdf' %}",
             // cache: true,
             dataType: 'json',
             data: {
+                month: month,
+                year: year,
+                end_day: end_day,
+                cashier_name: cashier_name,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {

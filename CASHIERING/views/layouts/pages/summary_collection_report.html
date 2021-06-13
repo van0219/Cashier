@@ -380,6 +380,8 @@
         });
     };
 
+    var tot_amt = 0;
+
     function loadBarChart(month, year) {
         $.ajax({
             type: "POST",
@@ -393,15 +395,15 @@
             },
             success: function(obj) {
                 if (obj.length != 0) {
+                    tot_amt = 0;
                     $('#canvas-div canvas').remove();
                     $('#canvas-div').append(`<canvas id="bar-chart"></canvas>`);
                     $('#bar-chart-no-data-text').prop('style','display:none');
                     handleBarChart(obj);
-                    var tot_amt = 0;
                     dt_combines.clear().draw();
                     $.each(obj, function(index, data){
                         dt_combines.row.add( [
-                            data[0]
+                             data[0]
                             ,data[1]
                             ,data[2]
                         ] ).draw();
@@ -410,7 +412,7 @@
                     $('#tot-amt').text('₱ ' + tot_amt.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 }
                 else {
-                    var tot_amt = 0;
+                    tot_amt = 0;
                     dt_combines.clear().draw();
                     $('#tot-amt').text('₱ ' + tot_amt.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                     $('#canvas-div canvas').remove();
@@ -444,13 +446,27 @@
         loadSumPDF();
     });
 
+    function daysInMonth(month, year) {
+        return new Date(year, month, 0).getDate();
+    };
+
     function loadSumPDF() {
+        var month = $('#select-month').val();
+        var year = $('#select-year').val();
+        var end_day = month == (new Date).getMonth()+1 && year == (new Date).getFullYear() ?  (new Date).getDate() : daysInMonth(month, year);
+        var cashier = $('.side_name').text();
+        var total_col = tot_amt;
         $.ajax({
             type: "POST",
             url: "{% url 'load_sum_pdf' %}",
             // cache: true,
             dataType: 'json',
             data: {
+                month: month,
+                year: year,
+                end_day: end_day,
+                cashier: cashier,
+                total_col: total_col,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {

@@ -125,3 +125,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'CASHIERING/static'),)
 LOGIN_URL = 'login'
+JS_REVERSE_JS_MINIFY = False

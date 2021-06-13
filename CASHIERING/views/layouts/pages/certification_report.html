@@ -36,8 +36,8 @@
 </style>
 <style>
     body {
-        overflow-y: scroll;
-        overflow-x: scroll;
+        overflow-y: auto;
+        overflow-x: auto;
     }
 </style>
 {% endblock %}
@@ -469,9 +469,10 @@
         });
     };
 
-    function loadCertPDF(end_day, total_dep) {
+    function loadCertPDF(end_day, total_dep, or_start, or_end) {
         var month = $('#select-month').val();
         var year = $('#select-year').val();
+        var cashier_name = $('.side_name').text();
         $.ajax({
             type: "POST",
             url: "{% url 'load_cert_pdf' %}",
@@ -482,6 +483,9 @@
                 total_dep: total_dep,
                 month: month,
                 year: year,
+                or_start: or_start,
+                or_end: or_end,
+                cashier_name: cashier_name,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -511,15 +515,45 @@
     $('#cert-pdf').on('click', function() {
         $('#cert-pdf-icon').removeClass('fa-file-pdf');
         $('#cert-pdf-icon').addClass('fa-spinner fa-pulse');
-        var mon = $('#select-month').val();
-        var yr = $('#select-year').val();
-        var end_day = mon == (new Date).getMonth()+1 && yr == (new Date).getFullYear() ?  (new Date).getDate() : daysInMonth(mon, yr);
-        loadCertPDF(end_day, total_dep);
+        $('#cert-filter').click();
+        getOrStartOrEnd();
     });
 
     function daysInMonth(month, year) {
         return new Date(year, month, 0).getDate();
-    }
+    };
+
+    function getOrStartOrEnd() {
+        var month = $('#select-month').val();
+        var year = $('#select-year').val();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_orstart_orend' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                month: month,
+                year: year,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                var or_start = obj[0][0];
+                var or_end = obj[0][1];
+                var end_day = month == (new Date).getMonth()+1 && year == (new Date).getFullYear() ?  (new Date).getDate() : daysInMonth(month, year);
+                loadCertPDF(end_day, total_dep, or_start, or_end);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');
