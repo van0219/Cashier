@@ -341,8 +341,8 @@
         'pagingType'  : 'numbers',
         "columns" : [ 
             { sWidth: '30%' },
-            { sWidth: '30%' },
-            { sWidth: '25%' },
+            { sWidth: '20%' },
+            { sWidth: '35%' },
             { sWidth: '15%' }
         ],
         dom: 'lBfrtip',
@@ -383,7 +383,15 @@
                 targets:1, render:function(data){
                     return data.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }
-            }
+            },
+            {
+                targets:1,
+                    className: 'text-right',  
+            },
+            {
+                targets:[0,2,3],
+                    className: 'text-center',  
+            },
         ]
     });
     var dt_combines2 = $('#data-table-combines2').DataTable({
@@ -396,9 +404,9 @@
         'order'   : [[0, "desc" ]],
         'pagingType'  : 'numbers',
         "columns" : [ 
-            { sWidth: '30%' },
-            { sWidth: '30%' },
-            { sWidth: '25%' },
+           { sWidth: '30%' },
+            { sWidth: '20%' },
+            { sWidth: '35%' },
             { sWidth: '15%' }
         ],
         dom: 'lBfrtip',
@@ -439,7 +447,15 @@
                 targets:1, render:function(data){
                     return data.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }
-            }
+            },
+            {
+                targets:1,
+                    className: 'text-right',  
+            },
+           {
+                targets:[0,2,3],
+                    className: 'text-center',  
+            },
         ]
     });
     
