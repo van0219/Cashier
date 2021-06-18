@@ -488,7 +488,7 @@ def load_acct_forms_dash(request):
     data = cursor.fetchall()
     import csv
     csv_rowlist = data
-    with open(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\textfiles\acc_obj.txt', 'w', newline='') as f:
+    with open(r'CASHIERING\views\layouts\textfiles\acc_obj.txt', 'w', newline='') as f:
         writer = csv.writer(f, delimiter=';')
         writer.writerows(csv_rowlist)
     return JsonResponse(data, safe=False)
@@ -509,7 +509,7 @@ def load_cert_table(request):
     data = cursor.fetchall()
     import csv
     csv_rowlist = data
-    with open(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\textfiles\cert_obj.txt', 'w', newline='') as f:
+    with open(r'CASHIERING\views\layouts\textfiles\cert_obj.txt', 'w', newline='') as f:
         writer = csv.writer(f, delimiter=';')
         writer.writerows(csv_rowlist)
     return JsonResponse(data, safe=False)
@@ -536,7 +536,7 @@ def load_radar_chart(request):
     data = cursor.fetchall()
     import csv
     csv_rowlist = data
-    with open(r'C:\Users\Van Anthony Silleza\CASHIER\CASHIERING\views\layouts\textfiles\sum_obj.txt', 'w', newline='') as f:
+    with open(r'CASHIERING\views\layouts\textfiles\sum_obj.txt', 'w', newline='') as f:
         writer = csv.writer(f, delimiter=';')
         writer.writerows(csv_rowlist)
     return JsonResponse(data, safe=False)

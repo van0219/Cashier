@@ -426,7 +426,9 @@
                     for (i = 0; i < obj.length; i++) {
                         tot_dep = tot_dep + parseFloat(obj[i][2]);
                     }
-                    $('#dep-month-tot').append(`Total Deposits for the Month of ${moment(new Date(obj[0][0])).format('MMMM')}: <b>${'₱ ' + tot_dep.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b>`);
+                    $('#dep-month-tot').append(
+                        `Total Deposits for the Month of ${moment(new Date(obj[0][0])).format('MMMM')}: <b>${'₱ ' 
+                            + tot_dep.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b>`);
                     handleDonutChart(obj);
                 }
                 else {
