@@ -114,8 +114,8 @@
                                         </div>                                    
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" id="or_studnum" class="form-control m-b-5 studno" data-parsley-required="true" data-parsley-required-message="Student number is required" placeholder="Student Number" />
-                                        <select class="form-control selectpicker individual_sel m-b-5" data-size="10" data-style="btn-white">
+                                        <input type="text" id="or_studnum" class="form-control m-b-10 studno" data-parsley-required="true" data-parsley-required-message="Student number is required" placeholder="Student Number" autocomplete="off"/>
+                                        <select class="form-control selectpicker individual_sel m-b-10" data-size="10" data-style="btn-white">
                                             <option selected disabled>Select level of education</option>
                                             <option value="Diploma">Diploma</option>
                                             <option value="Bachelor's Degree">Bachelor's Degree</option>
@@ -126,13 +126,13 @@
                             </div>
                             <div class="col-lg-6 individual">
                                 <div class="form-group row m-b-15">
-                                    <label class="col-form-label col-md-3">Last Name :</label>
+                                    <label class="col-form-label col-md-3 m-b-10">Last Name :</label>
                                     <div class="col-md-9">
-                                        <input type="text" id="or_lname" style="text-transform: uppercase;" data-parsley-required="true" data-parsley-required-message="Lastname is required" class="form-control m-b-5 f-s-12 nameBox" tabindex="-1"/>
+                                        <input type="text" id="or_lname" style="text-transform: uppercase;" data-parsley-required="true" data-parsley-required-message="Lastname is required" class="form-control m-b-10 f-s-12 nameBox" autocomplete="off"/>
                                     </div>
-                                    <label class="col-form-label col-md-3">First Name :</label>
+                                    <label class="col-form-label col-md-3 m-b-10">First Name :</label>
                                     <div class="col-md-9">
-                                        <input type="text" id="or_fname" style="text-transform: uppercase;" data-parsley-required="true" data-parsley-required-message="Firstname is required" class="form-control m-b-5 f-s-12 nameBox" tabindex="-1"/>
+                                        <input type="text" id="or_fname" style="text-transform: uppercase;" data-parsley-required="true" data-parsley-required-message="Firstname is required" class="form-control m-b-10 f-s-12 nameBox" autocomplete="off"/>
                                     </div>
                                 </div>
                             </div>
@@ -145,10 +145,10 @@
                                 </div>
                             </div>
                         </div>
-                        <hr class="bg-black-transparent-2 m-t-1">
+                        <hr class="bg-black-transparent-2 m-t-20 m-b-20">
                         <div class="row">
-                            <!-- begin col-4 -->
-                            <div class="col-lg-4">
+                            <!-- begin col-5 -->
+                            <div class="col-lg-5">
                                 <!-- begin panel -->
                                 <div class="panel">
                                     <div class="panel-body" style="border-radius: 5px;">
@@ -161,7 +161,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row m-b-15">
-                                            <label class="col-md-4 col-sm-4 col-form-label">UAC Code :</label>
+                                            <label class="col-md-4 col-sm-4 col-form-label">UA Code :</label>
                                             <div class="col-md-8 col-sm-8">
                                                 <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="true" data-style="btn-white" id="uacs_select" data-parsley-excluded="true">
                                                     <option value="Please choose" selected disabled>Please choose</option>
@@ -193,8 +193,8 @@
                                 </div>
                                 <!-- end panel -->
                             </div>
-                            <!-- end col-4 -->
-                            <div class="col-lg-8" style="margin-top: -15px;">
+                            <!-- end col-5 -->
+                            <div class="col-lg-7" style="margin-top: -15px;">
                                 <div class="panel">
                                     <!-- begin panel-heading -->
 
@@ -205,7 +205,7 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-nowrap">Income Type</th>
-                                                    <th class="text-nowrap">UAC Code</th>
+                                                    <th class="text-nowrap">UA Code</th>
                                                     <th class="text-nowrap">Nature</th>
                                                     <th class="text-nowrap">Amount</th>
                                                     <th style="max-width: 20px;" class="text-nowrap"></th>
@@ -291,22 +291,22 @@
         getIncType();
     });
 
-    $('#or_lname').on('focusin', function() {
-        if ($('#radiorequired').prop('checked')) {
-            $('#or_lname').off('blur');
-        }
-        else {
-            $('#or_lname').blur();
-        }
-    });
-    $('#or_fname').on('focusin', function() {
-        if ($('#radiorequired3').prop('checked')) {
-            $('#or_fname').blur();
-        }
-        else {
-            $('#or_fname').off('blur');
-        }
-    });
+    // $('#or_lname').on('focusin', function() {
+    //     if ($('#radiorequired').prop('checked')) {
+    //         $('#or_lname').off('blur');
+    //     }
+    //     else {
+    //         $('#or_lname').blur();
+    //     }
+    // });
+    // $('#or_fname').on('focusin', function() {
+    //     if ($('#radiorequired3').prop('checked')) {
+    //         $('#or_fname').blur();
+    //     }
+    //     else {
+    //         $('#or_fname').off('blur');
+    //     }
+    // });
 
     function getIncType() {
         $.ajax({
@@ -492,19 +492,51 @@
         getUacsCode($('#inc-select').val());
     });
 
-    // $('#or_studnum').on('focusin', function() {
-    //     $('#or_studnum').mask('2099-99999-CM-9'); //masked input for student number
-    // });
+    $('#or_studnum').on('focusin', function() {
+        $('#or_studnum').mask('9999-99999-CM-9'); //masked input for student number
+    });
 
-    $('#or_studnum').on('keyup', function() {
+    $('#or_lname').on('keyup', function(e) {
+        if ($('#or_lname').val() != '') {
+            var str = $('#or_lname').val().trim();
+            handleJqueryAutocomplete(str);
+        }
+    });
+
+    $('#or_studnum').on('keyup', function(e) {
         var studno = $('#or_studnum').val().trim();
-        if (studno.length > 11) {
-            $('#or_studnum').prop('style', 'text-transform: uppercase;'); 
+        var ch = String.fromCharCode(e.which);
+        if (e.keyCode == 8) {
+            if (studno[0] == '_') {
+                $('#or_studnum').removeClass('nameBox');
+                $('#or_studnum').prop('style', 'text-transform: capitalize;'); 
+            }
+        }
+        if (!(/[0-9]/.test(ch))) {
+            e.preventDefault();
         }
         else {
-            $('#or_studnum').prop('style', 'text-transform: capitalize;'); 
+            $('#or_studnum').addClass('nameBox');
+            if (studno.length > 11) {
+                $('#or_studnum').prop('style', 'text-transform: uppercase;'); 
+            }
+            else {
+                $('#or_studnum').prop('style', 'text-transform: capitalize;'); 
+            }
         }
         getStudName(studno);
+    });
+
+    $('#or_studnum').on('change', function(e) {
+        var studno = $('#or_studnum').val().trim();
+        if (studno == '____-_____-CM-_') {
+            $('#or_studnum').removeClass('nameBox');
+            $('#or_studnum').prop('style', 'text-transform: capitalize;'); 
+        }
+        else {
+            alert('Pasok');
+            $('#or_studnum').addClass('nameBox');
+        }
     });
 
     function getStudName(studno) {
@@ -688,7 +720,7 @@
             if (inctype == 'Please choose') {
                 swal({
                     title: "Missing Data", 
-                    text: "Please select income type.",
+                    text: "Please select Income Type.",
                     type: "info",
                     confirmButtonColor: "#428bca",
                     showLoaderOnConfirm: true
@@ -697,7 +729,7 @@
             else if (uacs == 'Please choose') {
                 swal({
                     title: "Missing Data", 
-                    text: "Please select UACS.",
+                    text: "Please select UA Code.",
                     type: "info",
                     confirmButtonColor: "#428bca",
                     showLoaderOnConfirm: true
@@ -811,6 +843,51 @@
         $('#total-fee').text(total_fee.toFixed(2));
         $(this).closest('tr').remove();
     });
+
+    function handleJqueryAutocomplete(str) {
+        var availableTags = [];
+        $('#or_fname').val('');
+        $('#or_studnum').val('');
+        $.ajax({
+            type: "POST",
+            url: "{% url 'search_last_name' %}",
+            cache: true,
+            dataType: 'json',
+            data: {
+                str: str,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                if (obj.length != 0) {
+                    for (var i = j = 0; i < obj.length; i++) {
+                        availableTags[i] = obj[i][j] + ', ' + obj[i][j+1] + ', ' + obj[i][j+2];  
+                    }
+                    $('#or_lname').autocomplete({
+                        source: availableTags,
+                        select : showResult,
+                        focus : showResult,
+                        change : showResult
+                    });
+                    function showResult(event, ui) {
+                        event.preventDefault();
+                        $('#or_lname').val(ui.item.label.split(',')[0]);
+                        $('#or_fname').val(ui.item.label.split(',')[1]);
+                        $('#or_studnum').val(ui.item.label.split(',')[2]);
+                    };
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');

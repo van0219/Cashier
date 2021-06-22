@@ -404,7 +404,8 @@ def load_collection_history(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_COLLECTION_LOG"
                     ,(request.POST['date_start']
-                    ,request.POST['date_end']))
+                    ,request.POST['date_end']
+                    ,request.POST['code']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -1443,5 +1444,12 @@ def get_orstart_orend(request):
     cursor.callproc("SP_SELECT_ORSTART_OREND"
                     ,(request.POST['month']
                     ,request.POST['year'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def search_last_name(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_STUD_FULLNAME"
+                ,(request.POST['str'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)

@@ -80,21 +80,29 @@
                             <!-- end row -->
                             <!-- begin row -->
                             <div class="row">
-                                <!-- begin col-6 -->
-                                <div class="col-lg-2" style="margin-top: 15px;">
-                                    <span class="label label-purple f-s-11 pull-left">
-                                        Total Results: <span id="table-count"></span>
+                                <!-- begin col-8 -->
+                                <div class="col-lg-5" style="margin-top: 15px;">
+                                    <span id="sis-badge" class="badge badge-danger f-s-11 m-r-5" style="cursor: pointer;">
+                                        SIS Payment
+                                    </span>
+                                    <span id="stud-badge" class="badge badge-success f-s-11 m-r-5" style="cursor: pointer;">
+                                        Student
+                                    </span>
+                                    <span id="non-badge" class="badge badge-warning f-s-11 m-r-5" style="cursor: pointer;">
+                                        Non-Student
+                                    </span>
+                                    <span id="comp-badge" class="badge badge-primary f-s-11 m-r-5" style="cursor: pointer;">
+                                        Company
                                     </span>
                                 </div>
-                                <!-- end col-6 -->
-                                <!-- begin col-6 -->
-                                <!-- begin col-6 -->
-                                <div class="col-lg-6">
-                                    <!-- filler -->
-                                </div>
-                                <!-- end col-6 -->
+                                <!-- end col-8 -->
                                 <!-- begin col-4 -->
-                                <div class="col-lg-4 m-b-5">
+                                <div class="col-lg-2">
+
+                                </div>
+                                <!-- end col-4 -->
+                                <!-- begin col-4 -->
+                                <div class="col-lg-5 m-b-5">
                                     <div class="input-group input-daterange">
                                         <input type="text" class="form-control" id="startDate" name="start" placeholder="Date Start" autocomplete="off" />
                                         <span class="input-group-addon">to</span>
@@ -104,7 +112,7 @@
                                 <!-- end col-4 -->
                             </div>
                             <!-- end row -->
-                            <div style="height: 370px;" class="overflow-auto">
+                            <div class="overflow-auto">
                                 <table class="table table-striped table-bordered" id="col-hist-table"> 
                                     <thead class="thead">
                                         <th class="text-nowrap">OR Number</th>
@@ -117,15 +125,16 @@
                                         <!-- append here -->
                                     </tbody>
                                     <tfoot class="text-center">
-                                        <tr><td colspan="5"><span class="label label-inverse f-s-11">End of Results</span></td></tr>
+                                        <tr>
+                                            <td colspan="5">
+                                                <span class="label label-inverse f-s-11">End of Results</span>
+                                            </td>
+                                        </tr>
                                     </tfoot>
                                 </table>
-                            </div>
-                            <div class="pull-right">
-                                <span class="label label-danger">SIS PAYMENT</span>
-                                <span class="label label-primary">COMPANY</span>
-                                <span class="label label-warning">NON-STUDENT</span>
-                                <span class="label label-success">ON-SITE STUDENT PAYMENT</span>
+                                <span class="label label-purple f-s-11 pull-left">
+                                    Total Results: <span id="table-count"></span>
+                                </span>
                             </div>
                         </div>
                         <!-- end #card-pill-1 -->
@@ -189,26 +198,28 @@
         FormPlugins.init();
         highlightSideNav();
         var d = new Date();
+        var code = 'ALL'
         var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
-        load_collection_history(d_today, d_today);
+        load_collection_history(d_today, d_today, code);
     });
 
-    function load_collection_history(date_start, date_end) {
+    function load_collection_history(date_start, date_end, code) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_collection_history' %}",
-            // cache: true,
+            cache: false,
             dataType: 'json',
             data: {
-                date_start,
-                date_end,
+                date_start: date_start,
+                date_end: date_end,
+                code: code,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
                 $('#col-hist-table tbody tr').remove();
                 for (var i = 0; i < obj.length; i++) {   
                     var payor = obj[i][5] == 'SIS PAYMENT' ? 'danger' : obj[i][5] == 'COMPANY' ? 'primary' : obj[i][5] == 'NON-STUDENT' ? 'warning' : 'success';
-                    var title = payor == 'danger' ? 'SIS Payment' : payor == 'primary' ? 'Company' : payor == 'warning' ? 'Non-Student' : 'On-site student payment';
+                    var title = payor == 'danger' ? 'SIS Payment' : payor == 'primary' ? 'Company' : payor == 'warning' ? 'Non-Student' : 'Student';
                     var dummyClass = payor.substr(0,2);
                     $('#col-hist-table tbody').append(
                         `<tr>
@@ -240,7 +251,7 @@
         if ($('endDate').val() != '') {
             var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
             var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-            load_collection_history(start,end);
+            load_collection_history(start,end,'ALL');
         }
     });
 
@@ -248,12 +259,18 @@
         if ($('startDate').val() != '') {
             var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
             var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-            load_collection_history(start,end);
+            load_collection_history(start,end,'ALL');
         }
     });
 
+    $('#sis-badge').on('click', function() {
+        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+        load_collection_history(start,end,'SIS PAYMENT');
+    });
+
     function loadKnobData() {
-        var rows = $('#col-hist-table tbody tr').length
+        var rows = $('#col-hist-table tbody tr').length;
         var knob_on_site = 0;
         var knob_sis = 0;
         var knob_non = 0;

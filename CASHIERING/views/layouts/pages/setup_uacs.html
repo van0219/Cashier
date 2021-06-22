@@ -88,7 +88,7 @@
                             </div>
                         </div>
                         <div class="form-group row m-b-15">
-                            <label class="col-md-4 col-sm-4 col-form-label" for="inctype">Income Type <span class="text-red">*</span> :</label>
+                            <label class="col-md-4 col-sm-4 col-form-label f-s-12" for="inctype">Income Type <span class="text-red">*</span> :</label>
                             <div class="col-md-8 col-sm-8">
                                 <select class="form-control selectpicker2" name="inctype" id="inctype" data-style="btn-white">
                                     <option selected disabled class="text-grey-darker optdummy2" style="display: block;">Select Income Type</option>
@@ -101,7 +101,7 @@
                                 <input class="form-control" type="text" id="o_code" name="o_code" placeholder="Old Code" />
                             </div>
                             <div class="col-md-2 col-sm-2 m-t-15" style="margin-left: -10px;">
-                                <input class="m-r-5" type="checkbox" id="o_check" name="o_check" title="Click if old code is not applicable"/><small>N/A</small>
+                                <input class="" style="margin-right: 3px;" type="checkbox" id="o_check" name="o_check" title="Click if old code is not applicable"/><small>N/A</small>
                             </div>
                         </div>
                         <div class="form-group row m-b-15">
@@ -159,7 +159,7 @@
                                 <div class="panel-heading">
                                     <div class="panel-heading-btn">
                                         <a href="javascript:;" class="btn btn-xs btn-warning m-b-10" data-click="panel-expand" id="expand"><i class="fa fa-expand m-r-5"></i><span id="exp">Expand</span></a>
-                                        <a href="javascript:;" class="btn btn-xs btn-success m-b-10" data-click="panel-reload" id="reload-panel"><i class="fa fa-redo m-r-5"></i>Reload</a>
+                                        <a href="javascript:;" class="btn btn-xs btn-success m-b-10" data-click="panel-reload" id="reload-panel"><i class="fa fa-sync m-r-5"></i>Reload</a>
                                     </div>
                                     <h4 class="panel-title"></h4>
                                 </div>
@@ -1130,10 +1130,10 @@
         "aoColumns" : [ 
             { sWidth: '10%' },
             { sWidth: '30%' },
-            { sWidth: '25%' },
+            { sWidth: '45%' },
             { sWidth: '0%' },
             { sWidth: '0%' },
-            { sWidth: '25%' }
+            { sWidth: '10%' }
         ],
         dom: 'lBfrtip',
         buttons: [
@@ -1166,7 +1166,7 @@
         columnDefs:[
             {
                 targets:5, render:function(data){
-                    return '<a href="javascript:;" class="btn btn-xs btn-warning redo"><i class="fas fa-redo m-r-5"></i>Restore</a>';
+                    return '<a href="javascript:;" class="btn btn-xs btn-warning redo" title="Restore" style="cursor: pointer;" ><i class="fas fa-undo-alt"></i></a>';
                 }
             },
             {

@@ -1,5 +1,5 @@
 {% load static %}
-<div id="sidebar" class="sidebar">
+<div id="sidebar" class="sidebar sidebar-transparent">
     <!-- begin sidebar scrollbar -->
     <div data-scrollbar="true" data-height="100%">
         <!-- begin sidebar user -->
@@ -7,7 +7,7 @@
             <li class="nav-profile">
                 <a href="javascript:;" data-toggle="nav-profile">
                     <div class="cover with-shadow">
-                        <img src="{%static 'assets/img/cover/cashier.jpg' %}" alt=""/>
+                        <!-- <img src="{%static 'assets/img/cover/cashier.jpg' %}" alt=""/> -->
                     </div>
                     <div class="image">
                         <img src="{%static 'assets/img/user/maam_meg.jpg' %}" alt="" />
@@ -39,7 +39,7 @@
                 <a href="javascript:;"  id="add-col-caret">
                     <b class="caret"></b>
                     <i class="fa fa-plus-square"></i> 
-                    <span>Add Collection</span>
+                    <span>Collections</span>
                 </a>
                 <ul class="sub-menu">
                     <li><a href="add_collection" id="add-col">Add Collection</a></li>
@@ -47,6 +47,12 @@
                     <!-- <li><a href="javascript:;">Add Clearance</a></li> -->
                     <li><a href="sis_payments" id="add-sis">Add SIS Payments</a></li>
                 </ul>
+            </li>
+            <li>
+                <a href="deposits" id="deposit_but">
+                    <i class="fas fa-download"></i>
+                    <span>Deposits</span>
+                </a>
             </li>
             <li class="has-sub">
                 <a href="javascript:;" id="view-rec-caret">
@@ -76,11 +82,6 @@
                 </ul>
             </li>
             <li>
-                <a href="deposits" id="deposit_but">
-                    <i class="fas fa-download"></i>
-                    <span>Deposits</span>
-                </a>
-            </li>
             <!-- begin sidebar minify button -->
             <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify" id="minify"><i class="fa fa-angle-double-left"></i></a></li>
             <!-- end sidebar minify button -->
