@@ -124,4 +124,7 @@ urlpatterns = [
     path('load_acc_pdf', views.load_acc_pdf, name="load_acc_pdf"),
     path('get_orstart_orend', views.get_orstart_orend, name="get_orstart_orend"),
     path('search_last_name', views.search_last_name, name="search_last_name"),
+    path('add_student_with_studno', views.add_student_with_studno, name="add_student_with_studno"),
+    path('add_student_without_studno', views.add_student_without_studno, name="add_student_without_studno"),
+    path('search_last_name_nostudno', views.search_last_name_nostudno, name="search_last_name_nostudno"),
 ]

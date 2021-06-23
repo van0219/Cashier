@@ -21,7 +21,12 @@
             </li>
             <li>
                 <ul class="nav nav-profile">
-                    <li><a href="#setup_queue" data-toggle="modal"><i class="fas fa-hourglass-start"></i> Setup Queue</a></li>
+                    <li><a href="#setup_queue" data-toggle="modal"><i class="fas fa-hourglass-start m-r-5"></i>Setup Queue</a></li>
+                </ul>
+            </li>
+            <li>
+                <ul class="nav nav-profile">
+                    <li><a href="#add_student" data-toggle="modal"><i class="fas fa-user-plus m-r-5"></i>Add Student</a></li>
                 </ul>
             </li>
         </ul>
@@ -90,7 +95,7 @@
     <!-- end sidebar scrollbar -->
 </div>
 <div class="sidebar-bg"></div>
-<!-- #modal-dialog -->
+<!-- #setup_queue -->
 <div class="modal fade" id="setup_queue">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -118,6 +123,73 @@
                         <div class="modal-footer form-group m-b-0">
                             <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
                             <button type="submit" class="btn btn-success">Set</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- end card -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #add_student -->
+<div class="modal fade" id="add_student">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Student</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+            <!-- begin card -->
+            <div class="card card-inverse bg-gradient-silver">
+                <div class="card-block">
+                    <form class="form-horizontal" id="add-stud-form" data-parsley-validate="true">
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="studno">Student Number :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control addstud" type="text" id="studno" name="studno" placeholder="Student Number" style="text-transform: capitalize;" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="fname">First Name <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control addstud" type="text" id="fname" name="fname" placeholder="First Name" data-parsley-required="true" data-parsley-required-message="First Name is required" style="text-transform: capitalize;" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="mname">Middle Name :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control addstud" type="text" id="mname" name="mname" placeholder="Middle Name" style="text-transform: capitalize;" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="lname">Last Name <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control addstud" type="text" id="lname" name="lname" placeholder="Last Name" data-parsley-required="true" data-parsley-required-message="Last Name is required" style="text-transform: capitalize;" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="course">Course <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control addstud" type="text" id="course" name="course" placeholder="Course" data-parsley-required="true" data-parsley-required-message="Course is required" style="text-transform: capitalize;" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="yr">Year Level<span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control addstud" type="text" id="yr" name="yr" placeholder="Year Level" data-parsley-type="number" data-parsley-required="true" data-parsley-required-message="Year level is required" style="text-transform: capitalize;" maxlength="1" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="sec">Section <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control addstud" type="text" id="sec" name="sec" placeholder="Section" data-parsley-type="number" data-parsley-required="true" data-parsley-required-message="Section is required" maxlength="2" style="text-transform: capitalize;" />
+                            </div>
+                        </div>
+                        <div class="modal-footer form-group m-b-0">
+                            <a href="javascript:;" class="btn btn-white" data-dismiss="modal" id="close-stud-but">Close</a>
+                            <a href="javascript:;" class="btn btn-success" id="add-stud-but">Add</a>
                         </div>
                     </form>
                 </div>

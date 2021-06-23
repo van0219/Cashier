@@ -1453,3 +1453,35 @@ def search_last_name(request):
                 ,(request.POST['str'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def add_student_with_studno(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_INSERT_STUDENT_WITH_STUDNO"
+                ,(request.POST['studno']
+                ,request.POST['fname']
+                ,request.POST['mname']
+                ,request.POST['lname']
+                ,request.POST['course']
+                ,request.POST['yr']
+                ,request.POST['sec']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def add_student_without_studno(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_INSERT_STUDENT_WITHOUT_STUDNO"
+                ,(request.POST['fname']
+                ,request.POST['mname']
+                ,request.POST['lname']
+                ,request.POST['course']
+                ,request.POST['yr']
+                ,request.POST['sec']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def search_last_name_nostudno(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_STUD_FULLNAME_NOSTUDNO"
+                ,(request.POST['str'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
