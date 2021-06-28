@@ -60,8 +60,8 @@
                 <div class="card-header">
                     <ul class="nav nav-pills card-header-pills">
                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1">Collection</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2">Deposit</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-3">Account</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2">Deposit</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-3">Account</a></li> -->
                     </ul>
                 </div>
                 <!-- begin card-block -->
@@ -81,7 +81,10 @@
                             <!-- begin row -->
                             <div class="row">
                                 <!-- begin col-8 -->
-                                <div class="col-lg-5" style="margin-top: 15px;">
+                                <div class="col-lg-6" style="margin-top: 15px;">
+                                    <span id="all-badge" class="badge badge-purple f-s-11 m-r-5" style="cursor: pointer;">
+                                        All
+                                    </span>
                                     <span id="sis-badge" class="badge badge-danger f-s-11 m-r-5" style="cursor: pointer;">
                                         SIS Payment
                                     </span>
@@ -97,7 +100,7 @@
                                 </div>
                                 <!-- end col-8 -->
                                 <!-- begin col-4 -->
-                                <div class="col-lg-2">
+                                <div class="col-lg-1">
 
                                 </div>
                                 <!-- end col-4 -->
@@ -117,7 +120,6 @@
                                     <thead class="thead">
                                         <th class="text-nowrap">OR Number</th>
                                         <th class="text-nowrap">Client Name</th>
-                                        <th class="text-nowrap">Assessed</th>
                                         <th class="text-nowrap">Collected</th>
                                         <th class="text-nowrap">Transaction Date</th>
                                     </thead>
@@ -139,18 +141,18 @@
                         </div>
                         <!-- end #card-pill-1 -->
                         <!-- begin #card-pill-2 -->
-                        <div class="tab-pane fade" id="card-pill-2">
+                        <!-- <div class="tab-pane fade" id="card-pill-2">
                             <h4 class="card-title">Deposit Log</h4>
                             <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                             <a href="javascript:;" class="btn btn-sm btn-success">Go somewhere</a>
-                        </div>
+                        </div> -->
                         <!-- end #card-pill-2 -->
                         <!-- begin #card-pill-3 -->
-                        <div class="tab-pane fade" id="card-pill-3">
+                        <!-- <div class="tab-pane fade" id="card-pill-3">
                             <h4 class="card-title">Account Log</h4>
                             <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                             <a href="javascript:;" class="btn btn-sm btn-success">Go somewhere</a>
-                        </div>
+                        </div> -->
                         <!-- end card-pill-3 -->
                     </div>
                 </div>
@@ -225,7 +227,6 @@
                         `<tr>
                             <td class="${dummyClass}"><span class="label label-${payor} f-s-12" title="${title}" style="cursor: pointer;">${obj[i][0]}</span></td>
                             <td class="text-nowrap">${obj[i][1]}</td>
-                            <td class="text-nowrap text-right">${obj[i][2]}</td>
                             <td class="text-nowrap text-right">${obj[i][3]}</td>
                             <td class="text-nowrap">${moment(new Date(obj[i][4])).format("MMM. DD, YYYY hh:mm:ss")}</td>
                         </tr>`
@@ -266,7 +267,31 @@
     $('#sis-badge').on('click', function() {
         var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
         var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-        load_collection_history(start,end,'SIS PAYMENT');
+        load_collection_history(start,end,$('#sis-badge').text().trim());
+    });
+
+    $('#stud-badge').on('click', function() {
+        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+        load_collection_history(start,end,$('#stud-badge').text().trim());
+    });
+
+    $('#non-badge').on('click', function() {
+        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+        load_collection_history(start,end,$('#non-badge').text().trim());
+    });
+
+    $('#comp-badge').on('click', function() {
+        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+        load_collection_history(start,end,$('#comp-badge').text().trim());
+    });
+
+    $('#all-badge').on('click', function() {
+        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+        load_collection_history(start,end,'ALL');
     });
 
     function loadKnobData() {
