@@ -417,8 +417,11 @@ def load_collection_history2(request):
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
-def deposits(request):
-    return render(request, 'views/layouts/pages/deposits.html')
+def deposits_pending(request):
+    return render(request, 'views/layouts/pages/deposits_pending.html')
+
+def deposits_deposited(request):
+    return render(request, 'views/layouts/pages/deposits_deposited.html')
 
 def save_for_remittance(request):
     cursor = connection.cursor()

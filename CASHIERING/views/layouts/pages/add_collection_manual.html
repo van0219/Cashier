@@ -117,7 +117,7 @@
                                         </div>                                    
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" id="or_studnum" class="form-control m-b-10 studno" data-parsley-required="true" data-parsley-required-message="Student number is required" placeholder="Student Number" autocomplete="off"/>
+                                        <input type="text" id="or_studnum" class="form-control m-b-10 studno" required="true" data-parsley-required-message="Student number is required" placeholder="Student Number" autocomplete="off"/>
                                         <select class="form-control selectpicker individual_sel m-b-10" data-size="10" data-style="btn-white">
                                             <option selected disabled>Select level of education</option>
                                             <option value="Diploma">Diploma</option>
@@ -610,6 +610,13 @@
     }
 
     $("#save").on('click', function() { //save entry is clicked
+        
+        if ($('#no-studnum-checkbox').prop('checked')) {
+            $('#or_studnum').prop('required', false);
+        }
+        else {
+            $('#or_studnum').prop('required', true);
+        }
         $('#addForm').parsley();
         if ($('#addForm').parsley().validate()) {
             $('#save-icon').removeClass('fa-save');

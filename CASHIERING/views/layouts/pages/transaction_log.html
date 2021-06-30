@@ -59,7 +59,7 @@
             <div class="card text-center">
                 <div class="card-header">
                     <ul class="nav nav-pills card-header-pills">
-                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1">Collection</a></li>
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1">Collection Log</a></li>
                         <!-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2">Deposit</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-3">Account</a></li> -->
                     </ul>
@@ -202,6 +202,8 @@
         var d = new Date();
         var code = 'ALL'
         var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+        $('#startDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
+        $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         load_collection_history(d_today, d_today, code);
     });
 
@@ -273,7 +275,7 @@
     $('#stud-badge').on('click', function() {
         var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
         var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-        load_collection_history(start,end,$('#stud-badge').text().trim());
+        load_collection_history(start,end,$('#stud-badge').text().trim().toUpperCase());
     });
 
     $('#non-badge').on('click', function() {
@@ -309,22 +311,22 @@
         for (var i = 0; i < rows; i++) {
             if ($('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(0)').attr('class') == 'su') {
                 knob_on_site++;
-                var temp = $('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(3)').html();
+                var temp = $('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(2)').html();
                 total_on_site += parseFloat(temp);
             }  
             else if ($('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(0)').attr('class') == 'pr') {
                 knob_company++;
-                var temp = $('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(3)').html();
+                var temp = $('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(2)').html();
                 total_company += parseFloat(temp);
             }
             else if ($('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(0)').attr('class') == 'da') {
                 knob_sis++;
-                var temp = $('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(3)').html();
+                var temp = $('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(2)').html();
                 total_sis += parseFloat(temp);
             }
             else if ($('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(0)').attr('class') == 'wa') {
                 knob_non++;
-                var temp = $('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(3)').html();
+                var temp = $('#col-hist-table tbody').find('tr:eq('+i+')').find('td:eq(2)').html();
                 total_non += parseFloat(temp);
             }
         }
