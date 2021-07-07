@@ -174,7 +174,7 @@
                                         <div class="form-group row m-b-0">
                                             <label class="col-md-4 col-sm-4 col-form-label">&nbsp;</label>
                                             <div class="col-md-8 col-sm-8">
-                                                <a href="javascript:;" class="btn btn-primary btn-sm" id="particular"><i class="fa fa-plus-circle m-r-5"></i>Add Particulars</a>
+                                                <button class="btn btn-primary btn-sm" id="particular"><i class="fa fa-plus-circle m-r-5"></i>Add Particulars</button>
                                             </div>
                                         </div>
                                     </div>
@@ -328,7 +328,7 @@
                 });
                 $('#uacs_select').selectpicker('refresh');
                 if ($('#check_1').prop('checked')) {
-                    $('#uacs_select').val('4 02 01 990 99 00034');
+                    $('#uacs_select').val('4 02 01 990 99 00034').prop('disabled', true);
                     $('#uacs_select').selectpicker('refresh');
                 }
             },
@@ -462,7 +462,7 @@
     $('#check_1').on('change', function() {
         if ($('#check_1').prop('checked')) {
             $('#check_2').prop('checked', false);
-            $('#inc-select').val('SERVICE INCOME');
+            $('#inc-select').val('SERVICE INCOME').prop('disabled', true);
             $('#inc-select').selectpicker('refresh');
             getUacsCode($('#inc-select').find('option:selected').text());
         }
@@ -474,12 +474,13 @@
     $('#check_2').on('change', function() {
         if ($('#check_2').prop('checked')) {
             $('#check_1').prop('checked', false);
-            $('#inc-select').val('Please choose');
+            $('#inc-select').val('Please choose').prop('disabled', false);
             $('#inc-select').selectpicker('refresh');
             $('#uacs_select').empty();
             $('#uacs_select').append(new Option('Please choose')).prop('selected', true);
+            $('#uacs_select').prop('disabled', false);
             $('#uacs_select').selectpicker('refresh');
-            $('#uacs_select').find('option:selected').prop('disabled',true);
+            $('#uacs_select').find('option:selected').prop('disabled', true);
             $('.remove').click();            
         }
         else {
@@ -606,11 +607,14 @@
                 );
                 total_fee = init_tot_fee + parseFloat(amt);
                 $('#total-fee').text(parseFloat(total_fee).toFixed(2));
-                $('#inc-select').selectpicker('val','Please choose');
-                $('#uacs_select').selectpicker('val','Please choose');
-                $('#nature-select').selectpicker('val','Please choose');
+                if (!$('#check_1').prop('checked')) { // if "total only" radio is not checked
+                    $('#inc-select').selectpicker('val','Please choose');
+                    $('#uacs_select').selectpicker('val','Please choose');
+                    $('#nature-select').selectpicker('val','Please choose');
+                }
                 $('#number').val('');
                 $('#nature-div').hide();
+                $('#particular').prop('disabled', true);
             }
             else {
                 $('#number').addClass('is-invalid');

@@ -331,7 +331,7 @@
             var barChart = nv.models.discreteBarChart()
                 .x(function(d) { return d.label })
                 .y(function(d) { return d.value })
-                .showValues(true)
+                .showValues(false)
                 .duration(250);
             
             // barChart.yAxis.axisLabel("Amount");
@@ -483,14 +483,18 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                var today_col = obj[0][0]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][0]));
-                var today_sis_col = obj[0][1]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][1]));
-                var month_col = obj[0][2]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][2]));
-                var year_col = obj[0][3]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][3]));
-                $('#today-col').text('₱' + today_col);
-                $('#today-sis-col').text('₱' + today_sis_col);
-                $('#month-col').text('₱' + month_col);
-                $('#year-col').text('₱' + year_col);
+                // var today_col = obj[0][0]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][0]));
+                // var today_sis_col = obj[0][1]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][1]));
+                // var month_col = obj[0][2]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][2]));
+                // var year_col = obj[0][3]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][3]));
+                var today_col = obj[0][0]==null ? 0 : parseFloat(obj[0][0]);
+                var today_sis_col = obj[0][1]==null ? 0 : parseFloat(obj[0][1]);
+                var month_col = obj[0][2]==null ? 0 : parseFloat(obj[0][2]);
+                var year_col = obj[0][3]==null ? 0 : parseFloat(obj[0][3]);
+                $('#today-col').text('₱' + today_col.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#today-sis-col').text('₱' + today_sis_col.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#month-col').text('₱' + month_col.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#year-col').text('₱' + year_col.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $('#count-or-today').text(obj[0][4]);
                 $('#count-sis-or-today').text(obj[0][5]);
             },

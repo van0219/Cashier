@@ -692,7 +692,7 @@
                 $('#number').removeClass('is-invalid');
                 $('.table-invoice tbody').append(
                     `<tr>
-                        <td class="text-center">${$('#uacs_select').find('option:selected').text().split('-')[1]}</td>
+                        <td class="text-left">${$('#uacs_select').find('option:selected').text().split('-')[1]}</td>
                         <td class="text-center">${$('#nature-select').val()==null ? '' : $('#nature-select').val()}</td>
                         <td class="text-right">${amtBox}</td>
                         <td class="text-center">
@@ -841,7 +841,7 @@
     });
 
     $('.table-invoice tbody').on('click', '.remove', function() {
-        var minus_fee = $(this).closest('tr').find('td:eq(1)').html();
+        var minus_fee = $(this).closest('tr').find('td:eq(2)').html();
         var total_fee = parseFloat($('#b_currtotal').text().replace(',', '')) - parseFloat(minus_fee);
         $('#b_currtotal').text(total_fee.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         $(this).closest('tr').remove();

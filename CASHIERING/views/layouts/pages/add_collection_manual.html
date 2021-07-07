@@ -898,6 +898,7 @@
         var _url = $('#no-studnum-checkbox').prop('checked') ? '/search_last_name_nostudno' : '/search_last_name';
         var comma_or_none = _url.length == 17 ? ', ' : '';
         $('#or_fname').val('');
+        $('#or_studnum').val('').removeClass('nameBox');
         $('#or_studnum').prop('style', 'text-transform: capitalize;');
         $.ajax({
             type: "POST",
