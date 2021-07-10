@@ -54,10 +54,10 @@
                     <div class="stats-title f-s-13">TODAY'S TOTAL COLLECTION</div>
                     <div class="stats-number" id="today-col"></div>
                     <div class="stats-progress progress">
-                        <div class="progress-bar" style="width: 70.1%;"></div>
+                        <div id="prog-1" class="progress-bar" style="width: 70.1%;"></div>
                     </div>
                     <!-- <div class="stats-desc">{% now "m/j/Y" %}</div> -->
-                    <div class="stats-desc f-s-13">Count of used OR today: <span id="count-or-today"></span></div>
+                    <div class="stats-desc f-s-12">Used OR today: <span id="first-or-today">********</span> to <span id="last-or-today">********</span></div>
                 </div>
             </div>
         </div>
@@ -70,10 +70,10 @@
                     <div class="stats-title f-s-13">TODAY'S SIS TOTAL COLLECTION</div>
                     <div class="stats-number" id="today-sis-col"></div>
                     <div class="stats-progress progress">
-                        <div class="progress-bar" style="width: 40.5%;"></div>
+                        <div id="prog-2" class="progress-bar" style="width: 40.5%;"></div>
                     </div>
                     <!-- <div class="stats-desc"><span id="yesterday"></span></div> -->
-                    <div class="stats-desc f-s-13">Count of used OR for SIS today: <span id="count-sis-or-today"></span></div>
+                    <div class="stats-desc f-s-13">Used OR for SIS today: <span id="sis-or-today"></span></div>
                 </div>
             </div>
         </div>
@@ -86,7 +86,7 @@
                     <div class="stats-title f-s-13">MONTH'S TOTAL COLLECTION</div>
                     <div class="stats-number" id="month-col"></div>
                     <div class="stats-progress progress">
-                        <div class="progress-bar" style="width: 76.3%;"></div>
+                        <div id="prog-3" class="progress-bar" style="width: 76.3%;"></div>
                     </div>
                     <!-- <div class="stats-desc"><span id="last_week"></span></div> -->
                     <div class="stats-desc f-s-13">Current Month: {% now "F" %}</div>
@@ -102,7 +102,7 @@
                     <div class="stats-title f-s-13">YEAR'S TOTAL COLLECTION</div>
                     <div class="stats-number" id="year-col"></div>
                     <div class="stats-progress progress">
-                        <div class="progress-bar" style="width: 54.9%;"></div>
+                        <div id="prog-4" class="progress-bar" style="width: 54.9%;"></div>
                     </div>
                     <!-- <div class="stats-desc"><span id="last_month"></span></div> -->
                     <div class="stats-desc f-s-13">Current Year: <span id="curr-year"></span></div>
@@ -198,6 +198,7 @@
             $('#monthly-year').text(year);
             $('#coldep-year').text(year);
             loadDashboardCards($('#dashboard-select').val());
+            loadProgressBar();
             loadDashboardBarGraph($('#dashboard-select').val());
             getMonthlyCollectionDeposit($('#dashboard-select').val());
             var mon;
@@ -220,6 +221,14 @@
                         `<option value="${i}">${i}</option>`
                     )
                 }
+            };
+
+            function loadProgressBar() {
+                var yearcol = parseFloat($('#year-col').text());
+                var monthcol = parseFloat($('#month-col').text());
+                var todaysiscol = parseFloat($('#today-sis-col').text());
+                var todaycol = parseFloat($('#today-col').text());
+                // var prog1 = 
             };
         });
 
@@ -495,13 +504,17 @@
                 $('#today-sis-col').text('₱' + today_sis_col.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $('#month-col').text('₱' + month_col.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $('#year-col').text('₱' + year_col.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $('#count-or-today').text(obj[0][4]);
-                $('#count-sis-or-today').text(obj[0][5]);
+                var firstORtoday = obj[0][4] == null ? '******' : obj[0][4];
+                var lastORtoday = obj[0][5] == null ? '******' : obj[0][5];
+                var sisOR = obj[0][6] == null ? '******' : obj[0][6];
+                $('#first-or-today').text(firstORtoday);
+                $('#last-or-today').text(lastORtoday);
+                $('#sis-or-today').text(sisOR);
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
                 swal({
-                    title: "Error!", 
+                    title: "Error!",
                     text: errMsg,
                     type: "error",
                     confirmButtonColor: "#428bca",

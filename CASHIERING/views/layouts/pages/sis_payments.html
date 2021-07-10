@@ -465,6 +465,8 @@
             $('#inc-select').val('SERVICE INCOME').prop('disabled', true);
             $('#inc-select').selectpicker('refresh');
             getUacsCode($('#inc-select').find('option:selected').text());
+            $('.remove').click();  
+            $('#particular').prop('disabled', false);
         }
         else {
             $('#check_1').prop('checked', true);
@@ -481,7 +483,8 @@
             $('#uacs_select').prop('disabled', false);
             $('#uacs_select').selectpicker('refresh');
             $('#uacs_select').find('option:selected').prop('disabled', true);
-            $('.remove').click();            
+            $('.remove').click();   
+            $('#particular').prop('disabled', false);         
         }
         else {
             $('#check_2').prop('checked', true);
@@ -564,11 +567,14 @@
         $('#data-table-responsives tbody tr').remove();
         $('#save-icon').removeClass('fa-spinner fa-pulse');
         $('#save-icon').addClass('fa-save');
+        $('#check_1').prop('checked', false);
+        $('#check_2').prop('checked', true).trigger('change');
     });
 
     var total_fee = 0;
     var minus_fee = '';
-    $('#particular').on('click', function() {
+    $('#particular').on('click', function(e) {
+        e.preventDefault();
         var tot_fee_txt = $('#total-fee').text();
         var init_tot_fee = parseFloat(tot_fee_txt);
         var inctype = $('#inc-select').find('option:selected').text();
@@ -612,9 +618,11 @@
                     $('#uacs_select').selectpicker('val','Please choose');
                     $('#nature-select').selectpicker('val','Please choose');
                 }
+                else {
+                    $('#particular').prop('disabled', true);
+                }
                 $('#number').val('');
                 $('#nature-div').hide();
-                $('#particular').prop('disabled', true);
             }
             else {
                 $('#number').addClass('is-invalid');
@@ -688,6 +696,7 @@
         total_fee = total_fee - parseFloat(minus_fee);
         $('#total-fee').text(total_fee.toFixed(2));
         $(this).closest('tr').remove();
+        $('#particular').prop('disabled', false);
     });
 
     function highlightSideNav() {

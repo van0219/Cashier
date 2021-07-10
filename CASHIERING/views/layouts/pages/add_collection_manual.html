@@ -157,7 +157,7 @@
                             </div>
                             <!-- end col-10 -->
                             <!-- begin col-2 -->
-                            <div class="col-lg-2">
+                            <div class="col-lg-2" id="no-studnum-div" style="display: block;">
                                 <div class="pull-right">
                                     <input type="checkbox" id="no-studnum-checkbox" class="m-r-5 m-t-15" /> <small>No Student Number</small>
                                 </div>
@@ -542,7 +542,9 @@
     function disableButtons() {
         $('#particular').prop('disabled', true);
         $('#save').prop('disabled', true);
-        $('#or_studnum').prop('style', 'text-transform: capitalize;');
+        if ($('#radiorequired3').prop('checked')) {
+            $('#or_studnum').prop('style', 'text-transform: capitalize;'); 
+        }
     };
 
     $('#or_studnum').on('keyup', function(e) {
@@ -695,7 +697,7 @@
             $('#save-icon').addClass('fa-save');
             swal({
                 title: "No Payment Added", 
-                text: "Please add particular fees to generate a receipt.",
+                text: "Please add particulars to generate a receipt.",
                 type: "info",
                 confirmButtonColor: "#428bca",
                 showLoaderOnConfirm: true
@@ -732,6 +734,7 @@
         $('#or_comp').val('');
         $('#or_studnum').val('');
         $('#addForm').parsley().reset();
+        $('#no-studnum-div').hide();
     });
     $("#radiorequired2").click(function() { //company radio
         $('.individual').hide();
@@ -742,6 +745,7 @@
         $('#or_fname').val('');
         $('#or_studnum').val('');
         $('#addForm').parsley().reset();
+        $('#no-studnum-div').hide();
     });
     $("#radiorequired3").click(function() { //student radio
         $('.individual_sel').selectpicker('show');
@@ -754,6 +758,7 @@
         $('#or_comp').val('');
         $('#addForm').parsley().reset();
         $('#or_studnum').prop('style', 'text-transform: capitalize;');
+        $('#no-studnum-div').show();
     });
     var total_fee = 0;
     var minus_fee = '';
