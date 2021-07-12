@@ -127,4 +127,6 @@ urlpatterns = [
     path('add_student_with_studno', views.add_student_with_studno, name="add_student_with_studno"),
     path('add_student_without_studno', views.add_student_without_studno, name="add_student_without_studno"),
     path('search_last_name_nostudno', views.search_last_name_nostudno, name="search_last_name_nostudno"),
+    path('load_pending_deposits', views.load_pending_deposits, name="load_pending_deposits"),
+    path('get_pending', views.get_pending, name="get_pending"),
 ]

@@ -1488,3 +1488,16 @@ def search_last_name_nostudno(request):
                 ,(request.POST['str'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_pending_deposits(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_PENDING_DEPOSITS")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def get_pending(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_GET_PENDING"
+                ,(request.POST['p_date'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

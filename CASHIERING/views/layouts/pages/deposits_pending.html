@@ -16,7 +16,7 @@
     </ol>
     <!-- end breadcrumb -->
     <!-- begin page-header -->
-    <h1 class="page-header">Pending <small>View Pending Collections</small></h1>
+    <h1 class="page-header">Pending <small>View Pending Deposits</small></h1>
     <!-- end page-header -->
     <!-- begin row -->
     <div class="row">
@@ -39,16 +39,13 @@
                 <div class="card-block">
                     <div class="tab-content p-0 m-0">
                         <div class="tab-pane fade active show" id="card-pill-1-deposits" style="max-height: 650px; overflow-y: auto;">
-                            <h4 class="card-title text-center">Pending</h4>
-                            <div style="height: 550px;" class="overflow-auto">
+                            <h4 class="card-title text-center">Pending Deposits</h4>
+                            <div class="overflow-auto">
                                 <table class="table table-hover table-striped" id="col-hist-table2" >
-                                    <thead class="thead">
-                                        <th width="2%"><input type="checkbox" name="col-hist-check-all" title="Check All" style="cursor: pointer;"/></th>
-                                        <th class="text-nowrap">OR Number</th>
-                                        <th class="text-nowrap">Client Name</th>
-                                        <th class="text-nowrap">Assessed</th>
-                                        <th class="text-nowrap">Collected</th>
-                                        <th class="text-nowrap">Transaction Date</th>
+                                    <thead class="thead text-center">
+                                        <th class="text-nowrap" width="30%">Amount</th>
+                                        <th class="text-nowrap" width="40%">Date Collected</th>
+                                        <th class="text-nowrap" width="30%">Options</th>
                                     </thead>
                                     <tbody>
                                         <!-- append here -->
@@ -58,15 +55,9 @@
                                     </tfoot>
                                 </table>
                             </div>
-                            <div class="pull-left">
+                            <!-- <div class="pull-left">
                                 <a href="javascript:;" class="btn btn-sm btn-warning" id="pending_save"><i class="fas fa-calendar-plus m-r-5"></i>Schedule Deposit</a>
-                            </div>
-                            <div class="pull-right">
-                                <span class="label label-danger">SIS PAYMENT</span>
-                                <span class="label label-primary">COMPANY</span>
-                                <span class="label label-warning">NON-STUDENT</span>
-                                <span class="label label-success">ON-SITE STUDENT PAYMENT</span>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="tab-pane fade" id="card-pill-2-deposits" style="max-height: 800px; overflow-y: auto;">
                             <h4 class="card-title text-center">Scheduled Deposits</h4>
@@ -104,55 +95,37 @@
     </div>
     <!-- end row -->
 </div>
-<!-- #sched-deposit -->
-<div class="modal fade" id="sched-deposit">
-    <div class="modal-dialog" style="max-width: 40%;">
+<!-- #view-pending-modal -->
+<div class="modal fade" id="view-pending-modal">
+    <div class="modal-dialog" style="max-width: 50%;">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Pick Schedule</h4>
+                <h4 class="modal-title"><span id="view-pending-title"></span><small class="m-l-5">Summary of collection for the given date.</small></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <div class="modal-body" style="height: 250px;">
-                <form method="POST" action="#" id="sched-deposit-form">
-                     <!-- begin row -->
-                    <div class="row">
-                        <!-- begin col-6 -->
-                        <div class="col-lg-6">
-                            <input type="text" id="pick-sched-group" class="form-control f-s-15 f-w-700 m-b-10" data-parsley-required="true" data-parsley-required-message="Deposit group number is required" onfocus="this.blur()" tabindex="-1"/>
-                            <input type="date" id="pick-sched-date" class="form-control m-b-10" data-parsley-required="true" data-parsley-required-message="Date is required"/>
-                            <textarea class="form-control" id="pick-sched-notes" placeholder="Add a note here." style="height: 110px;"></textarea>
-                        </div>
-                        <!-- end col-6 -->
-                        <!-- begin col-6 -->
-                        <div class="col-lg-6">
-                            <div style="max-height: 200px; overflow-y: auto;">
-                                <table class="table table-bordered table-striped" id="sched-deposit-table">
-                                    <thead class="text-center">
-                                        <th class="text-nowrap">OR Number</th>
-                                        <th class="text-nowrap">Amount</th>
-                                    </thead>
-                                    <tbody class="text-center">
-                                        <!-- append here -->
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="2" class="text-center"><span class="label label-inverse">Nothing follows..</span></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            <div class="pull-right m-t-10">
-                                <span class="label label-purple f-s-11">Total: <span id="tot"></span></span>
-                            </div>
-                        </div>
-                        <!-- end col-6 -->
-                    </div>
-                    <!-- end row -->
-                </form>
+            <div class="modal-body overflow-auto" style="max-height: 400px;">
+                <div class="overflow-auto">
+                    <table class="table table-bordered table-striped" id="view-pending-table">
+                        <thead>
+                            <tr>
+                                <th class="text-nowrap text-center text-white bg-blue-darker" width="30%">OR Number</th>
+                                <th class="text-nowrap text-center text-white bg-blue-darker" width="40%">Client Name</th>
+                                <th class="text-nowrap text-center text-white bg-blue-darker" width="30%">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- append here -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-center"><span class="label label-inverse">Nothing Follows</span></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer">
-                <a href="javascript:;" class="btn btn-white" data-dismiss="modal"><i class="fas fa-undo-alt fa-lg m-r-5"></i>Discard</a>
-                <a href="javascript:;" class="btn btn-success" id="pick-sched-set-but"><i class="fas fa-clock fa-lg m-r-5" id="set-but-icon"></i>Set</a>
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
             </div>
         </div>
     </div>
@@ -166,9 +139,17 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-                <label>Input deposit slip number:</label>
-                <input type="text" class="form-control" id="input-dep-slip" />
-                <span class="text-danger" style="display: none;" id="dep-slip-err">* Please add the deposit slip number.</span>
+                <div>
+                    <label>Input deposit slip number :</label>
+                    <input type="text" class="form-control" id="input-dep-slip" />
+                    <span class="text-danger" style="display: none;" id="dep-slip-err">* Please add the deposit slip number.</span>
+                </div>
+                <div class="form-inline">
+                    <label for="dep-slip-from" class="m-t-10 m-r-5">From :</label>
+                    <input type="date" class="form-control m-t-10 m-r-40" id="dep-slip-from"/>
+                    <label for="dep-slip-to" class="m-t-10 m-r-5 m-l-25">To :</label>
+                    <input type="date" class="form-control m-t-10" id="dep-slip-to"/>
+                </div>
             </div>
             <div class="modal-footer">
                 <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
@@ -185,57 +166,36 @@
 <script>
     $(document).ready(function() {
         App.init();
-        load_collection_history2(d_7day,d_today,0);
         highlightSideNav();
+        load_pending_deposits();
     });
 
     var d = new Date();  
     var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
     var d_7day = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + (d.getDate()-6);
 
-    function load_collection_history2(date_start,date_end,fromSaveRemittance) {
+    function load_pending_deposits() {
         $.ajax({
             type: "POST",
-            url: "{% url 'load_collection_history2' %}",
+            url: "{% url 'load_pending_deposits' %}",
             // cache: true,
             dataType: 'json',
             data: {
-                date_start: date_start,
-                date_end: date_end,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                $('#col-hist-table2 tbody tr').remove();
-                for (var i = 0; i < obj.length; i++) {
-                    var payor = obj[i][5] == 'SIS PAYMENT' ? 'danger' : obj[i][5] == 'COMPANY' ? 'primary' : obj[i][5] == 'NON-STUDENT' ? 'warning' : 'success';
+                for (i = 0; i < obj.length; i++) {
                     $('#col-hist-table2 tbody').append(
                         `<tr>
-                            <td><input type="checkbox" name="col-hist-check" value="${obj[i][0]}"/></td>
-                            <td class="text-nowrap"><span class="label label-${payor} f-s-12">${obj[i][0]}</span></td>
-                            <td class="text-nowrap">${obj[i][1]}</td>
-                            <td class="text-nowrap">${obj[i][2]}</td>
-                            <td>${obj[i][3]}</td>
-                            <td class="text-nowrap">${moment(new Date(obj[i][4])).format("MMM. DD, YYYY hh:mm:ss")}</td>
+                            <td class="text-nowrap text-center">${'₱' + obj[i][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+                            <td class="text-nowrap text-center">${moment(new Date(obj[i][1])).format('MMM. DD, YYYY')}</td>
+                            <td class="text-nowrap text-center">
+                                <a href="javascript:;" class="btn btn-primary btn-sm view_pending"><i class="fas fa-eye m-r-5"></i>View</a>
+                                <a href="javascript:;" class="btn btn-success btn-sm mark_deposit"><i class="fas fa-check-circle m-r-5"></i>Mark as Deposited</a>
+                            </td>
                         </tr>`
                     );
-                };
-                if (fromSaveRemittance == 1) {
-                    $('#set-but-icon').removeClass('fa-spinner fa-spin');
-                    $('#set-but-icon').addClass('fa-clock');
-                    get_current_group_id();
-                    swal({
-                        title: "Scheduled Successfully", 
-                        text: "Your scheduled deposits are stored in the scheduled deposits tab", 
-                        type: "success",
-                        showLoaderOnConfirm: true,
-                        confirmButtonColor: "#5cb85c",
-                    },function(isConfirm) {
-                        if (isConfirm) {
-                            $('#sched-deposit').modal('hide');
-                        }
-                    });
                 }
-                $('input[name="col-hist-check-all').prop('checked', false);
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -275,106 +235,6 @@
         });
     }
 
-    $('#sched-deposit').on('hidden.bs.modal', function() {
-        $('#sched-deposit-table tbody tr').remove();
-        $('#pick-sched-group').val('');
-        $('#pick-sched-notes').val('');
-    });
-
-    $('#col-hist-table2 tbody').on('click','tr', function() {
-        var rowCheckBox = $(this).closest('tr').find('td:eq(0)').find('input[name="col-hist-check"]');
-        if (rowCheckBox.prop('checked')) {
-            rowCheckBox.prop('checked', false);
-        }
-        else {
-            rowCheckBox.prop('checked', true);
-        }
-    });
-
-    $('input[name="col-hist-check-all"]').on('change', function() {
-        if ($('input[name="col-hist-check-all"]').prop('checked')) {
-            $('input[name="col-hist-check"]').prop('checked', true);
-        }
-        else {
-            $('input[name="col-hist-check"]').prop('checked', false);
-        }
-    });
-
-    var checked_cell = [];
-    $('#pending_save').on('click', function() {
-        checked_cell = [];
-        get_current_group_id();
-        var tot = 0;
-        $('#pick-sched-date').val('mm/dd/yyyy');
-        $('#pick-sched-note').val('');
-        $('#sched-deposit-table tbody tr').remove();
-        for (var i = j = 0; i < $('input[name="col-hist-check"]').length; i++) {
-            if($('#col-hist-table2 tbody').find('tr:eq('+i+')').find('td:eq(0)').find('input[name="col-hist-check"]').prop('checked')) {
-                checked_cell[j] = $('#col-hist-table2 tbody').find('tr:eq('+i+')').find('td:eq(0)').find('input[name="col-hist-check"]').val();
-                tot += parseFloat($('#col-hist-table2 tbody').find('tr:eq('+i+')').find('td:eq(4)').html());
-                $('#sched-deposit-table tbody').append(
-                    `<tr>
-                        <td class="text-nowrap">${checked_cell[j]}</td>
-                        <td class="text-nowrap">${$('#col-hist-table2 tbody').find('tr:eq('+i+')').find('td:eq(4)').html()}</td>
-                    </tr>`
-                );
-                j++;
-            }
-        };
-        $('#tot').text('₱' + tot.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-        if ($('#sched-deposit-table tbody tr').length > 0) {
-            $('#sched-deposit').modal('show');
-        }
-        else {
-            swal({
-                title: "Nothing Selected", 
-                text: "Please check an item in the list.",
-                type: "info",
-                confirmButtonColor: "#428bca",
-                showLoaderOnConfirm: true
-            });
-        }
-    });
-    function saveForRemittance(checked_cell) {
-        for (var i = 0; i < checked_cell.length; i++) {
-            var or_num = checked_cell[i];
-            $.ajax({
-                type: "POST",
-                url: "{% url 'save_for_remittance' %}",
-                // cache: true,
-                dataType: 'json',
-                data: {
-                    or_num: or_num,
-                    csrfmiddlewaretoken:"{{csrf_token}}"
-                },
-                success: function(obj) {
-                    
-                },
-                error: function(xhr, status, error) {
-                    var errMsg = xhr.status + ': ' + xhr.statusText;
-                    swal({
-                        title: "Error!", 
-                        text: errMsg,
-                        type: "error",
-                        confirmButtonColor: "#428bca",
-                        showLoaderOnConfirm: true
-                    });
-                }
-            });
-            insertDeposit(or_num);
-        };
-        checked_cell = [];
-    };
-
-    $('#pick-sched-set-but').on('click', function() {
-        $('#sched-deposit-form').parsley();
-        if ($('#sched-deposit-form').parsley().validate()) {
-            $('#set-but-icon').removeClass('fa-clock');
-            $('#set-but-icon').addClass('fa-spinner fa-spin');
-            saveForRemittance(checked_cell);
-        }		
-    });
-
     var getCurrentUserID;
     function callback(response) {
         getCurrentUserID = response;
@@ -390,28 +250,37 @@
         }
     });
 
-    function insertDeposit(or_num) {
-        var group_id = $('#pick-sched-group').val();
-        var status = 'FOR REMIT';
-        var date_sched = $('#pick-sched-date').val();
-        var notes = $('#pick-sched-notes').val();
-        var user_id = getCurrentUserID;
+    $('#col-hist-table2 tbody').on('click', '.view_pending', function() {
+        get_pending(moment(new Date($(this).closest('tr').find('td:eq(1)').text())).format('YYYY-MM-DD'));
+        $('#view-pending-title').text($(this).closest('tr').find('td:eq(1)').text());
+        $('#view-pending-modal').modal('show');
+    });
+
+    $('#col-hist-table2 tbody').on('click', '.mark_deposit', function() {
+        $('#modal-dep-slip').modal('show');
+    });
+
+    function get_pending(p_date) {
         $.ajax({
             type: "POST",
-            url: "{% url 'insert_deposit' %}",
+            url: "{% url 'get_pending' %}",
             // cache: true,
             dataType: 'json',
             data: {
-                or_num: or_num,
-                group_id: group_id,
-                status: status,
-                date_sched: date_sched,
-                notes: notes,
-                user_id: user_id,
+                p_date: p_date,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                load_collection_history2(d_7day,d_today,1);
+                $('#view-pending-table tbody tr').remove();
+                for (i = 0; i < obj.length; i++) {
+                    $('#view-pending-table tbody').append(
+                        `<tr>
+                            <td class="text-nowrap text-center">${obj[i][0]}</td>
+                            <td class="text-nowrap text-center">${obj[i][1]}</td>
+                            <td class="text-nowrap text-center">${obj[i][2]}</td>
+                        </tr>`
+                    );    
+                }
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -425,315 +294,11 @@
             }
         });
     };
-
-    $('#sched-panel').on('click', '#remove_but', function() {
-        var num = $(this).closest('.panel-body').prop('id').substring(10);
-        var group_id = $('#sched-head' + num).text().trim();
-        swal({
-            title: "Remove Scheduled Deposit",
-            text: "Are you sure to remove "+ group_id +"?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#428bca",
-            confirmButtonText: "Yes",
-            cancelButtonText: "No",
-            closeOnConfirm: false,
-            closeOnCancel: true,
-            customClass: "Custom_Cancel"
-        },
-        function(isConfirm) {
-            if (isConfirm) {
-                $.ajax({
-                    type: "POST",
-                    url: "{% url 'remove_sched_deposit' %}",
-                    // cache: true,
-                    dataType: 'json',
-                    data: {
-                        group_id: group_id,
-                        csrfmiddlewaretoken:"{{csrf_token}}"
-                    },
-                    success: function(obj) {
-                        swal({
-                            title: "Removed Successfully", 
-                            text: group_id + " has been removed successfully.", 
-                            type: "success",
-                            showLoaderOnConfirm: true,
-                            confirmButtonColor: "#5cb85c",
-                        },
-                        function(isConfirm){
-                            if (isConfirm){
-                                $('#sched-dep-tab').click();
-                                load_collection_history2(d_7day,d_today,0);
-                            }
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        var errMsg = xhr.status + ': ' + xhr.statusText;
-                        swal({
-                            title: "Error!", 
-                            text: errMsg,
-                            type: "error",
-                            confirmButtonColor: "#428bca",
-                            showLoaderOnConfirm: true
-                        });
-                    }
-                });
-            }
-        });
-    });
-
-    $('#sched-panel').on('click', '#resched_but', function() {    
-        var num = $(this).closest('.panel-body').prop('id').substring(10);
-        var prevDate = $('#sched-date' + num).val();
-        if ($('#resched-icon' + num).prop('class') == 'fas fa-calendar-alt') {
-            $('#sched-date' + num).prop('readonly',false);
-            $('#sched-date' + num).prop('type','date');
-            $('#sched-date' + num).val(moment(new Date(prevDate)).format('YYYY-MM-DD'));
-            $('#resched-icon' + num).removeClass('fa-calendar-alt');
-            $('#resched-icon' + num).addClass('fa-spinner fa-pulse');
-        }
-        else {
-            $('#sched-date' + num).prop('type','text');
-            $('#sched-date' + num).val(moment(new Date(prevDate)).format('MMM. DD, YYYY'));
-            $('#resched-icon' + num).removeClass('fa-spinner fa-pulse');
-            $('#resched-icon' + num).addClass('fa-calendar-alt');
-            var new_date = moment(new Date(prevDate)).format('YYYY-MM-DD');
-            var group_id = $('#sched-head' + num).text().trim();
-            $.ajax({
-                type: "POST",
-                url: "{% url 'resched_deposit' %}",
-                // cache: true,
-                dataType: 'json',
-                data: {
-                    new_date: new_date,
-                    group_id: group_id,
-                    csrfmiddlewaretoken:"{{csrf_token}}"
-                },
-                success: function(obj) {
-                    
-                },
-                error: function(xhr, status, error) {
-                    var errMsg = xhr.status + ': ' + xhr.statusText;
-                    swal({
-                        title: "Error!", 
-                        text: errMsg,
-                        type: "error",
-                        confirmButtonColor: "#428bca",
-                        showLoaderOnConfirm: true
-                    });
-                }
-            });
-        };
-    });
-    var num = null;
-    $('#sched-panel').on('click', '#check_but', function() {
-        $('#modal-dep-slip').modal('show');
-        num = $(this).closest('.panel-body').prop('id').substring(10);
-    });
-
-    $('#dep-slip-done').on('click', function() {
-        if ($('#input-dep-slip').val().length != 0 && $('#input-dep-slip').val().trim() != '') {
-            var group_id = $('#sched-head' + num).text().trim();
-            var slip_num = $('#input-dep-slip').val().trim();
-            $('#check_icon'+num).removeClass('fa-check-circle');
-            $('#check_icon'+num).addClass('fa-spinner fa-pulse');
-            $.ajax({
-                type: "POST",
-                url: "{% url 'done_deposit' %}",
-                // cache: true,
-                dataType: 'json',
-                data: {
-                    group_id: group_id,
-                    slip_num: slip_num,
-                    csrfmiddlewaretoken:"{{csrf_token}}"
-                },
-                success: function(obj) {
-                    setTimeout(function() {
-                        swal({
-                            title: "Deposited Successfully", 
-                            text: group_id + " has been deposited successfully.", 
-                            type: "success",
-                            showLoaderOnConfirm: true,
-                            confirmButtonColor: "#5cb85c",
-                        },
-                        function(isConfirm){
-                            if (isConfirm){
-                                $('#check_icon'+num).removeClass('fa-spinner fa-pulse'); 
-                                $('#check_icon'+num).addClass('fa-check-circle');
-                                $('#sched-dep-tab').click();
-                                $('#modal-dep-slip').modal('hide');
-                            }
-                        });
-                    },1500);
-                },
-                error: function(xhr, status, error) {
-                    var errMsg = xhr.status + ': ' + xhr.statusText;
-                    swal({
-                        title: "Error!", 
-                        text: errMsg,
-                        type: "error",
-                        confirmButtonColor: "#428bca",
-                        showLoaderOnConfirm: true
-                    });
-                }
-            });
-        }
-        else {
-            $('#input-dep-slip').addClass('is-invalid');
-            $('#dep-slip-err').prop('style', 'display:block');
-        }
-    });
-
-    $('#input-dep-slip').on('keypress', function() {
-        if ($('#input-dep-slip').val().length == 0) {
-            $('#input-dep-slip').removeClass('is-invalid');
-            $('#dep-slip-err').prop('style', 'display:none');
-        }
-    });
 
     $('#modal-dep-slip').on('hidden.bs.modal', function() {
-        $('#input-dep-slip').removeClass('is-invalid');
-        $('#dep-slip-err').prop('style', 'display:none');
         $('#input-dep-slip').val('');
-    });
-    
-    $('#deposited-tab').on('click', function() {
-        load_deposited();
-    });
-
-    function load_deposited() {
-        $.ajax({
-            type: "POST",
-            url: "{% url 'load_deposited' %}",
-            // cache: true,
-            dataType: 'json',
-            data: {
-                csrfmiddlewaretoken:"{{csrf_token}}"
-            },
-            success: function(obj) {
-                $('#deposited-table tbody tr').remove();
-                if (obj.length != 0) {
-                    for (var i = obj.length-1; i >= 0; i--) {
-                        $('#deposited-table tbody').append(
-                            `<tr>
-                                <td><span class="label label-info    f-s-12">${moment(new Date(obj[i][0])).format('MMM. DD, YYYY')}</span></td>
-                                <td class="text-nowrap">${obj[i][1]}</td>
-                                <td class="text-nowrap">${obj[i][2]}</td>
-                                <td class="text-nowrap f-w-700">${'₱' + parseFloat(obj[i][3]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-                            </tr>`
-                        );
-                    };
-                }
-                else {
-                    $('#deposited-table tbody').append(
-                        `<tr>
-                            <td colspan="3">No records found</td>
-                        </tr>`
-                    );
-                }
-            },
-            error: function(xhr, status, error) {
-                var errMsg = xhr.status + ': ' + xhr.statusText;
-                swal({
-                    title: "Error!", 
-                    text: errMsg,
-                    type: "error",
-                    confirmButtonColor: "#428bca",
-                    showLoaderOnConfirm: true
-                });
-            }
-        });
-    };
-
-    $('#sched-dep-tab').on('click', function() {
-        $.ajax({
-            type: "POST",
-            url: "{% url 'load_scheduled_deposit' %}",
-            // cache: true,
-            dataType: 'json',
-            data: {
-                csrfmiddlewaretoken:"{{csrf_token}}"
-            },
-            success: function(obj) {
-                $('.panel-sched').remove();
-                for (var i = 0; i < obj.length; i++) {
-                    $('#sched-panel').append(
-                        `<div class="panel-group m-b-10" id="accordion">
-                            <div class="panel panel-inverse panel-sched">
-                                <!-- begin panel-heading -->
-                                <div class="panel-heading" id="sched-head${i}">
-                                    <div class="panel-heading-btn">
-                                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
-                                    </div>
-                                    <h4 class="panel-title">
-                                        ${obj[i][0]}
-                                    </h4>
-                                </div>
-                                <!-- end panel-heading -->
-                                <div id="sched-body${i}" class="panel-collapse" >
-                                    <!-- begin panel-body -->
-                                    <div class="panel-body" id="panel-body${i}">
-                                        <!-- begin row -->
-                                        <div class="row height-60">
-                                            <!-- begin col-6 -->
-                                            <div class="col-lg-6">
-                                                <label class="" for="sched-date${i}"><small>Date Scheduled:</small></label>
-                                                <input type="text" class="form-control f-w-700" value="${moment(new Date(obj[i][1])).format('MMM. DD,YYYY')}" name="sched-date${i}" id="sched-date${i}" onfocus="this.blur()" tabindex="-1"/>
-                                            </div>
-                                            <!-- end col-6 -->
-                                            <!-- begin col-6 -->
-                                            <div class="col-lg-6">
-                                                <label class="" for="dep-notes${i}"><small>Notes:</small></label>
-                                                <textarea class="form-control" style="height: 94px;" name="dep-notes${i}" id="dep-notes${i}">${obj[i][3]}</textarea>
-                                            </div>
-                                            <!-- end col-6 -->
-                                        </div>
-                                        <!-- end row -->
-                                        <!-- begin row -->
-                                        <div class="row">
-                                            <!-- begin col-6 -->
-                                            <div class="col-lg-6">
-                                                <label class="" for="dep-amount${i}"><small>Amount:</small></label>
-                                                <input type="text" class="form-control f-w-700" value="${'₱' + parseFloat(obj[i][2]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}" name="dep-amount${i}" id="dep-amount${i}" onfocus="this.blur()" tabindex="-1"/>
-                                            </div>
-                                            <!-- end col-6 -->
-                                            <!-- begin col-6 -->
-                                            <div class="col-lg-6">
-                                                <!-- filler -->
-                                            </div>
-                                            <!-- end col-6 -->
-                                        </div>
-                                        <!-- end row -->
-                                        <!-- begin row -->
-                                        <div class="row">
-                                            <!-- begin col-12 -->
-                                            <div class="col-lg-12 text-center">
-                                                <a href="javascript:;" class="btn btn-xs btn-success m-t-10" title="Deposited" id="check_but"><i class="fas fa-check-circle" id="check_icon${i}"></i></a>
-                                                <a href="javascript:;" class="btn btn-xs btn-warning m-t-10" title="Re-schedule" id="resched_but"><i class="fas fa-calendar-alt" id="resched-icon${i}"></i></a>
-                                                <a href="javascript:;" class="btn btn-xs btn-danger m-t-10" title="Remove" id="remove_but"><i class="fas fa-trash-alt"></i></a>
-                                            </div>
-                                            <!-- end col-12 -->
-                                        </div>
-                                        <!-- end row -->
-                                    </div>
-                                    <!-- end panel-body -->
-                                </div>
-                            </div>
-                        </div>`
-                    );
-                };
-            },
-            error: function(xhr, status, error) {
-                var errMsg = xhr.status + ': ' + xhr.statusText;
-                swal({
-                    title: "Error!", 
-                    text: errMsg,
-                    type: "error",
-                    confirmButtonColor: "#428bca",
-                    showLoaderOnConfirm: true
-                });
-            }
-        });
+        $('#dep-slip-from').val('mm/dd/yyyy');
+        $('#dep-slip-to').val('mm/dd/yyyy');
     });
 
     function highlightSideNav() {
@@ -752,6 +317,9 @@
         $('#sum-col').removeClass('text-white');
         $('#cash-receipt').removeClass('text-white');
         $('#deposit_but').addClass('text-white');
+        $('#deposit_caret').addClass('text-white');
+        $('#pending_but').addClass('text-white');
+        $('#deposited_but').removeClass('text-white')
     };
 </script>
 {% endblock %}
