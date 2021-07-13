@@ -529,8 +529,11 @@
             var str = $('#or_lname').val().trim();
             handleJqueryAutocomplete(str);
         }
-        else {
+        else if ($('#or_lname').val() == '' && $('#radiorequired3').prop('checked')) {//if lname textbox is empty string && student radio button is selected
             disableButtons();
+        }
+        else if ($('#radiorequired').prop('checked') || $('#radiorequired2').prop('checked')) {
+            enableButtons();
         }
     });
 
@@ -687,10 +690,11 @@
             var ampm = (hrs >= 12) ? "PM" : "AM";
             var time = (hrs % 12 || 12) + ":" + ((mins<10?'0':'') + mins) + ' ' + ampm;
             $('#r_time').text(time);
-            $('#r_grandtotal').text('₱'+$('#total-fee').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")).delay(2000);
-            //
-            saveCollection(ornum);
-            saveCollectionBreakdown(ornum);
+            $('#r_grandtotal').text('₱'+$('#total-fee').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")).delay(2000).queue(function() {
+                saveCollection(ornum);
+                saveCollectionBreakdown(ornum);
+                $(this).dequeue();
+            });
         }
         else {
             $('#save-icon').removeClass('fa-spinner fa-pulse');
@@ -712,6 +716,9 @@
         $('#or_fname').val('');
         $('#or_studnum').prop('style', 'text-transform: capitalize');
         $('#or_studnum').val('').removeClass('nameBox');
+        if ($('#radiorequired').prop('checked') || $('#radiorequired2').prop('checked')) {
+            $('.studno').hide();
+        }
         $('.individual_sel').val('Select level of education');
         $('.individual_sel').selectpicker('refresh');
         $('#or_comp').val('');
@@ -735,6 +742,7 @@
         $('#or_studnum').val('');
         $('#addForm').parsley().reset();
         $('#no-studnum-div').hide();
+        enableButtons();
     });
     $("#radiorequired2").click(function() { //company radio
         $('.individual').hide();
@@ -746,6 +754,7 @@
         $('#or_studnum').val('');
         $('#addForm').parsley().reset();
         $('#no-studnum-div').hide();
+        enableButtons();
     });
     $("#radiorequired3").click(function() { //student radio
         $('.individual_sel').selectpicker('show');
@@ -759,6 +768,7 @@
         $('#addForm').parsley().reset();
         $('#or_studnum').prop('style', 'text-transform: capitalize;');
         $('#no-studnum-div').show();
+        disableButtons();
     });
     var total_fee = 0;
     var minus_fee = '';

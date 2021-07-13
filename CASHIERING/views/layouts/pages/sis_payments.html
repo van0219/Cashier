@@ -531,15 +531,16 @@
             var ampm = (hrs >= 12) ? "PM" : "AM";
             var time = (hrs % 12 || 12) + ":" + ((mins<10?'0':'') + mins) + ' ' + ampm;
             $('#r_time').text(time);
-            $('#r_grandtotal').text('₱'+$('#total-fee').text().toString()).delay(2000);
-            //
-            if ($('#check_1').prop('checked')) {
-                saveCollection($('#or_num').val());
-            }
-            else {
-                saveCollection($('#or_num').val());
-                saveCollectionBreakdown($('#or_num').val());
-            }
+            $('#r_grandtotal').text('₱'+$('#total-fee').text().toString()).delay(2000).queue(function() {
+                if ($('#check_1').prop('checked')) {
+                    saveCollection($('#or_num').val());
+                }
+                else {
+                    saveCollection($('#or_num').val());
+                    saveCollectionBreakdown($('#or_num').val());
+                }
+                $(this).dequeue();
+            });
         }
         else {
             $('#save-icon').removeClass('fa-spinner fa-pulse');
