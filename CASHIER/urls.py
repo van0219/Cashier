@@ -129,4 +129,6 @@ urlpatterns = [
     path('search_last_name_nostudno', views.search_last_name_nostudno, name="search_last_name_nostudno"),
     path('load_pending_deposits', views.load_pending_deposits, name="load_pending_deposits"),
     path('get_pending', views.get_pending, name="get_pending"),
+    path('done_deposit', views.done_deposit, name="done_deposit"),
+    path('save_to_folder', views.save_to_folder, name="save_to_folder"),
 ]

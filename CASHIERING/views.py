@@ -436,8 +436,8 @@ def insert_deposit(request):
                     ,(request.POST['or_num']
                     ,request.POST['group_id']
                     ,request.POST['status']
-                    ,request.POST['date_sched']
-                    ,request.POST['notes']
+                    ,request.POST['date_dep']
+                    ,request.POST['slip_num']
                     ,request.POST['user_id']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False) 
@@ -1501,3 +1501,25 @@ def get_pending(request):
                 ,(request.POST['p_date'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def done_deposit(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_DONE_DEPOSIT"
+                ,(request.POST['p_date'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def save_to_folder(request):
+    from PIL import Image
+    import cv2
+    import base64
+    import io
+    import numpy as np
+
+    imgdata = base64.b64decode(str(request.POST['img_src']))
+    image = Image.open(io.BytesIO(imgdata))
+    img = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
+    filename = request.POST['file_name']
+    file_loc = "CASHIERING/views/layouts/uploads/deposits/" + filename
+    cv2.imwrite(file_loc, img)
+    return JsonResponse(file_loc, safe=False)
