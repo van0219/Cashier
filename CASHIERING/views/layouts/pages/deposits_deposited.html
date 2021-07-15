@@ -38,15 +38,16 @@
                 </div>
                 <div class="card-block">
                     <div class="tab-content p-0 m-0">
-                        <div class="tab-pane fade active show" id="card-pill-3-deposits" style="height: 420px; overflow-y: auto;">
+                        <div class="tab-pane fade active show" id="card-pill-3-deposits" style="max-height: 620px; overflow-y: auto;">
                             <h4 class="card-title text-center">Deposited Collections</h4>
-                            <div style="height: 350px; overflow: auto;">
+                            <div style="max-height: 550px; overflow: auto;">
                                 <table class="table table-striped table-hover" id="deposited-table">
                                     <thead class="thead text-center">
                                         <th width="20%" class="text-nowrap">Date Deposited</th>
-                                        <th width="30%" class="text-nowrap">Group ID</th>
-                                        <th width="30" class="text-nowrap">Reference No.</th>
-                                        <th width="20%" class="text-nowrap">Amount</th>
+                                        <th width="20%" class="text-nowrap">Group ID</th>
+                                        <th width="20%" class="text-nowrap">Reference No.</th>
+                                        <th width="15%" class="text-nowrap">Amount</th>
+                                        <th width="25%" class="text-nowrap">Options</th>
                                     </thead>
                                     <tbody class="text-center">
                                         <!-- append tbody tr here -->
@@ -120,7 +121,7 @@
     </div>
 </div>
 <!-- #modal-dep-slip -->
-<div class="modal fade" id="modal-dep-slip">
+<div class="modal fade" id="modal-edit-slip">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -148,70 +149,12 @@
     $(document).ready(function() {
         App.init();
         $('#deposited-tab').click();
-        // load_collection_history2(d_7day,d_today,0);
         highlightSideNav();
     });
 
     var d = new Date();  
     var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
     var d_7day = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + (d.getDate()-6);
-
-    function load_collection_history2(date_start,date_end,fromSaveRemittance) {
-        $.ajax({
-            type: "POST",
-            url: "{% url 'load_collection_history2' %}",
-            // cache: true,
-            dataType: 'json',
-            data: {
-                date_start: date_start,
-                date_end: date_end,
-                csrfmiddlewaretoken:"{{csrf_token}}"
-            },
-            success: function(obj) {
-                $('#col-hist-table2 tbody tr').remove();
-                for (var i = 0; i < obj.length; i++) {   //eto ung loop
-                    var payor = obj[i][5] == 'SIS PAYMENT' ? 'danger' : obj[i][5] == 'COMPANY' ? 'primary' : obj[i][5] == 'NON-STUDENT' ? 'warning' : 'success';
-                    $('#col-hist-table2 tbody').append( //pakita ko ung sa chart diba same lang
-                        `<tr>
-                            <td><input type="checkbox" name="col-hist-check" value="${obj[i][0]}"/></td>
-                            <td class="text-nowrap"><span class="label label-${payor} f-s-12">${obj[i][0]}</span></td>
-                            <td class="text-nowrap">${obj[i][1]}</td>
-                            <td class="text-nowrap">${obj[i][2]}</td>
-                            <td>${obj[i][3]}</td>
-                            <td class="text-nowrap">${moment(new Date(obj[i][4])).format("MMM. DD, YYYY hh:mm:ss")}</td>
-                        </tr>`
-                    );
-                };
-                if (fromSaveRemittance == 1) {
-                    $('#set-but-icon').removeClass('fa-spinner fa-spin');
-                    $('#set-but-icon').addClass('fa-clock');
-                    get_current_group_id();
-                    swal({
-                        title: "Scheduled Successfully", 
-                        text: "Your scheduled deposits are stored in the scheduled deposits tab", 
-                        type: "success",
-                        showLoaderOnConfirm: true,
-                        confirmButtonColor: "#5cb85c",
-                    },function(isConfirm) {
-                        if (isConfirm) {
-                            $('#sched-deposit').modal('hide');
-                        }
-                    });
-                }
-                $('input[name="col-hist-check-all').prop('checked', false);
-            },
-            error: function(xhr, status, error) {
-                var errMsg = xhr.status + ': ' + xhr.statusText;
-                swal({
-                    title: "Error!", 
-                    text: errMsg,
-                    type: "error",
-                    confirmButtonColor: "#428bca",
-                    showLoaderOnConfirm: true
-                });
-            }
-        });
-    };
 
     function get_current_group_id() {
         $.ajax({
@@ -236,23 +179,7 @@
                 });
             }
         });
-    }
-
-    $('#sched-deposit').on('hidden.bs.modal', function() {
-        $('#sched-deposit-table tbody tr').remove();
-        $('#pick-sched-group').val('');
-        $('#pick-sched-notes').val('');
-    });
-
-    $('#col-hist-table2 tbody').on('click','tr', function() {
-        var rowCheckBox = $(this).closest('tr').find('td:eq(0)').find('input[name="col-hist-check"]');
-        if (rowCheckBox.prop('checked')) {
-            rowCheckBox.prop('checked', false);
-        }
-        else {
-            rowCheckBox.prop('checked', true);
-        }
-    });
+    };
 
     $('input[name="col-hist-check-all"]').on('change', function() {
         if ($('input[name="col-hist-check-all"]').prop('checked')) {
@@ -261,81 +188,6 @@
         else {
             $('input[name="col-hist-check"]').prop('checked', false);
         }
-    });
-
-    var checked_cell = [];
-    $('#pending_save').on('click', function() {
-        checked_cell = [];
-        get_current_group_id();
-        var tot = 0;
-        $('#pick-sched-date').val('mm/dd/yyyy');
-        $('#pick-sched-note').val('');
-        $('#sched-deposit-table tbody tr').remove();
-        for (var i = j = 0; i < $('input[name="col-hist-check"]').length; i++) {
-            if($('#col-hist-table2 tbody').find('tr:eq('+i+')').find('td:eq(0)').find('input[name="col-hist-check"]').prop('checked')) {
-                checked_cell[j] = $('#col-hist-table2 tbody').find('tr:eq('+i+')').find('td:eq(0)').find('input[name="col-hist-check"]').val();
-                tot += parseFloat($('#col-hist-table2 tbody').find('tr:eq('+i+')').find('td:eq(4)').html());
-                $('#sched-deposit-table tbody').append(
-                    `<tr>
-                        <td class="text-nowrap">${checked_cell[j]}</td>
-                        <td class="text-nowrap">${$('#col-hist-table2 tbody').find('tr:eq('+i+')').find('td:eq(4)').html()}</td>
-                    </tr>`
-                );
-                j++;
-            }
-        };
-        $('#tot').text('₱' + tot.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-        if ($('#sched-deposit-table tbody tr').length > 0) {
-            $('#sched-deposit').modal('show');
-        }
-        else {
-            swal({
-                title: "Nothing Selected", 
-                text: "Please check an item in the list.",
-                type: "info",
-                confirmButtonColor: "#428bca",
-                showLoaderOnConfirm: true
-            });
-        }
-    });
-    function saveForRemittance(checked_cell) {
-        for (var i = 0; i < checked_cell.length; i++) {
-            var or_num = checked_cell[i];
-            $.ajax({
-                type: "POST",
-                url: "{% url 'save_for_remittance' %}",
-                // cache: true,
-                dataType: 'json',
-                data: {
-                    or_num: or_num,
-                    csrfmiddlewaretoken:"{{csrf_token}}"
-                },
-                success: function(obj) {
-                    
-                },
-                error: function(xhr, status, error) {
-                    var errMsg = xhr.status + ': ' + xhr.statusText;
-                    swal({
-                        title: "Error!", 
-                        text: errMsg,
-                        type: "error",
-                        confirmButtonColor: "#428bca",
-                        showLoaderOnConfirm: true
-                    });
-                }
-            });
-            insertDeposit(or_num);
-        };
-        checked_cell = [];
-    };
-
-    $('#pick-sched-set-but').on('click', function() {
-        $('#sched-deposit-form').parsley();
-        if ($('#sched-deposit-form').parsley().validate()) {
-            $('#set-but-icon').removeClass('fa-clock');
-            $('#set-but-icon').addClass('fa-spinner fa-spin');
-            saveForRemittance(checked_cell);
-        }		
     });
 
     var getCurrentUserID;
@@ -350,200 +202,6 @@
         },
         success: function(role_session) {
             callback(role_session)
-        }
-    });
-
-    function insertDeposit(or_num) {
-        var group_id = $('#pick-sched-group').val();
-        var status = 'FOR REMIT';
-        var date_sched = $('#pick-sched-date').val();
-        var notes = $('#pick-sched-notes').val();
-        var user_id = getCurrentUserID;
-        $.ajax({
-            type: "POST",
-            url: "{% url 'insert_deposit' %}",
-            // cache: true,
-            dataType: 'json',
-            data: {
-                or_num: or_num,
-                group_id: group_id,
-                status: status,
-                date_sched: date_sched,
-                notes: notes,
-                user_id: user_id,
-                csrfmiddlewaretoken:"{{csrf_token}}"
-            },
-            success: function(obj) {
-                load_collection_history2(d_7day,d_today,1);
-            },
-            error: function(xhr, status, error) {
-                var errMsg = xhr.status + ': ' + xhr.statusText;
-                swal({
-                    title: "Error!", 
-                    text: errMsg,
-                    type: "error",
-                    confirmButtonColor: "#428bca",
-                    showLoaderOnConfirm: true
-                });
-            }
-        });
-    };
-
-    $('#sched-panel').on('click', '#remove_but', function() {
-        var num = $(this).closest('.panel-body').prop('id').substring(10);
-        var group_id = $('#sched-head' + num).text().trim();
-        swal({
-            title: "Remove Scheduled Deposit",
-            text: "Are you sure to remove "+ group_id +"?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#428bca",
-            confirmButtonText: "Yes",
-            cancelButtonText: "No",
-            closeOnConfirm: false,
-            closeOnCancel: true,
-            customClass: "Custom_Cancel"
-        },
-        function(isConfirm) {
-            if (isConfirm) {
-                $.ajax({
-                    type: "POST",
-                    url: "{% url 'remove_sched_deposit' %}",
-                    // cache: true,
-                    dataType: 'json',
-                    data: {
-                        group_id: group_id,
-                        csrfmiddlewaretoken:"{{csrf_token}}"
-                    },
-                    success: function(obj) {
-                        swal({
-                            title: "Removed Successfully", 
-                            text: group_id + " has been removed successfully.", 
-                            type: "success",
-                            showLoaderOnConfirm: true,
-                            confirmButtonColor: "#5cb85c",
-                        },
-                        function(isConfirm){
-                            if (isConfirm){
-                                $('#sched-dep-tab').click();
-                                load_collection_history2(d_7day,d_today,0);
-                            }
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        var errMsg = xhr.status + ': ' + xhr.statusText;
-                        swal({
-                            title: "Error!", 
-                            text: errMsg,
-                            type: "error",
-                            confirmButtonColor: "#428bca",
-                            showLoaderOnConfirm: true
-                        });
-                    }
-                });
-            }
-        });
-    });
-
-    $('#sched-panel').on('click', '#resched_but', function() {    
-        var num = $(this).closest('.panel-body').prop('id').substring(10);
-        var prevDate = $('#sched-date' + num).val();
-        if ($('#resched-icon' + num).prop('class') == 'fas fa-calendar-alt') {
-            $('#sched-date' + num).prop('readonly',false);
-            $('#sched-date' + num).prop('type','date');
-            $('#sched-date' + num).val(moment(new Date(prevDate)).format('YYYY-MM-DD'));
-            $('#resched-icon' + num).removeClass('fa-calendar-alt');
-            $('#resched-icon' + num).addClass('fa-spinner fa-pulse');
-        }
-        else {
-            $('#sched-date' + num).prop('type','text');
-            $('#sched-date' + num).val(moment(new Date(prevDate)).format('MMM. DD, YYYY'));
-            $('#resched-icon' + num).removeClass('fa-spinner fa-pulse');
-            $('#resched-icon' + num).addClass('fa-calendar-alt');
-            var new_date = moment(new Date(prevDate)).format('YYYY-MM-DD');
-            var group_id = $('#sched-head' + num).text().trim();
-            $.ajax({
-                type: "POST",
-                url: "{% url 'resched_deposit' %}",
-                // cache: true,
-                dataType: 'json',
-                data: {
-                    new_date: new_date,
-                    group_id: group_id,
-                    csrfmiddlewaretoken:"{{csrf_token}}"
-                },
-                success: function(obj) {
-                    
-                },
-                error: function(xhr, status, error) {
-                    var errMsg = xhr.status + ': ' + xhr.statusText;
-                    swal({
-                        title: "Error!", 
-                        text: errMsg,
-                        type: "error",
-                        confirmButtonColor: "#428bca",
-                        showLoaderOnConfirm: true
-                    });
-                }
-            });
-        };
-    });
-    var num = null;
-    $('#sched-panel').on('click', '#check_but', function() {
-        $('#modal-dep-slip').modal('show');
-        num = $(this).closest('.panel-body').prop('id').substring(10);
-    });
-
-    $('#dep-slip-done').on('click', function() {
-        if ($('#input-dep-slip').val().length != 0 && $('#input-dep-slip').val().trim() != '') {
-            var group_id = $('#sched-head' + num).text().trim();
-            var slip_num = $('#input-dep-slip').val().trim();
-            $('#check_icon'+num).removeClass('fa-check-circle');
-            $('#check_icon'+num).addClass('fa-spinner fa-pulse');
-            $.ajax({
-                type: "POST",
-                url: "{% url 'done_deposit' %}",
-                // cache: true,
-                dataType: 'json',
-                data: {
-                    group_id: group_id,
-                    slip_num: slip_num,
-                    csrfmiddlewaretoken:"{{csrf_token}}"
-                },
-                success: function(obj) {
-                    setTimeout(function() {
-                        swal({
-                            title: "Deposited Successfully", 
-                            text: group_id + " has been deposited successfully.", 
-                            type: "success",
-                            showLoaderOnConfirm: true,
-                            confirmButtonColor: "#5cb85c",
-                        },
-                        function(isConfirm){
-                            if (isConfirm){
-                                $('#check_icon'+num).removeClass('fa-spinner fa-pulse'); 
-                                $('#check_icon'+num).addClass('fa-check-circle');
-                                $('#sched-dep-tab').click();
-                                $('#modal-dep-slip').modal('hide');
-                            }
-                        });
-                    },1500);
-                },
-                error: function(xhr, status, error) {
-                    var errMsg = xhr.status + ': ' + xhr.statusText;
-                    swal({
-                        title: "Error!", 
-                        text: errMsg,
-                        type: "error",
-                        confirmButtonColor: "#428bca",
-                        showLoaderOnConfirm: true
-                    });
-                }
-            });
-        }
-        else {
-            $('#input-dep-slip').addClass('is-invalid');
-            $('#dep-slip-err').prop('style', 'display:block');
         }
     });
 
@@ -579,10 +237,14 @@
                     for (var i = obj.length-1; i >= 0; i--) {
                         $('#deposited-table tbody').append(
                             `<tr>
-                                <td><span class="label label-info    f-s-12">${moment(new Date(obj[i][0])).format('MMM. DD, YYYY')}</span></td>
+                                <td><span class="f-s-12">${moment(new Date(obj[i][0])).format('MMM. DD, YYYY')}</span></td>
                                 <td class="text-nowrap">${obj[i][1]}</td>
                                 <td class="text-nowrap">${obj[i][2]}</td>
-                                <td class="text-nowrap f-w-700">${'₱' + parseFloat(obj[i][3]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+                                <td class="text-nowrap text-right f-w-700">${'₱' + parseFloat(obj[i][3]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+                                <td class="text-nowrap text-center">
+                                    <a href="javascript:;" class="btn btn-sm btn-primary edit-dep"><i class="fas fa-pencil-alt m-r-5"></i>Edit</a>
+                                    <a href="javascript:;" class="btn btn-sm btn-danger del-dep"><i class="fas fa-trash-alt m-r-5"></i>Delete</a>
+                                </td>
                             </tr>`
                         );
                     };
@@ -608,95 +270,8 @@
         });
     };
 
-    $('#sched-dep-tab').on('click', function() {
-        $.ajax({
-            type: "POST",
-            url: "{% url 'load_scheduled_deposit' %}",
-            // cache: true,
-            dataType: 'json',
-            data: {
-                csrfmiddlewaretoken:"{{csrf_token}}"
-            },
-            success: function(obj) {
-                $('.panel-sched').remove();
-                for (var i = 0; i < obj.length; i++) {
-                    $('#sched-panel').append(
-                        `<div class="panel-group m-b-10" id="accordion">
-                            <div class="panel panel-inverse panel-sched">
-                                <!-- begin panel-heading -->
-                                <div class="panel-heading" id="sched-head${i}">
-                                    <div class="panel-heading-btn">
-                                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
-                                    </div>
-                                    <h4 class="panel-title">
-                                        ${obj[i][0]}
-                                    </h4>
-                                </div>
-                                <!-- end panel-heading -->
-                                <div id="sched-body${i}" class="panel-collapse" >
-                                    <!-- begin panel-body -->
-                                    <div class="panel-body" id="panel-body${i}">
-                                        <!-- begin row -->
-                                        <div class="row height-60">
-                                            <!-- begin col-6 -->
-                                            <div class="col-lg-6">
-                                                <label class="" for="sched-date${i}"><small>Date Scheduled:</small></label>
-                                                <input type="text" class="form-control f-w-700" value="${moment(new Date(obj[i][1])).format('MMM. DD,YYYY')}" name="sched-date${i}" id="sched-date${i}" onfocus="this.blur()" tabindex="-1"/>
-                                            </div>
-                                            <!-- end col-6 -->
-                                            <!-- begin col-6 -->
-                                            <div class="col-lg-6">
-                                                <label class="" for="dep-notes${i}"><small>Notes:</small></label>
-                                                <textarea class="form-control" style="height: 94px;" name="dep-notes${i}" id="dep-notes${i}">${obj[i][3]}</textarea>
-                                            </div>
-                                            <!-- end col-6 -->
-                                        </div>
-                                        <!-- end row -->
-                                        <!-- begin row -->
-                                        <div class="row">
-                                            <!-- begin col-6 -->
-                                            <div class="col-lg-6">
-                                                <label class="" for="dep-amount${i}"><small>Amount:</small></label>
-                                                <input type="text" class="form-control f-w-700" value="${'₱' + parseFloat(obj[i][2]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}" name="dep-amount${i}" id="dep-amount${i}" onfocus="this.blur()" tabindex="-1"/>
-                                            </div>
-                                            <!-- end col-6 -->
-                                            <!-- begin col-6 -->
-                                            <div class="col-lg-6">
-                                                <!-- filler -->
-                                            </div>
-                                            <!-- end col-6 -->
-                                        </div>
-                                        <!-- end row -->
-                                        <!-- begin row -->
-                                        <div class="row">
-                                            <!-- begin col-12 -->
-                                            <div class="col-lg-12 text-center">
-                                                <a href="javascript:;" class="btn btn-xs btn-success m-t-10" title="Deposited" id="check_but"><i class="fas fa-check-circle" id="check_icon${i}"></i></a>
-                                                <a href="javascript:;" class="btn btn-xs btn-warning m-t-10" title="Re-schedule" id="resched_but"><i class="fas fa-calendar-alt" id="resched-icon${i}"></i></a>
-                                                <a href="javascript:;" class="btn btn-xs btn-danger m-t-10" title="Remove" id="remove_but"><i class="fas fa-trash-alt"></i></a>
-                                            </div>
-                                            <!-- end col-12 -->
-                                        </div>
-                                        <!-- end row -->
-                                    </div>
-                                    <!-- end panel-body -->
-                                </div>
-                            </div>
-                        </div>`
-                    );
-                };
-            },
-            error: function(xhr, status, error) {
-                var errMsg = xhr.status + ': ' + xhr.statusText;
-                swal({
-                    title: "Error!", 
-                    text: errMsg,
-                    type: "error",
-                    confirmButtonColor: "#428bca",
-                    showLoaderOnConfirm: true
-                });
-            }
-        });
+    $('#deposited-table tbody').on('click', '.edit-dep', function() {
+        $('#modal-edit-slip').modal('show');
     });
 
     function highlightSideNav() {
