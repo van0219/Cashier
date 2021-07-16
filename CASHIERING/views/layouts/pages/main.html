@@ -252,6 +252,8 @@
 	    $('#add-stud-but').on('click', function() {
 	        $('#add-stud-form').parsley();
 	        if ($('#add-stud-form').parsley().validate()) {
+				$('#add-stud-but-icon').removeClass('fa-plus-circle');
+				$('#add-stud-but-icon').addClass('fa-spinner fa-pulse');
 	        	var studno = $('#studno').val().trim();
 	        	if (studno.length > 0) {
 	        		addStudentWithStudno();
@@ -309,19 +311,24 @@
 	                    },
 	                    function(isConfirm){
 	                        if (isConfirm){
+								$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+								$('#add-stud-but-icon').addClass('fa-plus-circle');
 	                            $('#add_student').modal('hide');
 	                        }
 	                    })
 					},
 					error: function(xhr, status, error) {
-						var errMsg = xhr.status + ': ' + xhr.statusText;
+						var errMsg = xhr.statusText;
 						swal({
-							title: "Error!", 
+							title: "An error occured", 
 							text: errMsg,
 							type: "error",
 							confirmButtonColor: "#428bca",
 							showLoaderOnConfirm: true
-						})
+						}, function(isConfirm) {
+							$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+							$('#add-stud-but-icon').addClass('fa-plus-circle');
+						});
 					}
 				});
 	    		}
@@ -373,6 +380,8 @@
 		                    },
 		                    function(isConfirm){
 		                        if (isConfirm){
+									$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+									$('#add-stud-but-icon').addClass('fa-plus-circle');
 		                            $('#add_student').modal('hide');
 		                        }
 		                    })
@@ -385,7 +394,10 @@
 								type: "error",
 								confirmButtonColor: "#428bca",
 								showLoaderOnConfirm: true
-							})
+							}, function(isConfirm) {
+								$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+								$('#add-stud-but-icon').addClass('fa-plus-circle');
+							});
 						}
 					});
 	    		}
@@ -393,12 +405,15 @@
 	    };
 
 	    $('#add_student').on('hidden.bs.modal', function() {
+			$('#navvy').click();
 	        $('#add-stud-form').parsley().reset();
 	        $('.addstud').val('');
 	    });
+
         $('#studno').on('focusin', function() {
 	        $('#studno').mask('9999-99999-CM-9'); //masked input for student number
 	    });
+
 	    $('#course').on('keyup', function(e) {
 	    	if (e.which == 8 && $('#course').val().trim() != '') {
 	    		$('#course').prop('style', 'text-transform: uppercase;');
@@ -411,6 +426,7 @@
 	    	}
 	    	
 	    });
+
 	    $('#course').on('focusout', function() {
 	    	if ($('#course').val().trim() == '') {
 				$('#course').prop('style', 'text-transform: capitalize;');
@@ -420,6 +436,13 @@
 	    	}
 	    	
 	    });
+
+		$('#daily-rep-sidenav-but').on('click', function() {
+			var d = new Date();
+			var dt = moment(new Date( (d.getMonth()+1) + '/' +  d.getDate()+ '/' + d.getFullYear())).format('MMM. DD, YYYY');
+			$('#daily-rep-date').text(dt);
+		});
+		
 	</script>
 </body>
 </html>

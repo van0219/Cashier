@@ -131,4 +131,6 @@ urlpatterns = [
     path('get_pending', views.get_pending, name="get_pending"),
     path('done_deposit', views.done_deposit, name="done_deposit"),
     path('save_to_folder', views.save_to_folder, name="save_to_folder"),
+    path('update_deposit', views.update_deposit, name="update_deposit"),
+    path('delete_deposit', views.delete_deposit, name="delete_deposit"),
 ]

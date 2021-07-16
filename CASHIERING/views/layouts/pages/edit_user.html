@@ -150,8 +150,8 @@
                         <div class="form-group row m-b-0">
                             <label class="col-md-4 col-sm-4 col-form-label">&nbsp;</label>
                             <div class="col-md-8 col-sm-8">
-                                <input type="submit" class="btn btn-warning" id="add" onclick="updateClick(event);" value="Update"></button>
-                                <a href="javascript:;" class="btn bg-gradient-black text-white btn-m" data-dismiss="modal" id="close" onfocus="closeFocus()">Close</a>
+                                <input type="submit" class="btn btn-warning btn-md" id="add" onclick="updateClick(event);" value="Update"></button>
+                                <a href="javascript:;" class="btn bg-gradient-black text-white btn-md" data-dismiss="modal" id="close" onfocus="closeFocus()">Close</a>
                             </div>
                         </div>
                     </form>
@@ -319,12 +319,12 @@
                 {
                     targets:8, render:function(data){
                         if (data == 1) {
-                            return `<a href="#view_modal" class="btn btn-xs btn-primary viewBtn" data-toggle="modal" title="view"><i class="fas fa-eye"></i></a>
-                            <a href="javascript:;" class="btn btn-xs btn-danger deactBtn" title="deactivate"><i class="fas fa-ban"></i></a>`;
+                            return `<a href="#view_modal" class="btn btn-xs btn-primary viewBtn" data-toggle="modal" title="view"><i class="fas fa-eye m-r-5"></i>View</a>
+                            <a href="javascript:;" class="btn btn-xs btn-danger deactBtn" title="deactivate"><i class="fas fa-ban m-r-5"></i>Deactivate</a>`;
                         }
                         else if (data == 0) {
-                            return `<a href="#view_modal" class="btn btn-xs btn-primary viewBtn" data-toggle="modal" title="view"><i class="fas fa-eye"></i></a>
-                            <a href="javascript:;" class="btn btn-xs btn-success reactBtn" title="reactivate"><i class="fas fa-undo-alt"></i></a>`;
+                            return `<a href="#view_modal" class="btn btn-xs btn-primary viewBtn" data-toggle="modal" title="view"><i class="fas fa-eye m-r-5"></i>View</a>
+                            <a href="javascript:;" class="btn btn-xs btn-success reactBtn" title="reactivate"><i class="fas fa-undo-alt m-r-5"></i>Reactivate</a>`;
                         }
                     }
                 },
@@ -428,7 +428,7 @@
                         data[0], // eto yung 
                         data[1], // eto ung frsstname
                         data[2], // middlename
-                        data[3], // ;astname
+                        data[3], // lastname
                         data[4],
                         data[5],
                         data[6],

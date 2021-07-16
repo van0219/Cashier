@@ -11,8 +11,8 @@
     <!-- begin breadcrumb -->
     <ol class="breadcrumb pull-right">
         <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
-        <li class="breadcrumb-item"><a href="javascript:;">Collection Report</a></li>
-        <li class="breadcrumb-item active">Cash Receipt Record</li>
+        <li class="breadcrumb-item"><a href="javascript:;">Deposits</a></li>
+        <li class="breadcrumb-item active">Deposited</li>
     </ol>
     <!-- end breadcrumb -->
     <!-- begin page-header -->
@@ -125,17 +125,40 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Confirmation</h4>
+                <h4 class="modal-title">Edit Deposit<small class="m-l-5">Editable fields are <strong>Date </strong>and <strong>Reference number </strong>only.</small></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-                <label>Input deposit slip number:</label>
-                <input type="text" class="form-control" id="input-dep-slip" />
-                <span class="text-danger" style="display: none;" id="dep-slip-err">* Please add the deposit slip number.</span>
+                <form id="mark-dep-form" data-parsley-validate="true" autocomplete="off">
+                    <div class="form-group row m-b-15">
+                        <label for="dep-slip-date" class="col-md-4 col-sm-4 col-form-label">Date Deposited : <span class="text-red">*</span></label>
+                        <div class="col-md-8 col-sm-8">
+                            <input type="date" class="form-control" id="dep-slip-date" required data-parsley-required-message="Date deposited is required."/>
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-15">
+                        <label for="dep-slip-grp" class="col-md-4 col-sm-4 col-form-label">Group ID : <span class="text-red">*</span></label>
+                        <div class="col-md-8 col-sm-8">
+                            <input type="text" class="form-control" id="dep-slip-grp" required data-parsley-required-message="Group is required."/>
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-15">
+                        <label for="input-dep-slip" class="col-md-4 col-sm-4 col-form-label">Reference No. : <span class="text-red">*</span></label>
+                        <div class="col-md-8 col-sm-8">
+                            <input type="text" class="form-control" id="input-dep-slip" required data-parsley-required-message="Deposit slip number is required."/>
+                        </div>
+                    </div>
+                    <div class="form-group row m-b-15">
+                        <label for="dep-slip-amt" class="col-md-4 col-sm-4 col-form-label">Amount : <span class="text-red">*</span></label>
+                        <div class="col-md-8 col-sm-8">
+                            <input type="text" class="form-control" id="dep-slip-amt" required data-parsley-required-message="Deposit amount is required."/>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
-                <a href="javascript:;" class="btn btn-success" id="dep-slip-done">Done</a>
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal"><i class="fas fa-times-circle m-r-5"></i>Close</a>
+                <a href="javascript:;" class="btn btn-success" id="dep-slip-upd"><i class="fas fa-check-circle m-r-5" id="dep-slip-upd-icon"></i>Update</a>
             </div>
         </div>
     </div>
@@ -271,7 +294,120 @@
     };
 
     $('#deposited-table tbody').on('click', '.edit-dep', function() {
+        $('#dep-slip-date').val(moment(new Date($(this).closest('tr').find('td:eq(0)').text())).format('YYYY-MM-DD'));
+        $('#dep-slip-grp').val($(this).closest('tr').find('td:eq(1)').text()).prop('readonly', true);
+        $('#input-dep-slip').val($(this).closest('tr').find('td:eq(2)').text());
+        $('#dep-slip-amt').val($(this).closest('tr').find('td:eq(3)').text()).prop('readonly', true);
         $('#modal-edit-slip').modal('show');
+    });
+
+    $('#dep-slip-upd').on('click', function() {
+        $('#dep-slip-upd-icon').removeClass('fa-check-circle');
+        $('#dep-slip-upd-icon').addClass('fa-spinner fa-pulse');
+        var date_dep = moment(new Date($('#dep-slip-date').val())).format('YYYY-MM-DD');
+        var ref_no = $('#input-dep-slip').val().trim();
+        var group_id = $('#dep-slip-grp').val();
+        var user_id = getCurrentUserID;
+        $.ajax({
+            type: "POST",
+            url: "{% url 'update_deposit' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                date_dep: date_dep,
+                ref_no: ref_no,
+                group_id: group_id,
+                user_id: user_id,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                setTimeout(function() {
+                    swal({
+                        title: "Updated Successfully", 
+                        text: group_id + ' has been updated successfully.',
+                        type: "success",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    }, function(isConfirm) {
+                        if (isConfirm) {
+                            $('#modal-edit-slip').modal('hide');
+                            $('#dep-slip-upd-icon').removeClass('fa-spinner fa-pulse');
+                            $('#dep-slip-upd-icon').addClass('fa-check-circle');
+                            load_deposited();
+                        }
+                    });
+                }, 2000);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                }, function(isConfirm) {
+                    if (isConfirm) {
+                        $('#dep-slip-upd-icon').removeClass('fa-spinner fa-pulse');
+                        $('#dep-slip-upd-icon').addClass('fa-check-circle');
+                    }
+                });
+            }
+        });
+    });
+
+    $('#deposited-table tbody').on('click', '.del-dep', function() {
+        var group_id = $(this).closest('tr').find('td:eq(1)').text();
+        swal({
+            title: "Delete",
+            text: "Are you sure to return " + group_id + " to pending?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d9534f",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: true,
+            customClass: "Custom_Cancel"
+        }, function(isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'delete_deposit' %}",
+                        // cache: true,
+                        dataType: 'json',
+                        data: {
+                            group_id: group_id,
+                            csrfmiddlewaretoken:"{{csrf_token}}"
+                        },
+                        success: function(obj) {
+                            setTimeout(function() {
+                                swal({
+                                    title: "Deleted Successfully", 
+                                    text: group_id + ' has been returned to pending status',
+                                    type: "success",
+                                    confirmButtonColor: "#428bca",
+                                    showLoaderOnConfirm: true
+                                }, function(isConfirm) {
+                                    if (isConfirm) {
+                                        load_deposited();
+                                    }
+                                });
+                            }, 1000);
+                        },
+                        error: function(xhr, status, error) {
+                            var errMsg = xhr.status + ': ' + xhr.statusText;
+                            swal({
+                                title: "Error!", 
+                                text: errMsg,
+                                type: "error",
+                                confirmButtonColor: "#428bca",
+                                showLoaderOnConfirm: true
+                            });
+                        }
+                    });
+                }
+        });
     });
 
     function highlightSideNav() {

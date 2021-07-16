@@ -1523,3 +1523,20 @@ def save_to_folder(request):
     file_loc = "CASHIERING/views/layouts/uploads/deposits/" + filename
     cv2.imwrite(file_loc, img)
     return JsonResponse(file_loc, safe=False)
+
+def update_deposit(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_UPDATE_DEPOSIT"
+                    ,(request.POST['date_dep']
+                    ,request.POST['ref_no']
+                    ,request.POST['group_id']
+                    ,request.POST['user_id']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def delete_deposit(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_DELETE_DEPOSIT"
+                    ,(request.POST['group_id'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

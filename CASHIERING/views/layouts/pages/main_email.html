@@ -135,12 +135,13 @@
 		$(window).on("load",function(){
 			$(".loader-wrapper").fadeOut("slow");
 		});
-		gt_fname();
+		$(document).ready(function() {
+			gt_fname();
+		});
 		function gt_fname() {
 			$.ajax({
 				url: "{% url 'gt_fname' %}",
 				type: "POST",
-				timeout: 2000,
 				data: {
 					csrfmiddlewaretoken:"{{csrf_token}}"
 				},
@@ -160,6 +161,196 @@
 				}
 			});
 		};
+
+	    $('#add-stud-but').on('click', function() {
+	        $('#add-stud-form').parsley();
+	        if ($('#add-stud-form').parsley().validate()) {
+				$('#add-stud-but-icon').removeClass('fa-plus-circle');
+				$('#add-stud-but-icon').addClass('fa-spinner fa-pulse');
+	        	var studno = $('#studno').val().trim();
+	        	if (studno.length > 0) {
+	        		addStudentWithStudno();
+	        	}
+	        	else {
+	        		addStudentWithoutStudno();
+	        	}
+
+	        };
+	    });
+
+	    function addStudentWithStudno() {
+	    	var studno = $('#studno').val().trim();
+	    	var fname = $('#fname').val().trim();
+	    	var mname = $('#mname').val().trim();
+	    	var lname = $('#lname').val().trim();
+	    	var course = $('#course').val().trim();
+	    	var yr = $('#yr').val().trim();
+	    	var sec = $('#sec').val().trim();
+
+	    	swal({
+                title: "Add Student",
+                text: "Are you sure to add this student?",
+                type: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#428bca",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: false,
+                closeOnCancel: true,
+                customClass: "Custom_Cancel"
+	    	},
+	    	function(isConfirm) {
+	    		if (isConfirm) {
+		        	$.ajax({
+					url: "{% url 'add_student_with_studno' %}",
+					type: "POST",
+					data: {
+						studno: studno,
+						fname: fname,
+						mname: mname,
+						lname: lname,
+						course: course,
+						yr: yr,
+						sec: sec,
+						csrfmiddlewaretoken:"{{csrf_token}}"
+					},
+					success: function(obj) {
+	                    swal({
+	                        title: "Added Successfully", 
+	                        text: 'You have added ' + studno + ' to the student list.',
+	                        type: "success",
+	                        confirmButtonColor: "#428bca",
+	                        showLoaderOnConfirm: true
+	                    },
+	                    function(isConfirm){
+	                        if (isConfirm){
+								$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+								$('#add-stud-but-icon').addClass('fa-plus-circle');
+	                            $('#add_student').modal('hide');
+	                        }
+	                    })
+					},
+					error: function(xhr, status, error) {
+						var errMsg = xhr.status + ': ' + xhr.statusText;
+						swal({
+							title: "Error!", 
+							text: errMsg,
+							type: "error",
+							confirmButtonColor: "#428bca",
+							showLoaderOnConfirm: true
+						}, function(isConfirm) {
+							$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+							$('#add-stud-but-icon').addClass('fa-plus-circle');
+						});
+					}
+				});
+	    		}
+	    	});
+	    };
+
+	    function addStudentWithoutStudno() {
+	    	var fname = $('#fname').val().trim().toUpperCase();
+	    	var mname = $('#mname').val().trim().toUpperCase();
+	    	var lname = $('#lname').val().trim().toUpperCase();
+	    	var course = $('#course').val().trim();
+	    	var yr = $('#yr').val().trim();
+	    	var sec = $('#sec').val().trim();
+
+	    	swal({
+                title: "Add Student",
+                text: "Are you sure to add this student?",
+                type: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#428bca",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: false,
+                closeOnCancel: true,
+                customClass: "Custom_Cancel"
+	    	},
+	    	function(isConfirm) {
+	    		if (isConfirm) {
+		        	$.ajax({
+						url: "{% url 'add_student_without_studno' %}",
+						type: "POST",
+						data: {
+							fname: fname,
+							mname: mname,
+							lname: lname,
+							course: course,
+							yr: yr,
+							sec: sec,
+							csrfmiddlewaretoken:"{{csrf_token}}"
+						},
+						success: function(obj) {
+							var name = mname == '' ? fname + ' ' + lname : fname + ' ' + mname + ' ' + lname;
+		                    swal({
+		                        title: "Added Successfully", 
+		                        text: 'You have added ' + name + ' to the student list.',
+		                        type: "success",
+		                        confirmButtonColor: "#428bca",
+		                        showLoaderOnConfirm: true
+		                    },
+		                    function(isConfirm){
+		                        if (isConfirm){
+									$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+									$('#add-stud-but-icon').addClass('fa-plus-circle');
+		                            $('#add_student').modal('hide');
+		                        }
+		                    })
+						},
+						error: function(xhr, status, error) {
+							var errMsg = xhr.status + ': ' + xhr.statusText;
+							swal({
+								title: "Error!", 
+								text: errMsg,
+								type: "error",
+								confirmButtonColor: "#428bca",
+								showLoaderOnConfirm: true
+							}, function(isConfirm) {
+								$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+								$('#add-stud-but-icon').addClass('fa-plus-circle');
+							});
+						}
+					});
+	    		}
+	    	});
+	    };
+
+	    $('#add_student').on('hidden.bs.modal', function() {
+			$('#navvy').click();
+	        $('#add-stud-form').parsley().reset();
+	        $('.addstud').val('');
+	    });
+        $('#studno').on('focusin', function() {
+	        $('#studno').mask('9999-99999-CM-9'); //masked input for student number
+	    });
+	    $('#course').on('keyup', function(e) {
+	    	if (e.which == 8 && $('#course').val().trim() != '') {
+	    		$('#course').prop('style', 'text-transform: uppercase;');
+	    	}
+	    	else if (e.which == 8 && $('#course').val().trim() == '') {
+	    		$('#course').prop('style', 'text-transform: capitalize;')
+	    	}
+	    	else if (e.which != 8 ) {
+	    		$('#course').prop('style', 'text-transform: uppercase;');
+	    	}
+	    	
+	    });
+	    $('#course').on('focusout', function() {
+	    	if ($('#course').val().trim() == '') {
+				$('#course').prop('style', 'text-transform: capitalize;');
+	    	}
+	    	else {
+	    		$('#course').prop('style', 'text-transform: uppercase;')
+	    	}	    	
+	    });
+
+		$('#daily-rep-sidenav-but').on('click', function() {
+			var d = new Date();
+			var dt = moment(new Date( (d.getMonth()+1) + '/' +  d.getDate()+ '/' + d.getFullYear())).format('MMM. DD, YYYY');
+			$('#daily-rep-date').text(dt);
+		});
 	</script>
 </body>
 </html>
