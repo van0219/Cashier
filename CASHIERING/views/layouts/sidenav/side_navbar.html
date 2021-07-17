@@ -235,15 +235,83 @@
                             <label class="col-md-12 col-sm-12 text-center f-s-12">(In Pesos)</label>
                         </div>
                         <div class="form-group row m-b-15">
-                            <label class="col-md-12 col-sm-12 f-s-12"><span class="pull-right">Date: <span id="daily-rep-date" class="m-l-5"></span></span></label>
+                            <label class="col-md-12 col-sm-12 f-s-12"><span class="pull-right"><strong>Date:</strong> <span id="daily-rep-date" class="m-l-5"></span></span></label>
                         </div>
-                        <div class="form-group row m-b-15">
+                        <div class="form-group row m-b-5">
                             <label class="col-md-4 col-sm-4 text-center f-s-12"><strong>Denomination</strong></label>
                             <label class="col-md-4 col-sm-4 text-center f-s-12"><strong>Frequency</strong></label>
                             <label class="col-md-4 col-sm-4 text-center f-s-12"><strong>Total</strong></label>
                         </div>
                         <div class="form-group row m-b-15">
                             <label class="col-md-12 col-sm-12 f-s-12"><span class="pull-left"><small>BILLS</small></span></label>
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge badge-info f-s-12">1000</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="thou-freq" value="5" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="thou-amt" value="5000" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge badge-yellow f-s-12">500</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="five-freq" value="3" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="five-amt" value="1500" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge badge-success f-s-12">200</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="two-freq" value="6" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="two-amt" value="1200" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge badge-purple f-s-12">100</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="one-freq" value="20" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="one-amt" value="2000" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge badge-danger f-s-12">50</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="fif-freq" value="15" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="fif-amt" value="750" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge badge-warning f-s-12">20</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="twen-freq" value="100" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="twen-amt" value="2000" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="Total Bills :" style="outline: none; border: none;" disabled="" />
+                            <!-- <label class="col-md-4 col-sm-4 text-center f-s-12"></label> -->
+                            <input class="col-md-4 col-sm-4 text-center text-white f-s-12 form-control-sm bg-black-transparent-6 f-w-700" id="tot-bills" value="12,450" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-12 col-sm-12 f-s-12"><span class="pull-left"><small>COINS</small></span></label>
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge f-s-12">10</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="ten-freq" value="5" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="ten-amt" value="50" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge f-s-12">5</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="cfive-freq" value="30" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="cfive-amt" value="150" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge f-s-12">1</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="cone-freq" value="100" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="cone-amt" value="100" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge f-s-12">0.25</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="ctwenfive-freq" value="20" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="ctwenfive-amt" value="5" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="Total Coins :" style="outline: none; border: none;" disabled="" />
+                            <!-- <label class="col-md-4 col-sm-4 text-center f-s-12"></label> -->
+                            <input class="col-md-4 col-sm-4 text-center text-white f-s-12 form-control-sm bg-black-transparent-6 f-w-700" id="tot-coins" value="305" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="GRAND TOTAL :" style="outline: none; border: none;" disabled="" />
+                            <!-- <label class="col-md-4 col-sm-4 text-center f-s-12 bg-white form-control-sm"></label> -->
+                            <input class="col-md-4 col-sm-4 text-center text-white f-s-12 form-control-sm bg-inverse f-w-700" id="tot-grand" value="₱12,755.00" style="outline: none; border: none;" disabled="" />
                         </div>
                         <!-- <div class="form-group row m-b-15">
                             <label class="col-md-4 col-sm-4 col-form-label" for="sec">Section <span class="text-red">*</span> :</label>
