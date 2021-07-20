@@ -39,21 +39,21 @@
                         <div class="panel-body" style="margin-bottom: -40px;;">
                             <form class="form-horizontal" name="demo-form" action="#" id="addForm" autocomplete="off">
                                 <div class="form-group row m-b-15">
-                                    <label class="col-md-4 col-sm-4 col-form-label" for="fullname">First Name <span class="text-red">*</span> :</label>
+                                    <label class="col-md-4 col-sm-4 col-form-label" for="fname">First Name <span class="text-red">*</span> :</label>
                                     <div class="col-md-8 col-sm-8">
-                                        <input class="form-control" type="text" id="fname" name="fname" placeholder="First Name" data-parsley-required="true" data-parsley-required-message="Firstname is required" />
+                                        <input class="form-control" type="text" id="fname" name="fname" placeholder="First Name" data-parsley-required="true" data-parsley-required-message="Firstname is required" style="text-transform: capitalize;"/>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
-                                    <label class="col-md-4 col-sm-4 col-form-label" for="fullname">Middle Name :</label>
+                                    <label class="col-md-4 col-sm-4 col-form-label" for="mname">Middle Name :</label>
                                     <div class="col-md-8 col-sm-8">
-                                        <input class="form-control" type="text" id="mname" name="mname" placeholder="Middle Name" />
+                                        <input class="form-control" type="text" id="mname" name="mname" placeholder="Middle Name" style="text-transform: capitalize;"/>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
-                                    <label class="col-md-4 col-sm-4 col-form-label" for="fullname">Last Name <span class="text-red">*</span> :</label>
+                                    <label class="col-md-4 col-sm-4 col-form-label" for="lname">Last Name <span class="text-red">*</span> :</label>
                                     <div class="col-md-8 col-sm-8">
-                                        <input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" data-parsley-required="true" data-parsley-required-message="Lastname is required" />
+                                        <input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" data-parsley-required="true" data-parsley-required-message="Lastname is required" style="text-transform: capitalize;"/>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
@@ -65,7 +65,7 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-4 col-sm-4 col-form-label" for="email">Email Address <span class="text-red">*</span> :</label>
                                     <div class="col-md-8 col-sm-8">
-                                        <input class="form-control" type="email" id="email" name="email" placeholder="Email Address" data-parsley-required="true" data-parsley-required-message="Username is required"/>
+                                        <input class="form-control" type="email" id="email" name="email" placeholder="Email Address" data-parsley-required="true" data-parsley-required-message="Email is required"/>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
@@ -110,9 +110,9 @@
             </div>
             <br>
             <div>
-                <input type="file" class="btn btn-sm btn-primary" id="fileBtn" name="fileBtn" value="Upload Image"
+                <input type="file" class="btn btn-sm btn-primary form-control" id="fileBtn" name="fileBtn" value="Upload Image"
                 onclick="uploadProfile(this)" data-parsley-required="true" data-parsley-required-message="Please choose an image.">
-                <p id="imgError"><span class="text-danger">*</span>upload image with .jpg, .jpeg, and .png extensions only.</p>
+                <p id="imgError"><span class="text-danger">*</span>upload image with jpg, jpeg, and png extensions only.</p>
             </div>
         </div>
     </div>
@@ -133,12 +133,17 @@
         highlightSideNav();
     });
 
+    var imgSrc = null;
+    var fileName = null;
+
     function uploadProfile(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
             reader.onload = function (e) {
                 $('#imgProfile').attr('src', e.target.result);
+                imgSrc = e.target.result.split(',')[1];
+                fileName = $('#fileBtn').val().split('\\')[2];
             }
 
             reader.readAsDataURL(input.files[0]);
@@ -148,78 +153,128 @@
         uploadProfile(this);
     });	
 
+    function saveToFolder(img_src, file_name) {
+        var req_from = 'add-user';
+        $.ajax({
+            type: "POST",
+            url: "{% url 'save_to_folder' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                img_src: img_src,
+                file_name: file_name,
+                req_from: req_from,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+
+            },
+            error: function(xhr, status, error) {
+                swal({
+                    title: "Error!", 
+                    text: error,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                }, function(isConfirm) {
+                    if (isConfirm) {
+                        $('#dep-slip-done-icon').removeClass('fa-spinner fa-pulse');
+                        $('#dep-slip-done-icon').addClass('fa-check-circle');
+                    }
+                });
+            }
+        });
+    };
+
     function addClick(event) {
         event.preventDefault();
         valid_uname();
     };
     function check_uname(cond) {
-        if(cond == 0) {
-            $('#addForm').parsley();
-            if($('#addForm').parsley().validate()) {
-                var fname = $.trim($('#fname').val());
-                var mname = $.trim($('#mname').val());
-                var lname = $.trim($('#lname').val());
-                var uname = $.trim($('#uname').val());
-                var psword = Math.random().toString().substr(2,8);
-                var role_name = $.trim($(".radiocss:checked").val());
-                var roleid = role_name == "admin" ? 1 : 2; 
-                var receiver = $.trim($('#email').val());
-                var fullname = $.trim($('#fname').val()) + ' ' + $.trim($('#mname').val()) + ' ' + $.trim($('#lname').val());;
-                swal({
-                    title: "Add User",
-                    text: "Are you sure to add this user?",
-                    type: "info",
-                    showCancelButton: true,
-                    confirmButtonColor: "#428bca",
-                    confirmButtonText: "Yes",
-                    cancelButtonText: "No",
-                    closeOnConfirm: false,
-                    closeOnCancel: true,
-                    customClass: "Custom_Cancel"
-                    },
-                    function(isConfirm) {
-                        if (isConfirm) {
-                            $.ajax({
-                                url: "{% url 'add_user_btn_click' %}",
-                                type: "POST",
-                                data: { 
-                                    fname:fname,
-                                    mname:mname,
-                                    lname:lname,
-                                    uname:uname,
-                                    receiver: receiver,
-                                    psword:psword,
-                                    roleid:roleid,
-                                    csrfmiddlewaretoken:"{{csrf_token}}"
-                                },
-                                success:function(data) {
-                                    swal({
-                                        title: "Added Successfully", 
-                                        text: "A new user is added to the system.", 
-                                        type: "success",
-                                        showLoaderOnConfirm: true,
-                                        confirmButtonColor: "#5cb85c",
+        if(cond == 0) { // If username does not exist in the database;
+            if (fileName != null) {
+                $('#addForm').parsley();
+                if($('#addForm').parsley().validate()) {
+                    var fname = $.trim($('#fname').val()).toUpperCase();
+                    var mname = $.trim($('#mname').val()).toUpperCase();
+                    var lname = $.trim($('#lname').val()).toUpperCase();
+                    var uname = $.trim($('#uname').val());
+                    var psword = Math.random().toString().substr(2,8);
+                    var role_name = $.trim($(".radiocss:checked").val());
+                    var roleid = role_name == "admin" ? 1 : 2; 
+                    var img_filename = fileName;
+                    var receiver = $.trim($('#email').val());
+                    var fullname = fname + ' ' + mname + ' ' + lname;
+                    swal({
+                        title: "Add User",
+                        text: "Are you sure to add "+ fullname +" as a new " + role_name.toUpperCase() + "?",
+                        type: "info",
+                        showCancelButton: true,
+                        confirmButtonColor: "#428bca",
+                        confirmButtonText: "Yes",
+                        cancelButtonText: "No",
+                        closeOnConfirm: false,
+                        closeOnCancel: true,
+                        customClass: "Custom_Cancel"
+                        },
+                        function(isConfirm) {
+                            if (isConfirm) {
+                                saveToFolder(imgSrc, fileName);
+                                $.ajax({
+                                    url: "{% url 'add_user_btn_click' %}",
+                                    type: "POST",
+                                    data: { 
+                                        fname:fname,
+                                        mname:mname,
+                                        lname:lname,
+                                        uname:uname,
+                                        receiver: receiver,
+                                        psword:psword,
+                                        roleid:roleid,
+                                        img_filename:img_filename,
+                                        csrfmiddlewaretoken:"{{csrf_token}}"
                                     },
-                                    function(isConfirm){
-                                        if (isConfirm){
-                                            $('.form-control').val('');
-                                            send_password(uname, psword, receiver, fullname);
-                                        }
-                                    });
-                                },
-                                error:function(xhr, status, error) {
-                                    var errMsg = xhr.status + ': ' + xhr.statusText;
-                                    swal({
-                                        title: "Error!", 
-                                        text: errMsg,
-                                        type: "error",
-                                        confirmButtonColor: "#428bca",
-                                        showLoaderOnConfirm: true
-                                    })
-                                }
-                            })
-                        }
-                    });
+                                    success:function(data) {
+                                        swal({
+                                            title: "Added Successfully", 
+                                            text: "A new "+ role_name.toUpperCase() +" has been added to the system.", 
+                                            type: "success",
+                                            showLoaderOnConfirm: true,
+                                            confirmButtonColor: "#5cb85c",
+                                        },
+                                        function(isConfirm){
+                                            if (isConfirm){
+                                                $('.form-control').val('');
+                                                imgSrc = null;
+                                                fileName = null;
+                                                $('#imgProfile').prop('src', "{%static 'assets/img/user/user-15.png' %}");
+                                                send_password(uname, psword, receiver, fullname);
+                                            }
+                                        });
+                                    },
+                                    error:function(xhr, status, error) {
+                                        var errMsg = xhr.status + ': ' + xhr.statusText;
+                                        swal({
+                                            title: "Error!", 
+                                            text: errMsg,
+                                            type: "error",
+                                            confirmButtonColor: "#428bca",
+                                            showLoaderOnConfirm: true
+                                        })
+                                    }
+                                })
+                            }
+                        });
+                }
+            }
+            else {
+                swal({
+                    title: "Missing Image!", 
+                    text: "Please add an image to this account.",
+                    type: "info",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
             }
         }
         else {
@@ -244,8 +299,8 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success:function(obj) {
-                cond = (obj[0] == 1);
-                check_uname(cond);
+                var cond = (obj[0] == 1); // If obj[0] has a result, (obj[0]==1) is true, otherwise, (obj[0]==1) is false;
+                check_uname(cond); // cond will only have a value of either 1 or 0; 1 means that username already exists in the database;
             },
             error:function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;

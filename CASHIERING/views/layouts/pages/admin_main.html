@@ -47,8 +47,8 @@
 			<ul class="navbar-nav navbar-right">
 				<li class="dropdown navbar-user">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-						<img src="{%static 'assets/img/user/spiderman.jpg' %}" alt="" /> 
-						<span class="d-none d-md-inline fname"></span> <b class="caret"></b>
+						<img src="{%static 'assets/img/user/user-15.png' %}" alt="{%static 'assets/img/user/user-15.png' %}" id="admin-topnav-img" /> 
+						<span class="d-none d-md-inline fname" style="text-transform: capitalize;"></span> <b class="caret"></b>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
 						<a href="javascript:;" class="dropdown-item"><i class="fas fa-calendar-alt m-r-5"></i>Calendar</a>
@@ -164,7 +164,12 @@
 		$(window).on("load",function(){
 			$(".loader-wrapper").fadeOut("slow");
 		});
-		gt_fname();
+
+		$(document).ready(function() {
+			gt_fname();
+			gt_profile_img();
+		});
+
 		function gt_fname() {
 			$.ajax({
 				url: "{% url 'gt_fname' %}",
@@ -173,8 +178,32 @@
 					csrfmiddlewaretoken:"{{csrf_token}}"
 				},
 				success: function(fname) {
-					$('.fname').text(fname);
-					$('.side_name').text(fname);
+					$('.fname').text($.trim(fname).toLowerCase());
+					$('.side_name').text($.trim(fname).toLowerCase());
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.status + ': ' + xhr.statusText;
+					swal({
+						title: "Error!", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					})
+				}
+			});
+		};
+
+		function gt_profile_img() {
+			$.ajax({
+				url: "{% url 'gt_profile_img' %}",
+				type: "POST",
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) { 
+					$('#admin-sidenav-img').prop('src', "{%static 'assets/img/uploads/profile_pictures/' %}" + obj);
+					$('#admin-topnav-img').prop('src', "{%static 'assets/img/uploads/profile_pictures/' %}" + obj);
 				},
 				error: function(xhr, status, error) {
 					var errMsg = xhr.status + ': ' + xhr.statusText;

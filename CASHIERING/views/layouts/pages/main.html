@@ -62,7 +62,7 @@
 			<ul class="navbar-nav navbar-right">
 				<li class="dropdown navbar-user">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-						<img src="{%static 'assets/img/user/maam_meg.jpg' %}" alt="" /> 
+						<img src="{%static 'assets/img/user/maam_meg.jpg' %}" alt="" id="cashier-sidenav-img"/> 
 						<span class="d-none d-md-inline fname"></span> <b class="caret"></b>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
@@ -70,7 +70,7 @@
 						<div class="dropdown-divider"></div>
 						<a href="{% url 'email' %}" class="dropdown-item"><i class="fas fa-envelope m-r-5"></i>Email</a>
 						<div class="dropdown-divider"></div>
-						<a href="{% url 'account' %}" class="dropdown-item"><i class="fas fa-user-circle m-r-5"></i>Account</a>
+						<a href="{% url 'change_pass' %}" class="dropdown-item"><i class="fas fa-key m-r-5"></i>Change Password</a>
 						<div class="dropdown-divider"></div>
 						<a href="{% url 'logout' %}" class="dropdown-item"><i class="fas fa-sign-out-alt m-r-5"></i>Log Out</a>
 					</div>
@@ -224,6 +224,7 @@
 		});
 		$(document).ready(function() {
 			gt_fname();
+			gt_profile_img();
 		});
 		function gt_fname() {
 			$.ajax({
@@ -235,6 +236,30 @@
 				success: function(fname) {
 					$('.fname').text(fname);
 					$('.side_name').text(fname);
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.status + ': ' + xhr.statusText;
+					swal({
+						title: "Error!", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					})
+				}
+			});
+		};
+
+		function gt_profile_img() {
+			$.ajax({
+				url: "{% url 'gt_profile_img' %}",
+				type: "POST",
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) { 
+					$('#cashier-sidenav-img').prop('src', "{%static 'assets/img/uploads/profile_pictures/' %}" + obj);
+					$('#cashier-topnav-img').prop('src', "{%static 'assets/img/uploads/profile_pictures/' %}" + obj);
 				},
 				error: function(xhr, status, error) {
 					var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -267,9 +292,9 @@
 
 	    function addStudentWithStudno() {
 	    	var studno = $('#studno').val().trim();
-	    	var fname = $('#fname').val().trim();
-	    	var mname = $('#mname').val().trim();
-	    	var lname = $('#lname').val().trim();
+	    	var fname = $.trim($('#fname').val()).toUpperCase();
+	    	var mname = $.trim($('#mname').val()).toUpperCase();
+	    	var lname = $.trim($('#lname').val()).toUpperCase();
 	    	var course = $('#course').val().trim();
 	    	var yr = $('#yr').val().trim();
 	    	var sec = $('#sec').val().trim();
@@ -336,9 +361,9 @@
 	    };
 
 	    function addStudentWithoutStudno() {
-	    	var fname = $('#fname').val().trim().toUpperCase();
-	    	var mname = $('#mname').val().trim().toUpperCase();
-	    	var lname = $('#lname').val().trim().toUpperCase();
+	    	var fname = $.trim($('#fname').val()).toUpperCase();
+	    	var mname = $.trim($('#mname').val()).toUpperCase();
+	    	var lname = $.trim($('#lname').val()).toUpperCase();
 	    	var course = $('#course').val().trim();
 	    	var yr = $('#yr').val().trim();
 	    	var sec = $('#sec').val().trim();
@@ -442,7 +467,134 @@
 			var dt = moment(new Date( (d.getMonth()+1) + '/' +  d.getDate()+ '/' + d.getFullYear())).format('MMM. DD, YYYY');
 			$('#daily-rep-date').text(dt);
 		});
-		
+// bills
+function tot_bills() {
+			var tot = parseInt($('#thou-amt').val()) + 
+					  parseInt($('#five-amt').val()) +
+					  parseInt($('#two-amt').val()) +
+					  parseInt($('#one-amt').val()) +
+					  parseInt($('#fif-amt').val()) +
+					  parseInt($('#twen-amt').val());
+			return tot;
+		};
+
+		$('#thou-freq').on('input', function() {
+			if ($('#thou-freq').val() == '') {
+				$('#thou-amt').val('0');
+			}
+			else {
+				$('#thou-amt').val(parseInt($('#thou-freq').val().trim()) * parseInt($('#thou-lbl').text()));
+			}	
+			$('#tot-bills').val(tot_bills());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#five-freq').on('input', function() {
+			if ($('#five-freq').val() == '') {
+				$('#five-amt').val('0');
+			}
+			else {
+				$('#five-amt').val(parseInt($('#five-freq').val().trim()) * parseInt($('#five-lbl').text()));
+			}
+			$('#tot-bills').val(tot_bills());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#two-freq').on('input', function() {
+			if ($('#two-freq').val() == '') {
+				$('#two-amt').val('0');
+			}
+			else {
+				$('#two-amt').val(parseInt($('#two-freq').val().trim()) * parseInt($('#two-lbl').text()));
+			}
+			$('#tot-bills').val(tot_bills());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#one-freq').on('input', function() {
+			if ($('#one-freq').val() == '') {
+				$('#one-amt').val('0');
+			}
+			else {
+				$('#one-amt').val(parseInt($('#one-freq').val().trim()) * parseInt($('#one-lbl').text()));
+			}
+			$('#tot-bills').val(tot_bills());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#fif-freq').on('input', function() {
+			if ($('#fif-freq').val() == '') {
+				$('#fif-amt').val('0');
+			}
+			else {
+				$('#fif-amt').val(parseInt($('#fif-freq').val().trim()) * parseInt($('#fif-lbl').text()));
+			}
+			$('#tot-bills').val(tot_bills());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#twen-freq').on('input', function() {
+			if ($('#twen-freq').val() == '') {
+				$('#twen-amt').val('0');
+			}
+			else {
+				$('#twen-amt').val(parseInt($('#twen-freq').val().trim()) * parseInt($('#twen-lbl').text()));
+			}
+			$('#tot-bills').val(tot_bills());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+// coins
+		function tot_coins() {
+			var tot = parseInt($('#ten-amt').val()) + 
+					  parseInt($('#cfive-amt').val()) +
+					  parseInt($('#cone-amt').val()) +
+					  parseFloat($('#ctwenfive-amt').val());
+			return tot;
+		};
+		$('#ten-freq').on('input', function() {
+			if ($('#ten-freq').val() == '') {
+				$('#ten-amt').val('0');
+			}
+			else {
+				$('#ten-amt').val(parseInt($('#ten-freq').val().trim()) * parseInt($('#ten-lbl').text()));
+			}
+			$('#tot-coins').val(tot_coins());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#cfive-freq').on('input', function() {
+			if ($('#cfive-freq').val() == '') {
+				$('#cfive-amt').val('0');
+			}
+			else {
+				$('#cfive-amt').val(parseInt($('#cfive-freq').val().trim()) * parseInt($('#cfive-lbl').text()));
+			}
+			$('#tot-coins').val(tot_coins());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#cone-freq').on('input', function() {
+			if ($('#cone-freq').val() == '') {
+				$('#cone-amt').val('0');
+			}
+			else {
+				$('#cone-amt').val(parseInt($('#cone-freq').val().trim()) * parseInt($('#cone-lbl').text()));
+			}
+			$('#tot-coins').val(tot_coins());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#ctwenfive-freq').on('input', function() {
+			if ($('#ctwenfive-freq').val() == '') {
+				$('#ctwenfive-amt').val('0');
+			}
+			else {
+				$('#ctwenfive-amt').val(parseFloat(parseInt($('#ctwenfive-freq').val().trim()) * parseFloat($('#ctwenfive-lbl').text())));
+			}
+			$('#tot-coins').val(tot_coins());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+				
 	</script>
 </body>
 </html>

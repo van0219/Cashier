@@ -40,7 +40,7 @@ urlpatterns = [
     path('edit_user', views.edit_user, name='edit_user'),
     path('react_deact', views.react_deact, name='react_deact'),
     path('email', views.email, name="email"),
-    path('account', views.account, name="account"),
+    path('change_pass', views.change_pass, name="change_pass"),
     path('add_user_btn_click', views.add_user_btn_click, name="add_user_btn_click"),
     path('check_username', views.check_username, name="check_username"),
     path('check_credentials', views.check_credentials, name="check_credentials"),
@@ -133,4 +133,8 @@ urlpatterns = [
     path('save_to_folder', views.save_to_folder, name="save_to_folder"),
     path('update_deposit', views.update_deposit, name="update_deposit"),
     path('delete_deposit', views.delete_deposit, name="delete_deposit"),
+    path('gt_profile_img', views.gt_profile_img, name="gt_profile_img"),
+    path('check_or_set', views.check_or_set, name="check_or_set"),
+    path('check_old_pass', views.check_old_pass, name="check_old_pass"),
+    path('change_pass_now', views.change_pass_now, name="change_pass_now"),
 ]

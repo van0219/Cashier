@@ -373,7 +373,9 @@
             reader.readAsDataURL(input.files[0]);
         }
     };
+
     function saveToFolder(img_src, file_name) {
+        var req_from = 'dep-pending';
         $.ajax({
             type: "POST",
             url: "{% url 'save_to_folder' %}",
@@ -382,6 +384,7 @@
             data: {
                 img_src: img_src,
                 file_name: file_name,
+                req_from: req_from,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {

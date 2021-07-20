@@ -85,8 +85,8 @@ def email(request):
     return render(request, 'views/layouts/pages/email.html')
 
 
-def account(request):
-    return render(request, 'views/layouts/pages/account.html')
+def change_pass(request):
+    return render(request, 'views/layouts/pages/change_pass.html')
 
 def sis_payments(request):
     return render(request, 'views/layouts/pages/sis_payments.html')
@@ -101,6 +101,7 @@ def add_user_btn_click(request):
         request.POST['receiver'],
         request.POST['psword'],
         request.POST['roleid'],
+        request.POST['img_filename']
     ))
     return HttpResponse("")
 
@@ -117,11 +118,14 @@ def check_credentials(request):
     if data:
         uname = ''
         role = ''
+        img = ''
         for row in data:
             uname = row[0]
             role = row[1]
+            img = row[2]
         request.session['uname'] = uname
         request.session['role'] = role
+        request.session['img'] = img
     return JsonResponse(data, safe=False)
 
 def logout(request):
@@ -142,6 +146,10 @@ def gt_fname(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_FNAME_CMS", (request.session['uname'],))
     data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def gt_profile_img(request):
+    data = request.session['img']
     return JsonResponse(data, safe=False)
 
 def activity_log(request):
@@ -613,7 +621,7 @@ def send_password(request):
     msgText = MIMEText('<b>%s</b>' % (message1 + '<br>' + message2), 'html')
     msg.attach(msgText)
     # if with image attachment
-    imgFile = "CASHIERING/static/assets/img/logo/key.png"
+    imgFile = "CASHIERING/static/assets/img/logo/PUPLogo.png"
     imgRename = " "
     with open(imgFile, 'rb') as fp:
         img = MIMEImage(fp.read())
@@ -1520,7 +1528,11 @@ def save_to_folder(request):
     image = Image.open(io.BytesIO(imgdata))
     img = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
     filename = request.POST['file_name']
-    file_loc = "CASHIERING/views/layouts/uploads/deposits/" + filename
+    req_from = request.POST['req_from']
+    if req_from == 'add-user':
+        file_loc = "CASHIERING/static/assets/img/uploads/profile_pictures/" + filename
+    else:
+        file_loc = "CASHIERING/static/assets/img/uploads/deposits/" + filename
     cv2.imwrite(file_loc, img)
     return JsonResponse(file_loc, safe=False)
 
@@ -1538,5 +1550,27 @@ def delete_deposit(request):
     cursor = connection.cursor()
     cursor.callproc("SP_DELETE_DEPOSIT"
                     ,(request.POST['group_id'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def check_or_set(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_CHECK_OR_SET")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def change_pass_now(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_CHANGE_PASS_NOW"
+                    ,(request.POST['new_pass']
+                    ,request.session['uname'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def check_old_pass(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_CHECK_OLD_PASS"
+                    ,(request.POST['old_pass']
+                    ,request.session['uname'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)

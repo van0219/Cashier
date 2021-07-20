@@ -58,7 +58,7 @@
 						<div class="dropdown-divider"></div>
 						<a href="{% url 'email' %}" class="dropdown-item"><i class="fas fa-envelope m-r-5"></i>Email</a>
 						<div class="dropdown-divider"></div>
-						<a href="{% url 'account' %}" class="dropdown-item"><i class="fas fa-user-circle m-r-5"></i>Account</a>
+						<a href="{% url 'change_pass' %}" class="dropdown-item"><i class="fas fa-key m-r-5"></i>Account</a>
 						<div class="dropdown-divider"></div>
 						<a href="{% url 'logout' %}" class="dropdown-item"><i class="fas fa-sign-out-alt m-r-5"></i>Log Out</a>
 					</div>
@@ -212,6 +212,7 @@
 		});
 		$(document).ready(function() {
 			gt_fname();
+			gt_profile_img();
 		});
 		function gt_fname() {
 			$.ajax({
@@ -236,6 +237,351 @@
 				}
 			});
 		};
+
+		function gt_profile_img() {
+			$.ajax({
+				url: "{% url 'gt_profile_img' %}",
+				type: "POST",
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) { 
+					$('#cashier-sidenav-img').prop('src', "{%static 'assets/img/uploads/profile_pictures/' %}" + obj);
+					$('#cashier-topnav-img').prop('src', "{%static 'assets/img/uploads/profile_pictures/' %}" + obj);
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.status + ': ' + xhr.statusText;
+					swal({
+						title: "Error!", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					})
+				}
+			});
+		};
+
+	    $('#add-stud-but').on('click', function() {
+	        $('#add-stud-form').parsley();
+	        if ($('#add-stud-form').parsley().validate()) {
+				$('#add-stud-but-icon').removeClass('fa-plus-circle');
+				$('#add-stud-but-icon').addClass('fa-spinner fa-pulse');
+	        	var studno = $('#studno').val().trim();
+	        	if (studno.length > 0) {
+	        		addStudentWithStudno();
+	        	}
+	        	else {
+	        		addStudentWithoutStudno();
+	        	}
+
+	        };
+	    });
+
+	    function addStudentWithStudno() {
+	    	var studno = $('#studno').val().trim();
+	    	var fname = $.trim($('#fname').val()).toUpperCase();
+	    	var mname = $.trim($('#mname').val()).toUpperCase();
+	    	var lname = $.trim($('#lname').val()).toUpperCase();
+	    	var course = $('#course').val().trim();
+	    	var yr = $('#yr').val().trim();
+	    	var sec = $('#sec').val().trim();
+
+	    	swal({
+                title: "Add Student",
+                text: "Are you sure to add this student?",
+                type: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#428bca",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: false,
+                closeOnCancel: true,
+                customClass: "Custom_Cancel"
+	    	},
+	    	function(isConfirm) {
+	    		if (isConfirm) {
+		        	$.ajax({
+					url: "{% url 'add_student_with_studno' %}",
+					type: "POST",
+					data: {
+						studno: studno,
+						fname: fname,
+						mname: mname,
+						lname: lname,
+						course: course,
+						yr: yr,
+						sec: sec,
+						csrfmiddlewaretoken:"{{csrf_token}}"
+					},
+					success: function(obj) {
+	                    swal({
+	                        title: "Added Successfully", 
+	                        text: 'You have added ' + studno + ' to the student list.',
+	                        type: "success",
+	                        confirmButtonColor: "#428bca",
+	                        showLoaderOnConfirm: true
+	                    },
+	                    function(isConfirm){
+	                        if (isConfirm){
+								$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+								$('#add-stud-but-icon').addClass('fa-plus-circle');
+	                            $('#add_student').modal('hide');
+	                        }
+	                    })
+					},
+					error: function(xhr, status, error) {
+						var errMsg = xhr.statusText;
+						swal({
+							title: "An error occured", 
+							text: errMsg,
+							type: "error",
+							confirmButtonColor: "#428bca",
+							showLoaderOnConfirm: true
+						}, function(isConfirm) {
+							$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+							$('#add-stud-but-icon').addClass('fa-plus-circle');
+						});
+					}
+				});
+	    		}
+	    	});
+	    };
+
+	    function addStudentWithoutStudno() {
+	    	var fname = $.trim($('#fname').val()).toUpperCase();
+	    	var mname = $.trim($('#mname').val()).toUpperCase();
+	    	var lname = $.trim($('#lname').val()).toUpperCase();
+	    	var course = $('#course').val().trim();
+	    	var yr = $('#yr').val().trim();
+	    	var sec = $('#sec').val().trim();
+
+	    	swal({
+                title: "Add Student",
+                text: "Are you sure to add this student?",
+                type: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#428bca",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: false,
+                closeOnCancel: true,
+                customClass: "Custom_Cancel"
+	    	},
+	    	function(isConfirm) {
+	    		if (isConfirm) {
+		        	$.ajax({
+						url: "{% url 'add_student_without_studno' %}",
+						type: "POST",
+						data: {
+							fname: fname,
+							mname: mname,
+							lname: lname,
+							course: course,
+							yr: yr,
+							sec: sec,
+							csrfmiddlewaretoken:"{{csrf_token}}"
+						},
+						success: function(obj) {
+							var name = mname == '' ? fname + ' ' + lname : fname + ' ' + mname + ' ' + lname;
+		                    swal({
+		                        title: "Added Successfully", 
+		                        text: 'You have added ' + name + ' to the student list.',
+		                        type: "success",
+		                        confirmButtonColor: "#428bca",
+		                        showLoaderOnConfirm: true
+		                    },
+		                    function(isConfirm){
+		                        if (isConfirm){
+									$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+									$('#add-stud-but-icon').addClass('fa-plus-circle');
+		                            $('#add_student').modal('hide');
+		                        }
+		                    })
+						},
+						error: function(xhr, status, error) {
+							var errMsg = xhr.status + ': ' + xhr.statusText;
+							swal({
+								title: "Error!", 
+								text: errMsg,
+								type: "error",
+								confirmButtonColor: "#428bca",
+								showLoaderOnConfirm: true
+							}, function(isConfirm) {
+								$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+								$('#add-stud-but-icon').addClass('fa-plus-circle');
+							});
+						}
+					});
+	    		}
+	    	});
+	    };
+
+	    $('#add_student').on('hidden.bs.modal', function() {
+			$('#navvy').click();
+	        $('#add-stud-form').parsley().reset();
+	        $('.addstud').val('');
+	    });
+
+        $('#studno').on('focusin', function() {
+	        $('#studno').mask('9999-99999-CM-9'); //masked input for student number
+	    });
+
+	    $('#course').on('keyup', function(e) {
+	    	if (e.which == 8 && $('#course').val().trim() != '') {
+	    		$('#course').prop('style', 'text-transform: uppercase;');
+	    	}
+	    	else if (e.which == 8 && $('#course').val().trim() == '') {
+	    		$('#course').prop('style', 'text-transform: capitalize;')
+	    	}
+	    	else if (e.which != 8 ) {
+	    		$('#course').prop('style', 'text-transform: uppercase;');
+	    	}
+	    	
+	    });
+
+	    $('#course').on('focusout', function() {
+	    	if ($('#course').val().trim() == '') {
+				$('#course').prop('style', 'text-transform: capitalize;');
+	    	}
+	    	else {
+	    		$('#course').prop('style', 'text-transform: uppercase;')
+	    	}
+	    	
+	    });
+
+		$('#daily-rep-sidenav-but').on('click', function() {
+			var d = new Date();
+			var dt = moment(new Date( (d.getMonth()+1) + '/' +  d.getDate()+ '/' + d.getFullYear())).format('MMM. DD, YYYY');
+			$('#daily-rep-date').text(dt);
+		});
+// bills
+		function tot_bills() {
+			var tot = parseInt($('#thou-amt').val()) + 
+					  parseInt($('#five-amt').val()) +
+					  parseInt($('#two-amt').val()) +
+					  parseInt($('#one-amt').val()) +
+					  parseInt($('#fif-amt').val()) +
+					  parseInt($('#twen-amt').val());
+			return tot;
+		};
+
+		$('#thou-freq').on('input', function() {
+			if ($('#thou-freq').val() == '') {
+				$('#thou-amt').val('0');
+			}
+			else {
+				$('#thou-amt').val(parseInt($('#thou-freq').val().trim()) * parseInt($('#thou-lbl').text()));
+			}	
+			$('#tot-bills').val(tot_bills());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#five-freq').on('input', function() {
+			if ($('#five-freq').val() == '') {
+				$('#five-amt').val('0');
+			}
+			else {
+				$('#five-amt').val(parseInt($('#five-freq').val().trim()) * parseInt($('#five-lbl').text()));
+			}
+			$('#tot-bills').val(tot_bills());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#two-freq').on('input', function() {
+			if ($('#two-freq').val() == '') {
+				$('#two-amt').val('0');
+			}
+			else {
+				$('#two-amt').val(parseInt($('#two-freq').val().trim()) * parseInt($('#two-lbl').text()));
+			}
+			$('#tot-bills').val(tot_bills());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#one-freq').on('input', function() {
+			if ($('#one-freq').val() == '') {
+				$('#one-amt').val('0');
+			}
+			else {
+				$('#one-amt').val(parseInt($('#one-freq').val().trim()) * parseInt($('#one-lbl').text()));
+			}
+			$('#tot-bills').val(tot_bills());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#fif-freq').on('input', function() {
+			if ($('#fif-freq').val() == '') {
+				$('#fif-amt').val('0');
+			}
+			else {
+				$('#fif-amt').val(parseInt($('#fif-freq').val().trim()) * parseInt($('#fif-lbl').text()));
+			}
+			$('#tot-bills').val(tot_bills());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#twen-freq').on('input', function() {
+			if ($('#twen-freq').val() == '') {
+				$('#twen-amt').val('0');
+			}
+			else {
+				$('#twen-amt').val(parseInt($('#twen-freq').val().trim()) * parseInt($('#twen-lbl').text()));
+			}
+			$('#tot-bills').val(tot_bills());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+// coins
+		function tot_coins() {
+			var tot = parseInt($('#ten-amt').val()) + 
+					  parseInt($('#cfive-amt').val()) +
+					  parseInt($('#cone-amt').val()) +
+					  parseFloat($('#ctwenfive-amt').val());
+			return tot;
+		};
+		$('#ten-freq').on('input', function() {
+			if ($('#ten-freq').val() == '') {
+				$('#ten-amt').val('0');
+			}
+			else {
+				$('#ten-amt').val(parseInt($('#ten-freq').val().trim()) * parseInt($('#ten-lbl').text()));
+			}
+			$('#tot-coins').val(tot_coins());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#cfive-freq').on('input', function() {
+			if ($('#cfive-freq').val() == '') {
+				$('#cfive-amt').val('0');
+			}
+			else {
+				$('#cfive-amt').val(parseInt($('#cfive-freq').val().trim()) * parseInt($('#cfive-lbl').text()));
+			}
+			$('#tot-coins').val(tot_coins());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#cone-freq').on('input', function() {
+			if ($('#cone-freq').val() == '') {
+				$('#cone-amt').val('0');
+			}
+			else {
+				$('#cone-amt').val(parseInt($('#cone-freq').val().trim()) * parseInt($('#cone-lbl').text()));
+			}
+			$('#tot-coins').val(tot_coins());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
+
+		$('#ctwenfive-freq').on('input', function() {
+			if ($('#ctwenfive-freq').val() == '') {
+				$('#ctwenfive-amt').val('0');
+			}
+			else {
+				$('#ctwenfive-amt').val(parseFloat(parseInt($('#ctwenfive-freq').val().trim()) * parseFloat($('#ctwenfive-lbl').text())));
+			}
+			$('#tot-coins').val(tot_coins());
+			$('#tot-grand').val(tot_bills() + tot_coins());
+		});
 	</script>
 </body>
 </html>

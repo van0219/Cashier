@@ -10,7 +10,7 @@
                         <!-- <img src="{%static 'assets/img/cover/cashier.jpg' %}" alt=""/> -->
                     </div>
                     <div class="image">
-                        <img src="{%static 'assets/img/user/maam_meg.jpg' %}" alt="" />
+                        <img src="{%static 'assets/img/user/maam_meg.jpg' %}" alt="" style="height: 100px; width: 100px;" id="cashier-topnav-img"/>
                     </div>
                     <div class="info">
                         <b class="caret pull-right"></b>
@@ -27,6 +27,11 @@
             <li>
                 <ul class="nav nav-profile">
                     <li><a href="#add_student" data-toggle="modal"><i class="fas fa-user-plus m-r-5"></i>Add Student</a></li>
+                </ul>
+            </li>
+            <li>
+                <ul class="nav nav-profile">
+                    <li><a href="#daily-collection-report" data-toggle="modal" id="daily-rep-sidenav-but"><i class="fas fa-file-alt m-r-5"></i>Daily Collection Report</a></li>
                 </ul>
             </li>
         </ul>
@@ -307,6 +312,155 @@
                         <div class="modal-footer form-group m-b-0">
                             <a href="javascript:;" class="btn btn-white" data-dismiss="modal" id="close-stud-but"><i class="fas fa-times-circle m-r-5"></i>Close</a>
                             <a href="javascript:;" class="btn btn-success" id="add-stud-but"><i class="fas fa-plus-circle m-r-5"></i>Add</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- end card -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #daily-collection-report -->
+<div class="modal fade" id="daily-collection-report">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+            <!-- begin card -->
+            <div class="card card-inverse bg-gradient-silver">
+                <div class="card-block">
+                    <form class="form-horizontal" id="add-stud-form" data-parsley-validate="true">
+                        <div class="form-group row">
+                            <label class="col-md-12 col-sm-12 text-center f-s-14"><strong>POLYTECHNIC UNIVERSITY OF THE PHILIPPINES</strong></label>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-12 col-sm-12 text-center f-s-11">Don Fabian St. Commonwealth Ave., Quezon City</label>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-12 col-sm-12 text-center f-s-12"><strong>CASH COUNT SHEET</strong></label>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-12 col-sm-12 text-center f-s-12">(In Pesos)</label>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-12 col-sm-12 f-s-12"><span class="pull-right"><strong>Date:</strong> <span id="daily-rep-date" class="m-l-5"></span></span></label>
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12"><strong>Denomination</strong></label>
+                            <label class="col-md-4 col-sm-4 text-center f-s-12"><strong>Frequency</strong></label>
+                            <label class="col-md-4 col-sm-4 text-center f-s-12"><strong>Total</strong></label>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-12 col-sm-12 f-s-12"><span class="pull-left"><small>BILLS</small></span></label>
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge badge-info f-s-12" id="thou-lbl">1000</span></label>
+                            <input type="number" class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="thou-freq" value="" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="thou-amt" value="0" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge badge-yellow f-s-12" id="five-lbl">500</span></label>
+                            <input type="number" class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="five-freq" value="" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="five-amt" value="0" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge badge-success f-s-12" id="two-lbl">200</span></label>
+                            <input type="number" class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="two-freq" value="" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="two-amt" value="0" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge badge-purple f-s-12" id="one-lbl">100</span></label>
+                            <input type="number" class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="one-freq" value="" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="one-amt" value="0" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge badge-danger f-s-12" id="fif-lbl">50</span></label>
+                            <input type="number" class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="fif-freq" value="" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="fif-amt" value="0" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge badge-warning f-s-12" id="twen-lbl">20</span></label>
+                            <input type="number" class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="twen-freq" value="" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="twen-amt" value="0" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="Total Bills :" style="outline: none; border: none;" disabled="" />
+                            <!-- <label class="col-md-4 col-sm-4 text-center f-s-12"></label> -->
+                            <input class="col-md-4 col-sm-4 text-center text-white f-s-12 form-control-sm bg-black-transparent-6 f-w-700" id="tot-bills" value="0" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-12 col-sm-12 f-s-12"><span class="pull-left"><small>COINS</small></span></label>
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge f-s-12" id="ten-lbl">10</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="ten-freq" value="" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="ten-amt" value="0" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge f-s-12" id="cfive-lbl">5</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="cfive-freq" value="" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="cfive-amt" value="0" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge f-s-12" id="cone-lbl">1</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="cone-freq" value="" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="cone-amt" value="0" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-5">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12 m-t-5"><span class="badge f-s-12" id="ctwenfive-lbl">0.25</span></label>
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm" id="ctwenfive-freq" value="" style="outline: none; border: none;" />
+                            <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="ctwenfive-amt" value="0" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="Total Coins :" style="outline: none; border: none;" disabled="" />
+                            <!-- <label class="col-md-4 col-sm-4 text-center f-s-12"></label> -->
+                            <input class="col-md-4 col-sm-4 text-center text-white f-s-12 form-control-sm bg-black-transparent-6 f-w-700" id="tot-coins" value="" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-30">
+                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="GRAND TOTAL :" style="outline: none; border: none;" disabled="" />
+                            <!-- <label class="col-md-4 col-sm-4 text-center f-s-12 bg-white form-control-sm"></label> -->
+                            <input class="col-md-4 col-sm-4 text-center text-white f-s-12 form-control-sm bg-inverse f-w-700" id="tot-grand" value="" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-6 col-sm-6 text-center f-s-12">Cash Counted By :</label>
+                            <label class="col-md-6 col-sm-6 text-center f-s-12">Fund Acknowledged By :</label>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <div class="col-md-6 col-sm-6 f-w-700">
+                                <hr class="bg-black-transparent-6" />
+                            </div>
+                            <div class="col-md-6 col-sm-6 f-w-700">
+                                <hr class="bg-black-transparent-6" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 text-center f-s-12">Collection Period</label>
+                            <label class="col-md-4 col-sm-4 text-center f-s-12">OR Number Used</label>
+                            <label class="col-md-4 col-sm-4 text-center f-s-12">Amount</label>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <div class="col-md-4 col-sm-4 f-w-700">
+                                <hr class="bg-black-transparent-6" />   
+                            </div>
+                            <div class="col-md-4 col-sm-4 f-w-700">
+                                <hr class="bg-black-transparent-6" />
+                            </div>
+                            <div class="col-md-4 col-sm-4 f-w-700">
+                                <hr class="bg-black-transparent-6" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-30">
+                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="GRAND TOTAL :" style="outline: none; border: none;" disabled="" />
+                            <!-- <label class="col-md-4 col-sm-4 text-center f-s-12 bg-white form-control-sm"></label> -->
+                            <input class="col-md-4 col-sm-4 text-center text-white f-s-12 form-control-sm bg-inverse f-w-700" id="tot-grand2" value="" style="outline: none; border: none;" disabled="" />
+                        </div>
+                        <div class="modal-footer form-group m-b-0">
+                            <a href="javascript:;" class="btn btn-white btn-md" data-dismiss="modal" id="close-stud-but"><i class="fas fa-times-circle m-r-5"></i>Close</a>
+                            <a href="javascript:;" class="btn btn-success btn-md" id="add-stud-but"><i class="fas fa-save m-r-5" id="add-stud-but-icon"></i>Save</a>
                         </div>
                     </form>
                 </div>

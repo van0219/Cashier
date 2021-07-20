@@ -82,48 +82,7 @@
         event.preventDefault();
         $('#or-form').parsley();
         if ($('#or-form').parsley().validate()) {
-            $('#or-div').removeClass('bg-grey-transparent-3');
-            $('#or-div').addClass('bg-gradient-blue');
-            $('#from-label').removeClass('text-inverse');
-            $('#from-label').addClass('text-white');
-            $('#to-label').removeClass('text-inverse');
-            $('#to-label').addClass('text-white');
-            
-            var startVal = $.trim($('#min').val());
-            var endVal = $.trim($('#max').val());
-            $.ajax({
-                type: "POST",
-                url: "{% url 'add_or_set' %}",
-                cache: true,
-                data: {
-                    startVal: startVal,
-                    endVal: endVal,
-                    csrfmiddlewaretoken:"{{csrf_token}}"
-                },
-                success: function(obj) {
-                    swal({
-                        title: "Added Successfully", 
-                        text: "A new OR set has been added successfully.",
-                        type: "success",
-                        showLoaderOnConfirm: true,
-                        confirmButtonColor: "#5cb85c",
-                    });
-                    $('#from').val('');
-                    $('#to').val('');
-                    $('#min').val('');
-                    $('#max').val('');
-                },
-                error: function(xhr, status, error) {
-                    var errMsg = xhr.status + ': ' + xhr.statusText;
-                    swal({
-                        title: "Error!", 
-                        text: errMsg,
-                        type: "error",
-                        confirmButtonColor: "#428bca",
-                        showLoaderOnConfirm: true
-                    })
-                }
-            });
+            checkORcount();
         }
         else {
             $('#or-div').removeClass('bg-gradient-blue');
@@ -134,6 +93,51 @@
             $('#to-label').addClass('text-inverse');
         }
     });
+
+    function or_set_empty() {
+        $('#or-div').removeClass('bg-grey-transparent-3');
+        $('#or-div').addClass('bg-gradient-blue');
+        $('#from-label').removeClass('text-inverse');
+        $('#from-label').addClass('text-white');
+        $('#to-label').removeClass('text-inverse');
+        $('#to-label').addClass('text-white');
+        
+        var startVal = $.trim($('#min').val());
+        var endVal = $.trim($('#max').val());
+        $.ajax({
+            type: "POST",
+            url: "{% url 'add_or_set' %}",
+            cache: true,
+            data: {
+                startVal: startVal,
+                endVal: endVal,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                swal({
+                    title: "Added Successfully", 
+                    text: "A new OR set has been added successfully.",
+                    type: "success",
+                    showLoaderOnConfirm: true,
+                    confirmButtonColor: "#5cb85c",
+                });
+                $('#from').val('');
+                $('#to').val('');
+                $('#min').val('');
+                $('#max').val('');
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
 
     $('#clear').on('click', function() {
         $('#or-form').parsley().reset();
@@ -146,6 +150,41 @@
         $('#to-label').removeClass('text-inverse');
         $('#to-label').addClass('text-white');
     });
+
+    function checkORcount() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'check_or_set' %}",
+            cache: true,
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                if (parseInt(obj[0]) == 0) {
+                    or_set_empty();
+                }
+                else {
+                    swal({
+                        title: "Unable to Add!", 
+                        text: "You still have " + parseInt(obj[0]).toString() + " OR's left.",
+                        type: "info",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');
