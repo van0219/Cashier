@@ -36,7 +36,7 @@
 	<!-- ================== BEGIN BASE JS ================== -->
 	<!-- ================== END BASE JS ================== -->
 </head>
-<body>
+<body id="body-main">
 	<!-- begin #page-loader -->
 	<div class="loader-wrapper">
         <span class="loader"><span class="loader-inner"></span></span>
@@ -225,7 +225,28 @@
 		$(document).ready(function() {
 			gt_fname();
 			gt_profile_img();
+			$('#tot-bills-lbl').on('focusin', function() {
+				$(this).blur();
+			});
+			$('#tot-coins-lbl').on('focusin', function() {
+				$(this).blur();
+			});
+			$('#tot-grand-lbl').on('focusin', function() {
+				$(this).blur();
+			});
+			$('#tot-grand2-lbl').on('focusin', function() {
+				$(this).blur();
+			});
+			// alert(zoomIn());
 		});
+
+		// function zoomIn() {
+		// 	var Page = document.getElementById('body-main');
+		// 	var zoom = Math.round(window.devicePixelRatio * 100) + 20 + '%';
+		// 	Page.style.zoom = zoom;
+		// 	return zoom;
+		// };
+
 		function gt_fname() {
 			$.ajax({
 				url: "{% url 'gt_fname' %}",
@@ -314,48 +335,48 @@
 	    	function(isConfirm) {
 	    		if (isConfirm) {
 		        	$.ajax({
-					url: "{% url 'add_student_with_studno' %}",
-					type: "POST",
-					data: {
-						studno: studno,
-						fname: fname,
-						mname: mname,
-						lname: lname,
-						course: course,
-						yr: yr,
-						sec: sec,
-						csrfmiddlewaretoken:"{{csrf_token}}"
-					},
-					success: function(obj) {
-	                    swal({
-	                        title: "Added Successfully", 
-	                        text: 'You have added ' + studno + ' to the student list.',
-	                        type: "success",
-	                        confirmButtonColor: "#428bca",
-	                        showLoaderOnConfirm: true
-	                    },
-	                    function(isConfirm){
-	                        if (isConfirm){
+						url: "{% url 'add_student_with_studno' %}",
+						type: "POST",
+						data: {
+							studno: studno,
+							fname: fname,
+							mname: mname,
+							lname: lname,
+							course: course,
+							yr: yr,
+							sec: sec,
+							csrfmiddlewaretoken:"{{csrf_token}}"
+						},
+						success: function(obj) {
+							swal({
+								title: "Added Successfully", 
+								text: 'You have added ' + studno + ' to the student list.',
+								type: "success",
+								confirmButtonColor: "#428bca",
+								showLoaderOnConfirm: true
+							},
+							function(isConfirm){
+								if (isConfirm){
+									$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+									$('#add-stud-but-icon').addClass('fa-plus-circle');
+									$('#add_student').modal('hide');
+								}
+							})
+						},
+						error: function(xhr, status, error) {
+							var errMsg = xhr.statusText;
+							swal({
+								title: "An error occured", 
+								text: errMsg,
+								type: "error",
+								confirmButtonColor: "#428bca",
+								showLoaderOnConfirm: true
+							}, function(isConfirm) {
 								$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
 								$('#add-stud-but-icon').addClass('fa-plus-circle');
-	                            $('#add_student').modal('hide');
-	                        }
-	                    })
-					},
-					error: function(xhr, status, error) {
-						var errMsg = xhr.statusText;
-						swal({
-							title: "An error occured", 
-							text: errMsg,
-							type: "error",
-							confirmButtonColor: "#428bca",
-							showLoaderOnConfirm: true
-						}, function(isConfirm) {
-							$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
-							$('#add-stud-but-icon').addClass('fa-plus-circle');
-						});
-					}
-				});
+							});
+						}
+					});
 	    		}
 	    	});
 	    };
@@ -467,8 +488,13 @@
 			var dt = moment(new Date( (d.getMonth()+1) + '/' +  d.getDate()+ '/' + d.getFullYear())).format('MMM. DD, YYYY');
 			$('#daily-rep-date').text(dt);
 		});
+
+		$('#daily-collection-report').on('shown.bs.modal', function() {
+			$('#cash-count-by').text($('.fname').text());
+		});
+
 // bills
-function tot_bills() {
+		function tot_bills() {
 			var tot = parseInt($('#thou-amt').val()) + 
 					  parseInt($('#five-amt').val()) +
 					  parseInt($('#two-amt').val()) +
@@ -594,6 +620,46 @@ function tot_bills() {
 			$('#tot-coins').val(tot_coins());
 			$('#tot-grand').val(tot_bills() + tot_coins());
 		});
+
+		$('#add-sis').on('click', function() {
+			checkIfSISPaymentDone();
+		});
+
+		function checkIfSISPaymentDone() {
+			$.ajax({
+				url: "{% url 'check_if_sis_payment_done' %}",
+				type: "POST",
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) {
+					if (obj.length > 0) {
+						swal({
+							title: "SIS Done",
+							text: "You have already added an SIS payment today.",
+							type: "warning",
+							confirmButtonColor: "#428bca",
+							confirmButtonText: "OK",
+							closeOnConfirm: true,
+							customClass: "Custom_Cancel"
+						});
+					}
+					else {
+						window.location = "{% url 'sis_payments' %}";
+					};
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.statusText;
+					swal({
+						title: "An error occured", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					});
+				}
+			});
+		};
 				
 	</script>
 </body>

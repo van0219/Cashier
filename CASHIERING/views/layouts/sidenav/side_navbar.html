@@ -55,7 +55,7 @@
                     <li><a href="add_collection" id="add-col">Add Collection</a></li>
                     <!-- <li><a href="add_collection_student">Add Collection <small>(Student)</small></a></li> -->
                     <!-- <li><a href="javascript:;">Add Clearance</a></li> -->
-                    <li><a href="sis_payments" id="add-sis">Add SIS Payments</a></li>
+                    <li><a href="javascript:;" id="add-sis">Add SIS Payments</a></li>
                 </ul>
             </li>
             <li class="has-sub m-b-10">
@@ -76,9 +76,8 @@
                     <span>View Records</span> 
                 </a>
                 <ul class="sub-menu">
-                    <li><a href="view_receipts" id="view-rec">View Receipts</a></li>
-                    <!-- <li><a href="cleared_students">Cleared Students</a></li> -->
                     <li><a href="transaction_log" id="trans-log">Transaction Log</a></li>
+                    <li><a href="view_receipts" id="view-rec">View Receipts</a></li>
                     <li><a href="view_sis_payments" id="view-sis">View SIS Payments</a></li>
                 </ul>
             </li>
@@ -276,7 +275,7 @@
                             <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="twen-amt" value="0" style="outline: none; border: none;" disabled="" />
                         </div>
                         <div class="form-group row m-b-15">
-                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="Total Bills :" style="outline: none; border: none;" disabled="" />
+                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="Total Bills :" style="outline: none; border: none;" id="tot-bills-lbl" />
                             <!-- <label class="col-md-4 col-sm-4 text-center f-s-12"></label> -->
                             <input class="col-md-4 col-sm-4 text-center text-white f-s-12 form-control-sm bg-black-transparent-6 f-w-700" id="tot-bills" value="0" style="outline: none; border: none;" disabled="" />
                         </div>
@@ -304,31 +303,29 @@
                             <input class="col-md-4 col-sm-4 text-center f-s-12 form-control-sm bg-gradient-silver" id="ctwenfive-amt" value="0" style="outline: none; border: none;" disabled="" />
                         </div>
                         <div class="form-group row m-b-15">
-                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="Total Coins :" style="outline: none; border: none;" disabled="" />
+                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="Total Coins :" style="outline: none; border: none;" id="tot-coins-lbl" />
                             <!-- <label class="col-md-4 col-sm-4 text-center f-s-12"></label> -->
                             <input class="col-md-4 col-sm-4 text-center text-white f-s-12 form-control-sm bg-black-transparent-6 f-w-700" id="tot-coins" value="" style="outline: none; border: none;" disabled="" />
                         </div>
                         <div class="form-group row m-b-30">
-                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="GRAND TOTAL :" style="outline: none; border: none;" disabled="" />
+                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="GRAND TOTAL :" style="outline: none; border: none;" id="tot-grand-lbl" />
                             <!-- <label class="col-md-4 col-sm-4 text-center f-s-12 bg-white form-control-sm"></label> -->
                             <input class="col-md-4 col-sm-4 text-center text-white f-s-12 form-control-sm bg-inverse f-w-700" id="tot-grand" value="" style="outline: none; border: none;" disabled="" />
                         </div>
                         <div class="form-group row m-b-15">
-                            <label class="col-md-6 col-sm-6 text-center f-s-12">Cash Counted By :</label>
-                            <label class="col-md-6 col-sm-6 text-center f-s-12">Fund Acknowledged By :</label>
+                            <label class="col-md-6 col-sm-6 text-center f-s-12"><strong>Cash Counted By :</strong></label>
+                            <label class="col-md-6 col-sm-6 text-center f-s-12"><strong>Fund Acknowledged By :</strong></label>
                         </div>
                         <div class="form-group row m-b-15">
+                            <label class="col-md-6 col-sm-6 text-center f-s-12"><u><span id="cash-count-by"></span></u></label>
                             <div class="col-md-6 col-sm-6 f-w-700">
                                 <hr class="bg-black-transparent-6" />
                             </div>
-                            <div class="col-md-6 col-sm-6 f-w-700">
-                                <hr class="bg-black-transparent-6" />
-                            </div>
                         </div>
                         <div class="form-group row m-b-15">
-                            <label class="col-md-4 col-sm-4 text-center f-s-12">Collection Period</label>
-                            <label class="col-md-4 col-sm-4 text-center f-s-12">OR Number Used</label>
-                            <label class="col-md-4 col-sm-4 text-center f-s-12">Amount</label>
+                            <label class="col-md-4 col-sm-4 text-center f-s-12"><strong>Collection Mode</strong></label>
+                            <label class="col-md-4 col-sm-4 text-center f-s-12"><strong>OR Number Used</strong></label>
+                            <label class="col-md-4 col-sm-4 text-center f-s-12"><strong>Amount</strong></label>
                         </div>
                         <div class="form-group row m-b-15">
                             <div class="col-md-4 col-sm-4 f-w-700">
@@ -342,7 +339,7 @@
                             </div>
                         </div>
                         <div class="form-group row m-b-30">
-                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="GRAND TOTAL :" style="outline: none; border: none;" disabled="" />
+                            <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="GRAND TOTAL :" style="outline: none; border: none;" id="tot-grand2-lbl" />
                             <!-- <label class="col-md-4 col-sm-4 text-center f-s-12 bg-white form-control-sm"></label> -->
                             <input class="col-md-4 col-sm-4 text-center text-white f-s-12 form-control-sm bg-inverse f-w-700" id="tot-grand2" value="" style="outline: none; border: none;" disabled="" />
                         </div>

@@ -69,7 +69,7 @@
     <!-- end page-header -->
     <!-- begin card -->
     <div class="card text-left">
-        <div class="card-header">
+        <div class="card-header bg-inverse text-white">
             <i class="fas fa-calculator fa-lg m-r-5"></i>Add Collection
         </div>
         <div class="card-block">
@@ -80,7 +80,7 @@
                         <!-- begin row -->
                         <div class="row" style="position: relative;">
                             <div class="col-lg-6">
-                                <div class="form-group row m-b-15">
+                                <div class="form-group row m-b-15 m-t-15">
                                     <label class="col-form-label col-md-3">OR Number :</label>
                                     <div class="col-md-9">
                                         <input type="text" class="form-control m-b-5 f-s-12 disabledInput" data-parsley-required="true" data-parsley-required-message="OR number is required" id="or_num" onfocus="this.blur();" tabindex="-1"/>
@@ -88,7 +88,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <div class="form-group row m-b-15">
+                                <div class="form-group row m-b-15 m-t-15">
                                     <label class="col-form-label col-md-3">Date :</label>
                                     <div class="col-md-9">
                                         <input type="text" value="{% now 'M. d, Y' %}" class="form-control m-b-5 f-s-12 disabledInput" data-parsley-required="true" data-parsley-required-message="Date is required" id="or_date" onfocus="this.blur();" tabindex="-1" />
@@ -184,7 +184,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row m-b-15">
-                                            <label class="col-md-4 col-sm-4 col-form-label">UA Code :</label>
+                                            <label class="col-md-4 col-sm-4 col-form-label">Description :</label>
                                             <div class="col-md-8 col-sm-8">
                                                 <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="true" data-style="btn-white" id="uacs_select" data-parsley-excluded="true">
                                                     <option value="Please choose" selected disabled>Please choose</option>
@@ -228,7 +228,7 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-nowrap">Income Type</th>
-                                                    <th class="text-nowrap">UA Code</th>
+                                                    <th class="text-nowrap">Description</th>
                                                     <th class="text-nowrap">Nature</th>
                                                     <th class="text-nowrap">Amount</th>
                                                     <th style="max-width: 20px;" class="text-nowrap"></th>
@@ -307,20 +307,11 @@
         Highlight.init();
         highlightSideNav();
         TableManageResponsive.init();
-        // FormPlugins.init();
         $('select').selectpicker('render');
         getCurrentORnum();
         getIncType();
     });
 
-    // $('#or_lname').on('focusin', function() {
-    //     if ($('#radiorequired').prop('checked')) {
-    //         $('#or_lname').off('blur');
-    //     }
-    //     else {
-    //         $('#or_lname').blur();
-    //     }
-    // });
     $('#or_fname').on('focusin', function() {
         if ($('#radiorequired3').prop('checked')) {
             $('#or_fname').blur();
@@ -373,7 +364,7 @@
                 $('#uacs_select').append(new Option('Please choose')).select();
                 $('#uacs_select').find('option:selected').prop('disabled',true);                
                 $.each(obj, function(index, option){
-                    $('#uacs_select').append( new Option(option[0]+' - '+option[1],option[0])); //text and value
+                    $('#uacs_select').append( new Option(option[1],option[0])); //text and value
                 });
                 $('#uacs_select option').prop('style', 'font-size: 11px;');
                 $('#uacs_select').selectpicker('refresh');
@@ -475,7 +466,7 @@
         var dt_res = $('#data-table-responsives tbody');
         var dt_res_len = $('#data-table-responsives tbody tr').length;
         for (var i = 0; i < dt_res_len; i++) {
-            var desc = dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text().split('-')[1];
+            var desc = dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text();
             var nature = dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text();
             var amt = dt_res.find('tr:eq('+ i +')').find('td:eq(3)').text();
             $.ajax({
@@ -659,7 +650,7 @@
                 $('.table-invoice tbody').append(
                     `<tr>
                         <td>
-                            <span class="text-inverse" id="r_desc">${dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text().split('-')[1] + (dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text() != '' ? ' ('+dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()+')' : '')}</span><br />
+                            <span class="text-inverse" id="r_desc">${dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text() + (dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text() != '' ? ' ('+dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()+')' : '')}</span><br />
                         </td>
                         <td class="text-center" id="r_amount">${dt_res.find('tr:eq('+ i +')').find('td:eq(3)').text()}</td>
                     </tr>`
@@ -813,10 +804,10 @@
                 $('#data-table-responsives tbody').append(
                     `<tr>
                         <td class="text-nowrap">
-                            <span class="label label-default f-s-11">${inctype}</span>
+                            <span class="label label-default f-s-12">${inctype}</span>
                         </td>
-                        <td class="f-s-10">${uacs}</td>
-                        <td class="f-s-10">${nature}</td>
+                        <td class="f-s-12">${uacs}</td>
+                        <td class="f-s-12">${nature}</td>
                         <td>${amt.toFixed(2)}</td>
                         <td align="center">
                             <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove" title="remove"><i class="fas fa-times"></i></a>
@@ -936,6 +927,7 @@
                         select : showResult,
                         focus : showResult,
                         change : showResult,
+                        keydown : showResult,
                     });
                     function showResult(event, ui) {
                         event.preventDefault();
@@ -945,6 +937,10 @@
                             $('#or_studnum').val($.trim(ui.item.label.split(',')[2])).trigger('focusin');
                         }
                         if (event.which == 13) {
+                            setTimeout(function() {
+                                $('#or_fname').click();
+                            }, 300); // I don't know how this works, but setting timeout really helps in displaying the name to its textbox when 
+                                     //you press enter rather than mousehover/mouseclick;
                             $('#or_lname').blur();
                         }
                         enableButtons();
@@ -969,7 +965,7 @@
         if ($('#no-studnum-checkbox').prop('checked')) {
             $('#or_studnum').val('');
             $('#or_studnum').removeClass('nameBox');
-            $('#or_lname').val('');
+            $('#or_lname').val('').empty();
             $('#or_fname').val('');
             $('#or_studnum').prop('disabled', true);
             disableButtons();

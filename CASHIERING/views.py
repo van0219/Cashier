@@ -306,6 +306,12 @@ def get_uacs_code(request):
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
+def get_uacs_code_sis(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SIS_UACS_CODE")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
 def add_or_set(request):
     cursor = connection.cursor()
     cursor.callproc("SP_INSERT_OR_SET"
@@ -1572,5 +1578,31 @@ def check_old_pass(request):
     cursor.callproc("SP_CHECK_OLD_PASS"
                     ,(request.POST['old_pass']
                     ,request.session['uname'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_sis_tbl(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SIS_UACS")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def remove_sis(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_REMOVE_SIS"
+                  ,(request.POST['uacs'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def add_sis_uacs(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_ADD_SIS"
+                  ,(request.POST['uacs'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def check_if_sis_payment_done(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_CHECK_SIS_PAYMENT_DONE")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)

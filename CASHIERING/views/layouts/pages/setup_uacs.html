@@ -256,6 +256,7 @@
     </div>
     <!-- end row -->
     <!-- begin row -->
+    <div class="row m-b-15 m-t-15">
         <!-- begin col-12 -->
         <div class="col-lg-12">
             <h3>Nature of Collection</h3>
@@ -308,6 +309,68 @@
             </div>
         </div>
         <!-- end col-12 -->
+    </div>
+    <!-- end row -->
+    <!-- begin row -->
+    <div class="row m-b-15">
+        <!-- begin col-12 -->
+        <div class="col-lg-12">
+            <h3>SIS (UACS)</h3>
+            <div class="panel panel-inverse">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">
+                    <h4 class="panel-title">Setup UACS Dedicated for SIS Only</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin panel-body -->
+                <div class="panel-body">
+                    <!-- begin row -->
+                    <div class="row">
+                        <div class="form-group m-b-15 col-lg-5">
+                            <label class="form-label" for="inc-select2">Income Type :</label>
+                            <div class="">
+                                <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="false" data-style="btn-white"  id="inc-select2" data-parsley-excluded="true">
+                                    <option value="Please choose" selected disabled>Please choose</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group m-b-15 col-lg-5">
+                            <label class="form-label" for="uacs_select2">UACS Code :</label>
+                            <div class="">
+                                <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="true" data-style="btn-white" id="uacs_select2" data-parsley-excluded="true">
+                                    <option value="Please choose" selected disabled>Please choose</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group m-b-15 col-lg-2">
+                            <div class="m-t-25">
+                                <a href="javascript:;" class="btn btn-md btn-success" id="add-sis"><i class="fas fa-plus-circle m-r-5"></i>Add to SIS</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+                    <table class="table table-bordered table-striped table-hover" id="sis-uacs-tbl">
+                        <thead class="text-center">
+                            <th class="text-nowrap">Old Code</th>
+                            <th class="text-nowrap">New Code</th>
+                            <th class="text-nowrap">Description</th>
+                            <th class="text-nowrap">Options</th>
+                        </thead>
+                        <tbody class="text-center">
+                            <!-- append here -->
+                        </tbody>
+                    </table>
+                    <!-- begin col-12 -->
+                    <div class="col-lg-12">
+                        <a href="javascript:;" class="btn btn-sm btn-success pull-right" style="display: none;" id="plus-but"><i class="fas fa-plus-square fa-lg"></i></a>
+                    </div>
+                    <!-- end col-12 -->
+                </div>
+                <!-- end panel-body -->
+            </div>
+        </div>
+        <!-- end col-12 -->
+    </div>
     <!-- end row -->
 </div>
 <!-- end #content -->
@@ -351,7 +414,7 @@
                                         <th class="text-nowrap text-center bg-white">Options</th>
                                     </thead>
                                     <tbody align="center">
-
+                                        <!-- append here -->
                                     </tbody>
                                 </table>
                             </div>
@@ -391,7 +454,7 @@
                             </div>
                         </div> -->
                         <div class="form-group row m-b-15 addIncDiv">
-                            <label class="col-md-4 col-sm-4 col-form-label" for="descInc">Income Description<span class="text-red">*</span>:</label>
+                            <label class="col-md-4 col-sm-4 col-form-label" for="descInc">Income Description<span class="text-red m-r-5">*</span>:</label>
                             <div class="col-md-8 col-sm-8">
                                 <input class="form-control" type="text" id="descInc" name="descInc" placeholder="Income description" data-parsley-required="true" data-parsley-required-message="Income description is required" style="text-transform: uppercase;"/>
                             </div>
@@ -407,7 +470,7 @@
                                     <th class="text-nowrap text-center bg-white">Options</th>
                                 </thead>
                                 <tbody align="center">
-
+                                    <!-- append here -->
                                 </tbody>
                             </table>
                         </div>
@@ -514,14 +577,14 @@
                             <div class="panel-body" style="margin-bottom: -40px;;">
                                 <form class="form-horizontal" name="demo-form" action="#" id="editFundForm" autocomplete="off">
                                     <div class="form-group row m-b-15">
-                                        <label class="col-md-4 col-sm-4 col-form-label" for="editFund-code">Fund Code <span class="text-red">*</span> :</label>
-                                        <div class="col-md-8 col-sm-8">
+                                        <label class="col-md-5 col-sm-5 col-form-label" for="editFund-code">Fund Code <span class="text-red">*</span> :</label>
+                                        <div class="col-md-7 col-sm-7">
                                             <input class="form-control" type="text" id="editFund-code" name="editFund-code" placeholder="Fund Code" data-parsley-required="true" data-parsley-required-message="Fund Code is required" style="text-transform: uppercase;" />
                                         </div>
                                     </div>
                                     <div class="form-group row m-b-15">
-                                        <label class="col-md-4 col-sm-4 col-form-label" for="editFund-desc">Fund Description <span class="text-red">*</span> :</label>
-                                        <div class="col-md-8 col-sm-8">
+                                        <label class="col-md-5 col-sm-5 col-form-label" for="editFund-desc">Fund Description <span class="text-red">*</span> :</label>
+                                        <div class="col-md-7 col-sm-7">
                                             <input class="form-control" type="text" id="editFund-desc" name="editFund-desc" placeholder="Fund Description" data-parsley-required="true" data-parsley-required-message="Fund description is required" style="text-transform: uppercase;" />
                                         </div>
                                     </div>
@@ -562,8 +625,8 @@
                             <div class="panel-body" style="margin-bottom: -40px;;">
                                 <form class="form-horizontal" name="demo-form" action="#" id="editIncForm" autocomplete="off">
                                     <div class="form-group row m-b-15">
-                                        <label class="col-md-4 col-sm-4 col-form-label" for="editInc-desc">Income Description<span class="text-red">*</span>:</label>
-                                        <div class="col-md-8 col-sm-8">
+                                        <label class="col-md-5 col-sm-5 col-form-label" for="editInc-desc">Income Description<span class="text-red m-r-5">*</span>:</label>
+                                        <div class="col-md-7 col-sm-7">
                                             <input class="form-control" type="text" id="editInc-desc" name="editInc-desc" placeholder="Income Description" data-parsley-required="true" data-parsley-required-message="Income description is required" style="text-transform: uppercase;"/>
                                         </div>
                                     </div>
@@ -675,6 +738,7 @@
         $('#inc-select').selectpicker('render');
         $('#uacs_select').selectpicker('render');
         getIncType();
+        loadSIStbl();
 
         $.ajax({
             type: "POST",
@@ -731,8 +795,11 @@
             }
         });
 
-        $('#inc-select').on('change', function() {
-            getUacsCode($('#inc-select').val());
+        $('#inc-select').on('change', function() { // income type select of nature of collection setup
+            getUacsCode($('#inc-select').val(), 0);
+        });
+        $('#inc-select2').on('change', function() { // income type select of sis setup
+            getUacsCode($('#inc-select2').val(), 1);
         });
         $('#inc-select').on('change', function() {
             if ($('#inc-select').val() == 'Please choose') {
@@ -754,6 +821,15 @@
             }
         });
 
+        $('#uacs_select2').on('change', function() {
+            if ($('#uacs_select2').val() == 'Please choose') {
+                $('#uacs_select2').addClass('is-invalid');
+            }
+            else {
+                $('#uacs_select2').removeClass('is-invalid');
+            }
+        });
+
         function getIncType() {
             $.ajax({
                 type: "POST",
@@ -766,9 +842,12 @@
                 success: function(obj) {
                     $.each(obj, function(index, option){
                         $('#inc-select').append( new Option(option,option)); //value and text
+                        $('#inc-select2').append( new Option(option,option)); //value and text
                     });
                     $('#inc-select option').prop('style', 'font-size: 11px;')
                     $('#inc-select').selectpicker('refresh');
+                    $('#inc-select2 option').prop('style', 'font-size: 11px;')
+                    $('#inc-select2').selectpicker('refresh');
                 },
                 error: function(xhr, status, error) {
                     var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -782,7 +861,7 @@
                 }
             });
         };
-        function getUacsCode(incomeType) {
+        function getUacsCode(incomeType, from_sis) {
             $.ajax({
                 type: "POST",
                 url: "{% url 'get_uacs_code' %}",
@@ -793,14 +872,26 @@
                     csrfmiddlewaretoken:"{{csrf_token}}"
                 },
                 success: function(obj) {
-                    $('#uacs_select').empty();
-                    $('#uacs_select').append(new Option('Please choose')).select();
-                    $('#uacs_select').find('option:selected').prop('disabled',true);                
-                    $.each(obj, function(index, option){
-                        $('#uacs_select').append( new Option(option[0]+' - '+option[1],option[0])); //text and value
-                    });
-                    $('#uacs_select option').prop('style', 'font-size: 11px;');
-                    $('#uacs_select').selectpicker('refresh');
+                    if (!from_sis) {
+                        $('#uacs_select').empty();
+                        $('#uacs_select').append(new Option('Please choose')).select();
+                        $('#uacs_select').find('option:selected').prop('disabled',true);                
+                        $.each(obj, function(index, option){
+                            $('#uacs_select').append( new Option(option[0]+' - '+option[1],option[0])); //text and value
+                        });
+                        $('#uacs_select option').prop('style', 'font-size: 11px;');
+                        $('#uacs_select').selectpicker('refresh');
+                    }
+                    else {
+                        $('#uacs_select2').empty();
+                        $('#uacs_select2').append(new Option('Please choose')).select();
+                        $('#uacs_select2').find('option:selected').prop('disabled',true);                
+                        $.each(obj, function(index, option){
+                            $('#uacs_select2').append( new Option(option[0]+' - '+option[1],option[0])); //text and value
+                        });
+                        $('#uacs_select2 option').prop('style', 'font-size: 11px;');
+                        $('#uacs_select2').selectpicker('refresh');
+                    }
                 },
                 error: function(xhr, status, error) {
                     var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -858,6 +949,104 @@
                                 <td>
                                     <a href="javascript:;" class="btn btn-xs btn-primary" title="edit" id="edit-nature"><i class="fas fa-edit"></i></a>
                                     <a href="javascript:;" class="btn btn-xs btn-danger" title="remove" id="remove-nature"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>`
+                        );
+                    }
+                    $('#plus-but').prop('style', 'display: block;');
+                }
+                else {
+                    $('#nature-col-tbl tbody').append(
+                        `<tr><td colspan="4" class="text-center">No results found</td></tr>`  
+                    );
+                    $('#plus-but').prop('style', 'display: block;');
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+
+    function addSIS(uacs, desc) {
+        swal({
+            title: "Add SIS UACS",
+            text: "Are you sure to add "+ desc +" to SIS (UACS)?",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonColor: "#428bca",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: true,
+            customClass: "Custom_Cancel"
+        },
+        function(isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: "{% url 'add_sis_uacs' %}",
+                    type: "POST",
+                    data: { 
+                        uacs: uacs,
+                        csrfmiddlewaretoken:"{{csrf_token}}"
+                    },
+                    success:function(data) {
+                        loadUACSdata();
+                        swal({
+                            title: "Added Successfully!", 
+                            text: "A new SIS (UACS) is added to the list.", 
+                            type: "success",
+                            showLoaderOnConfirm: true,
+                            confirmButtonColor: "#5cb85c",
+                        },
+                        function(isConfirm){
+                            if (isConfirm){
+                                loadSIStbl();
+                            }
+                        })
+                    },
+                    error:function(xhr, status, error) {
+                        var errMsg = xhr.status + ': ' + xhr.statusText;
+                        swal({
+                            title: "Error!", 
+                            text: errMsg,
+                            type: "error",
+                            confirmButtonColor: "#428bca",
+                            showLoaderOnConfirm: true
+                        })
+                    }
+                })
+            }
+        });
+    };
+
+    function loadSIStbl() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_sis_tbl' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#sis-uacs-tbl tbody tr').remove();
+                if (obj.length != 0) {
+                    for (var i = 0;  i < obj.length; i++) {
+                        $('#sis-uacs-tbl tbody').append(
+                            `<tr>
+                                <td class="text-nowrap">${obj[i][0]}</td>
+                                <td class="text-nowrap">${obj[i][1]}</td>
+                                <td class="text-nowrap">${obj[i][2]}</td>
+                                <td>
+                                    <a href="javascript:;" class="btn btn-xs btn-danger remove-sis" title="remove"><i class="fas fa-trash"></i></a>
                                 </td>
                             </tr>`
                         );
@@ -945,6 +1134,67 @@
         $('#desc-nature-upd').val($(this).closest('tr').find('td:eq(2)').html());
         $('#update-nature').modal('show');
         old_name = $('#desc-nature-upd').val();
+    });
+
+    $('#sis-uacs-tbl tbody').on('click', '.remove-sis', function() {
+        var name = $(this).closest('tr').find('td:eq(2)').html();
+        var uacs = $(this).closest('tr').find('td:eq(1)').html();
+        swal({
+            title: "Remove",
+            text: "Are you sure to remove "+name+"?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d9534f",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: true,
+            customClass: "Custom_Cancel"
+        },
+        function(isConfirm) {
+            if (isConfirm){
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'remove_sis' %}",
+                    // cache: true,
+                    dataType: 'json',
+                    data: {
+                        uacs: uacs,
+                        csrfmiddlewaretoken:"{{csrf_token}}"
+                    },
+                    success: function(obj) {
+                        swal({
+                            title: "Removed Successfully", 
+                            text: 'You have removed ' + name + ' from SIS UACS.',
+                            type: "success",
+                            confirmButtonColor: "#428bca",
+                            showLoaderOnConfirm: true
+                        },
+                        function(isConfirm){
+                            if (isConfirm){
+                                loadSIStbl();
+                            }
+                        })
+                    },
+                    error: function(xhr, status, error) {
+                        var errMsg = xhr.status + ': ' + xhr.statusText;
+                        swal({
+                            title: "Error!", 
+                            text: errMsg,
+                            type: "error",
+                            confirmButtonColor: "#428bca",
+                            showLoaderOnConfirm: true
+                        })
+                    }
+                });
+            }
+        });
+    });
+
+    $('#add-sis').on('click', function() {
+        var uacs = $('#uacs_select2').val().trim();
+        var desc = $('#uacs_select2').find('option:selected').text().split('-')[1];
+        addSIS(uacs, desc);
     });
 
     var old_name = '';

@@ -66,7 +66,7 @@
     <!-- end page-header -->
     <!-- begin card -->
     <div class="card text-left">
-        <div class="card-header">
+        <div class="card-header bg-inverse text-white">
             <i class="fas fa-laptop fa-lg m-r-5"></i>Add SIS Payments
         </div>
         <div class="card-block">
@@ -76,7 +76,7 @@
                     <form class="form-horizontal" id="addForm" action="#" method="POST" data-parsley-excluded="input[type=hidden], :hidden" autocomplete="off">
                         <div class="row" style="position: relative;">
                             <div class="col-lg-6">
-                                <div class="form-group row m-b-15">
+                                <div class="form-group row m-b-15 m-t-15">
                                     <label class="col-form-label col-md-3">OR Number :</label>
                                     <div class="col-md-9">
                                         <input type="text" class="form-control m-b-5 f-s-12 disabledInput" data-parsley-required="true" data-parsley-required-message="OR number is required" id="or_num" onfocus="this.blur();" tabindex="-1"/>
@@ -84,7 +84,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <div class="form-group row m-b-15">
+                                <div class="form-group row m-b-15 m-t-15">
                                     <label class="col-form-label col-md-3">Date :</label>
                                     <div class="col-md-9">
                                         <input type="text" value="{% now 'M. d, Y' %}" class="form-control m-b-5 f-s-12 disabledInput" data-parsley-required="true" data-parsley-required-message="Date is required" id="or_date" onfocus="this.blur();" tabindex="-1" />
@@ -144,13 +144,13 @@
                                         <div class="form-group row m-b-15">
                                             <label class="col-md-4 col-sm-4 col-form-label">Income Type :</label>
                                             <div class="col-md-8 col-sm-8">
-                                                <select class="form-control" data-dropup-auto="false" data-size="10" data-style="btn-white" id="inc-select" name="selectBox" data-parsley-excluded="true" on>
-                                                    <option value="Please choose" selected disabled>Please choose</option>
+                                                <select class="form-control" data-dropup-auto="false" data-size="10" data-style="btn-white" id="inc-select" name="selectBox" data-parsley-excluded="true" on disabled>
+                                                    <option value="SIS" selected disabled>SIS Payment</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group row m-b-15">
-                                            <label class="col-md-4 col-sm-4 col-form-label">UA Code :</label>
+                                            <label class="col-md-4 col-sm-4 col-form-label">Description :</label>
                                             <div class="col-md-8 col-sm-8">
                                                 <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="true" data-style="btn-white" id="uacs_select" name="selectBox" data-parsley-excluded="true">
                                                     <option value="Please choose" selected disabled>Please choose</option>
@@ -194,7 +194,7 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-nowrap">Income Type</th>
-                                                    <th class="text-nowrap">UA Code</th>
+                                                    <th class="text-nowrap">Description</th>
                                                     <th class="text-nowrap">Nature</th>
                                                     <th class="text-nowrap">Amount</th>
                                                     <th style="max-width: 20px;" class="text-nowrap"></th>
@@ -276,47 +276,19 @@
         highlightSideNav();
         $('select').selectpicker('render');
         getCurrentORnum();
-        getIncType();
+        getUacsCode();
         $('#or_lname').val('PUP');
         $('#or_fname').val('QUEZON CITY');
         $('#check_2').prop('checked', true);
     });
-    function getIncType() {
+
+    function getUacsCode() {
         $.ajax({
             type: "POST",
-            url: "{% url 'get_income_type' %}",
-            // cache: true,
-            dataType: 'json',
-            data: {
-                csrfmiddlewaretoken:"{{csrf_token}}"
-            },
-            success: function(obj) {
-                $.each(obj, function(index, option){
-                    $('#inc-select').append( new Option(option,option)); //value and text
-                });
-                $('#inc-select option').prop('style', 'font-size: 11px;')
-                $('#inc-select').selectpicker('refresh');
-            },
-            error: function(xhr, status, error) {
-                var errMsg = xhr.status + ': ' + xhr.statusText;
-                swal({
-                    title: "Error!", 
-                    text: errMsg,
-                    type: "error",
-                    confirmButtonColor: "#428bca",
-                    showLoaderOnConfirm: true
-                })
-            }
-        });
-    };
-    function getUacsCode(incomeType) {
-        $.ajax({
-            type: "POST",
-            url: "{% url 'get_uacs_code' %}",
+            url: "{% url 'get_uacs_code_sis' %}",
             cache: false,
             dataType: 'json',
             data: {
-                incomeType: incomeType,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -324,7 +296,16 @@
                 $('#uacs_select').append(new Option('Please choose')).prop('selected', true);
                 $('#uacs_select').find('option:selected').prop('disabled',true);
                 $.each(obj, function(index, option){
-                    $('#uacs_select').append( new Option(option[0]+' - '+option[1], option[0])); //text and value
+                    if ($('#check_1').prop('checked')) { // if with_breakdown checkbox is checked
+                        if (option[0] == '4 02 01 990 99 00034') {
+                            $('#uacs_select').append( new Option(option[1], option[0])); //text and value
+                        }
+                    }
+                    else {
+                        if (option[0] != '4 02 01 990 99 00034') {
+                            $('#uacs_select').append( new Option(option[1], option[0])); //text and value
+                        }
+                    }
                 });
                 $('#uacs_select').selectpicker('refresh');
                 if ($('#check_1').prop('checked')) {
@@ -426,7 +407,7 @@
         var dt_res = $('#data-table-responsives tbody');
         var dt_res_len = $('#data-table-responsives tbody tr').length;
         for (var i = 0; i < dt_res_len; i++) {
-            var desc = dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text().split('-')[1];
+            var desc = dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text();
             var nature = dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text();
             var amt = dt_res.find('tr:eq('+ i +')').find('td:eq(3)').text();
             $.ajax({
@@ -462,9 +443,9 @@
     $('#check_1').on('change', function() {
         if ($('#check_1').prop('checked')) {
             $('#check_2').prop('checked', false);
-            $('#inc-select').val('SERVICE INCOME').prop('disabled', true);
+            $('#inc-select').val('SIS').prop('disabled', true);
             $('#inc-select').selectpicker('refresh');
-            getUacsCode($('#inc-select').find('option:selected').text());
+            getUacsCode();
             $('.remove').click();  
             $('#particular').prop('disabled', false);
         }
@@ -476,13 +457,8 @@
     $('#check_2').on('change', function() {
         if ($('#check_2').prop('checked')) {
             $('#check_1').prop('checked', false);
-            $('#inc-select').val('Please choose').prop('disabled', false);
-            $('#inc-select').selectpicker('refresh');
-            $('#uacs_select').empty();
-            $('#uacs_select').append(new Option('Please choose')).prop('selected', true);
             $('#uacs_select').prop('disabled', false);
-            $('#uacs_select').selectpicker('refresh');
-            $('#uacs_select').find('option:selected').prop('disabled', true);
+            getUacsCode();
             $('.remove').click();   
             $('#particular').prop('disabled', false);         
         }
@@ -492,7 +468,7 @@
     });
 
     $('#inc-select').on('change', function() {
-        getUacsCode($('#inc-select').find('option:selected').text());
+        getUacsCode();
     });
 
     $("#save").on('click', function() { //save entry is clicked
@@ -500,7 +476,7 @@
         if ($('#addForm').parsley().validate()) {
             $('#save-icon').removeClass('fa-save');
             $('#save-icon').addClass('fa-spinner fa-pulse');
-                no_err_when_save_collection();
+            no_err_when_save_collection();
         }
     });
 
@@ -513,7 +489,7 @@
                 $('.table-invoice tbody').append(
                     `<tr>
                         <td>
-                            <span class="text-inverse" id="r_desc">${dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text().split('-')[1] + (dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text() != '' ? ' ('+dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()+')' : '')}</span><br />
+                            <span class="text-inverse" id="r_desc">${dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text() + (dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text() != '' ? ' ('+dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()+')' : '')}</span><br />
                         </td>
                         <td class="text-center" id="r_amount">${dt_res.find('tr:eq('+ i +')').find('td:eq(3)').text()}</td>
                     </tr>`
@@ -559,9 +535,7 @@
         $('.table-invoice tbody tr').remove();
         $('#or_num').val(getCurrentORnum());
         $('#total-fee').text(parseFloat('0').toFixed(2));
-        $('#inc-select').val('Please choose');
         $('#uacs_select').val('Please choose');
-        $('#inc-select').selectpicker('refresh');
         $('#uacs_select').selectpicker('refresh');
         $('#number').val('');
         $('#number').removeClass('is-invalid');
@@ -570,6 +544,9 @@
         $('#save-icon').addClass('fa-save');
         $('#check_1').prop('checked', false);
         $('#check_2').prop('checked', true).trigger('change');
+        setTimeout(function() {
+            window.location = "{% url 'dashboard' %}";
+        },500);
     });
 
     var total_fee = 0;
@@ -598,32 +575,42 @@
             $('#inc-select').removeClass('is-invalid');
             $('#uacs_select').removeClass('is-invalid');
             if (amtBox != '' && amtBox.length != 0) {
-                $('#number').removeClass('is-invalid');
-                $('#data-table-responsives tbody').append(
-                    `<tr>
-                        <td class="text-nowrap">
-                            <span class="label label-default f-s-11">${inctype}</span>
-                        </td>
-                        <td class="f-s-10">${uacs}</td>
-                        <td class="f-s-10">${nature}</td>
-                        <td>${amt.toFixed(2)}</td>
-                        <td align="center">
-                            <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove" title="remove"><i class="fas fa-times"></i></a>
-                        </td>
-                    </tr>`
-                );
-                total_fee = init_tot_fee + parseFloat(amt);
-                $('#total-fee').text(parseFloat(total_fee).toFixed(2));
-                if (!$('#check_1').prop('checked')) { // if "total only" radio is not checked
-                    $('#inc-select').selectpicker('val','Please choose');
-                    $('#uacs_select').selectpicker('val','Please choose');
-                    $('#nature-select').selectpicker('val','Please choose');
+                if ($('#check_2').prop('checked') || ($('#check_1').prop('checked') && $('#data-table-responsives tbody tr').length == 0)) { // if total only is checked and table row count == 0;
+                    $('#number').removeClass('is-invalid');
+                    $('#data-table-responsives tbody').append(
+                        `<tr>
+                            <td class="text-nowrap">
+                                <span class="label label-default f-s-12">${inctype}</span>
+                            </td>
+                            <td class="f-s-12">${uacs}</td>
+                            <td class="f-s-12">${nature}</td>
+                            <td>${amt.toFixed(2)}</td>
+                            <td align="center">
+                                <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove" title="remove"><i class="fas fa-times"></i></a>
+                            </td>
+                        </tr>`
+                    );
+                    total_fee = init_tot_fee + parseFloat(amt);
+                    $('#total-fee').text(parseFloat(total_fee).toFixed(2));
+                    if (!$('#check_1').prop('checked')) { // if "total only" radio is not checked
+                        $('#uacs_select').selectpicker('val','Please choose');
+                        $('#nature-select').selectpicker('val','Please choose');
+                    }
+                    else {
+                        $('#particular').prop('disabled', true);
+                    }
+                    $('#number').val('');
+                    $('#nature-div').hide();
                 }
-                else {
-                    $('#particular').prop('disabled', true);
+                else if($('#check_1').prop('checked') && $('#data-table-responsives tbody tr').length > 0) {
+                    swal({
+                        title: "Invalid Action", 
+                        text: "You can only add 1 particular if \"Total Only\" is checked.",
+                        type: "info",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    });
                 }
-                $('#number').val('');
-                $('#nature-div').hide();
             }
             else {
                 $('#number').addClass('is-invalid');

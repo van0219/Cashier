@@ -71,6 +71,7 @@ urlpatterns = [
     # tapos pupuntahan nya tong views.load_user_data2 na nasa views.py
     path('deactivate_user', views.deactivate_user, name="deactivate_user"),
     path('get_uacs_code', views.get_uacs_code, name="get_uacs_code"),
+    path('get_uacs_code_sis', views.get_uacs_code_sis, name="get_uacs_code_sis"),
     path('add_or_set', views.add_or_set, name="add_or_set"),
     path('get_current_or', views.get_current_or, name="get_current_or"),
     path('get_student_name', views.get_student_name, name="get_student_name"),
@@ -137,4 +138,8 @@ urlpatterns = [
     path('check_or_set', views.check_or_set, name="check_or_set"),
     path('check_old_pass', views.check_old_pass, name="check_old_pass"),
     path('change_pass_now', views.change_pass_now, name="change_pass_now"),
+    path('load_sis_tbl', views.load_sis_tbl, name="load_sis_tbl"),
+    path('remove_sis', views.remove_sis, name="remove_sis"),
+    path('add_sis_uacs', views.add_sis_uacs, name="add_sis_uacs"),
+    path('check_if_sis_payment_done', views.check_if_sis_payment_done, name="check_if_sis_payment_done"),
 ]

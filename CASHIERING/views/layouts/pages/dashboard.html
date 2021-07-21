@@ -57,7 +57,7 @@
                         <div id="prog-1" class="progress-bar" style="width: 70.1%;"></div>
                     </div>
                     <!-- <div class="stats-desc">{% now "m/j/Y" %}</div> -->
-                    <div class="stats-desc f-s-12">Used OR today: <span id="first-or-today">********</span> to <span id="last-or-today">********</span></div>
+                    <div class="stats-desc f-s-12">Used OR today: <strong><span id="first-or-today">********</span></strong> to <strong><span id="last-or-today">********</span></strong></div>
                 </div>
             </div>
         </div>
@@ -73,7 +73,7 @@
                         <div id="prog-2" class="progress-bar" style="width: 40.5%;"></div>
                     </div>
                     <!-- <div class="stats-desc"><span id="yesterday"></span></div> -->
-                    <div class="stats-desc f-s-13">Used OR for SIS today: <span id="sis-or-today"></span></div>
+                    <div class="stats-desc f-s-13">Used OR for SIS today: <strong><span id="sis-or-today"></span></strong></div>
                 </div>
             </div>
         </div>
@@ -89,7 +89,7 @@
                         <div id="prog-3" class="progress-bar" style="width: 76.3%;"></div>
                     </div>
                     <!-- <div class="stats-desc"><span id="last_week"></span></div> -->
-                    <div class="stats-desc f-s-13">Current Month: {% now "F" %}</div>
+                    <div class="stats-desc f-s-13">Current Month: <strong>{% now "F" %}</strong></div>
                 </div>
             </div>
         </div>
@@ -105,7 +105,7 @@
                         <div id="prog-4" class="progress-bar" style="width: 54.9%;"></div>
                     </div>
                     <!-- <div class="stats-desc"><span id="last_month"></span></div> -->
-                    <div class="stats-desc f-s-13">Current Year: <span id="curr-year"></span></div>
+                    <div class="stats-desc f-s-13">Current Year: <strong><span id="curr-year"></span></strong></div>
                 </div>
             </div>
         </div>
@@ -117,7 +117,7 @@
         <!-- begin col-6 -->
         <div class="col-lg-6">
             <!-- begin panel -->
-            <div class="panel panel-default">
+            <div class="panel panel-inverse">
                 <div class="panel-heading">
                     <h4 class="panel-title"><i class="fas fa-chart-bar m-r-5"></i>Monthly Collection (<span id="monthly-year"></span>)</h4>
                 </div>
@@ -134,7 +134,7 @@
         <!-- begin col-6 -->
         <div class="col-lg-6">
             <!-- begin panel -->
-            <div class="panel panel-default">
+            <div class="panel panel-inverse">
                 <div class="panel-heading">
                     <h4 class="panel-title"><i class="fas fa-chart-line m-r-5"></i>Collection vs Deposit (<span id="coldep-year"></span>)</h4>
                 </div>
@@ -171,7 +171,6 @@
     $.ajax({
         url: "{% url 'get_session' %}",
         type: "POST",
-        // timeout: 2000,
         data: {
             csrfmiddlewaretoken:"{{csrf_token}}"
         },
@@ -492,10 +491,6 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                // var today_col = obj[0][0]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][0]));
-                // var today_sis_col = obj[0][1]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][1]));
-                // var month_col = obj[0][2]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][2]));
-                // var year_col = obj[0][3]==null ? shortenNum(parseFloat(0)) : shortenNum(parseFloat(obj[0][3]));
                 var today_col = obj[0][0]==null ? 0 : parseFloat(obj[0][0]);
                 var today_sis_col = obj[0][1]==null ? 0 : parseFloat(obj[0][1]);
                 var month_col = obj[0][2]==null ? 0 : parseFloat(obj[0][2]);
