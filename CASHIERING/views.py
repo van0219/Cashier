@@ -341,7 +341,8 @@ def insert_collection(request):
                     ,request.POST['studno']
                     ,request.POST['client']
                     ,request.POST['educ_level']
-                    ,request.POST['userID']))
+                    ,request.POST['userID']
+                    ,request.POST['is_direct']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 

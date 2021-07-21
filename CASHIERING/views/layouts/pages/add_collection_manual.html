@@ -151,15 +151,22 @@
                         <!-- end row -->
                         <!-- begin row -->
                         <div class="row">
-                            <!-- begin col-10 -->
-                            <div class="col-lg-10">
-                                <!-- filler -->
+                            <!-- begin col-8 -->
+                            <div class="col-lg-8">
+                                
                             </div>
-                            <!-- end col-10 -->
+                            <!-- end col-8 -->
+                            <!-- begin col-2 -->
+                            <div class="col-lg-2" style="display: block;">
+                                <div class="pull-right">
+                                    <input type="checkbox" id="direct_deposit_checkbox" class="m-r-5 m-t-15" /> <small><strong>Direct Deposit</strong></small>
+                                </div>
+                            </div>
+                            <!-- end col-2 -->
                             <!-- begin col-2 -->
                             <div class="col-lg-2" id="no-studnum-div" style="display: block;">
                                 <div class="pull-right">
-                                    <input type="checkbox" id="no-studnum-checkbox" class="m-r-5 m-t-15" /> <small>No Student Number</small>
+                                    <input type="checkbox" id="no-studnum-checkbox" class="m-r-5 m-t-15" /> <small><strong>No Student Number</strong></small>
                                 </div>
                             </div>
                             <!-- end col-2 -->
@@ -428,6 +435,7 @@
         var client = $('#r_name').text(); 
         var educ_level = $('#radiorequired2').prop('checked')  ? '' : $('#radiorequired').prop('checked') ? 'NON-STUDENT' : $('.individual_sel').val();
         var userID = getCurrentUserID;
+        var is_direct = $('#direct_deposit_checkbox').prop('checked') ? 1 : 0;
         $.ajax({
             type: "POST",
             url: "{% url 'insert_collection' %}",
@@ -441,6 +449,7 @@
                 client: client,
                 educ_level: educ_level,
                 userID: userID,
+                is_direct: is_direct,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             timeout: 2000,
@@ -618,7 +627,7 @@
             $('#save-icon').removeClass('fa-save');
             $('#save-icon').addClass('fa-spinner fa-pulse');
             if ($('#radiorequired3').prop('checked')) { // student is checked
-                if ($('.individual_sel').find('option:selected').text() =='Select level of education') {
+                if ($('.individual_sel').find('option:selected').text() =='Select level of education') { // missing level of education
                     swal({
                         title: "Missing Data", 
                         text: "Please select level of education.",
@@ -939,9 +948,9 @@
                         if (event.which == 13) {
                             setTimeout(function() {
                                 $('#or_fname').click();
-                            }, 300); // I don't know how this works, but setting timeout really helps in displaying the name to its textbox when 
-                                     //you press enter rather than mousehover/mouseclick;
-                            $('#or_lname').blur();
+                                $('#or_lname').blur();
+                            }, 300); // I don't know how this works, but setting timeout really helps in displaying the data to its alloted                             
+                                     //textbox when you press enter rather than mousehover/mouseclick;
                         }
                         enableButtons();
                     };
