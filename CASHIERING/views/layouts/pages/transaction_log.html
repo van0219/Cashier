@@ -80,31 +80,26 @@
                             <!-- end row -->
                             <!-- begin row -->
                             <div class="row">
-                                <!-- begin col-8 -->
-                                <div class="col-lg-6" style="margin-top: 15px;">
-                                    <span id="all-badge" class="badge badge-purple f-s-11 m-r-5" style="cursor: pointer;">
-                                        All
+                                <!-- begin col-7 -->
+                                <div class="col-lg-7 m-t-5">
+                                    <span id="all-badge" class="btn btn-purple btn-sm f-s-11 m-r-5 pull-left m-b-5" style="cursor: pointer;">
+                                        <i class="fas fa-circle m-r-5" id="all-btn"></i>All
                                     </span>
-                                    <span id="sis-badge" class="badge badge-danger f-s-11 m-r-5" style="cursor: pointer;">
-                                        SIS Payment
+                                    <span id="sis-badge" class="btn btn-danger btn-sm f-s-11 m-r-5 pull-left m-b-5" style="cursor: pointer;">
+                                        <i class="fas fa-circle m-r-5" id="sis-btn"></i>SIS Payment
                                     </span>
-                                    <span id="stud-badge" class="badge badge-success f-s-11 m-r-5" style="cursor: pointer;">
-                                        Student
+                                    <span id="stud-badge" class="btn btn-success btn-sm f-s-11 m-r-5 pull-left m-b-5" style="cursor: pointer;">
+                                        <i class="fas fa-circle m-r-5" id="stud-btn"></i>Student
                                     </span>
-                                    <span id="non-badge" class="badge badge-warning f-s-11 m-r-5" style="cursor: pointer;">
-                                        Non-Student
+                                    <span id="non-badge" class="btn btn-warning btn-sm f-s-11 m-r-5 pull-left m-b-5" style="cursor: pointer;">
+                                        <i class="fas fa-circle m-r-5" id="non-btn"></i>Non-Student
                                     </span>
-                                    <span id="comp-badge" class="badge badge-primary f-s-11 m-r-5" style="cursor: pointer;">
-                                        Company
+                                    <span id="comp-badge" class="btn btn-primary btn-sm f-s-11 m-r-5 pull-left m-b-5" style="cursor: pointer;">
+                                        <i class="fas fa-circle m-r-5" id="com-btn"></i>Company
                                     </span>
                                 </div>
-                                <!-- end col-8 -->
-                                <!-- begin col-4 -->
-                                <div class="col-lg-1">
-
-                                </div>
-                                <!-- end col-4 -->
-                                <!-- begin col-4 -->
+                                <!-- end col-7 -->
+                                <!-- begin col-5 -->
                                 <div class="col-lg-5 m-b-5">
                                     <div class="input-group input-daterange">
                                         <input type="text" class="form-control" id="startDate" name="start" placeholder="Date Start" autocomplete="off" />
@@ -112,7 +107,7 @@
                                         <input type="text" class="form-control" id="endDate" name="end" placeholder="Date End" autocomplete="off" />
                                     </div>
                                 </div>
-                                <!-- end col-4 -->
+                                <!-- end col-5 -->
                             </div>
                             <!-- end row -->
                             <div class="overflow-auto">
@@ -140,20 +135,6 @@
                             </div>
                         </div>
                         <!-- end #card-pill-1 -->
-                        <!-- begin #card-pill-2 -->
-                        <!-- <div class="tab-pane fade" id="card-pill-2">
-                            <h4 class="card-title">Deposit Log</h4>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="javascript:;" class="btn btn-sm btn-success">Go somewhere</a>
-                        </div> -->
-                        <!-- end #card-pill-2 -->
-                        <!-- begin #card-pill-3 -->
-                        <!-- <div class="tab-pane fade" id="card-pill-3">
-                            <h4 class="card-title">Account Log</h4>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="javascript:;" class="btn btn-sm btn-success">Go somewhere</a>
-                        </div> -->
-                        <!-- end card-pill-3 -->
                     </div>
                 </div>
                 <!-- end card-block -->
@@ -196,15 +177,17 @@
 <script>
     $(document).ready(function() {
         App.init();
-        PageWithTwoSidebar.init();
-        FormPlugins.init();
-        highlightSideNav();
         var d = new Date();
-        var code = 'ALL'
+        var code = 'ALL';
         var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
         $('#startDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
-        load_collection_history(d_today, d_today, code);
+        PageWithTwoSidebar.init();
+        FormPlugins.init();
+        highlightSideNav();
+        setTimeout(function() {
+            $('#all-badge').click();
+        });
     });
 
     function load_collection_history(date_start, date_end, code) {
@@ -250,50 +233,325 @@
         });
     };
 
+    var last_educ_level = null;
+
+    function changeBtnIcon(clicked_btn) {
+        var educ_level = [];
+        if (clicked_btn == 'all') {
+            all_add_check();
+            last_educ_level = 'ALL'
+            return last_educ_level;
+        }
+        else if (clicked_btn == 'sis' && is_sis_checked()) {
+            all_remove_check();
+            sis_remove_check();
+            if (!is_all_checked() && !is_sis_checked() && !is_stud_checked() && !is_non_checked() && !is_com_checked()) {
+                all_add_check();
+                last_educ_level = 'ALL'
+                return last_educ_level;
+            }
+            else {
+                if (is_stud_checked()) {
+                    educ_level.push("BACHELOR\'S DEGREE,DIPLOMA,MASTER\'S DEGREE");
+                };
+                if (is_non_checked()) {
+                    educ_level.push($('#non-badge').text().trim());
+                };
+                if (is_com_checked()) {
+                    educ_level.push($('#comp-badge').text().trim());
+                };
+                last_educ_level = educ_level.join(',');
+                return last_educ_level;
+            }
+        }
+        else if (clicked_btn == 'sis' && !is_sis_checked()) {
+            sis_add_check();
+            if (is_stud_checked() && is_non_checked() && is_com_checked()) {
+                all_add_check();
+                last_educ_level = 'ALL'
+                return last_educ_level;
+            }
+            else {
+                if (is_sis_checked()) {
+                    educ_level.push($('#sis-badge').text().trim());
+                }
+                if (is_stud_checked()) {
+                    educ_level.push("BACHELOR\'S DEGREE,DIPLOMA,MASTER\'S DEGREE");
+                };
+                if (is_non_checked()) {
+                    educ_level.push($('#non-badge').text().trim());
+                };
+                if (is_com_checked()) {
+                    educ_level.push($('#comp-badge').text().trim());
+                };
+                last_educ_level = educ_level.join(',');
+                return last_educ_level;
+            }
+        }
+        else if (clicked_btn == 'stud' && is_stud_checked()) {
+            all_remove_check();
+            stud_remove_check();
+            if (!is_all_checked() && !is_sis_checked() && !is_stud_checked() && !is_non_checked() && !is_com_checked()) {
+                all_add_check();
+                last_educ_level = 'ALL';
+                return last_educ_level;
+            }
+            else {
+                if (is_sis_checked()) {
+                    educ_level.push($('#sis-badge').text().trim());
+                };
+                if (is_non_checked()) {
+                    educ_level.push($('#non-badge').text().trim());
+                };
+                if (is_com_checked()) {
+                    educ_level.push($('#comp-badge').text().trim());
+                };
+                last_educ_level = educ_level.join(',');
+                return last_educ_level;
+            }
+        }
+        else if (clicked_btn == 'stud' && !is_stud_checked()) {
+            stud_add_check();
+            if (is_sis_checked() && is_non_checked() && is_com_checked()) {
+                all_add_check();
+                last_educ_level = 'ALL';
+                return last_educ_level;
+            }
+            else {
+                if (is_sis_checked()) {
+                    educ_level.push($('#sis-badge').text().trim());
+                }
+                if (is_stud_checked()) {
+                    educ_level.push("BACHELOR\'S DEGREE,DIPLOMA,MASTER\'S DEGREE");
+                };
+                if (is_non_checked()) {
+                    educ_level.push($('#non-badge').text().trim());
+                };
+                if (is_com_checked()) {
+                    educ_level.push($('#comp-badge').text().trim());
+                };
+                last_educ_level = educ_level.join(',');
+                return last_educ_level;
+            }
+        }
+        else if (clicked_btn == 'non' && is_non_checked()) {
+            all_remove_check();
+            non_remove_check();
+            if (!is_all_checked() && !is_sis_checked() && !is_stud_checked() && !is_non_checked() && !is_com_checked()) {
+                all_add_check();
+                last_educ_level = 'ALL';
+                return last_educ_level;
+            }
+            else {
+                if (is_sis_checked()) {
+                    educ_level.push($('#sis-badge').text().trim());
+                };
+                if (is_stud_checked()) {
+                    educ_level.push("BACHELOR\'S DEGREE,DIPLOMA,MASTER\'S DEGREE");
+                };
+                if (is_com_checked()) {
+                    educ_level.push($('#comp-badge').text().trim());
+                };
+                last_educ_level = educ_level.join(',');
+                return last_educ_level;
+            }
+        }
+        else if (clicked_btn == 'non' && !is_non_checked()) {
+            non_add_check();
+            if (is_sis_checked() && is_stud_checked() && is_com_checked()) {
+                all_add_check();
+                last_educ_level = 'ALL'
+                return last_educ_level;
+            }
+            else {
+                if (is_sis_checked()) {
+                    educ_level.push($('#sis-badge').text().trim());
+                }
+                if (is_stud_checked()) {
+                    educ_level.push("BACHELOR\'S DEGREE,DIPLOMA,MASTER\'S DEGREE");
+                };
+                if (is_non_checked()) {
+                    educ_level.push($('#non-badge').text().trim());
+                };
+                if (is_com_checked()) {
+                    educ_level.push($('#comp-badge').text().trim());
+                };
+                last_educ_level = educ_level.join(',');
+                return last_educ_level;
+            }
+        }
+        else if (clicked_btn == 'com' && is_com_checked()) {
+            all_remove_check();
+            com_remove_check();
+            if (!is_all_checked() && !is_sis_checked() && !is_stud_checked() && !is_non_checked() && !is_com_checked()) {
+                all_add_check();
+                last_educ_level = 'ALL';
+                return last_educ_level;
+            }
+            else {
+                if (is_sis_checked()) {
+                    educ_level.push($('#sis-badge').text().trim());
+                };
+                if (is_stud_checked()) {
+                    educ_level.push("BACHELOR\'S DEGREE,DIPLOMA,MASTER\'S DEGREE");
+                };
+                if (is_non_checked()) {
+                    educ_level.push($('#non-badge').text().trim());
+                };
+                last_educ_level = educ_level.join(',');
+                return last_educ_level;
+            }
+        }
+        else if (clicked_btn == 'com' && !is_com_checked()) {
+            com_add_check();
+            if (is_sis_checked() && is_stud_checked() && is_non_checked()) {
+                all_add_check();
+                last_educ_level = 'ALL'
+                return last_educ_level;
+            }
+            else {
+                if (is_sis_checked()) {
+                    educ_level.push($('#sis-badge').text().trim());
+                }
+                if (is_stud_checked()) {
+                    educ_level.push("BACHELOR\'S DEGREE,DIPLOMA,MASTER\'S DEGREE");
+                };
+                if (is_non_checked()) {
+                    educ_level.push($('#non-badge').text().trim());
+                };
+                if (is_com_checked()) {
+                    educ_level.push($('#comp-badge').text().trim());
+                };
+                last_educ_level = educ_level.join(',');
+                return last_educ_level;
+            }
+        }
+    };
+    function is_all_checked() {
+        var is_all_checked = $.trim($('#all-btn').prop('class')).search('fa-check-circle') != -1 ? true : false; //check if class "fa-check-circle" is present in the #all-btn button.
+        return is_all_checked;
+    };
+
+    function is_sis_checked() {
+        var is_sis_checked = $.trim($('#sis-btn').prop('class')).search('fa-check-circle') != -1 ? true : false; //check if class "fa-check-circle" is present in the #sis-btn button.
+        return is_sis_checked;
+    };
+
+    function is_stud_checked() {
+        var is_stud_checked = $.trim($('#stud-btn').prop('class')).search('fa-check-circle') != -1 ? true : false; //check if class "fa-check-circle" is present in the #stud-btn button.
+        return is_stud_checked;
+    };
+
+    function is_non_checked() {
+        var is_non_checked = $.trim($('#non-btn').prop('class')).search('fa-check-circle') != -1 ? true : false; //check if class "fa-check-circle" is present in the #non-btn button.
+        return is_non_checked;
+    };
+
+    function is_com_checked() {
+        var is_com_checked = $.trim($('#com-btn').prop('class')).search('fa-check-circle') != -1 ? true : false; //check if class "fa-check-circle" is present in the #com-btn button.
+        return is_com_checked;
+    };
+
+    function all_remove_check() {
+        $('#all-btn').removeClass('fa-check-circle');
+        $('#all-btn').addClass('fa-circle');
+    };
+    function all_add_check() {
+        $('#all-btn').removeClass('fa-circle');
+        $('#all-btn').addClass('fa-check-circle');
+        sis_add_check();
+        stud_add_check();
+        non_add_check();
+        com_add_check();
+    };
+
+    function sis_remove_check() {
+        $('#sis-btn').removeClass('fa-check-circle');
+        $('#sis-btn').addClass('fa-circle');
+    };
+    function sis_add_check() {
+        $('#sis-btn').removeClass('fa-circle');
+        $('#sis-btn').addClass('fa-check-circle');
+    };
+
+    function stud_remove_check() {
+        $('#stud-btn').removeClass('fa-check-circle');
+        $('#stud-btn').addClass('fa-circle');
+    };
+    function stud_add_check() {
+        $('#stud-btn').removeClass('fa-circle');
+        $('#stud-btn').addClass('fa-check-circle');
+    };
+
+    function non_remove_check() {
+        $('#non-btn').removeClass('fa-check-circle');
+        $('#non-btn').addClass('fa-circle');
+    };
+    function non_add_check() {
+        $('#non-btn').removeClass('fa-circle');
+        $('#non-btn').addClass('fa-check-circle');
+    };
+
+    function com_remove_check() {
+        $('#com-btn').removeClass('fa-check-circle');
+        $('#com-btn').addClass('fa-circle');
+    };
+    function com_add_check() {
+        $('#com-btn').removeClass('fa-circle');
+        $('#com-btn').addClass('fa-check-circle');
+    };
+
     $('#startDate').on('change', function(event) {
+        last_educ_level = last_educ_level == null ? 'ALL' : last_educ_level;
         if ($('endDate').val() != '') {
             var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
             var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-            load_collection_history(start,end,'ALL');
+            load_collection_history(start,end,last_educ_level);
         }
     });
 
     $('#endDate').on('change', function(event) {
+        last_educ_level = last_educ_level == null ? 'ALL' : last_educ_level;
         if ($('startDate').val() != '') {
             var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
             var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-            load_collection_history(start,end,'ALL');
+            load_collection_history(start,end,last_educ_level);
         }
     });
 
     $('#sis-badge').on('click', function() {
+        var categ = changeBtnIcon('sis');
         var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
         var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-        load_collection_history(start,end,$('#sis-badge').text().trim());
+        load_collection_history(start,end,categ);
     });
 
     $('#stud-badge').on('click', function() {
+        var categ = changeBtnIcon('stud');
         var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
         var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-        load_collection_history(start,end,$('#stud-badge').text().trim().toUpperCase());
+        load_collection_history(start,end,categ);
     });
 
     $('#non-badge').on('click', function() {
+        var categ = changeBtnIcon('non');
         var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
         var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-        load_collection_history(start,end,$('#non-badge').text().trim());
+        load_collection_history(start,end,categ);
     });
 
     $('#comp-badge').on('click', function() {
+        var categ = changeBtnIcon('com');
         var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
         var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-        load_collection_history(start,end,$('#comp-badge').text().trim());
+        load_collection_history(start,end,categ);
     });
 
     $('#all-badge').on('click', function() {
+        var categ = changeBtnIcon('all');
         var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
         var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-        load_collection_history(start,end,'ALL');
+        load_collection_history(start,end,categ);
     });
 
     function loadKnobData() {

@@ -40,7 +40,7 @@
         <div class="col-lg-7">
             <!-- begin card -->
             <div class="card text-left">
-                <div class="card-header">
+                <div class="card-header bg-inverse text-white">
                     <i class="fas fa-barcode fa-lg m-r-5"></i>View Receipt
                 </div>
                 <div class="card-block">
@@ -87,12 +87,12 @@
         <!-- begin col-5 -->
         <div class="col-lg-5">
             <!-- begin panel -->
-            <div class="panel panel-default" data-sortable-id="morris-chart-4">
+            <div class="panel panel-inverse" data-sortable-id="morris-chart-4">
                 <div class="panel-heading">
                     <h4 class="panel-title"><i class="fas fa-graduation-cap fa-lg m-r-5"></i>Receipt Chart</h4>
                 </div>
                 <div class="panel-body">
-                    <h4 class="text-center m-t-20 m-b-20">Receipts per Category <small>Total Receipts: <span id="tot_receipt"></span></small></h4>
+                    <h4 class="text-center m-t-20 m-b-20">Receipts per Category <small>Total Receipts: <strong><span id="tot_receipt"></span></strong></small></h4>
                     <div id="morris-donut-chart" class="height-sm"></div>
                 </div>
             </div>
@@ -320,7 +320,7 @@
                         gridTextColor: FONT_COLOR,
                         gridTextWeight: FONT_WEIGHT,
                         gridTextSize: FONT_SIZE,
-                        colors: ['#5cb85c', COLOR_AQUA, COLOR_BLUE, '#292b2c', '#d9534f']
+                        colors: ['#5cb85c', COLOR_BLACK_LIGHTER, COLOR_BLUE, '#292b2c', COLOR_AQUA, '#d9534f']
                     });
                 };
             },

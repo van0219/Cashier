@@ -247,6 +247,22 @@
 		// 	return zoom;
 		// };
 
+		
+		var getCurrentUserID;
+		function callback(response) {
+			getCurrentUserID = response;
+		}
+		$.ajax({
+			url: "{% url 'get_session' %}",
+			type: "POST",
+			data: {
+				csrfmiddlewaretoken:"{{csrf_token}}"
+			},
+			success: function(role_session) {
+				callback(role_session)
+			}
+		});
+
 		function gt_fname() {
 			$.ajax({
 				url: "{% url 'gt_fname' %}",
@@ -491,7 +507,134 @@
 
 		$('#daily-collection-report').on('shown.bs.modal', function() {
 			$('#cash-count-by').text($('.fname').text());
+			getManualCol();
+			getSisCol();
+			getDirectCol();
+			setTimeout(function() {
+				$('#daily-rep-tbl tbody tr').remove();
+				$('#daily-rep-tbl tbody').append(
+					`<tr>
+						<td>Manual</td>
+						<td class="text-center">${(startM=='' ? '' : startM) + ((endM==''||endM==startM) ? '' : '-' + endM)}</td>
+						<td class="text-right">${(manualCol=='' ? '' : manualCol)}</td>
+					</tr>
+					<tr>
+						<td>SIS</td>
+						<td class="text-center">${(orSis=='' ? '' : orSis)}</td>
+						<td class="text-right">${(sisCol=='' ? '' : sisCol)}</td>
+					</tr>
+					<tr>
+						<td>Direct Deposit</td>
+						<td class="text-center">${(startD=='' ? '' : startD) + ((endD==''||endD==startD) ? '' : '-' + endD)}</td>
+						<td class="text-right">${(dirCol=='' ? '' : dirCol)}</td>
+					</tr>`
+				);
+			}, 1000);
 		});
+
+		$('#daily-collection-report').on('hidden.bs.modal', function() {
+			$('#navvy').click();
+		});
+
+		var startM = null;
+		var endM = null;
+		var manualCol = null;
+		function manualCol_callback(start, end, mcol) {
+			startM = start;
+			endM = end;
+			manualCol = mcol;
+		};
+
+		var orSis = null;
+		var sisCol = null;
+		function sisCol_callback(or, scol) {
+			orSis = or;
+			sisCol = scol;
+		};
+
+		var startD = null;
+		var endD = null;
+		var dirCol = null;
+		function dirCol_callback(start, end, dcol) {
+			startD = start;
+			endD = end;
+			dirCol = dcol;
+		};
+
+		function getManualCol() {
+			$.ajax({
+				type: "POST",
+				url: "{% url 'get_manual_col' %}",
+				// cache: true,
+				dataType: 'json',
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) {
+					manualCol_callback(obj[0][0], obj[0][1], parseFloat(obj[0][2]).toFixed(2));
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.status + ': ' + xhr.statusText;
+					swal({
+						title: "Error!", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					});
+				}
+			});
+		};
+
+		function getSisCol() {
+			$.ajax({
+				type: "POST",
+				url: "{% url 'get_sis_col' %}",
+				// cache: true,
+				dataType: 'json',
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) {
+					sisCol_callback(obj[0][0], parseFloat(obj[0][1]).toFixed(2));
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.status + ': ' + xhr.statusText;
+					swal({
+						title: "Error!", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					});
+				}
+			});
+		};
+
+		function getDirectCol() {
+			$.ajax({
+				type: "POST",
+				url: "{% url 'get_direct_col' %}",
+				// cache: true,
+				dataType: 'json',
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) {
+					dirCol_callback(obj[0][0], obj[0][1], parseFloat(obj[0][2]).toFixed(2));
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.status + ': ' + xhr.statusText;
+					swal({
+						title: "Error!", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					});
+				}
+			});
+		};
 
 // bills
 		function tot_bills() {
@@ -513,6 +656,8 @@
 			}	
 			$('#tot-bills').val(tot_bills());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#five-freq').on('input', function() {
@@ -524,6 +669,8 @@
 			}
 			$('#tot-bills').val(tot_bills());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#two-freq').on('input', function() {
@@ -535,6 +682,8 @@
 			}
 			$('#tot-bills').val(tot_bills());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#one-freq').on('input', function() {
@@ -546,6 +695,8 @@
 			}
 			$('#tot-bills').val(tot_bills());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#fif-freq').on('input', function() {
@@ -557,6 +708,8 @@
 			}
 			$('#tot-bills').val(tot_bills());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#twen-freq').on('input', function() {
@@ -568,6 +721,8 @@
 			}
 			$('#tot-bills').val(tot_bills());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 // coins
 		function tot_coins() {
@@ -586,6 +741,8 @@
 			}
 			$('#tot-coins').val(tot_coins());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#cfive-freq').on('input', function() {
@@ -597,6 +754,8 @@
 			}
 			$('#tot-coins').val(tot_coins());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#cone-freq').on('input', function() {
@@ -608,6 +767,8 @@
 			}
 			$('#tot-coins').val(tot_coins());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#ctwenfive-freq').on('input', function() {
@@ -619,6 +780,8 @@
 			}
 			$('#tot-coins').val(tot_coins());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#add-sis').on('click', function() {
@@ -659,7 +822,85 @@
 				}
 			});
 		};
-				
+
+		$('#add-daily-rep-but').on('click', function() {
+			$('#add-daily-rep-but-icon').removeClass('fa-save');
+			$('#add-daily-rep-but-icon').addClass('fa-spinner fa-pulse');
+			swal({
+                title: "Save Daily Collection Report",
+                text: "Are you sure to save this collection report?",
+                type: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#428bca",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: false,
+                closeOnCancel: true,
+                customClass: "Custom_Cancel"
+	    	}, function(isConfirm) {
+				if (isConfirm) {
+					addDaily();
+				}
+			});
+		});
+		
+		function addDaily() {
+			var thou = $.trim($('#thou-freq').val());
+			var fiveh = $.trim($('#five-freq').val());
+			var twoh = $.trim($('#two-freq').val());
+			var oneh = $.trim($('#one-freq').val());
+			var fif = $.trim($('#fif-freq').val());
+			var twen = $.trim($('#twen-freq').val());
+			var ten = $.trim($('#ten-freq').val());
+			var fivep = $.trim($('#cfive-freq').val());
+			var onep = $.trim($('#cone-freq').val());
+			var twenc = $.trim($('#ctwenfive-freq').val());
+			var user_id = getCurrentUserID;
+			$.ajax({
+				url: "{% url 'add_daily_col_report' %}",
+				type: "POST",
+				data: {
+					thou: thou,
+					fiveh: fiveh,
+					twoh: twoh,
+					oneh: oneh,
+					fif: fif,
+					twen: twen,
+					ten: ten,
+					fivep: fivep,
+					onep: onep,
+					twenc: twenc,
+					user_id: user_id,
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) {
+					swal({
+						title: "Added Successfully", 
+						text: 'You have added a collection report for today.',
+						type: "success",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					},
+					function(isConfirm){
+						if (isConfirm){
+							$('#add-daily-rep-but-icon').removeClass('fa-spinner fa-pulse');
+							$('#add-daily-rep-but-icon').addClass('fa-save');
+							$('#daily-collection-report').modal('hide');
+						}
+					});
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.statusText;
+					swal({
+						title: "An error occured", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					});
+				}
+			});
+		};
 	</script>
 </body>
 </html>

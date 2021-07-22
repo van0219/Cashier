@@ -372,6 +372,7 @@
         var client = $('#r_name').text();
         var educ_level = $('#radiorequired').val();
         var userID = getCurrentUserID;
+        var is_direct = 0;
         $.ajax({
             type: "POST",
             url: "{% url 'insert_collection' %}",
@@ -385,6 +386,7 @@
                 client: client,
                 educ_level: educ_level,
                 userID: userID,
+                is_direct: is_direct,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -507,15 +509,16 @@
             var ampm = (hrs >= 12) ? "PM" : "AM";
             var time = (hrs % 12 || 12) + ":" + ((mins<10?'0':'') + mins) + ' ' + ampm;
             $('#r_time').text(time);
-            $('#r_grandtotal').text('₱'+$('#total-fee').text().toString()).delay(2000).queue(function() {
+            $('#r_grandtotal').text('₱'+$('#total-fee').text().toString()).delay(1000).queue(function() {
                 if ($('#check_1').prop('checked')) {
                     saveCollection($('#or_num').val());
                 }
                 else {
                     saveCollection($('#or_num').val());
-                    saveCollectionBreakdown($('#or_num').val());
+                    setTimeout(function() {
+                        saveCollectionBreakdown($('#or_num').val());
+                    },1000);
                 }
-                $(this).dequeue();
             });
         }
         else {

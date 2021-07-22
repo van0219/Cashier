@@ -376,6 +376,14 @@
 			var dt = moment(new Date( (d.getMonth()+1) + '/' +  d.getDate()+ '/' + d.getFullYear())).format('MMM. DD, YYYY');
 			$('#daily-rep-date').text(dt);
 		});
+
+		$('#daily-collection-report').on('shown.bs.modal', function() {
+			$('#cash-count-by').text($('.fname').text());
+		});
+
+		$('#daily-collection-report').on('hidden.bs.modal', function() {
+			$('#navvy').click();
+		});
 // bills
 function tot_bills() {
 			var tot = parseInt($('#thou-amt').val()) + 

@@ -52,7 +52,7 @@
                 <div class="stats-icon stats-icon-lg"><i class="fas fa-shopping-basket fa-fw"></i></div>
                 <div class="stats-content">
                     <div class="stats-title f-s-13">TODAY'S TOTAL COLLECTION</div>
-                    <div class="stats-number" id="today-col"></div>
+                    <div class="stats-number" id="today-col" style="cursor: pointer;"></div>
                     <div class="stats-progress progress">
                         <div id="prog-1" class="progress-bar" style="width: 70.1%;"></div>
                     </div>
@@ -306,6 +306,112 @@
             }
             return _days; // returns the number of days of the current month
         }
+    };
+
+    $('#today-col').on('click', function() {
+        getManualCol();
+        getSisCol();
+        getDirectCol();
+        setTimeout(function() {
+            swal({
+                title: $.trim($('#today-col').text()), 
+                text: "<b>Manual :</b>"+ ' ' + manualCol +"<br><b>Direct :</b>"+ ' ' + dirCol +"<br><b>SIS :</b>"+ ' ' +sisCol, 
+                type: "info",
+                html: true,
+                showLoaderOnConfirm: true,
+                confirmButtonColor: "#5cb85c",
+            });
+        }, 300);
+    });
+
+    var manualCol = null;
+    function manualCol_callback(mcol) {
+        manualCol = mcol;
+    };
+
+    var sisCol = null;
+    function sisCol_callback(scol) {
+        sisCol = scol;
+    };
+
+    var dirCol = null;
+    function dirCol_callback(dcol) {
+        dirCol = dcol;
+    };
+
+    function getManualCol() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_manual_col' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                manualCol_callback(parseFloat(obj[0][2]).toFixed(2));
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
+    function getSisCol() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_sis_col' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                sisCol_callback(parseFloat(obj[0][1]).toFixed(2));
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
+    function getDirectCol() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_direct_col' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                dirCol_callback(parseFloat(obj[0][2]).toFixed(2));
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
     };
 
     function handleBarChart(obj) {

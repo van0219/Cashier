@@ -1607,3 +1607,38 @@ def check_if_sis_payment_done(request):
     cursor.callproc("SP_CHECK_SIS_PAYMENT_DONE")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def get_manual_col(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_MANUAL_COL_TODAY")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def get_sis_col(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_SIS_COL_TODAY")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def get_direct_col(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_DIRECT_DEP_COL_TODAY")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def add_daily_col_report(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_INSERT_DAILY_COL_REPORT"
+                    ,(request.POST['thou']
+                    ,request.POST['fiveh']
+                    ,request.POST['twoh']
+                    ,request.POST['oneh']
+                    ,request.POST['fif']
+                    ,request.POST['twen']
+                    ,request.POST['ten']
+                    ,request.POST['fivep']
+                    ,request.POST['onep']
+                    ,request.POST['twenc']
+                    ,request.POST['user_id']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

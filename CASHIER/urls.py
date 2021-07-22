@@ -142,4 +142,8 @@ urlpatterns = [
     path('remove_sis', views.remove_sis, name="remove_sis"),
     path('add_sis_uacs', views.add_sis_uacs, name="add_sis_uacs"),
     path('check_if_sis_payment_done', views.check_if_sis_payment_done, name="check_if_sis_payment_done"),
+    path('get_manual_col', views.get_manual_col, name="get_manual_col"),
+    path('get_direct_col', views.get_direct_col, name="get_direct_col"),
+    path('get_sis_col', views.get_sis_col, name="get_sis_col"),
+    path('add_daily_col_report', views.add_daily_col_report, name="add_daily_col_report"),
 ]

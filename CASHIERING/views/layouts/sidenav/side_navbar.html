@@ -146,7 +146,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add Student</h4>
+                <h4 class="modal-title"><i class="fas fa-user-plus m-r-5"></i>Add Student</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
@@ -213,14 +213,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title"></h4>
+                <h4 class="modal-title"><i class="fas fa-file-alt m-r-5"></i>Daily Collection Report</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
             <!-- begin card -->
             <div class="card card-inverse bg-gradient-silver">
                 <div class="card-block">
-                    <form class="form-horizontal" id="add-stud-form" data-parsley-validate="true">
+                    <form class="form-horizontal" id="daily-col-form" data-parsley-validate="true">
                         <div class="form-group row">
                             <label class="col-md-12 col-sm-12 text-center f-s-14"><strong>POLYTECHNIC UNIVERSITY OF THE PHILIPPINES</strong></label>
                         </div>
@@ -323,20 +323,16 @@
                             </div>
                         </div>
                         <div class="form-group row m-b-15">
-                            <label class="col-md-4 col-sm-4 text-center f-s-12"><strong>Collection Mode</strong></label>
-                            <label class="col-md-4 col-sm-4 text-center f-s-12"><strong>OR Number Used</strong></label>
-                            <label class="col-md-4 col-sm-4 text-center f-s-12"><strong>Amount</strong></label>
-                        </div>
-                        <div class="form-group row m-b-15">
-                            <div class="col-md-4 col-sm-4 f-w-700">
-                                <hr class="bg-black-transparent-6" />   
-                            </div>
-                            <div class="col-md-4 col-sm-4 f-w-700">
-                                <hr class="bg-black-transparent-6" />
-                            </div>
-                            <div class="col-md-4 col-sm-4 f-w-700">
-                                <hr class="bg-black-transparent-6" />
-                            </div>
+                            <table class="table" id="daily-rep-tbl">
+                                <thead>
+                                    <th class="text-nowrap" width="30%">Collection Mode</th>
+                                    <th class="text-nowrap text-center" width="40%">OR Number Used</th>
+                                    <th class="text-nowrap text-right" width="30%">Amount</th>
+                                </thead>
+                                <tbody class="text-inverse">
+                                    <!-- append here -->
+                                </tbody>
+                            </table>
                         </div>
                         <div class="form-group row m-b-30">
                             <input class="col-md-8 col-sm-8 text-center f-s-12 form-control-sm bg-white f-w-700" value="GRAND TOTAL :" style="outline: none; border: none;" id="tot-grand2-lbl" />
@@ -344,8 +340,8 @@
                             <input class="col-md-4 col-sm-4 text-center text-white f-s-12 form-control-sm bg-inverse f-w-700" id="tot-grand2" value="" style="outline: none; border: none;" disabled="" />
                         </div>
                         <div class="modal-footer form-group m-b-0">
-                            <a href="javascript:;" class="btn btn-white btn-md" data-dismiss="modal" id="close-stud-but"><i class="fas fa-times-circle m-r-5"></i>Close</a>
-                            <a href="javascript:;" class="btn btn-success btn-md" id="add-stud-but"><i class="fas fa-save m-r-5" id="add-stud-but-icon"></i>Save</a>
+                            <a href="javascript:;" class="btn btn-white btn-md" data-dismiss="modal" id="close-daily-rep-but"><i class="fas fa-times-circle m-r-5"></i>Close</a>
+                            <a href="javascript:;" class="btn btn-success btn-md" id="add-daily-rep-but"><i class="fas fa-save m-r-5" id="add-daily-rep-but-icon"></i>Save</a>
                         </div>
                     </form>
                 </div>
