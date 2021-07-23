@@ -1,0 +1,191 @@
+<!-- content format -->
+{% extends 'views/layouts/pages/admin_main.html' %}
+{% block title %} 
+<title>CMS | Change Password</title>
+{% endblock %}
+{% load static %}
+{% block page-css %}
+<!-- dito yung page css -->
+{% endblock %}
+{% block content %}
+<!-- dito yung content -->
+<div class="content" id="content">
+    <!-- begin page-header -->
+    <h1 class="page-header">Change Password <small>Account Settings</small></h1>
+    <!-- end page-header -->
+    <div class="row">
+        <!-- begin col-2 -->
+        <div class="col-lg-2">
+            <!-- filler -->
+        </div>
+        <!-- end col-2 -->
+        <!-- begin col-8 -->
+        <div class="col-lg-8">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fas fa-key m-r-5"></i>Change Password</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin panel-body -->
+                <div class="panel-body">
+                    <form id="change-pass-form" autocomplete="off">
+                        <div class="form-group row m-b-15 m-t-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="old-pass">Old Password <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control" type="password" id="old-pass" name="old-pass" placeholder="Old Password" data-parsley-required="true" data-parsley-required-message="Old Password is required" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-30" id="div1">
+                            <label class="col-md-10 col-sm-10 col-form-label"></label>
+                            <div class="col-md-2 col-sm-2">
+                                <a href="javascript:;" class="btn btn-md btn-success" id="verify"><i class="fas fa-check-circle m-r-5"></i>Verify</a>
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15" style="display: none;" id="div2">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="new-pass">New Password <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control" type="password" id="new-pass" name="new-pass" placeholder="New Password" data-parsley-required="true" data-parsley-required-message="New Password is required"  data-parsley-equalto="#conf-new-pass"/>
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-20" style="display: none;" id="div3">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="conf-new-pass">Confirm New Password <span class="text-red">*</span> :</label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control" type="password" id="conf-new-pass" name="conf-new-pass" placeholder="Confirm New Password" data-parsley-required="true" data-parsley-required-message="Confirmation is required" data-parsley-equalto="#new-pass"/>
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-30" style="display: none;" id="div4">
+                            <label class="col-md-8 col-sm-8 col-form-label"></label>
+                            <div class="col-md-4 col-sm-4">
+                                <a href="javascript:;" class="btn btn-md btn-secondary" id="reset"><i class="fas fa-undo m-r-5"></i>Reset</a>
+                                <a href="javascript:;" class="btn btn-md btn-success" id="submit"><i class="fas fa-check-circle m-r-5"></i>Submit</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- end panel-body -->
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-8 -->
+        <!-- begin col-2 -->
+        <div class="col-lg-2">
+            <!-- filler -->
+        </div>
+        <!-- end col-2 -->
+    </div>
+    <!-- end row -->
+</div>
+{% endblock %}
+{% block page-js %}
+<!-- dito yung page-js -->
+{% endblock %}
+{% block init %}
+<script>
+    $(document).ready(function() {
+        App.init();
+    });
+
+    $('#reset').on('click', function() {
+        $('#old-pass').val('');
+        $('#new-pass').val('');
+        $('#conf-new-pass').val('');
+    });
+
+    $('#verify').on('click', function() {
+        if ($('#old-pass').parsley().validate() && $('#old-pass').val().length != 0) {
+            var old_pass = $.trim($('#old-pass').val());
+            checkOldPass(old_pass);
+        }
+    });
+
+    $('#submit').on('click', function() {
+        var new_pass = $.trim($('#new-pass').val());
+        if ($('#change-pass-form').parsley().validate()) {
+            submitChanges(new_pass);
+        }
+    });
+
+    function checkOldPass(old_pass) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'check_old_pass' %}",
+            cache: false,
+            data: {
+                old_pass: old_pass,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                if (obj[0] != null) {
+                    $('#div1').hide();
+                    $('#div2').show();
+                    $('#div3').show();
+                    $('#div4').show();
+                }
+                else {
+                    $('#div1').show();
+                    $('#div2').hide();
+                    $('#div3').hide();
+                    $('#div4').hide();
+                    swal({
+                        title: "Incorrect Password", 
+                        text: "Your old password is incorrect.",
+                        type: "info",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
+    function submitChanges(new_pass) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'change_pass_now' %}",
+            cache: true,
+            data: {
+                new_pass: new_pass,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                swal({
+                    title: "Changed Successfully!", 
+                    text: "Your password was changed successfully.", 
+                    type: "success",
+                    showLoaderOnConfirm: true,
+                    confirmButtonColor: "#5cb85c",
+                },
+                function(isConfirm){
+                    $('#reset').click();
+                    $('#div1').show();
+                    $('#div2').hide();
+                    $('#div3').hide();
+                    $('#div4').hide();
+                });
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+</script>
+{% endblock %}

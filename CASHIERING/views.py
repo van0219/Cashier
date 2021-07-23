@@ -88,6 +88,9 @@ def email(request):
 def change_pass(request):
     return render(request, 'views/layouts/pages/change_pass.html')
 
+def change_pass_admin(request):
+    return render(request, 'views/layouts/pages/change_pass_admin.html')
+
 def sis_payments(request):
     return render(request, 'views/layouts/pages/sis_payments.html')
 
@@ -452,7 +455,6 @@ def insert_deposit(request):
                     ,request.POST['group_id']
                     ,request.POST['status']
                     ,request.POST['date_dep']
-                    ,request.POST['slip_num']
                     ,request.POST['user_id']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False) 
@@ -493,8 +495,7 @@ def load_deposited(request):
 def done_deposit(request):
     cursor = connection.cursor()
     cursor.callproc("SP_DONE_DEPOSIT"
-                    ,(request.POST['group_id']
-                    ,request.POST['slip_num']))
+                    ,(request.POST['group_id'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -763,9 +764,9 @@ def load_cert_pdf(request):
         # Page header
         def header(self):
             # PUP Logo
-            self.image(r'CASHIERING\static\assets\img\logo\PUPLogo.png', 15, 8, 30, 30)
+            # self.image(r'CASHIERING\static\assets\img\logo\PUPLogo.png', 15, 8, 30, 30)
             # QR Code
-            self.image('CASHIERING/static/assets/img/QR-code/' + report_id + '.png', 168, 8, 30, 30)
+            # self.image('CASHIERING/static/assets/img/QR-code/' + report_id + '.png', 168, 8, 30, 30)
             # Arial bold 13
             self.set_font('Arial', 'B', 13)
             self.cell(0, 0, 'Polytechnic University of the Philippines', 0, 0, 'C')
@@ -1547,7 +1548,6 @@ def update_deposit(request):
     cursor = connection.cursor()
     cursor.callproc("SP_UPDATE_DEPOSIT"
                     ,(request.POST['date_dep']
-                    ,request.POST['ref_no']
                     ,request.POST['group_id']
                     ,request.POST['user_id']))
     data = cursor.fetchall()

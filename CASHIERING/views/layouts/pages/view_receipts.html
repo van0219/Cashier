@@ -13,7 +13,7 @@
 <link href="{%static 'assets/plugins/morris/morris.css' %}" rel="stylesheet" />
 <style type="text/css" media="print">
     @page {
-        size: landscape;
+        /* size: portrait; */
     }
     .hidden-print {
         display: none; 
@@ -186,6 +186,7 @@
                 $('#r_date').text(obj[0][3]);
                 $('#r_time').text(obj[0][4]);
                 $('#r_grandtotal').text('₱'+ obj[0][5].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#r_grandtotal_words').text(parseFloat(obj[0][5]));
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;

@@ -14,8 +14,22 @@
 	<!-- ================== END BASE CSS STYLE ================== -->
 	<!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
 	<style type="text/css" media="print">
-		.hidden-print {
-			display: none; 
+		.hidden-print {			
+			display: none !important;
+		}
+		.hidden-color {
+			background-color: white !important;
+			color: black !important;
+		}
+		.show-words {
+			display: block !important;
+			font-size: small !important;
+		}
+		.baba-top {
+			margin-top: 60px;
+		}
+		.baba-total {
+			margin-top: 170px;
 		}
 	</style>
 	<style>
@@ -120,7 +134,7 @@
 	<!-- end modal #request -->
 	<!-- begin modal receipt -->
 	<div class="modal fade" id="receipt">
-		<div class="modal-dialog" style="max-width: 40%;">
+		<div class="modal-dialog" style="max-width: 50%;">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title"></h4>
@@ -130,7 +144,7 @@
 					<!-- begin invoice -->
 					<div class="invoice">
 						<!-- begin invoice-company -->
-						<div class="invoice-company text-inverse f-w-600">
+						<div class="invoice-company text-inverse f-w-600 hidden-print">
 							<span class="pull-right hidden-print">
 							<a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-white m-b-10 p-l-5 hidden-print" id="print_receipt"><i class="fas fa-print t-plus-1 fa-fw fa-lg m-r-5 text-warning"></i>Print</a>
 							</span>
@@ -138,22 +152,22 @@
 						</div>
 						<!-- end invoice-company -->
 						<!-- begin invoice-header -->
-						<div class="invoice-header">
-							<div class="invoice-from">
+						<div class="invoice-header hidden-color baba-top">
+							<div class="invoice-from hidden-print">
 								<small>OR Number</small>
 								<address class="m-t-5 m-b-5">
 									<strong class="text-inverse" id="r_ornum">00000142579</strong><br />
 								</address>
 							</div>
 							<div class="invoice-to">
-								<small>Payor</small>
+								<small class="hidden-print">Payor</small>
 								<address class="m-t-5 m-b-5">
 									<strong class="text-inverse" id="r_name">LASTNAME, FIRSTNAME M.</strong><br />
 									<div class="invoice-detail" id="r_studnum">2017-00293-CM-0</div>
 								</address>
 							</div>
 							<div class="invoice-date">
-								<small>Transaction Date</small>
+								<small class="hidden-print">Transaction Date</small>
 								<div class="date text-inverse m-t-5" id="r_date">{% now "F j, Y" %}</div>
 								<div class="invoice-detail" id="r_time">{% now "h:i:s a" %}</div>
 							</div>
@@ -164,32 +178,32 @@
 							<!-- begin table-responsive -->
 							<div class="table-responsive">
 								<table class="table table-invoice">
-									<thead>
+									<thead class="hidden-print">
 										<tr>
 											<th>DESCRIPTION</th>
 											<th class="text-center">AMOUNT</th>
 										</tr>
 									</thead>
 									<tbody>
-
+										<!-- append here -->
 									</tbody>
 								</table>
 							</div>
 							<!-- end table-responsive -->
 							<!-- begin invoice-price -->
-							<div class="invoice-price">
-								<div class="invoice-price-left">
-									<!--  -->
+							<div class="invoice-price baba-total">
+								<div class="invoice-price-left hidden-color">
+									<span class="show-words" style="display: none; text-transform: uppercase;" id="r_grandtotal_words"></span>
 								</div>
-								<div class="invoice-price-right">
-									<small>TOTAL</small> <span class="f-w-600" id="r_grandtotal"></span>
+								<div class="invoice-price-right hidden-color">
+									<small class="hidden-print">TOTAL</small> <span class="f-w-600" id="r_grandtotal"></span>
 								</div>
 							</div>
 							<!-- end invoice-price -->
 						</div>
 						<!-- end invoice-content -->
 						<!-- begin invoice-footer -->
-						<div class="invoice-footer">
+						<!-- <div class="invoice-footer">
 							<p class="text-center m-b-0 f-w-600">
 								THANK YOU. HAVE A NICE DAY!
 							</p>
@@ -197,7 +211,7 @@
 								<span class="m-r-10"><i class="fa fa-fw fa-lg fas fa-phone-square"></i> (02) 414-3952</span>
 								<span class="m-r-10"><i class="fa fa-fw fa-lg fas fa-envelope-square"></i> pupqc_cashier@gmail.com</span>
 							</p>
-						</div>
+						</div> -->
 						<!-- end invoice-footer -->
 					</div>
 					<!-- end invoice -->
@@ -240,12 +254,66 @@
 			// alert(zoomIn());
 		});
 
+		$('#receipt').on('shown.bs.modal', function() {
+			var cents = parseFloat($('#r_grandtotal_words').text()).toFixed(2).split('.')[1];
+			var cents_words = (parseInt(cents) == 0) ? '' : ' and ' + convert(parseInt(cents)) + ' centavos';
+			$('#r_grandtotal_words').text(convert(parseInt($('#r_grandtotal_words').text())) + ' pesos' + cents_words);
+		});
+
 		// function zoomIn() {
 		// 	var Page = document.getElementById('body-main');
 		// 	var zoom = Math.round(window.devicePixelRatio * 100) + 20 + '%';
 		// 	Page.style.zoom = zoom;
 		// 	return zoom;
 		// };
+
+		// actual  conversion code starts here
+		var ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+		var tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+		var teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+
+		function convert_millions(num) {
+			if (num >= 1000000) {
+				return convert_millions(Math.floor(num / 1000000)) + " million " + convert_thousands(num % 1000000);
+			} else {
+				return convert_thousands(num);
+			}
+		}
+
+		function convert_thousands(num) {
+			if (num >= 1000) {
+				return convert_hundreds(Math.floor(num / 1000)) + " thousand " + convert_hundreds(num % 1000);
+			} else {
+				return convert_hundreds(num);
+			}
+		}
+
+		function convert_hundreds(num) {
+			if (num > 99) {
+				return ones[Math.floor(num / 100)] + " hundred " + convert_tens(num % 100);
+			} else {
+				return convert_tens(num);
+			}
+		}
+
+		function convert_tens(num) {
+			if (num < 10) 
+				return ones[num];
+			else if (num >= 10 && num < 20) 
+				return teens[num - 10];
+			else {
+				return tens[Math.floor(num / 10)] + " " + ones[num % 10];
+			}
+		}
+
+		function convert(num) {
+			if (num == 0) 
+				return "zero";
+			else 
+				return convert_millions(num);
+		}
+		//end of conversion code
+
 
 		
 		var getCurrentUserID;
@@ -897,6 +965,10 @@
 						type: "error",
 						confirmButtonColor: "#428bca",
 						showLoaderOnConfirm: true
+					},
+					function(isConfirm) {
+						$('#add-daily-rep-but-icon').removeClass('fa-spinner fa-pulse');
+						$('#add-daily-rep-but-icon').addClass('fa-save');
 					});
 				}
 			});

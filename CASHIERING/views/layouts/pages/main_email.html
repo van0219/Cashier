@@ -16,6 +16,25 @@
 	
 	<!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
 	{% block page-css %} 
+	<style type="text/css" media="print">
+		.hidden-print {			
+			display: none !important;
+		}
+		.hidden-color {
+			background-color: white !important;
+			color: black !important;
+		}
+		.show-words {
+			display: block !important;
+			font-size: small !important;
+		}
+		.baba-top {
+			margin-top: 60px;
+		}
+		.baba-total {
+			margin-top: 170px;
+		}
+	</style>
 	<style>
 		.table thead th {
 			position: sticky;
@@ -116,6 +135,94 @@
 			</div>
 		</div>
 	</div>
+		<!-- begin modal receipt -->
+		<div class="modal fade" id="receipt">
+			<div class="modal-dialog" style="max-width: 50%;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title"></h4>
+						<button type="button" class="close hidden-print" data-dismiss="modal" aria-hidden="true">×</button>
+					</div>
+					<div class="modal-body">
+						<!-- begin invoice -->
+						<div class="invoice">
+							<!-- begin invoice-company -->
+							<div class="invoice-company text-inverse f-w-600 hidden-print">
+								<span class="pull-right hidden-print">
+								<a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-white m-b-10 p-l-5 hidden-print" id="print_receipt"><i class="fas fa-print t-plus-1 fa-fw fa-lg m-r-5 text-warning"></i>Print</a>
+								</span>
+								Polytechnic University of the Philippines <br><small>Quezon City Branch</small>
+							</div>
+							<!-- end invoice-company -->
+							<!-- begin invoice-header -->
+							<div class="invoice-header hidden-color baba-top">
+								<div class="invoice-from hidden-print">
+									<small>OR Number</small>
+									<address class="m-t-5 m-b-5">
+										<strong class="text-inverse" id="r_ornum">00000142579</strong><br />
+									</address>
+								</div>
+								<div class="invoice-to">
+									<small class="hidden-print">Payor</small>
+									<address class="m-t-5 m-b-5">
+										<strong class="text-inverse" id="r_name">LASTNAME, FIRSTNAME M.</strong><br />
+										<div class="invoice-detail" id="r_studnum">2017-00293-CM-0</div>
+									</address>
+								</div>
+								<div class="invoice-date">
+									<small class="hidden-print">Transaction Date</small>
+									<div class="date text-inverse m-t-5" id="r_date">{% now "F j, Y" %}</div>
+									<div class="invoice-detail" id="r_time">{% now "h:i:s a" %}</div>
+								</div>
+							</div>
+							<!-- end invoice-header -->
+							<!-- begin invoice-content -->
+							<div class="invoice-content">
+								<!-- begin table-responsive -->
+								<div class="table-responsive">
+									<table class="table table-invoice">
+										<thead class="hidden-print">
+											<tr>
+												<th>DESCRIPTION</th>
+												<th class="text-center">AMOUNT</th>
+											</tr>
+										</thead>
+										<tbody>
+											<!-- append here -->
+										</tbody>
+									</table>
+								</div>
+								<!-- end table-responsive -->
+								<!-- begin invoice-price -->
+								<div class="invoice-price baba-total">
+									<div class="invoice-price-left hidden-color">
+										<span class="show-words" style="display: none; text-transform: uppercase;" id="r_grandtotal_words"></span>
+									</div>
+									<div class="invoice-price-right hidden-color">
+										<small class="hidden-print">TOTAL</small> <span class="f-w-600" id="r_grandtotal"></span>
+									</div>
+								</div>
+								<!-- end invoice-price -->
+							</div>
+							<!-- end invoice-content -->
+							<!-- begin invoice-footer -->
+							<!-- <div class="invoice-footer">
+								<p class="text-center m-b-0 f-w-600">
+									THANK YOU. HAVE A NICE DAY!
+								</p>
+								<p class="text-center">
+									<span class="m-r-10"><i class="fa fa-fw fa-lg fas fa-phone-square"></i> (02) 414-3952</span>
+									<span class="m-r-10"><i class="fa fa-fw fa-lg fas fa-envelope-square"></i> pupqc_cashier@gmail.com</span>
+								</p>
+							</div> -->
+							<!-- end invoice-footer -->
+						</div>
+						<!-- end invoice -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end modal receipt -->
 
 	<!-- ================== BEGIN BASE JS ================== -->
 	{% include "views/layouts/includes/base_js.html" %}
@@ -126,19 +233,104 @@
 	<!-- ================== END PAGE LEVEL JS ================== -->
 	{% block init %}
 	<script>
-		$(document).ready(function() {
-			App.init();
-		});
-	</script>
-	{% endblock %}
-	<script>
 		$(window).on("load",function(){
 			$(".loader-wrapper").fadeOut("slow");
 		});
 		$(document).ready(function() {
 			gt_fname();
 			gt_profile_img();
+			$('#tot-bills-lbl').on('focusin', function() {
+				$(this).blur();
+			});
+			$('#tot-coins-lbl').on('focusin', function() {
+				$(this).blur();
+			});
+			$('#tot-grand-lbl').on('focusin', function() {
+				$(this).blur();
+			});
+			$('#tot-grand2-lbl').on('focusin', function() {
+				$(this).blur();
+			});
+			// alert(zoomIn());
 		});
+
+		$('#receipt').on('shown.bs.modal', function() {
+			var cents = parseFloat($('#r_grandtotal_words').text()).toFixed(2).split('.')[1];
+			var cents_words = (parseInt(cents) == 0) ? '' : ' and ' + convert(parseInt(cents)) + ' centavos';
+			$('#r_grandtotal_words').text(convert(parseInt($('#r_grandtotal_words').text())) + ' pesos' + cents_words);
+		});
+
+		// function zoomIn() {
+		// 	var Page = document.getElementById('body-main');
+		// 	var zoom = Math.round(window.devicePixelRatio * 100) + 20 + '%';
+		// 	Page.style.zoom = zoom;
+		// 	return zoom;
+		// };
+
+		// actual  conversion code starts here
+		var ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+		var tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+		var teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+
+		function convert_millions(num) {
+			if (num >= 1000000) {
+				return convert_millions(Math.floor(num / 1000000)) + " million " + convert_thousands(num % 1000000);
+			} else {
+				return convert_thousands(num);
+			}
+		}
+
+		function convert_thousands(num) {
+			if (num >= 1000) {
+				return convert_hundreds(Math.floor(num / 1000)) + " thousand " + convert_hundreds(num % 1000);
+			} else {
+				return convert_hundreds(num);
+			}
+		}
+
+		function convert_hundreds(num) {
+			if (num > 99) {
+				return ones[Math.floor(num / 100)] + " hundred " + convert_tens(num % 100);
+			} else {
+				return convert_tens(num);
+			}
+		}
+
+		function convert_tens(num) {
+			if (num < 10) 
+				return ones[num];
+			else if (num >= 10 && num < 20) 
+				return teens[num - 10];
+			else {
+				return tens[Math.floor(num / 10)] + " " + ones[num % 10];
+			}
+		}
+
+		function convert(num) {
+			if (num == 0) 
+				return "zero";
+			else 
+				return convert_millions(num);
+		}
+		//end of conversion code
+
+
+		
+		var getCurrentUserID;
+		function callback(response) {
+			getCurrentUserID = response;
+		}
+		$.ajax({
+			url: "{% url 'get_session' %}",
+			type: "POST",
+			data: {
+				csrfmiddlewaretoken:"{{csrf_token}}"
+			},
+			success: function(role_session) {
+				callback(role_session)
+			}
+		});
+
 		function gt_fname() {
 			$.ajax({
 				url: "{% url 'gt_fname' %}",
@@ -205,9 +397,9 @@
 
 	    function addStudentWithStudno() {
 	    	var studno = $('#studno').val().trim();
-	    	var fname = $('#fname').val().trim();
-	    	var mname = $('#mname').val().trim();
-	    	var lname = $('#lname').val().trim();
+	    	var fname = $.trim($('#fname').val()).toUpperCase();
+	    	var mname = $.trim($('#mname').val()).toUpperCase();
+	    	var lname = $.trim($('#lname').val()).toUpperCase();
 	    	var course = $('#course').val().trim();
 	    	var yr = $('#yr').val().trim();
 	    	var sec = $('#sec').val().trim();
@@ -227,56 +419,56 @@
 	    	function(isConfirm) {
 	    		if (isConfirm) {
 		        	$.ajax({
-					url: "{% url 'add_student_with_studno' %}",
-					type: "POST",
-					data: {
-						studno: studno,
-						fname: fname,
-						mname: mname,
-						lname: lname,
-						course: course,
-						yr: yr,
-						sec: sec,
-						csrfmiddlewaretoken:"{{csrf_token}}"
-					},
-					success: function(obj) {
-	                    swal({
-	                        title: "Added Successfully", 
-	                        text: 'You have added ' + studno + ' to the student list.',
-	                        type: "success",
-	                        confirmButtonColor: "#428bca",
-	                        showLoaderOnConfirm: true
-	                    },
-	                    function(isConfirm){
-	                        if (isConfirm){
+						url: "{% url 'add_student_with_studno' %}",
+						type: "POST",
+						data: {
+							studno: studno,
+							fname: fname,
+							mname: mname,
+							lname: lname,
+							course: course,
+							yr: yr,
+							sec: sec,
+							csrfmiddlewaretoken:"{{csrf_token}}"
+						},
+						success: function(obj) {
+							swal({
+								title: "Added Successfully", 
+								text: 'You have added ' + studno + ' to the student list.',
+								type: "success",
+								confirmButtonColor: "#428bca",
+								showLoaderOnConfirm: true
+							},
+							function(isConfirm){
+								if (isConfirm){
+									$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
+									$('#add-stud-but-icon').addClass('fa-plus-circle');
+									$('#add_student').modal('hide');
+								}
+							})
+						},
+						error: function(xhr, status, error) {
+							var errMsg = xhr.statusText;
+							swal({
+								title: "An error occured", 
+								text: errMsg,
+								type: "error",
+								confirmButtonColor: "#428bca",
+								showLoaderOnConfirm: true
+							}, function(isConfirm) {
 								$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
 								$('#add-stud-but-icon').addClass('fa-plus-circle');
-	                            $('#add_student').modal('hide');
-	                        }
-	                    })
-					},
-					error: function(xhr, status, error) {
-						var errMsg = xhr.status + ': ' + xhr.statusText;
-						swal({
-							title: "Error!", 
-							text: errMsg,
-							type: "error",
-							confirmButtonColor: "#428bca",
-							showLoaderOnConfirm: true
-						}, function(isConfirm) {
-							$('#add-stud-but-icon').removeClass('fa-spinner fa-pulse');
-							$('#add-stud-but-icon').addClass('fa-plus-circle');
-						});
-					}
-				});
+							});
+						}
+					});
 	    		}
 	    	});
 	    };
 
 	    function addStudentWithoutStudno() {
-	    	var fname = $('#fname').val().trim().toUpperCase();
-	    	var mname = $('#mname').val().trim().toUpperCase();
-	    	var lname = $('#lname').val().trim().toUpperCase();
+	    	var fname = $.trim($('#fname').val()).toUpperCase();
+	    	var mname = $.trim($('#mname').val()).toUpperCase();
+	    	var lname = $.trim($('#lname').val()).toUpperCase();
 	    	var course = $('#course').val().trim();
 	    	var yr = $('#yr').val().trim();
 	    	var sec = $('#sec').val().trim();
@@ -347,9 +539,11 @@
 	        $('#add-stud-form').parsley().reset();
 	        $('.addstud').val('');
 	    });
+
         $('#studno').on('focusin', function() {
 	        $('#studno').mask('9999-99999-CM-9'); //masked input for student number
 	    });
+
 	    $('#course').on('keyup', function(e) {
 	    	if (e.which == 8 && $('#course').val().trim() != '') {
 	    		$('#course').prop('style', 'text-transform: uppercase;');
@@ -362,13 +556,15 @@
 	    	}
 	    	
 	    });
+
 	    $('#course').on('focusout', function() {
 	    	if ($('#course').val().trim() == '') {
 				$('#course').prop('style', 'text-transform: capitalize;');
 	    	}
 	    	else {
 	    		$('#course').prop('style', 'text-transform: uppercase;')
-	    	}	    	
+	    	}
+	    	
 	    });
 
 		$('#daily-rep-sidenav-but').on('click', function() {
@@ -379,13 +575,137 @@
 
 		$('#daily-collection-report').on('shown.bs.modal', function() {
 			$('#cash-count-by').text($('.fname').text());
+			getManualCol();
+			getSisCol();
+			getDirectCol();
+			setTimeout(function() {
+				$('#daily-rep-tbl tbody tr').remove();
+				$('#daily-rep-tbl tbody').append(
+					`<tr>
+						<td>Manual</td>
+						<td class="text-center">${(startM=='' ? '' : startM) + ((endM==''||endM==startM) ? '' : '-' + endM)}</td>
+						<td class="text-right">${(manualCol=='' ? '' : manualCol)}</td>
+					</tr>
+					<tr>
+						<td>SIS</td>
+						<td class="text-center">${(orSis=='' ? '' : orSis)}</td>
+						<td class="text-right">${(sisCol=='' ? '' : sisCol)}</td>
+					</tr>
+					<tr>
+						<td>Direct Deposit</td>
+						<td class="text-center">${(startD=='' ? '' : startD) + ((endD==''||endD==startD) ? '' : '-' + endD)}</td>
+						<td class="text-right">${(dirCol=='' ? '' : dirCol)}</td>
+					</tr>`
+				);
+			}, 1000);
 		});
 
 		$('#daily-collection-report').on('hidden.bs.modal', function() {
 			$('#navvy').click();
 		});
+
+		var startM = null;
+		var endM = null;
+		var manualCol = null;
+		function manualCol_callback(start, end, mcol) {
+			startM = start;
+			endM = end;
+			manualCol = mcol;
+		};
+
+		var orSis = null;
+		var sisCol = null;
+		function sisCol_callback(or, scol) {
+			orSis = or;
+			sisCol = scol;
+		};
+
+		var startD = null;
+		var endD = null;
+		var dirCol = null;
+		function dirCol_callback(start, end, dcol) {
+			startD = start;
+			endD = end;
+			dirCol = dcol;
+		};
+
+		function getManualCol() {
+			$.ajax({
+				type: "POST",
+				url: "{% url 'get_manual_col' %}",
+				// cache: true,
+				dataType: 'json',
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) {
+					manualCol_callback(obj[0][0], obj[0][1], parseFloat(obj[0][2]).toFixed(2));
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.status + ': ' + xhr.statusText;
+					swal({
+						title: "Error!", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					});
+				}
+			});
+		};
+
+		function getSisCol() {
+			$.ajax({
+				type: "POST",
+				url: "{% url 'get_sis_col' %}",
+				// cache: true,
+				dataType: 'json',
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) {
+					sisCol_callback(obj[0][0], parseFloat(obj[0][1]).toFixed(2));
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.status + ': ' + xhr.statusText;
+					swal({
+						title: "Error!", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					});
+				}
+			});
+		};
+
+		function getDirectCol() {
+			$.ajax({
+				type: "POST",
+				url: "{% url 'get_direct_col' %}",
+				// cache: true,
+				dataType: 'json',
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) {
+					dirCol_callback(obj[0][0], obj[0][1], parseFloat(obj[0][2]).toFixed(2));
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.status + ': ' + xhr.statusText;
+					swal({
+						title: "Error!", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					});
+				}
+			});
+		};
+
 // bills
-function tot_bills() {
+		function tot_bills() {
 			var tot = parseInt($('#thou-amt').val()) + 
 					  parseInt($('#five-amt').val()) +
 					  parseInt($('#two-amt').val()) +
@@ -404,6 +724,8 @@ function tot_bills() {
 			}	
 			$('#tot-bills').val(tot_bills());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#five-freq').on('input', function() {
@@ -415,6 +737,8 @@ function tot_bills() {
 			}
 			$('#tot-bills').val(tot_bills());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#two-freq').on('input', function() {
@@ -426,6 +750,8 @@ function tot_bills() {
 			}
 			$('#tot-bills').val(tot_bills());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#one-freq').on('input', function() {
@@ -437,6 +763,8 @@ function tot_bills() {
 			}
 			$('#tot-bills').val(tot_bills());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#fif-freq').on('input', function() {
@@ -448,6 +776,8 @@ function tot_bills() {
 			}
 			$('#tot-bills').val(tot_bills());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#twen-freq').on('input', function() {
@@ -459,6 +789,8 @@ function tot_bills() {
 			}
 			$('#tot-bills').val(tot_bills());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 // coins
 		function tot_coins() {
@@ -477,6 +809,8 @@ function tot_bills() {
 			}
 			$('#tot-coins').val(tot_coins());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#cfive-freq').on('input', function() {
@@ -488,6 +822,8 @@ function tot_bills() {
 			}
 			$('#tot-coins').val(tot_coins());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#cone-freq').on('input', function() {
@@ -499,6 +835,8 @@ function tot_bills() {
 			}
 			$('#tot-coins').val(tot_coins());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
 
 		$('#ctwenfive-freq').on('input', function() {
@@ -510,7 +848,131 @@ function tot_bills() {
 			}
 			$('#tot-coins').val(tot_coins());
 			$('#tot-grand').val(tot_bills() + tot_coins());
+			var tot_grand2 = parseFloat(parseFloat($('#tot-grand').val()) + parseFloat(manualCol) + parseFloat(sisCol) + parseFloat(dirCol)).toFixed(2);
+			$('#tot-grand2').val('₱'+tot_grand2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		});
+
+		$('#add-sis').on('click', function() {
+			checkIfSISPaymentDone();
+		});
+
+		function checkIfSISPaymentDone() {
+			$.ajax({
+				url: "{% url 'check_if_sis_payment_done' %}",
+				type: "POST",
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) {
+					if (obj.length > 0) {
+						swal({
+							title: "SIS Done",
+							text: "You have already added an SIS collection today.",
+							type: "warning",
+							confirmButtonColor: "#428bca",
+							confirmButtonText: "OK",
+							closeOnConfirm: true,
+						});
+					}
+					else {
+						window.location = "{% url 'sis_payments' %}";
+					};
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.statusText;
+					swal({
+						title: "An error occured", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					});
+				}
+			});
+		};
+
+		$('#add-daily-rep-but').on('click', function() {
+			$('#add-daily-rep-but-icon').removeClass('fa-save');
+			$('#add-daily-rep-but-icon').addClass('fa-spinner fa-pulse');
+			swal({
+                title: "Save Daily Collection Report",
+                text: "Are you sure to save this collection report?",
+                type: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#428bca",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: false,
+                closeOnCancel: true,
+                customClass: "Custom_Cancel"
+	    	}, function(isConfirm) {
+				if (isConfirm) {
+					addDaily();
+				}
+			});
+		});
+		
+		function addDaily() {
+			var thou = $.trim($('#thou-freq').val());
+			var fiveh = $.trim($('#five-freq').val());
+			var twoh = $.trim($('#two-freq').val());
+			var oneh = $.trim($('#one-freq').val());
+			var fif = $.trim($('#fif-freq').val());
+			var twen = $.trim($('#twen-freq').val());
+			var ten = $.trim($('#ten-freq').val());
+			var fivep = $.trim($('#cfive-freq').val());
+			var onep = $.trim($('#cone-freq').val());
+			var twenc = $.trim($('#ctwenfive-freq').val());
+			var user_id = getCurrentUserID;
+			$.ajax({
+				url: "{% url 'add_daily_col_report' %}",
+				type: "POST",
+				data: {
+					thou: thou,
+					fiveh: fiveh,
+					twoh: twoh,
+					oneh: oneh,
+					fif: fif,
+					twen: twen,
+					ten: ten,
+					fivep: fivep,
+					onep: onep,
+					twenc: twenc,
+					user_id: user_id,
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) {
+					swal({
+						title: "Added Successfully", 
+						text: 'You have added a collection report for today.',
+						type: "success",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					},
+					function(isConfirm){
+						if (isConfirm){
+							$('#add-daily-rep-but-icon').removeClass('fa-spinner fa-pulse');
+							$('#add-daily-rep-but-icon').addClass('fa-save');
+							$('#daily-collection-report').modal('hide');
+						}
+					});
+				},
+				error: function(xhr, status, error) {
+					var errMsg = xhr.statusText;
+					swal({
+						title: "An error occured", 
+						text: errMsg,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					},
+					function(isConfirm) {
+						$('#add-daily-rep-but-icon').removeClass('fa-spinner fa-pulse');
+						$('#add-daily-rep-but-icon').addClass('fa-save');
+					});
+				}
+			});
+		};
 	</script>
 </body>
 </html>

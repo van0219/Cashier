@@ -690,6 +690,7 @@
             var ampm = (hrs >= 12) ? "PM" : "AM";
             var time = (hrs % 12 || 12) + ":" + ((mins<10?'0':'') + mins) + ' ' + ampm;
             $('#r_time').text(time);
+            $('#r_grandtotal_words').text(parseFloat($('#total-fee').text()));
             $('#r_grandtotal').text('₱'+$('#total-fee').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")).delay(1000).queue(function() {
                 saveCollection(ornum);
                 setTimeout(function() {

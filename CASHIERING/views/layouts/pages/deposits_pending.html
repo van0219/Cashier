@@ -119,6 +119,9 @@
                         </tbody>
                         <tfoot>
                             <tr>
+                                <td colspan="4" class="text-right">Total : <span class="label label-default f-s-14" id="view-pending-total"></span></td>
+                            </tr>
+                            <tr>
                                 <td colspan="4" class="text-center"><span class="label label-inverse">Nothing Follows</span></td>
                             </tr>
                         </tfoot>
@@ -136,16 +139,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Confirmation<small class="m-l-10">(<span id="conf-desc" class="m-r-5 m-l-5"></span>)</small></h4>
+                <h4 class="modal-title">Confirmation<small class="m-l-10 f-s-12">(<span id="conf-desc" class="m-r-5 m-l-5"></span>)</small></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
                 <form id="mark-dep-form" data-parsley-validate="true" autocomplete="off">
                     <div class="form-group row m-b-15">
-                        <label for="input-dep-slip" class="col-md-4 col-sm-4 col-form-label">Deposit Slip No. : <span class="text-red">*</span></label>
+                        <label for="input-dep-slip" class="col-md-4 col-sm-4 col-form-label">Deposit No. : <span class="text-red">*</span></label>
                         <div class="col-md-8 col-sm-8">
-                            <input type="text" class="form-control" id="input-dep-slip" required data-parsley-required-message="Deposit slip number is required."/>
-                            <span class="text-danger" style="display: none;" id="dep-slip-err">* Please add the deposit slip number.</span>
+                            <input type="text" class="form-control" id="input-dep-slip" required data-parsley-required-message="Deposit slip number is required." readonly/>
                         </div>
                     </div>
                     <div class="form-group row m-b-15">
@@ -237,7 +239,7 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                currentGroupID(obj[0][0]);
+                currentGroupID(obj[0]);
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -275,7 +277,11 @@
 
     $('#col-hist-table2 tbody').on('click', '.mark_deposit', function() {
         $('#conf-desc').text($(this).closest('tr').find('td:eq(1)').text() + ' : ' + $(this).closest('tr').find('td:eq(0)').text());
-        $('#modal-dep-slip').modal('show');
+        get_current_group_id();    
+        setTimeout(function() {
+            $('#input-dep-slip').val(current_group_id);
+            $('#modal-dep-slip').modal('show');
+        },1000);  
     });
 
     function get_pending(p_date) {
@@ -289,6 +295,7 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
+                var tot = 0;
                 $('#view-pending-table tbody tr').remove();
                 for (i = 0; i < obj.length; i++) {
                     $('#view-pending-table tbody').append(
@@ -298,8 +305,10 @@
                             <td class="text-nowrap text-center">${obj[i][1]}</td>
                             <td class="text-nowrap text-right">${obj[i][2]}</td>
                         </tr>`
-                    );    
-                }
+                    );   
+                    tot += parseFloat(obj[i][2]);
+                };
+                $('#view-pending-total').text(tot);
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -356,8 +365,12 @@
         if ($('#mark-dep-form').parsley().validate()) {
             $('#dep-slip-done-icon').removeClass('fa-check-circle');
             $('#dep-slip-done-icon').addClass('fa-spinner fa-pulse');
-            saveToFolder(imgSrc, fileName); // deposit slip image
-            saveToDB(); // deposit slip number and date deposited
+            if (fileName == null) {
+                get_pending2();
+            }
+            else {
+                saveToFolder(imgSrc, fileName); // deposit slip image
+            }
         }
     });
 
@@ -388,7 +401,6 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                get_current_group_id();
                 setTimeout(function(){
                     get_pending2(); // get_pending is for clicking view btn, get_pending2 is just to get the pending OR for deposit
                 }, 1000);
@@ -437,16 +449,16 @@
     };
 
     function saveToDB(obj, len) {
-        var group_id = current_group_id;
         var status = 'DEPOSITED';
         var date_dep = moment(new Date($('#dep-slip-date').val())).format('YYYY-MM-DD');
-        var slip_num = $('#input-dep-slip').val().trim();
+        var group_id = $('#input-dep-slip').val().trim();
         var user_id = getCurrentUserID;
         for (var i = 0; i < len; i++) {
             var or_num = obj[i][0];
             $.ajax({
                 type: "POST",
                 url: "{% url 'insert_deposit' %}",
+                async: false,
                 cache: false,
                 dataType: 'json',
                 data: {
@@ -454,15 +466,14 @@
                     group_id: group_id,
                     status: status,
                     date_dep: date_dep,
-                    slip_num: slip_num,
                     user_id: user_id,
                     csrfmiddlewaretoken:"{{csrf_token}}"
                 },
                 success: function(obj) {
-                    if (i == len) {
+                    if (i == (len-1)) {
                         swal({
                             title: "Saved Successfully", 
-                            text: 'Deposit slip #' + slip_num + ' has been saved successfully.',
+                            text: 'Deposit No. ' + group_id + ' has been saved successfully.',
                             type: "success",
                             confirmButtonColor: "#428bca",
                             showLoaderOnConfirm: true
