@@ -9,8 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from fpdf import *
 import re
 from datetime import datetime
-from pyzbar import pyzbar
-import qrcode
+# from pyzbar import pyzbar
+# import qrcode
 import string
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -720,24 +720,24 @@ def load_top_contrib(request):
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
-def createQr(report_id):
-    # data to encode
-    data = report_id
-    # instantiate QRCode object
-    qr = qrcode.QRCode(version=3, box_size=10, border=4)
-    # add data to the QR code
-    qr.add_data(data)
-    # compile the data into a QR code array
-    qr.make()
-    # transfer the array into an actual image
-    img = qr.make_image(fill_color="black", back_color="white") #binaligtad ko kasi d mabasa ng scanner
-    file_loc = "CASHIERING/static/assets/img/QR-code/" + data + '.png'
-    # save it to a file 
-    img.save(file_loc)
-    ret = []
-    ret.append(file_loc[10:])
-    ret.append(data)
-    return data
+# def createQr(report_id):
+#     # data to encode
+#     data = report_id
+#     # instantiate QRCode object
+#     qr = qrcode.QRCode(version=3, box_size=10, border=4)
+#     # add data to the QR code
+#     qr.add_data(data)
+#     # compile the data into a QR code array
+#     qr.make()
+#     # transfer the array into an actual image
+#     img = qr.make_image(fill_color="black", back_color="white") #binaligtad ko kasi d mabasa ng scanner
+#     file_loc = "CASHIERING/static/assets/img/QR-code/" + data + '.png'
+#     # save it to a file 
+#     img.save(file_loc)
+#     ret = []
+#     ret.append(file_loc[10:])
+#     ret.append(data)
+#     return data
 
 def load_cert_pdf(request):
     total = "{0:,.2f}".format(float(request.POST['total_dep']))
@@ -750,7 +750,7 @@ def load_cert_pdf(request):
     or_end = request.POST['or_end']
     cashier = request.POST['cashier_name']
     report_id = 'CR-' + str(month) + '-1-' + str(month_l_day) + '-' + str(year) 
-    createQr(report_id)
+    # createQr(report_id)
     class PDF(FPDF):
         def __init__(self, orientation = 'P', unit = 'mm', format = 'Legal'): # other format: Letter, A4
             # Call parent constructor
@@ -902,7 +902,7 @@ def load_sum_pdf(request):
     month_object = datetime.strptime(str(month), "%m")
     cashier = request.POST['cashier']
     report_id = 'SR-' + str(month) + '-1-' + str(month_l_day) + '-' + str(year) 
-    createQr(report_id)
+    # createQr(report_id)
     class PDF(FPDF):
         def __init__(self, orientation = 'P', unit = 'mm', format = 'Legal'): # other format: Letter, A4
             # Call parent constructor
@@ -916,9 +916,9 @@ def load_sum_pdf(request):
         # Page header
         def header(self):
             # PUP Logo
-            self.image(r'CASHIERING\static\assets\img\logo\PUPLogo.png', 15, 8, 30, 30)
+            # self.image(r'CASHIERING\static\assets\img\logo\PUPLogo.png', 15, 8, 30, 30)
             # QR Code
-            self.image('CASHIERING/static/assets/img/QR-code/' + report_id + '.png', 168, 8, 30, 30)
+            # self.image('CASHIERING/static/assets/img/QR-code/' + report_id + '.png', 168, 8, 30, 30)
             # Arial bold 13
             self.set_font('Arial', 'B', 13)
             self.cell(0, 0, 'Polytechnic University of the Philippines', 0, 0, 'C')
@@ -984,13 +984,13 @@ def load_sum_pdf(request):
                 self.ln()
             # Closure line
             self.cell(sum(w), 0, '', 'T')
-            self.ln(20)
+            self.ln(10)
             self.set_font('Arial', 'B', 12)
             self.cell(0, 0, 'TOTAL:', 0, 0, 'L')
             self.cell(0, 0, total, 0, 0, 'R')
             # Text String
             self.set_font('Arial', '', 11)
-            self.ln(20)
+            self.ln(10)
             self.set_fill_color(255,255,240)
             self.multi_cell(w=0, h=5, txt='I hereby certify on my official oath that the above is a true statement of all collections and deposits had by me during the period stated above for which Official Receipts Nos. inclusive, were actually issued by me in the amounts shown thereon. I also certify that I have not received money from whatever source without saving issued the necessary Official Receipt in Acknowledgement thereof. Collections received by sub-collectors are recorded above in lump-sum opposite their respective report numbers. I certify further that the balance shown above agrees with the balance appearing in my Cash Receipt Record.', border=0, align='J', fill=1, split_only=False)
             self.ln(10)
@@ -1012,7 +1012,7 @@ def load_sum_pdf(request):
     data = pdf.load_data(r'CASHIERING\views\layouts\textfiles\sum_obj.txt')
     pdf.set_font('Arial', '', 12)
     pdf.set_margins(left=20, top=20)
-    pdf.set_auto_page_break(1, 30)
+    pdf.set_auto_page_break(1, 25)
     pdf.add_page()
     pdf.improved_table(header, data)
     pdf.alias_nb_pages()
@@ -1027,9 +1027,9 @@ def load_cash_pdf(request):
         # Page header
         def header(self):
             # PUP Logo
-            self.image(r'CASHIERING\static\assets\img\logo\PUPLogo.png', 15, 8, 30, 30)
+            # self.image(r'CASHIERING\static\assets\img\logo\PUPLogo.png', 15, 8, 30, 30)
             # QR Code
-            self.image(r'CASHIERING\static\assets\img\QR-code\qrsample.png', 168, 8, 30, 30)
+            # self.image(r'CASHIERING\static\assets\img\QR-code\qrsample.png', 168, 8, 30, 30)
             # Arial bold 13
             self.set_font('Arial', 'B', 13)
             self.cell(0, 0, 'Polytechnic University of the Philippines', 0, 0, 'C')
@@ -1160,9 +1160,9 @@ def load_mon_pdf(request):
         # Page header
         def header(self):
             # PUP Logo
-            self.image(r'CASHIERING\static\assets\img\logo\PUPLogo.png', 15, 8, 30, 30)
+            # self.image(r'CASHIERING\static\assets\img\logo\PUPLogo.png', 15, 8, 30, 30)
             # QR Code
-            self.image(r'CASHIERING\static\assets\img\QR-code\qrsample.png', 168, 8, 30, 30)
+            # self.image(r'CASHIERING\static\assets\img\QR-code\qrsample.png', 168, 8, 30, 30)
             # Arial bold 13
             self.set_font('Arial', 'B', 13)
             self.cell(0, 0, 'Polytechnic University of the Philippines', 0, 0, 'C')
@@ -1299,7 +1299,7 @@ def load_acc_pdf(request):
     # or_end = request.POST['or_end']
     cashier = request.POST['cashier_name']
     report_id = 'AF-' + str(month) + '-1-' + str(month_l_day) + '-' + str(year) 
-    createQr(report_id)
+    # createQr(report_id)
     class PDF(FPDF):
         def __init__(self, orientation = 'L', unit = 'mm', format = 'Legal'): # other format: Letter, A4
             # Call parent constructor
@@ -1313,9 +1313,9 @@ def load_acc_pdf(request):
         # Page header
         def header(self):
             # PUP Logo
-            self.image(r'CASHIERING\static\assets\img\logo\PUPLogo.png', 15, 8, 30, 30)
+            # self.image(r'CASHIERING\static\assets\img\logo\PUPLogo.png', 15, 8, 30, 30)
             # QR Code
-            self.image('CASHIERING/static/assets/img/QR-code/' + report_id + '.png', 315, 8, 30, 30)
+            # self.image('CASHIERING/static/assets/img/QR-code/' + report_id + '.png', 315, 8, 30, 30)
             # Arial bold 13
             self.set_font('Arial', 'B', 13)
             self.cell(0, 0, 'Polytechnic University of the Philippines', 0, 0, 'C')
@@ -1409,6 +1409,20 @@ def load_acc_pdf(request):
                 self.cell(w[11], 7, str(int(row[2]) + 1), 'LR', 0, 'C')
                 self.cell(w[12], 7, row[7], 'LR', 0, 'C')
                 self.ln()
+            self.cell(w[0], 7, 'WITHOUT FACE VALUE', 'LR', 0, 'C')
+            self.cell(w[1], 7, '', 'LR', 0, 'C')
+            self.cell(w[2], 7, '', 'LR', 0, 'C')
+            self.cell(w[3], 7, '', 'LR', 0, 'C')
+            self.cell(w[4], 7, '', 'LR', 0, 'C')
+            self.cell(w[5], 7, '', 'LR', 0, 'C')
+            self.cell(w[6], 7, '', 'LR', 0, 'C')
+            self.cell(w[7], 7, '', 'LR', 0, 'C')
+            self.cell(w[8], 7, '', 'LR', 0, 'C')
+            self.cell(w[9], 7, '', 'LR', 0, 'C')
+            self.cell(w[10], 7, '', 'LR', 0, 'C')
+            self.cell(w[11], 7, '', 'LR', 0, 'C')
+            self.cell(w[12], 7, '', 'LR', 0, 'C')
+            self.ln()
             # Closure line
             self.cell(sum(w), 0, '', 'T')
             self.ln(20)
