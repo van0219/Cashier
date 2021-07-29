@@ -502,7 +502,7 @@
 
     $('#startDate').on('change', function(event) {
         last_educ_level = last_educ_level == null ? 'ALL' : last_educ_level;
-        if ($('endDate').val() != '') {
+        if ($('#endDate').val() != '') {
             var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
             var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
             load_collection_history(start,end,last_educ_level);
@@ -511,7 +511,7 @@
 
     $('#endDate').on('change', function(event) {
         last_educ_level = last_educ_level == null ? 'ALL' : last_educ_level;
-        if ($('startDate').val() != '') {
+        if ($('#startDate').val() != '') {
             var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
             var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
             load_collection_history(start,end,last_educ_level);

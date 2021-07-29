@@ -54,51 +54,52 @@
     <h1 class="page-header">Certification <small>View/Generate Report</small></h1>
     <!-- end page-header -->
     <!-- begin row -->
-    <div class="row m-b-10">
+    <div class="row m-b-20">
         <!-- begin col-12 -->
         <div class="col-lg-12">
             <!-- begin row -->
             <div class="row">
-                <!-- begin col-6 -->
-                <div class="col-lg-6 m-t-10">
-                    <!-- begin row -->
-                    <div class="row">
-                        <div class="col-lg-3 col-sm-5">
-                            <select class="form-control bg-inverse text-white" id="select-month">
-                                <option value="1">January</option>
-                                <option value="2">February</option>
-                                <option value="3">March</option>
-                                <option value="4">April</option>
-                                <option value="5">May</option>
-                                <option value="6">June</option>
-                                <option value="7">July</option>
-                                <option value="8">August</option>
-                                <option value="9">September</option>
-                                <option value="10">October</option>
-                                <option value="11">November</option>
-                                <option value="12">December</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3 col-sm-5">
-                            <select class="form-control bg-inverse text-white" id="select-year"></select>
-                        </div>
-                        <div class="col-lg-2 col-sm-2">
-                            <a href="javascript:;" class="btn btn-primary btn-sm m-t-5" id="cert-filter"><i class="fas fa-filter m-r-5"></i>Filter</a>
-                        </div>
-                        <div class="col-lg-4">
-                            <!-- filler -->
+                <!-- begin col-3 -->
+                <div class="col-lg-3 col-md-3">
+                    <div class="widget widget-stats bg-gradient-orange">
+                        <div class="stats-icon"><i class="fas fa-download"></i></div>
+                        <div class="stats-info">
+                            <h4>TOTAL DEPOSIT</h4>
+                            <p id="tot-dep-card">70,600</p>	
                         </div>
                     </div>
-                    <!-- end row -->
                 </div>
-                <!-- end col-6 -->
-                <!-- begin col-6 -->
-                <div class="col-lg-6 m-t-10">
-                    <div class="pull-right">
-                        <a href="javascript:;" class="btn btn-primary btn-md" id="cert-pdf"><i class="fas fa-file-pdf m-r-5" id="cert-pdf-icon"></i>Certification Report (PDF)</a>
+                <!-- end col-3 -->
+                <!-- begin col-3 -->
+                <div class="col-lg-3 col-md-3">
+                    <div class="widget widget-stats bg-gradient-black">
+                        <div class="stats-icon"><i class="fas fa-bookmark"></i></div>
+                        <div class="stats-info">
+                            <h4>TOTAL DEPOSIT SLIP</h4>
+                            <p id="tot-slip-card">15</p>	
+                        </div>
                     </div>
                 </div>
-                <!-- end col-6 -->
+                <!-- end col-3 -->
+                <!-- begin col-3 -->
+                <div class="col-lg-3 col-md-3" style="border-right: 1px #747474 solid;">
+                    <div class="pull-left">
+                        <a href="javascript:;" class="btn btn-white btn-sm" id="cert-pdf"><i class="fas fa-file-pdf fa-2x text-red" id="cert-pdf-icon"></i></a>
+                        <span class="fas fa-arrow-alt-circle-left"><small class="m-l-5">Click this!</small></span>
+                        <br>
+                        <span>Generate Certification Report PDF</span>
+                    </div>
+                </div>
+                <!-- end col-3 -->
+                <!-- begin col-3 -->
+                <div class="col-lg-3 col-md-3">
+                    <div class="input-group input-daterange">
+                        <input type="text" class="form-control" id="startDate" name="start" placeholder="Date Start" autocomplete="off" />
+                        <span class="input-group-addon">to</span>
+                        <input type="text" class="form-control" id="endDate" name="end" placeholder="Date End" autocomplete="off" />
+                    </div>
+                </div>
+                <!-- end col-3 -->
             </div>
             <!-- end row -->
         </div>
@@ -109,60 +110,26 @@
     <div class="row">
         <!-- begin col-6 -->
         <div class="col-lg-6">
-            <!-- begin row -->
-            <div class="row">
-                <!-- begin col-6 -->
-                <div class="col-lg-6 col-md-6">
-                    <div class="widget widget-stats bg-gradient-orange">
-                        <div class="stats-icon"><i class="fas fa-download"></i></div>
-                        <div class="stats-info">
-                            <h4>TOTAL DEPOSIT</h4>
-                            <p id="tot-dep-card">70,600</p>	
-                        </div>
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fas fa-chart-line m-r-5"></i>Monthly Certified Deposits (<span id="year-span"></span>)</h4>
+                </div>
+                <div class="panel-body">
+                    <div id="canvas-div">
+                        <h3 id="line-chart-no-data" class="text-center m-t-40" style="display: none;">No data available</h3>
+                        <canvas id="line-chart" data-render="chart-js"></canvas>
                     </div>
                 </div>
-                <!-- end col-6 -->
-                <!-- begin col-6 -->
-                <div class="col-lg-6 col-md-6">
-                    <div class="widget widget-stats bg-gradient-black">
-                        <div class="stats-icon"><i class="fas fa-bookmark"></i></div>
-                        <div class="stats-info">
-                            <h4>TOTAL DEPOSIT SLIP</h4>
-                            <p id="tot-slip-card">15</p>	
-                        </div>
-                    </div>
-                </div>
-                <!-- end col-6 -->
             </div>
-            <!-- end row -->
-            <!-- begin row -->
-            <div class="row">
-                <!-- begin col-12 -->
-                <div class="col-lg-12">
-                    <!-- begin panel -->
-                    <div class="panel panel-inverse">
-                        <div class="panel-heading">
-                            <h4 class="panel-title"><i class="fas fa-chart-line m-r-5"></i>Monthly Certified Deposits (<span id="year-span"></span>)</h4>
-                        </div>
-                        <div class="panel-body">
-                            <div id="canvas-div">
-                                <h3 id="line-chart-no-data" class="text-center m-t-40" style="display: none;">No data available</h3>
-                                <canvas id="line-chart" data-render="chart-js"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end panel -->
-                </div>
-                <!-- end col-12 -->
-            </div>
-            <!-- end row -->
+            <!-- end panel -->
         </div>
         <!-- end col-6 -->
         <!-- begin col-6 -->
         <div class="col-lg-6">
             <!-- begin card -->
             <div class="card text-left">
-                <div class="card-header">
+                <div class="card-header bg-inverse text-white">
                     <i class="fas fa-certificate m-r-5"></i>Certification
                 </div>
                 <div class="card-block">
@@ -176,9 +143,9 @@
                         <div class="panel-body">
                             <table id="data-table-combines" class="table table-hover table-bordered table-striped">
                                 <thead>
-                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="30%">Date</th>
-                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="40%">Reference No.</th>
-                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="30%">Amount</th>
+                                    <th class="text-nowrap" style="text-align: center;" width="30%">Date</th>
+                                    <th class="text-nowrap" style="text-align: center;" width="40%">Reference No.</th>
+                                    <th class="text-nowrap" style="text-align: center;" width="30%">Amount</th>
                                 </thead>
                                 <tbody>
                                     <!-- append tbody tr here -->
@@ -214,7 +181,7 @@
             </div>
             <!-- end card -->
         </div>
-        <!-- end col-10 -->
+        <!-- end col-6 -->
     </div>
     <!-- end row -->
 </div>
@@ -266,14 +233,17 @@
     $(document).ready(function() {
         App.init();
         TableManageCombine.init();
+        d = new Date();
+        var d_mon_start = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + '01';
+        var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+        $('#startDate').val(moment(new Date(d_mon_start)).format('MM/DD/YYYY'));
+        $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         FormPlugins.init();
         highlightSideNav();
-        loadYears();
-        $('#select-month').val((new Date).getMonth()+1);
-        $('#select-year').val((new Date).getFullYear());
-        var end_day = (new Date).getDate();
-        loadDepositCertTable($('#select-month').val(), $('#select-year').val());
-        getMonthlyCollectionDeposit($('#select-year').val());
+        setTimeout(function() {
+            loadDepositCertTable(d_mon_start, d_today);
+            getMonthlyCollectionDeposit(d.getFullYear());
+        },500);
     });
 
     function loadYears() {
@@ -286,15 +256,39 @@
     };
 
     var dt_combines = $('#data-table-combines').DataTable({
-        'paging'      : false,
-        'lengthChange': false,
-        'searching'   : true,
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : false,
         'ordering'    : true,
-        'info'        : false,
+        'info'        : true,
         'autoWidth'   : true,
         'order'       : [[1, "desc" ]],
         dom: 'lBfrtip',
     buttons: [
+        {
+            extend:    'print',
+            text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
+            titleAttr: 'Print',
+            exportOptions: {
+                columns: [0,1,2]
+            }
+        },
+        {
+            extend:    'excel',
+            text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
+            titleAttr: 'Excel',
+            exportOptions: {
+                columns: [0,1,2]
+            }
+        },
+        {
+            extend:    'pdf',
+            text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
+            titleAttr: 'PDF',
+            exportOptions: {
+                columns: [0,1,2]
+            }
+        }
     ],
     "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
     columnDefs:[
@@ -304,8 +298,12 @@
             },
         },
         {
-            targets:[0,1,2],
+            targets:[0,1],
                 className: 'text-center',  
+        },
+        {
+            targets:[2],
+                className: 'text-right',
         },
         {
             targets:2, render:function(data){
@@ -408,7 +406,7 @@
                 });
             }
         });
-        $('#year-span').text($('#select-year').val());
+        $('#year-span').text(moment(new Date($('#endDate').val())).format('YYYY'));
         $('#year-span').show();
         $('#canvas-div canvas').remove();
         $('#canvas-div').append(`<canvas id="line-chart" data-render="chart-js"></canvas>`);
@@ -423,15 +421,15 @@
 
     var total_dep = 0;
 
-    function loadDepositCertTable(month, year) {
+    function loadDepositCertTable(start, end) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_cert_table' %}",
             // cache: true,
             dataType: 'json',
             data: {
-                month: month,
-                year: year,
+                start: start,
+                end: end,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -466,9 +464,10 @@
         });
     };
 
-    function loadCertPDF(end_day, total_dep, or_start, or_end) {
-        var month = $('#select-month').val();
-        var year = $('#select-year').val();
+    function loadCertPDF(start_day, end_day, total_dep, or_start, or_end) {
+        var is_loadCertPDF1 = 1;
+        var month = new Date($('#startDate').val()).getMonth()+1;
+        var year = new Date($('#endDate').val()).getFullYear();
         var cashier_name = $('.side_name').text();
         $.ajax({
             type: "POST",
@@ -476,6 +475,8 @@
             // cache: true,
             dataType: 'json',
             data: {
+                is_loadCertPDF1: is_loadCertPDF1,
+                start_day: start_day,
                 end_day: end_day,
                 total_dep: total_dep,
                 month: month,
@@ -504,15 +505,50 @@
         });
     };
 
-    $('#cert-filter').on('click', function() {
-        loadDepositCertTable($('#select-month').val(), $('#select-year').val());
-        getMonthlyCollectionDeposit($('#select-year').val())
-    });
+    function loadCertPDF2(starts, ends, total_dep, or_start, or_end) {
+        var is_loadCertPDF1 = 0;
+        var month = new Date($('#startDate').val()).getMonth()+1;
+        var year = new Date($('#endDate').val()).getFullYear();
+        var cashier_name = $('.side_name').text();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_cert_pdf' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                is_loadCertPDF1: is_loadCertPDF1,
+                starts: starts,
+                ends: ends,
+                total_dep: total_dep,
+                month: month,
+                year: year,
+                or_start: or_start,
+                or_end: or_end,
+                cashier_name: cashier_name,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#cert-pdf-icon').removeClass('fa-spinner fa-pulse');
+                $('#cert-pdf-icon').addClass('fa-file-pdf');
+            },
+            error: function(xhr, status, error) {
+                $('#cert-pdf-icon').removeClass('fa-spinner fa-pulse');
+                $('#cert-pdf-icon').addClass('fa-file-pdf');
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
 
     $('#cert-pdf').on('click', function() {
         $('#cert-pdf-icon').removeClass('fa-file-pdf');
         $('#cert-pdf-icon').addClass('fa-spinner fa-pulse');
-        $('#cert-filter').click();
         getOrStartOrEnd();
     });
 
@@ -521,23 +557,36 @@
     };
 
     function getOrStartOrEnd() {
-        var month = $('#select-month').val();
-        var year = $('#select-year').val();
+        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+        var start_day = new Date($('#startDate').val()).getDate();
+        var end_day = new Date($('#endDate').val()).getDate();
         $.ajax({
             type: "POST",
             url: "{% url 'get_orstart_orend' %}",
             // cache: true,
             dataType: 'json',
             data: {
-                month: month,
-                year: year,
+                start: start,
+                end: end,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
                 var or_start = obj[0][0];
                 var or_end = obj[0][1];
-                var end_day = month == (new Date).getMonth()+1 && year == (new Date).getFullYear() ?  (new Date).getDate() : daysInMonth(month, year);
-                loadCertPDF(end_day, total_dep, or_start, or_end);
+                // var end_day = month == (new Date).getMonth()+1 && year == (new Date).getFullYear() ?  (new Date).getDate() : daysInMonth(month, year);
+                var Smonth = new Date($('#startDate').val()).getMonth()+1;
+                var Syear =  new Date($('#startDate').val()).getFullYear();
+                var Emonth = new Date($('#endDate').val()).getMonth()+1;
+                var Eyear =  new Date($('#endDate').val()).getFullYear();
+                if (Smonth == Emonth && Syear == Eyear) {
+                    loadCertPDF(start_day, end_day, total_dep, or_start, or_end);
+                }
+                else {
+                    var starts = moment(new Date(start)).format('MMM. DD, YYYY');
+                    var ends = moment(new Date(end)).format('MMM. DD, YYYY');
+                    loadCertPDF2(starts, ends, total_dep, or_start, or_end);
+                }
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -551,6 +600,28 @@
             }
         });
     };
+
+    $('#startDate').on('change', function() {
+        if ($('#startDate').val() != '') {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+            setTimeout(function() {
+                loadDepositCertTable(start, end);
+                getMonthlyCollectionDeposit(new Date(end).getFullYear());
+            },500);
+        }
+    });
+
+    $('#endDate').on('change', function() {
+        if ($('#endDate').val() != '') {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+            setTimeout(function() {
+                loadDepositCertTable(start, end);
+                getMonthlyCollectionDeposit(new Date(end).getFullYear());
+            },500);
+        }
+    });
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');

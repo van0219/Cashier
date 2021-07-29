@@ -58,58 +58,6 @@
             <!-- begin row -->
             <div class="row">
                 <!-- begin col-6 -->
-                <div class="col-lg-6 m-t-10">
-                    <!-- begin row -->
-                    <div class="row">
-                        <div class="col-lg-3 col-sm-5">
-                            <select class="form-control bg-inverse text-white" id="select-month">
-                                <option value="1">January</option>
-                                <option value="2">February</option>
-                                <option value="3">March</option>
-                                <option value="4">April</option>
-                                <option value="5">May</option>
-                                <option value="6">June</option>
-                                <option value="7">July</option>
-                                <option value="8">August</option>
-                                <option value="9">September</option>
-                                <option value="10">October</option>
-                                <option value="11">November</option>
-                                <option value="12">December</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3 col-sm-5">
-                            <select class="form-control bg-inverse text-white" id="select-year"></select>
-                        </div>
-                        <div class="col-lg-2 col-sm-2">
-                            <a href="javascript:;" class="btn btn-primary btn-sm m-t-5" id="acc-filter"><i class="fas fa-filter m-r-5"></i>Filter</a>
-                        </div>
-                        <div class="col-lg-4">
-                            <!-- filler -->
-                        </div>
-                    </div>
-                    <!-- end row -->
-                </div>
-                <!-- end col-6 -->
-                <!-- begin col-6 -->
-                <div class="col-lg-6 m-t-10">
-                    <div class="pull-right">
-                        <a href="javascript:;" class="btn btn-primary btn-md" id="acc-pdf"><i class="fas fa-file-pdf m-r-5" id="acc-pdf-icon"></i>Accountable Forms Report (PDF)</a>
-                    </div>
-                </div>
-                <!-- end col-6 -->
-            </div>
-            <!-- end row -->
-        </div>
-        <!-- end col-12 -->
-    </div>
-    <!-- end row -->
-    <!-- begin row -->
-    <div class="row m-b-10">
-        <!-- begin col-12 -->
-        <div class="col-lg-12">
-            <!-- begin row -->
-            <div class="row">
-                <!-- begin col-6 -->
                 <div class="col-lg-6">
                     <!-- begin row -->
                     <div class="row">
@@ -150,11 +98,25 @@
                     <!-- end row -->
                 </div>
                 <!-- end col-6 -->
-                <!-- begin col-6 -->
-                <div class="col-lg-6">
-                    <!-- filler -->
+                <!-- begin col-3 -->
+                <div class="col-lg-3" style="border-right: 1px #747474 solid;">
+                    <div class="pull-left">
+                        <a href="javascript:;" class="btn btn-white btn-sm" id="acc-pdf"><i class="fas fa-file-pdf fa-2x text-red" id="acc-pdf-icon"></i></a>
+                        <span class="fas fa-arrow-alt-circle-left"><small class="m-l-5">Click this!</small></span>
+                        <br>
+                        <span>Generate Accountable Forms Report PDF</span>
+                    </div>
                 </div>
-                <!-- end col-6 -->
+                <!-- end col-3 -->
+                <!-- begin col-3 -->
+                <div class="col-lg-3">
+                    <div class="input-group input-daterange">
+                        <input type="text" class="form-control" id="startDate" name="start" placeholder="Date Start" autocomplete="off" />
+                        <span class="input-group-addon">to</span>
+                        <input type="text" class="form-control" id="endDate" name="end" placeholder="Date End" autocomplete="off" />
+                    </div>
+                </div>
+                <!-- end col-3 -->
             </div>
             <!-- end row -->          
         </div>
@@ -336,13 +298,17 @@
 <script>
     $(document).ready(function() {
         App.init();
+        d = new Date();
+        var d_mon_start = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + '01';
+        var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+        $('#startDate').val(moment(new Date(d_mon_start)).format('MM/DD/YYYY'));
+        $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         FormPlugins.init();
         highlightSideNav();
-        loadYears();
-        $('#select-month').val((new Date).getMonth()+1);
-        $('#select-year').val((new Date).getFullYear());
-        loadAcctFormsDash($('#select-month').val(), $('#select-year').val());
-        loadORMonthlyReport($('#select-month').val(), $('#select-year').val());
+        setTimeout(function() {
+            loadAcctFormsDash(d_mon_start, d_today);
+            loadORMonthlyReport(d_mon_start, d_today);
+        },500);
     });
 
     function loadYears() {
@@ -404,60 +370,15 @@
         $('#acct-forms-modal').modal('show');
     });
 
-    function acctFormsTableData(obj) {
-        var issue_end = (parseInt(obj[0][3]) + parseInt(obj[0][1]) - 1).toString().padStart(obj[0][3].length, '0');
-        var end_start = (parseInt(issue_end) + 1).toString().padStart(obj[0][3].length, '0');
-        $('#month').text($('#select-month').find('option:selected').text());
-        $('#acct-forms-table tbody tr').remove();
-        $('#acct-forms-table tbody').append(
-            `<tr>
-                <td class="text-nowrap f-w-700" colspan="3">With Face Value</td>
-                <!-- beginning balance -->
-                <td class="text-nowrap f-w-700">${obj[0][0]}</td>
-                <td class="text-nowrap">${obj[0][1]}</td>
-                <td class="text-nowrap">${obj[0][2]}</td>
-                <td class="text-nowrap"></td>
-                <td class="text-nowrap"></td>
-                <td class="text-nowrap"></td>
-                <!-- issued -->
-                <td class="text-nowrap f-w-700">${obj[0][0]}</td>
-                <td class="text-nowrap">${obj[0][1]}</td>
-                <td class="text-nowrap">${obj[0][2]}</td>
-                <!-- ending balance -->
-                <td class="text-nowrap"></td>
-                <td class="text-nowrap"></td>
-                <td class="text-nowrap"></td>
-            </tr>
-            <tr>
-                <td class="text-nowrap f-w-700" colspan="3">Without Face Value</td>
-                <!-- beginning balance -->
-                <td class="text-nowrap f-w-700">${obj[0][0]}</td>
-                <td class="text-nowrap">${obj[0][3]}</td>
-                <td class="text-nowrap">${obj[0][4]}</td>
-                <td class="text-nowrap"></td>
-                <td class="text-nowrap"></td>
-                <td class="text-nowrap"></td>
-                <!-- issued -->
-                <td class="text-nowrap"></td>
-                <td class="text-nowrap"></td>
-                <td class="text-nowrap"></td>
-                <!-- ending balance -->
-                <td class="text-nowrap f-w-700">${obj[0][2]}</td>
-                <td class="text-nowrap">${end_start}</td>
-                <td class="text-nowrap">${obj[0][4]}</td>
-            </tr>`
-        );
-    };
-
-    function loadAcctFormsDash(month, year) {
+    function loadAcctFormsDash(start, end) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_acct_forms_dash' %}",
             // cache: true,
             dataType: 'json',
             data: {
-                month: month,
-                year: year,
+                start: start,
+                end: end,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -490,22 +411,15 @@
         });
     };
 
-    $('#acc-filter').on('click', function() {
-        var mon = $('#select-month').val();
-        var yr = $('#select-year').val()
-        loadAcctFormsDash(mon, yr);
-        loadORMonthlyReport(mon, yr);
-    });
-
-    function loadORMonthlyReport(month, year) {
+    function loadORMonthlyReport(start, end) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_or_monthly_report' %}",
             // cache: true,
             dataType: 'json',
             data: {
-                month: month,
-                year: year,
+                start: start,
+                end: end,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -531,17 +445,29 @@
     $('#acc-pdf').on('click', function() {
         $('#acc-pdf-icon').removeClass('fa-file-pdf');
         $('#acc-pdf-icon').addClass('fa-spinner fa-pulse');
-        loadAccPDF();
+        var Smonth = new Date($('#startDate').val()).getMonth()+1;
+        var Syear =  new Date($('#startDate').val()).getFullYear();
+        var Emonth = new Date($('#endDate').val()).getMonth()+1;
+        var Eyear =  new Date($('#endDate').val()).getFullYear();
+        if (Smonth == Emonth && Syear == Eyear) {
+            loadAccPDF1();
+        }
+        else {
+            loadAccPDF2();
+        }
     });
 
     function daysInMonth(month, year) {
         return new Date(year, month, 0).getDate();
     };
     
-    function loadAccPDF() {
-        var month = $('#select-month').val();
-        var year = $('#select-year').val();
-        var end_day = month == (new Date).getMonth()+1 && year == (new Date).getFullYear() ?  (new Date).getDate() : daysInMonth(month, year);
+    function loadAccPDF1() {
+        var is_loadAccPDF1 = 1;
+        var month = new Date($('#startDate').val()).getMonth()+1;
+        var year =  new Date($('#startDate').val()).getFullYear();
+        var start_day = new Date($('#startDate').val()).getDate();
+        var end_day = new Date($('#endDate').val()).getDate();
+        // var end_day = month == (new Date).getMonth()+1 && year == (new Date).getFullYear() ?  (new Date).getDate() : daysInMonth(month, year);
         var cashier_name = $('.side_name').text();
         $.ajax({
             type: "POST",
@@ -551,8 +477,10 @@
             data: {
                 month: month,
                 year: year,
+                start_day: start_day,
                 end_day: end_day,
                 cashier_name: cashier_name,
+                is_loadAccPDF1: is_loadAccPDF1,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -573,6 +501,62 @@
             }
         });
     };
+
+    function loadAccPDF2() {
+        var is_loadAccPDF1 = 0;
+        var start_date = moment(new Date($('#startDate').val())).format('MMM. DD, YYYY');
+        var end_date =  moment(new Date($('#endDate').val())).format('MMM. DD, YYYY');
+        var cashier_name = $('.side_name').text();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_acc_pdf' %}",
+            // cache: true,
+            dataType: 'json',
+            data: {
+                start_date: start_date,
+                end_date: end_date,
+                cashier_name: cashier_name,
+                is_loadAccPDF1: is_loadAccPDF1,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#acc-pdf-icon').removeClass('fa-spinner fa-pulse');
+                $('#acc-pdf-icon').addClass('fa-file-pdf');
+            },
+            error: function(xhr, status, error) {
+                $('#acc-pdf-icon').removeClass('fa-spinner fa-pulse');
+                $('#acc-pdf-icon').addClass('fa-file-pdf');
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
+    $('#startDate').on('change', function() {
+        if ($('#startDate').val() != '') {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+            setTimeout(function() {
+                loadAcctFormsDash(start, end);
+            },500);
+        }
+    });
+
+    $('#endDate').on('change', function() {
+        if ($('#endDate').val() != '') {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+            setTimeout(function() {
+                loadAcctFormsDash(start, end);
+            },500);
+        }
+    });
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');

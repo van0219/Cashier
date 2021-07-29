@@ -502,8 +502,8 @@ def done_deposit(request):
 def load_acct_forms_dash(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_ACCOUNTABLE_FORMS_REPORT"
-                    ,(request.POST['month']
-                    ,request.POST['year']
+                    ,(request.POST['start']
+                    ,request.POST['end']
                     ,'CARD'))
     data = cursor.fetchall()
     import csv
@@ -516,16 +516,16 @@ def load_acct_forms_dash(request):
 def load_or_monthly_report(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_OR_MONTHLY_REPORT"
-                   ,(request.POST['month']
-                   ,request.POST['year']))
+                   ,(request.POST['start']
+                   ,request.POST['end']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
 def load_cert_table(request):
     cursor = connection.cursor()
     cursor.callproc("SP_LOAD_CERT_TABLE"
-                    ,(request.POST['month']
-                    ,request.POST['year']))
+                    ,(request.POST['start']
+                    ,request.POST['end']))
     data = cursor.fetchall()
     import csv
     csv_rowlist = data
@@ -741,15 +741,25 @@ def load_top_contrib(request):
 
 def load_cert_pdf(request):
     total = "{0:,.2f}".format(float(request.POST['total_dep']))
+    is_loadCertPDF1 = int(request.POST['is_loadCertPDF1'])
     month = int(request.POST['month'])
     year = int(request.POST['year'])
     # month_l_day = calendar.monthrange(year,month)[1]  # this is to get the last day of the month
-    month_l_day = request.POST['end_day']
+    if is_loadCertPDF1 == 1:
+        month_f_day = request.POST['start_day']
+        month_l_day = request.POST['end_day']
+        report_id = 'CR-' + str(month) + '-' + str(month_f_day) + '-' + str(month_l_day) + '-' + str(year) 
+    else:
+        start = request.POST['starts']
+        end = request.POST['ends']
+        strtR = datetime.strptime(str(start), r"%b. %d, %Y").date()
+        endR = datetime.strptime(str(end), r"%b. %d, %Y").date()
+        report_id = 'CR-' + str(strtR) + '-' + str(endR)
     month_object = datetime.strptime(str(month), "%m")
     or_start = request.POST['or_start']
     or_end = request.POST['or_end']
     cashier = request.POST['cashier_name']
-    report_id = 'CR-' + str(month) + '-1-' + str(month_l_day) + '-' + str(year) 
+    
     # createQr(report_id)
     class PDF(FPDF):
         def __init__(self, orientation = 'P', unit = 'mm', format = 'Legal'): # other format: Letter, A4
@@ -826,7 +836,10 @@ def load_cert_pdf(request):
             self.set_font('Arial', 'B', 11)
             self.cell(0, 0, 'Add: ', 0, 0, 'L')
             self.set_font('Arial', '', 11)
-            self.text(30, 81.2,'Collection per this report ' + month_object.strftime("%B") + ' 1-'+ str(month_l_day) +', ' + str(year))
+            if is_loadCertPDF1 == 1:
+                self.text(30, 81.2,'Collection per this report ' + month_object.strftime("%B") + ' ' + str(month_f_day) + '-' + str(month_l_day) +', ' + str(year))
+            else:
+                self.text(30, 81.2,'Collection per this report ' + str(start) + ' to ' + str(end))
             self.cell(0, 0, total, 0, 0, 'R')
             self.ln(5)
             self.set_font('Arial', 'B', 11)
@@ -1290,15 +1303,22 @@ def load_mon_pdf(request):
 
 def load_acc_pdf(request):
     # total = "{0:,.2f}".format(float(request.POST['total_dep']))
-    month = int(request.POST['month'])
-    year = int(request.POST['year'])
-    # month_l_day = calendar.monthrange(year,month)[1]  # this is to get the last day of the month
-    month_l_day = request.POST['end_day']
-    month_object = datetime.strptime(str(month), "%m")
-    # or_start = request.POST['or_start']
-    # or_end = request.POST['or_end']
+    is_loadAccPDF1 = int(request.POST['is_loadAccPDF1'])
     cashier = request.POST['cashier_name']
-    report_id = 'AF-' + str(month) + '-1-' + str(month_l_day) + '-' + str(year) 
+    if is_loadAccPDF1 == 1:
+        month = int(request.POST['month'])
+        year = int(request.POST['year'])
+        # month_l_day = calendar.monthrange(year,month)[1]  # this is to get the last day of the month
+        month_f_day = request.POST['start_day']
+        month_l_day = request.POST['end_day']
+        month_object = datetime.strptime(str(month), "%m")
+        report_id = 'AF-' + str(month) + '-1-' + str(month_l_day) + '-' + str(year) 
+    else:
+        strt = request.POST['start_date']
+        end = request.POST['end_date']   
+        strtR = datetime.strptime(str(strt), r"%b. %d, %Y").date()
+        endR = datetime.strptime(str(end), r"%b. %d, %Y").date()
+        report_id = 'AF-' + str(strtR) + '-' + str(endR)
     # createQr(report_id)
     class PDF(FPDF):
         def __init__(self, orientation = 'L', unit = 'mm', format = 'Legal'): # other format: Letter, A4
@@ -1363,7 +1383,10 @@ def load_acc_pdf(request):
         def dummy_table(self, header):
             # Data before table
             self.set_font('Arial', 'U', 12)
-            self.cell(0, 0, 'Month of ' + month_object.strftime("%B") + ' 1-'+ str(month_l_day) +', ' + str(year), 0, 0, 'C')
+            if is_loadAccPDF1:
+                self.cell(0, 0, 'Month of ' + month_object.strftime("%B") + ' ' + str(month_f_day) + '-' + str(month_l_day) +', ' + str(year), 0, 0, 'C')
+            else:
+                self.cell(0, 0, strt + ' to ' + end, 0, 0, 'C')
             self.ln(10)
             # Column widths
             w = [50, 70, 70, 70, 70]
@@ -1475,8 +1498,8 @@ def load_acc_pdf(request):
 def get_orstart_orend(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_ORSTART_OREND"
-                    ,(request.POST['month']
-                    ,request.POST['year'],))
+                    ,(request.POST['start']
+                    ,request.POST['end'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
