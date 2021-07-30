@@ -402,7 +402,6 @@
 	    	var lname = $.trim($('#lname').val()).toUpperCase();
 	    	var course = $('#course').val().trim();
 	    	var yr = $('#yr').val().trim();
-	    	var sec = $('#sec').val().trim();
 
 	    	swal({
                 title: "Add Student",
@@ -428,7 +427,6 @@
 							lname: lname,
 							course: course,
 							yr: yr,
-							sec: sec,
 							csrfmiddlewaretoken:"{{csrf_token}}"
 						},
 						success: function(obj) {
@@ -471,7 +469,6 @@
 	    	var lname = $.trim($('#lname').val()).toUpperCase();
 	    	var course = $('#course').val().trim();
 	    	var yr = $('#yr').val().trim();
-	    	var sec = $('#sec').val().trim();
 
 	    	swal({
                 title: "Add Student",
@@ -496,7 +493,6 @@
 							lname: lname,
 							course: course,
 							yr: yr,
-							sec: sec,
 							csrfmiddlewaretoken:"{{csrf_token}}"
 						},
 						success: function(obj) {

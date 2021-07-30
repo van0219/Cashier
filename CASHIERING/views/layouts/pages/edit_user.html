@@ -104,19 +104,19 @@
                         <div class="form-group row m-b-15">
                             <label class="col-md-4 col-sm-4 col-form-label" for="fullname">First Name <span class="text-red">*</span> :</label>
                             <div class="col-md-8 col-sm-8">
-                                <input class="form-control" type="text" id="fname" name="fname" placeholder="First Name" data-parsley-required="true" />
+                                <input class="form-control" type="text" id="fname" name="fname" placeholder="First Name" data-parsley-required="true" style="text-transform: capitalize;"/>
                             </div>
                         </div>
                         <div class="form-group row m-b-15">
                             <label class="col-md-4 col-sm-4 col-form-label" for="fullname">Middle Name :</label>
                             <div class="col-md-8 col-sm-8">
-                                <input class="form-control" type="text" id="mname" name="mname" placeholder="Middle Name" />
+                                <input class="form-control" type="text" id="mname" name="mname" placeholder="Middle Name" style="text-transform: capitalize;"/>
                             </div>
                         </div>
                         <div class="form-group row m-b-15">
                             <label class="col-md-4 col-sm-4 col-form-label" for="fullname">Last Name <span class="text-red">*</span> :</label>
                             <div class="col-md-8 col-sm-8">
-                                <input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" data-parsley-required="true" />
+                                <input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" data-parsley-required="true" style="text-transform: capitalize;"/>
                             </div>
                         </div>
                         <div class="form-group row m-b-15">
@@ -184,19 +184,19 @@
                                     <div class="form-group row m-b-15">
                                         <label class="col-md-4 col-sm-4 col-form-label" for="vfname">First Name <span class="text-red">*</span> :</label>
                                         <div class="col-md-8 col-sm-8">
-                                            <input class="form-control" type="text" id="vfname" name="vfname" placeholder="First Name" data-parsley-required="true" data-parsley-required-message="First name is required" />
+                                            <input class="form-control" type="text" id="vfname" name="vfname" placeholder="First Name" data-parsley-required="true" data-parsley-required-message="First name is required" style="text-transform: capitalize;"/>
                                         </div>
                                     </div>
                                     <div class="form-group row m-b-15">
                                         <label class="col-md-4 col-sm-4 col-form-label" for="vmname">Middle Name :</label>
                                         <div class="col-md-8 col-sm-8">
-                                            <input class="form-control" type="text" id="vmname" name="vmname" placeholder="Middle Name" />
+                                            <input class="form-control" type="text" id="vmname" name="vmname" placeholder="Middle Name" style="text-transform: capitalize;"/>
                                         </div>
                                     </div>
                                     <div class="form-group row m-b-15">
                                         <label class="col-md-4 col-sm-4 col-form-label" for="vlname">Last Name <span class="text-red">*</span> :</label>
                                         <div class="col-md-8 col-sm-8">
-                                            <input class="form-control" type="text" id="vlname" name="vlname" placeholder="Last Name" data-parsley-required="true" data-parsley-required-message="Last name is required" />
+                                            <input class="form-control" type="text" id="vlname" name="vlname" placeholder="Last Name" data-parsley-required="true" data-parsley-required-message="Last name is required" style="text-transform:capitalize"/>
                                         </div>
                                     </div>
                                     <div class="form-group row m-b-15">
@@ -344,6 +344,11 @@
                 {
                     targets:[1,2,3,6,7],
                     className: 'text-center'
+                },
+                {
+                    targets:[1,2,3], render:function(data) {
+                        return data.trim().toLowerCase().replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+                    }
                 },
                 {
                     targets:7, render:function(data) {

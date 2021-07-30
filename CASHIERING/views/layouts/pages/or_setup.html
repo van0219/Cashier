@@ -54,7 +54,7 @@
                 <!-- end panel -->
             </div>
             <div class="card-footer text-grey-darker f-s-10">
-                <span style="font-style: italic;">Last Updated: 2 days ago</span>
+                <span style="font-style: italic;">Last Updated: <span id="last-upd"></span></span>
             </div>
         </div>
         <!-- end card -->
@@ -73,15 +73,47 @@
         App.init();
         Highlight.init();
         highlightSideNav();
+        getLastUpd();
+        setTimeout(function() {
+            $('#last-upd').text(last_upd);
+        },300);
     });
 
     var dt = new Date();
+
+    function getLastUpd() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_last_upd' %}",
+            cache: true,
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                get_last_upd(obj);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
 
     $('#set').on('click', function() {
         event.preventDefault();
         $('#or-form').parsley();
         if ($('#or-form').parsley().validate()) {
-            checkORcount();
+            getCurrentORnum();
+            getEndingORnum();
+            setTimeout(function() {
+                checkORcount();
+            },500);
         }
         else {
             $('#or-div').removeClass('bg-gradient-blue');
@@ -150,6 +182,69 @@
         $('#to-label').addClass('text-white');
     });
 
+    var curr_or = null;
+    function curr_or_num(curr) {
+        curr_or = curr;
+    };
+
+    var end_or = null;
+    function end_or_num(end) {
+        end_or = end;
+    };
+
+    var last_upd = null;
+    function get_last_upd(last) {
+        last_upd = last;
+    };
+
+    function getCurrentORnum() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_current_or' %}",
+            cache: true,
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                curr_or_num(obj);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+
+    function getEndingORnum() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_ending_or' %}",
+            cache: true,
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                end_or_num(obj);
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+
     function checkORcount() {
         $.ajax({
             type: "POST",
@@ -165,9 +260,12 @@
                 else {
                     swal({
                         title: "Unable to Add!", 
-                        text: "You still have " + parseInt(obj[0]).toString() + " OR's left.",
+                        text: "<span class='text-center'>You still have " + "<b>" + parseInt(obj[0]).toString() + "</b>" + " OR's left.</span><br><br>"+
+                              "<span class='text-center'><strong>Current OR</strong> : "+ curr_or +"</span>"+" "+
+                              "<span class='text-center'><strong>Ending OR</strong> : "+ end_or +"</span>",
                         type: "warning",
                         confirmButtonColor: "#428bca",
+                        html: true,
                         showLoaderOnConfirm: true
                     });
                 }

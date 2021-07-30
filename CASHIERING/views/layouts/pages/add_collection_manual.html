@@ -120,13 +120,13 @@
                                     <div class="col-md-9">
                                         <input type="text" id="or_studnum" class="form-control m-b-10 studno" required="true" data-parsley-required-message="Student number is required" placeholder="Student Number" autocomplete="off"/>
                                     </div>
-                                    <label class="col-form-label col-md-3 m-b-10 studno">Educ Level <span class="pull-right">:</span></label>
-                                    <div class="col-md-9">
-                                        <select class="form-control selectpicker individual_sel m-b-10" data-size="10" data-style="btn-white">
+                                    <label class="col-form-label col-md-3 m-b-10" style="display: none;">Educ Level <span class="pull-right">:</span></label>
+                                    <div class="col-md-9" style="display: none;">
+                                        <select class="form-control selectpicker individual_sel m-b-10" data-size="10" data-style="btn-white" id="educ-level">
                                             <option selected disabled>Select level of education</option>
-                                            <option value="Diploma">Diploma</option>
-                                            <option value="Bachelor's Degree">Bachelor's Degree</option>
-                                            <option value="Master's Degree">Master's Degree</option>
+                                            <option value="DIPLOMA">Diploma</option>
+                                            <option value="BACHELOR'S DEGREE">Bachelor's Degree</option>
+                                            <option value="MASTER'S DEGREE">Master's Degree</option>
                                         </select>
                                     </div>
                                 </div>
@@ -178,7 +178,7 @@
                         <div class="row">
                             <!-- begin col-4 -->
                             <div class="col-lg-4">
-                                <div class="form-group row m-b-15">
+                                <div class="form-group row m-b-15 m-t-15">
                                     <label class="col-md-5 col-sm-5 col-form-label">Income Type <span class="pull-right">:</span></label>
                                     <div class="col-md-7 col-sm-7">
                                         <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="false" data-style="btn-white"  id="inc-select" data-parsley-excluded="true">
@@ -208,7 +208,7 @@
                                         <input class="form-control" type="number" id="number" name="number" data-parsley-excluded="true" placeholder="Amount in peso"/>
                                     </div>
                                 </div>
-                                <div class="form-group row m-b-0">
+                                <div class="form-group row m-b-10">
                                     <label class="col-md-5 col-sm-5 col-form-label">&nbsp;</label>
                                     <div class="col-md-7 col-sm-7">
                                         <button type="button" class="btn btn-primary btn-sm" id="particular" disabled="true"><i class="fa fa-plus-circle m-r-5"></i>Add Particulars</button>
@@ -217,7 +217,7 @@
                             </div>
                             <!-- end col-4 -->
                             <!-- begin col-8 -->
-                            <div class="col-lg-8" style="margin-top: -15px;">
+                            <div class="col-lg-8">
                                 <div class="panel">
                                     <!-- begin panel-heading -->
 
@@ -924,7 +924,7 @@
             success: function(obj) {
                 if (obj.length != 0) {
                     for (var i = j = 0; i < obj.length; i++) {
-                        availableTags[i] = obj[i][j] + ', ' + obj[i][j+1] + comma_or_none + obj[i][j+2];  
+                        availableTags[i] = obj[i][j] + ', ' + obj[i][j+1] + comma_or_none + obj[i][j+2] + ', ' + obj[i][j+3];  
                     }
                     $('#or_lname').autocomplete({
                         source: availableTags,
@@ -940,6 +940,7 @@
                         if (_url.length == 17) {
                             $('#or_studnum').val($.trim(ui.item.label.split(',')[2])).trigger('focusin');
                         }
+                        $('#educ-level').selectpicker('val', $.trim(ui.item.label.split(',')[3]));
                         if (event.which == 13) {
                             setTimeout(function() {
                                 $('#or_fname').click();

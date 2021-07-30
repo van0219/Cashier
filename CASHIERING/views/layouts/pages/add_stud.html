@@ -1,0 +1,152 @@
+{% extends 'views/layouts/pages/admin_main.html' %}
+{% block title %} 
+<title>CMS | Add Student</title>
+{% endblock %}
+{% load static %}
+{% block page-css %}
+<!-- dito yung page css -->
+<link href="{%static 'assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css' %}" rel="stylesheet" />
+<!--  -->
+<link href="{%static 'assets/plugins/bootstrap-combobox/css/bootstrap-combobox.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/select2/dist/css/select2.min.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<!-- dito yung content -->
+<div class="content" id="content">
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li class="breadcrumb-item"><a href="javascript:;">Student Management</a></li>
+        <li class="breadcrumb-item active">Add Student</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">Add Student <small>Add New Student to the System</small></h1>
+    <!-- end page-header -->
+    <div class="row">
+        <!-- begin col-4 -->
+        <div class="col-lg-4">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fas fa-user-plus m-r-5"></i>Add Student</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin panel-body -->
+                <div class="panel-body">
+                    <form class="form-horizontal" id="add-stud-form" data-parsley-validate="true">
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="studno">Student No. <span class="pull-right">:</span></label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control addstud" type="text" id="studno" name="studno" placeholder="Student Number" style="text-transform: capitalize;" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="fname">First Name <span class="pull-right"><span class="text-red">*</span> :</span></label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control addstud" type="text" id="fname" name="fname" placeholder="First Name" data-parsley-required="true" data-parsley-required-message="First Name is required" style="text-transform: capitalize;" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="mname">Middle Name <span class="pull-right">:</span></label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control addstud" type="text" id="mname" name="mname" placeholder="Middle Name" style="text-transform: capitalize;" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="lname">Last Name <span class="pull-right"><span class="text-red">*</span> :</span></label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control addstud" type="text" id="lname" name="lname" placeholder="Last Name" data-parsley-required="true" data-parsley-required-message="Last Name is required" style="text-transform: capitalize;" />
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="educ-level">Educ Level <span class="pull-right"><span class="text-red">*</span> :</span></label>
+                            <div class="col-md-8 col-sm-8">
+                                <select id="educ-level" class="form-control selectpicker" data-size="10" data-style="btn-white">
+                                    <option selected disabled>Select Level of Education</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="course">Course <span class="pull-right"><span class="text-red">*</span> :</span></label>
+                            <div class="col-md-8 col-sm-8">
+                                <select id="course" class="form-control selectpicker" data-size="10" data-style="btn-white">
+                                    <option selected disabled>Select Course</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="yr">Year Level <span class="pull-right"><span class="text-red">*</span> :</span></label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control addstud" type="text" id="yr" name="yr" placeholder="Year Level" data-parsley-type="number" data-parsley-required="true" data-parsley-required-message="Year level is required" style="text-transform: capitalize;" maxlength="1" />
+                            </div>
+                        </div>
+                        <!-- <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="sec">Section <span class="pull-right"><span class="text-red">*</span> :</span></label>
+                            <div class="col-md-8 col-sm-8">
+                                <input class="form-control addstud" type="text" id="sec" name="sec" placeholder="Section" data-parsley-type="number" data-parsley-required="true" data-parsley-required-message="Section is required" maxlength="2" style="text-transform: capitalize;" />
+                            </div>
+                        </div> -->
+                        <div class="modal-footer form-group m-b-0">
+                            <a href="javascript:;" class="btn btn-white btn-md" data-dismiss="modal" id="close-stud-but"><i class="fas fa-times-circle m-r-5"></i>Close</a>
+                            <a href="javascript:;" class="btn btn-success btn-md" id="add-stud-but"><i class="fas fa-plus-circle m-r-5" id="add-stud-but-icon"></i>Add</a>
+                        </div>
+                    </form>
+                </div>
+                <!-- end panel-body -->
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-4 -->
+        <!-- begin col-8 -->
+        <div class="col-lg-8">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fas fa-list m-r-5"></i>Student List</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin panel-body -->
+                <div class="panel-body">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <th class="text-center" width="20%">Student No.</th>
+                            <th class="text-center" width="25%">Last Name</th>
+                            <th class="text-center" width="25%">First Name</th>
+                            <th class="text-center" width="30%">Course</th>
+                        </thead>
+                    </table>
+                </div>
+                <!-- end panel-body -->
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-8 -->
+    </div>
+</div>
+{% endblock %}
+{% block page-js %}
+<!-- dito yung page-js -->
+<script src="{%static 'assets/plugins/chart-js/Chart.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/chart-js.demo.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/media/js/jquery.dataTables.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/table-manage-responsive.demo.min.js' %}"></script>
+<!--  -->
+<script src="{%static 'assets/plugins/bootstrap-combobox/js/bootstrap-combobox.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<script src="{%static 'assets/plugins/select2/dist/js/select2.min.js' %}"></script>
+{% endblock %}
+{% block init %}
+<script>
+    $(document).ready(function() {
+        App.init();
+        TableManageResponsive.init();
+        $('select').selectpicker('render');
+    });
+</script>
+{% endblock %}

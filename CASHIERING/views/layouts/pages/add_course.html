@@ -1,0 +1,113 @@
+{% extends 'views/layouts/pages/admin_main.html' %}
+{% block title %} 
+<title>CMS | Course</title>
+{% endblock %}
+{% load static %}
+{% block page-css %}
+<!-- dito yung page css -->
+<link href="{%static 'assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css' %}" rel="stylesheet" />
+<!--  -->
+<link href="{%static 'assets/plugins/bootstrap-combobox/css/bootstrap-combobox.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/select2/dist/css/select2.min.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<!-- dito yung content -->
+<div class="content" id="content">
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li class="breadcrumb-item"><a href="javascript:;">Student Management</a></li>
+        <li class="breadcrumb-item active">Course</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">Course <small>Manage Courses</small></h1>
+    <!-- end page-header -->
+    <div class="row">
+        <!-- begin col-2 -->
+        <div class="col-lg-2">
+            <!-- filler -->
+        </div>
+        <!-- end col-2 -->
+        <!-- begin col-8 -->
+        <div class="col-lg-8">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fas fa-list m-r-5"></i>Course List</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin panel-body -->
+                <div class="panel-body">
+                    <div class="pull-right">
+                        <a href="javascript:;" class="btn btn-success btn-md" id="add-educ-btn"><i class="fas fa-plus-circle fa-lg"></i></a>
+                    </div>
+                    <table class="table table-hover table-striped" id="course-tbl">
+                        <thead>
+                            <th class="text-center" width="10%">No.</th>
+                            <th class="text-center" width="50%">Description</th>
+                            <th class="text-center" width="30%">Abbreviation</th>
+                            <th class="text-center" width="10%">Option</th>
+                        </thead>
+                        <tbody>
+                            <!-- append here -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- end panel-body -->
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-8 -->
+    </div>
+</div>
+{% endblock %}
+{% block page-js %}
+<!-- dito yung page-js -->
+<script src="{%static 'assets/plugins/chart-js/Chart.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/chart-js.demo.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/media/js/jquery.dataTables.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/table-manage-responsive.demo.min.js' %}"></script>
+<!--  -->
+<script src="{%static 'assets/plugins/bootstrap-combobox/js/bootstrap-combobox.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<script src="{%static 'assets/plugins/select2/dist/js/select2.min.js' %}"></script>
+{% endblock %}
+{% block init %}
+<script>
+    $(document).ready(function() {
+        App.init();
+        TableManageResponsive.init();
+    });
+
+    $('#add-educ-btn').on('click', function() {
+        var num = $('#course-tbl tbody tr').length + 1;
+        $('#course-tbl tbody').append(
+            `<tr>
+                <td class="m-t-5">${num}</td>
+                <td><input type="text" class="form-control full" placeholder="Course Full Name" style="text-transform: capitalize;" id="full${num}"/></td>
+                <td><input type="text" class="form-control abbr" placeholder="Course Abbreviation" id="abbr${num}"/></td>
+                <td><a href="javascript:;" class="btn btn-danger btn-md remove"><i class="fas fa-times-circle fa-lg"></i></a></td>
+            </tr>`
+        );
+    });
+
+    $('#course-tbl tbody').on('focus', '.abbr', function() {
+        var num = $(this).closest('tr').find('td:eq(0)').text();
+        $('#abbr'+num).prop('placeholder', '');
+        $('#abbr'+num).prop('style', 'text-transform: uppercase;');
+    });
+
+    $('#course-tbl tbody').on('click', '.remove', function() {
+        $(this).closest('tr').remove();
+        var len = $('#course-tbl tbody tr').length;
+        for (var i = 0; i < len; i++) {
+            $('#course-tbl tbody').find('tr:eq('+i+')').find('td:eq(0)').text(i + 1);
+        }
+    });
+</script>
+{% endblock %}

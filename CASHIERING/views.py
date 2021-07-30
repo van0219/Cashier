@@ -94,6 +94,15 @@ def change_pass_admin(request):
 def sis_payments(request):
     return render(request, 'views/layouts/pages/sis_payments.html')
 
+def add_stud(request):
+    return render(request, 'views/layouts/pages/add_stud.html')
+
+def add_educ_level(request):
+    return render(request, 'views/layouts/pages/add_educ_level.html')
+
+def add_course(request):
+    return render(request, 'views/layouts/pages/add_course.html')
+
 def add_user_btn_click(request):
     cursor = connection.cursor()
     cursor.callproc("SP_INSERT_USER_CMS", (
@@ -325,6 +334,18 @@ def add_or_set(request):
 def get_current_or(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_CURRENT_OR")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def get_ending_or(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_ENDING_OR")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def get_last_upd(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_LAST_UPD")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -1503,13 +1524,6 @@ def get_orstart_orend(request):
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
-def search_last_name(request):
-    cursor = connection.cursor()
-    cursor.callproc("SP_SELECT_STUD_FULLNAME"
-                ,(request.POST['str'],))
-    data = cursor.fetchall()
-    return JsonResponse(data, safe=False)
-
 def add_student_with_studno(request):
     cursor = connection.cursor()
     cursor.callproc("SP_INSERT_STUDENT_WITH_STUDNO"
@@ -1518,8 +1532,7 @@ def add_student_with_studno(request):
                 ,request.POST['mname']
                 ,request.POST['lname']
                 ,request.POST['course']
-                ,request.POST['yr']
-                ,request.POST['sec']))
+                ,request.POST['yr']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -1530,8 +1543,14 @@ def add_student_without_studno(request):
                 ,request.POST['mname']
                 ,request.POST['lname']
                 ,request.POST['course']
-                ,request.POST['yr']
-                ,request.POST['sec']))
+                ,request.POST['yr']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def search_last_name(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_STUD_FULLNAME"
+                ,(request.POST['str'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
