@@ -1698,3 +1698,24 @@ def add_daily_col_report(request):
                     ,request.POST['user_id']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def save_educ_level(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_UPDATE_EDUC_LEVEL"
+                    ,(request.POST['desc_b4']
+                    ,request.POST['desc_new']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_educ_level(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_EDUC_LEVEL")
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def remove_educ_level(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_REMOVE_EDUC_LEVEL"
+                    ,(request.POST['desc'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

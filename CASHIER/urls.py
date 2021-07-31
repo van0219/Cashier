@@ -151,4 +151,7 @@ urlpatterns = [
     path('add_stud', views.add_stud, name="add_stud"),
     path('add_educ_level', views.add_educ_level, name="add_educ_level"),
     path('add_course', views.add_course, name="add_course"),
+    path('save_educ_level', views.save_educ_level, name="save_educ_level"),
+    path('load_educ_level', views.load_educ_level, name="load_educ_level"),
+    path('remove_educ_level', views.remove_educ_level, name="remove_educ_level"),
 ]

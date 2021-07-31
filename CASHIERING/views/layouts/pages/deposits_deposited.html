@@ -123,7 +123,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Edit Deposit<small class="m-l-5">Editable fields are <strong>Date </strong>and <strong>Reference number </strong>only.</small></h4>
+                <h4 class="modal-title">Edit Deposit<small class="m-l-5">Editable field is <strong>Date Deposited </strong>only.</small></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
@@ -256,8 +256,8 @@
                                 <td class="text-nowrap">${obj[i][1]}</td>
                                 <td class="text-nowrap text-right f-w-700">${'₱' + parseFloat(obj[i][2]).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
                                 <td class="text-nowrap text-center">
-                                    <a href="javascript:;" class="btn btn-sm btn-primary edit-dep"><i class="fas fa-pencil-alt m-r-5"></i>Edit</a>
-                                    <a href="javascript:;" class="btn btn-sm btn-danger del-dep"><i class="fas fa-trash-alt m-r-5"></i>Delete</a>
+                                    <a href="javascript:;" class="btn btn-sm btn-primary edit-dep"><i class="fas fa-edit m-r-5"></i>Edit</a>
+                                    <a href="javascript:;" class="btn btn-sm btn-danger del-dep"><i class="fas fa-trash m-r-5"></i>Delete</a>
                                 </td>
                             </tr>`
                         );

@@ -239,6 +239,7 @@
 		$(document).ready(function() {
 			gt_fname();
 			gt_profile_img();
+			loadEducLevel();
 			$('#tot-bills-lbl').on('focusin', function() {
 				$(this).blur();
 			});
@@ -253,6 +254,33 @@
 			});
 			// alert(zoomIn());
 		});
+
+		function loadEducLevel() {
+			$.ajax({
+				type: "POST",
+				url: "{% url 'load_educ_level' %}",
+				cache: false,
+				dataType: 'json',
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) {
+					$.each(obj, function(index, option){
+						$('#educ-level').append( new Option(option,option)); //value and text
+					});
+					$('#educ-level option').prop('style', 'font-size: 11px;')
+				},
+				error: function(xhr, status, error) {
+					swal({
+						title: "Error!", 
+						text: error,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					});
+				}
+			});
+		};
 
 		$('#receipt').on('shown.bs.modal', function() {
 			var cents = parseFloat($('#r_grandtotal_words').text()).toFixed(2).split('.')[1];

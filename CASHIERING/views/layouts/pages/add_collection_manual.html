@@ -124,9 +124,6 @@
                                     <div class="col-md-9" style="display: none;">
                                         <select class="form-control selectpicker individual_sel m-b-10" data-size="10" data-style="btn-white" id="educ-level">
                                             <option selected disabled>Select level of education</option>
-                                            <option value="DIPLOMA">Diploma</option>
-                                            <option value="BACHELOR'S DEGREE">Bachelor's Degree</option>
-                                            <option value="MASTER'S DEGREE">Master's Degree</option>
                                         </select>
                                     </div>
                                 </div>
@@ -310,6 +307,7 @@
         $('select').selectpicker('render');
         getCurrentORnum();
         getIncType();
+        loadEducLevel();
     });
 
     $('#or_fname').on('focusin', function() {
@@ -420,6 +418,34 @@
             callback(role_session)
         }
     });
+
+    function loadEducLevel() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_educ_level' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $.each(obj, function(index, option){
+                    $('#educ-level').append( new Option(option,option)); //value and text
+                });
+                $('#educ-level option').prop('style', 'font-size: 11px;')
+                $('#educ-level').selectpicker('refresh');
+            },
+            error: function(xhr, status, error) {
+                swal({
+                    title: "Error!", 
+                    text: error,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
 
     function saveCollection(or_num) {
         var assessed = parseFloat($('#r_grandtotal').text().substring(1).replace(/,/g,''));

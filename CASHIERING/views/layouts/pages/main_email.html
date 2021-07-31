@@ -88,7 +88,7 @@
 						<div class="dropdown-divider"></div>
 						<a href="{% url 'email' %}" class="dropdown-item"><i class="fas fa-envelope m-r-5"></i>Email</a>
 						<div class="dropdown-divider"></div>
-						<a href="{% url 'account' %}" class="dropdown-item"><i class="fas fa-user-circle m-r-5"></i>Account</a>
+						<a href="javascript:;" class="dropdown-item"><i class="fas fa-user-circle m-r-5"></i>Account</a>
 						<div class="dropdown-divider"></div>
 						<a href="{% url 'logout' %}" class="dropdown-item"><i class="fas fa-sign-out-alt m-r-5"></i>Log Out</a>
 					</div>
@@ -232,6 +232,8 @@
 	{% block page-js %} {% endblock %}
 	<!-- ================== END PAGE LEVEL JS ================== -->
 	{% block init %}
+
+	{% endblock %}
 	<script>
 		$(window).on("load",function(){
 			$(".loader-wrapper").fadeOut("slow");
@@ -239,6 +241,7 @@
 		$(document).ready(function() {
 			gt_fname();
 			gt_profile_img();
+			loadEducLevel();
 			$('#tot-bills-lbl').on('focusin', function() {
 				$(this).blur();
 			});
@@ -253,6 +256,34 @@
 			});
 			// alert(zoomIn());
 		});
+
+		function loadEducLevel() {
+			$.ajax({
+				type: "POST",
+				url: "{% url 'load_educ_level' %}",
+				cache: false,
+				dataType: 'json',
+				data: {
+					csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				success: function(obj) {
+					$.each(obj, function(index, option){
+						$('#educ-level').append( new Option(option,option)); //value and text
+					});
+					$('#educ-level option').prop('style', 'font-size: 11px;')
+					$('#educ-level').selectpicker('refresh');
+				},
+				error: function(xhr, status, error) {
+					swal({
+						title: "Error!", 
+						text: error,
+						type: "error",
+						confirmButtonColor: "#428bca",
+						showLoaderOnConfirm: true
+					});
+				}
+			});
+		};
 
 		$('#receipt').on('shown.bs.modal', function() {
 			var cents = parseFloat($('#r_grandtotal_words').text()).toFixed(2).split('.')[1];
@@ -972,3 +1003,4 @@
 	</script>
 </body>
 </html>
+

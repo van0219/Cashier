@@ -296,11 +296,15 @@
         FormPlugins.init();
         highlightSideNav();
         loadYears();
+        
         $('#select-month').val(new Date().getMonth() + 1);
-        $('#select-year').val((new Date).getFullYear());
+        $('#select-year').val(new Date().getFullYear());
         loadCashReceiptCards($('#select-month').val(), $('#select-year').val());
         loadTopContrib($('#select-month').val(), $('#select-year').val());
-        loadDepositOfTheMonthChart($('#select-month').val(), $('#select-year').val());
+        var d = new Date();
+        var d_mon_start = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + '01';
+        var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+        loadDepositOfTheMonthChart(d_mon_start, d_today);
     });
 
     var dt_top_contrib = $('#table-top-contrib').DataTable({
@@ -407,15 +411,15 @@
         });
     };
 
-    function loadDepositOfTheMonthChart(month, year) {
+    function loadDepositOfTheMonthChart(start, end) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_cert_table' %}",
             // cache: true,
             dataType: 'json',
             data: {
-                month: month,
-                year: year,
+                start: start,
+                end: end,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {

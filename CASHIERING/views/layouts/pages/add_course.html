@@ -25,13 +25,13 @@
     <h1 class="page-header">Course <small>Manage Courses</small></h1>
     <!-- end page-header -->
     <div class="row">
-        <!-- begin col-2 -->
-        <div class="col-lg-2">
+        <!-- begin col-1 -->
+        <div class="col-lg-1">
             <!-- filler -->
         </div>
-        <!-- end col-2 -->
-        <!-- begin col-8 -->
-        <div class="col-lg-8">
+        <!-- end col-1 -->
+        <!-- begin col-10 -->
+        <div class="col-lg-10">
             <!-- begin panel -->
             <div class="panel panel-inverse">
                 <!-- begin panel-heading -->
@@ -46,10 +46,11 @@
                     </div>
                     <table class="table table-hover table-striped" id="course-tbl">
                         <thead>
-                            <th class="text-center" width="10%">No.</th>
-                            <th class="text-center" width="50%">Description</th>
-                            <th class="text-center" width="30%">Abbreviation</th>
-                            <th class="text-center" width="10%">Option</th>
+                            <th class="text-center" width="5%">No.</th>
+                            <th class="text-center" width="30%">Description</th>
+                            <th class="text-center" width="20%">Acronym</th>
+                            <th class="text-center" width="25%">Educ Level</th>
+                            <th class="text-center" width="20%">Option</th>
                         </thead>
                         <tbody>
                             <!-- append here -->
@@ -60,7 +61,7 @@
             </div>
             <!-- end panel -->
         </div>
-        <!-- end col-8 -->
+        <!-- end col-10 -->
     </div>
 </div>
 {% endblock %}
@@ -82,19 +83,60 @@
     $(document).ready(function() {
         App.init();
         TableManageResponsive.init();
+        loadEducLevel();
     });
 
     $('#add-educ-btn').on('click', function() {
         var num = $('#course-tbl tbody tr').length + 1;
         $('#course-tbl tbody').append(
             `<tr>
-                <td class="m-t-5">${num}</td>
+                <td class="m-t-5 text-center">${num}</td>
                 <td><input type="text" class="form-control full" placeholder="Course Full Name" style="text-transform: capitalize;" id="full${num}"/></td>
-                <td><input type="text" class="form-control abbr" placeholder="Course Abbreviation" id="abbr${num}"/></td>
-                <td><a href="javascript:;" class="btn btn-danger btn-md remove"><i class="fas fa-times-circle fa-lg"></i></a></td>
+                <td><input type="text" class="form-control abbr" placeholder="Acronym" id="abbr${num}"/></td>
+                <td>
+                    <select class="form-control educ-level"  id="educ-level${num}">
+                        <option selected disabled>Select level of education</option>
+                    </select>    
+                </td>
+                <td class="text-center">
+                    <a href="javascript:;" class="btn btn-primary btn-md edit"><i class="fas fa-edit fa-lg" id="edit-icon"></i></a>
+                    <a href="javascript:;" class="btn btn-danger btn-md remove"><i class="fas fa-times-circle fa-lg"></i></a>
+                </td>
             </tr>`
         );
+        loadEducLevel(num);
     });
+
+    function loadEducLevel(num) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_educ_level' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#educ-level'+ num +' option').remove();
+                $('#educ-level' + num).append(
+                    `<option selected disabled>Select level of education</option>`
+                );
+                $.each(obj, function(index, option){
+                    $('#educ-level' + num).append( new Option(option,option)); //value and text
+                });
+                $('#educ-level'+ num +' option').prop('style', 'font-size: 11px;')
+            },
+            error: function(xhr, status, error) {
+                swal({
+                    title: "Error!", 
+                    text: error,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
 
     $('#course-tbl tbody').on('focus', '.abbr', function() {
         var num = $(this).closest('tr').find('td:eq(0)').text();
@@ -102,11 +144,49 @@
         $('#abbr'+num).prop('style', 'text-transform: uppercase;');
     });
 
+    $('#course-tbl tbody').on('focusout', '.abbr', function() {
+        var num = $(this).closest('tr').find('td:eq(0)').text();
+        if ($(this).closest('tr').find('td:eq(2)').find('#abbr'+num).val() == '') {
+            $('#abbr'+num).prop('placeholder', 'Acronym');
+            $('#abbr'+num).prop('style', 'text-transform: capitalize;');
+        }
+    });
+
     $('#course-tbl tbody').on('click', '.remove', function() {
         $(this).closest('tr').remove();
         var len = $('#course-tbl tbody tr').length;
         for (var i = 0; i < len; i++) {
             $('#course-tbl tbody').find('tr:eq('+i+')').find('td:eq(0)').text(i + 1);
+        }
+    });
+
+    var desc_b4 = '';
+    var acro_b4 = '';
+    var educ_b4 = '';
+
+    $('#course-tbl tbody').on('click', '.edit', function() {
+        var claz = $.trim($(this).closest('tr').find('td:eq(4)').find('.edit').prop('class')).toString();
+        if (claz.indexOf('primary') >= 0) {
+            desc_b4 = $(this).closest('tr').find('td:eq(1)').find('.full').val();
+            acro_b4 = $(this).closest('tr').find('td:eq(2)').find('.abbr').val();
+            educ_b4 = $(this).closest('tr').find('td:eq(3)').find('.educ-level').val();
+            $(this).closest('tr').find('td:eq(1)').find('.full').prop('disabled', false);
+            $(this).removeClass('btn-primary');
+            $(this).addClass('btn-success');
+            $(this).closest('tr').find('td:eq(4)').find('.edit').find('#edit-icon').removeClass('fa-edit');
+            $(this).closest('tr').find('td:eq(4)').find('.edit').find('#edit-icon').addClass('fa-check-circle');
+        }
+        else {
+            var desc_new = $(this).closest('tr').find('td:eq(1)').find('.full').val();
+            if ($.trim(desc_new) != '') {
+                $(this).closest('tr').find('td:eq(4)').find('.edit').find('#edit-icon').removeClass('fa-check-circle');
+                $(this).closest('tr').find('td:eq(4)').find('.edit').find('#edit-icon').addClass('fa-spinner fa-pulse');
+                var eto = this;
+                saveEducLevel(desc_b4, desc_new, eto);
+            }
+            else {
+                $(this).closest('tr').find('td:eq(1)').find('.full').addClass('is-invalid');
+            }
         }
     });
 </script>

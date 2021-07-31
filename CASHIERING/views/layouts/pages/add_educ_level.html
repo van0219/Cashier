@@ -90,35 +90,169 @@
     $(document).ready(function() {
         App.init();
         TableManageResponsive.init();
+        loadEducTbl();
     });
+
+    function loadEducTbl() {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'load_educ_level' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $('#educ-tbl tbody tr').remove();
+                for (var i = 0; i < obj.length; i++) {
+                    var num = $('#educ-tbl tbody tr').length + 1;
+                    $('#educ-tbl tbody').append(
+                        `<tr>
+                            <td class="m-t-5 text-center">${num}</td>
+                            <td><input type="text" class="form-control full" placeholder="Education Level" value="${obj[i]}" style="text-transform: uppercase;" id="full${num}" disabled/></td>
+                            <td class="text-center">
+                                <a href="javascript:;" class="btn btn-primary btn-md edit"><i class="fas fa-edit fa-lg" id="edit-icon"></i></a>
+                                <a href="javascript:;" class="btn btn-danger btn-md remove"><i class="fas fa-times-circle fa-lg"></i></a>        
+                            </td>
+                        </tr>`
+                    );
+                }
+            },
+            error: function(xhr, status, error) {
+                swal({
+                    title: "Error!", 
+                    text: error,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
 
     $('#add-educ-btn').on('click', function() {
         var num = $('#educ-tbl tbody tr').length + 1;
         $('#educ-tbl tbody').append(
             `<tr>
-                <td class="m-t-5">${num}</td>
-                <td><input type="text" class="form-control full" placeholder="Education Level" style="text-transform: capitalize;" id="full${num}" disabled/></td>
-                <td>
-                    <a href="javascript:;" class="btn btn-primary btn-md edit"><i class="fas fa-edit fa-lg" id="edit-icon"></i></a>
+                <td class="m-t-5 text-center">${num}</td>
+                <td><input type="text" class="form-control full" placeholder="Education Level" style="text-transform: capitalize;" id="full${num}"/></td>
+                <td class="text-center">
+                    <a href="javascript:;" class="btn btn-success btn-md edit"><i class="fas fa-check-circle fa-lg" id="edit-icon"></i></a>
                     <a href="javascript:;" class="btn btn-danger btn-md remove"><i class="fas fa-times-circle fa-lg"></i></a>        
                 </td>
             </tr>`
         );
     });
 
+    var desc_b4 = '';
+
     $('#educ-tbl tbody').on('click', '.edit', function() {
-        $(this).closest('tr').find('td:eq(1)').find('.full').prop('disabled', false);
-        $(this).removeClass('btn-primary');
-        $(this).addClass('btn-success');
-        $(this).closest('tr').find('td:eq(2)').find('.edit').find('#edit-icon').removeClass('fa-edit');
-        $(this).closest('tr').find('td:eq(2)').find('.edit').find('#edit-icon').addClass('fa-check-circle');
+        var claz = $.trim($(this).closest('tr').find('td:eq(2)').find('.edit').prop('class')).toString();
+        
+        if (claz.indexOf('primary') >= 0) {
+            desc_b4 = $(this).closest('tr').find('td:eq(1)').find('.full').val();
+            $(this).closest('tr').find('td:eq(1)').find('.full').prop('disabled', false);
+            $(this).removeClass('btn-primary');
+            $(this).addClass('btn-success');
+            $(this).closest('tr').find('td:eq(2)').find('.edit').find('#edit-icon').removeClass('fa-edit');
+            $(this).closest('tr').find('td:eq(2)').find('.edit').find('#edit-icon').addClass('fa-check-circle');
+        }
+        else {
+            var desc_new = $(this).closest('tr').find('td:eq(1)').find('.full').val();
+            if ($.trim(desc_new) != '') {
+                $(this).closest('tr').find('td:eq(2)').find('.edit').find('#edit-icon').removeClass('fa-check-circle');
+                $(this).closest('tr').find('td:eq(2)').find('.edit').find('#edit-icon').addClass('fa-spinner fa-pulse');
+                var eto = this;
+                saveEducLevel(desc_b4, desc_new, eto);
+            }
+            else {
+                $(this).closest('tr').find('td:eq(1)').find('.full').addClass('is-invalid');
+            }
+        }
     });
 
+    $('#educ-tbl tbody').on('input', '.full', function() {
+        $(this).closest('tr').find('td:eq(1)').find('.full').removeClass('is-invalid');
+    });
+
+    function saveEducLevel(desc_b4, desc_new, eto) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'save_educ_level' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                desc_b4: desc_b4,
+                desc_new: desc_new,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                $(eto).closest('tr').find('td:eq(2)').find('.edit').find('#edit-icon').removeClass('fa-spinner fa-pulse');
+                $(eto).closest('tr').find('td:eq(2)').find('.edit').find('#edit-icon').addClass('fa-edit');
+                $(eto).closest('tr').find('td:eq(2)').find('.edit').removeClass('btn-success');
+                $(eto).closest('tr').find('td:eq(2)').find('.edit').addClass('btn-primary');
+                $(eto).closest('tr').find('td:eq(1)').find('.full').prop('disabled', true);
+            },
+            error: function(xhr, status, error) {
+                swal({
+                    title: "Error!", 
+                    text: error,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
     $('#educ-tbl tbody').on('click', '.remove', function() {
-        $(this).closest('tr').remove();
-        var len = $('#educ-tbl tbody tr').length;
-        for (var i = 0; i < len; i++) {
-            $('#educ-tbl tbody').find('tr:eq('+i+')').find('td:eq(0)').text(i + 1);
+        if ($(this).closest('tr').find('td:eq(1)').find('.full').prop('disabled')) {
+            removeEducLevel($(this).closest('tr').find('td:eq(1)').find('.full').val());
+            $(this).closest('tr').remove();
+        }
+        else {
+            $(this).closest('tr').remove();
+            var len = $('#educ-tbl tbody tr').length;
+            for (var i = 0; i < len; i++) {
+                $('#educ-tbl tbody').find('tr:eq('+i+')').find('td:eq(0)').text(i + 1);
+            }
+        }
+    });
+
+    function removeEducLevel(desc) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'remove_educ_level' %}",
+            cache: false,
+            dataType: 'json',
+            data: {
+                desc: desc,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+
+            },
+            error: function(xhr, status, error) {
+                swal({
+                    title: "Error!", 
+                    text: error,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
+
+    $('#educ-tbl tbody').on('focus', '.full', function() {
+        $(this).closest('tr').find('td:eq(1)').find('.full').prop('placeholder', '');
+        $(this).closest('tr').find('td:eq(1)').find('.full').prop('style', 'text-transform: uppercase;');
+    });
+
+    $('#educ-tbl tbody').on('focusout', '.full', function() {
+        if ($(this).closest('tr').find('td:eq(1)').find('.full').val() == '') {
+            $(this).closest('tr').find('td:eq(1)').find('.full').prop('placeholder', 'Education Level');
+            $(this).closest('tr').find('td:eq(1)').find('.full').prop('style', 'text-transform: capitalize;');
         }
     });
 </script>
