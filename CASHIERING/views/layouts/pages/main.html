@@ -612,12 +612,12 @@
 					</tr>
 					<tr>
 						<td>SIS</td>
-						<td class="text-center">${(orSis=='' ? '' : orSis)}</td>
+						<td class="text-center">${(orSis==null ? '' : orSis)}</td>
 						<td class="text-right">${(sisCol=='' ? '' : sisCol)}</td>
 					</tr>
 					<tr>
 						<td>Direct Deposit</td>
-						<td class="text-center">${(startD=='' ? '' : startD) + ((endD==''||endD==startD) ? '' : '-' + endD)}</td>
+						<td class="text-center">${(startD==null ? '' : startD) + ((endD==''||endD==startD) ? '' : '-' + endD)}</td>
 						<td class="text-right">${(dirCol=='' ? '' : dirCol)}</td>
 					</tr>`
 				);

@@ -122,7 +122,7 @@
                                     </div>
                                     <label class="col-form-label col-md-3 m-b-10" style="display: none;">Educ Level <span class="pull-right">:</span></label>
                                     <div class="col-md-9" style="display: none;">
-                                        <select class="form-control selectpicker individual_sel m-b-10" data-size="10" data-style="btn-white" id="educ-level">
+                                        <select class="form-control selectpicker individual_sel m-b-10" data-size="10" data-style="btn-white" id="educ-levels">
                                             <option selected disabled>Select level of education</option>
                                         </select>
                                     </div>
@@ -307,7 +307,7 @@
         $('select').selectpicker('render');
         getCurrentORnum();
         getIncType();
-        loadEducLevel();
+        loadEducLevels();
     });
 
     $('#or_fname').on('focusin', function() {
@@ -419,7 +419,7 @@
         }
     });
 
-    function loadEducLevel() {
+    function loadEducLevels() {
         $.ajax({
             type: "POST",
             url: "{% url 'load_educ_level' %}",
@@ -430,10 +430,10 @@
             },
             success: function(obj) {
                 $.each(obj, function(index, option){
-                    $('#educ-level').append( new Option(option,option)); //value and text
+                    $('#educ-levels').append( new Option(option,option)); //value and text
                 });
-                $('#educ-level option').prop('style', 'font-size: 11px;')
-                $('#educ-level').selectpicker('refresh');
+                $('#educ-levels option').prop('style', 'font-size: 11px;')
+                $('#educ-levels').selectpicker('refresh');
             },
             error: function(xhr, status, error) {
                 swal({
@@ -966,7 +966,7 @@
                         if (_url.length == 17) {
                             $('#or_studnum').val($.trim(ui.item.label.split(',')[2])).trigger('focusin');
                         }
-                        $('#educ-level').selectpicker('val', $.trim(ui.item.label.split(',')[3]));
+                        $('#educ-levels').selectpicker('val', $.trim(ui.item.label.split(',')[3]));
                         if (event.which == 13) {
                             setTimeout(function() {
                                 $('#or_fname').click();
