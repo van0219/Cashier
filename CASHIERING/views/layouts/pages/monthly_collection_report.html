@@ -55,159 +55,124 @@
     <!-- begin col-12 -->
     <div class="col-lg-12">
         <!-- begin row -->
-        <div class="row">
-            <!-- begin col-6 -->
-            <div class="col-lg-6 m-t-10">
-                <!-- begin row -->
-                <div class="row">
-                    <div class="col-lg-3 col-sm-5">
-                        <select class="form-control bg-inverse text-white" id="select-month">
-                            <option value="1">January</option>
-                            <option value="2">February</option>
-                            <option value="3">March</option>
-                            <option value="4">April</option>
-                            <option value="5">May</option>
-                            <option value="6">June</option>
-                            <option value="7">July</option>
-                            <option value="8">August</option>
-                            <option value="9">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-3 col-sm-5">
-                        <select class="form-control bg-inverse text-white" id="select-year"></select>
-                    </div>
-                    <div class="col-lg-2 col-sm-2">
-                        <a href="javascript:;" class="btn btn-primary btn-sm m-t-5" id="mon-filter"><i class="fas fa-filter m-r-5"></i>Filter</a>
-                    </div>
-                    <div class="col-lg-4">
-                        <!-- filler -->
+        <div class="row m-b-15">
+            <!-- begin col-3 -->
+            <div class="col-lg-3 col-md-3">
+                <div class="widget widget-stats bg-gradient-lime">
+                    <div class="stats-icon"><i class="fas fa-archive"></i></div>
+                    <div class="stats-info">
+                        <h4>TOTAL COLLECTION</h4>
+                        <p id="tot-col-card"></p>	
                     </div>
                 </div>
-                <!-- end row -->
             </div>
-            <!-- end col-6 -->
-            <!-- begin col-6 -->
-            <div class="col-lg-6 m-t-10">
-                <div class="pull-right">
-                    <a href="javascript:;" class="btn btn-primary btn-md" id="mon-pdf"><i class="fas fa-file-pdf m-r-5" id="mon-pdf-icon"></i>Monthly Collection and Deposit Report (PDF)</a>
+            <!-- end col-3 -->
+            <!-- begin col-3 -->
+            <div class="col-lg-3 col-md-3">
+                <div class="widget widget-stats bg-gradient-black">
+                    <div class="stats-icon"><i class="fas fa-download"></i></div>
+                    <div class="stats-info">
+                        <h4>TOTAL DEPOSIT</h4>
+                        <p id="tot-dep-card"></p>	
+                    </div>
                 </div>
             </div>
-            <!-- end col-6 -->
+            <!-- end col-3 -->
+            <!-- begin col-3 -->
+            <div class="col-lg-3 col-md-3" style="border-right: 1px #747474 solid;">
+                <div class="pull-left">
+                    <a href="javascript:;" class="btn btn-white btn-sm" id="mon-pdf"><i class="fas fa-file-pdf fa-2x text-red" id="mon-pdf-icon"></i></a>
+                    <span class="fas fa-arrow-alt-circle-left"><small class="m-l-5">Click this!</small></span>
+                    <br>
+                    <span>Generate Monthly Collection and Deposit Report PDF</span>
+                </div>
+            </div>
+            <!-- end col-3 -->
+            <!-- begin col-3 -->
+            <div class="col-lg-3 col-md-3">
+                <div class="input-group input-daterange">
+                    <input type="text" class="form-control" id="startDate" name="start" placeholder="Date Start" autocomplete="off" />
+                    <span class="input-group-addon">to</span>
+                    <input type="text" class="form-control" id="endDate" name="end" placeholder="Date End" autocomplete="off" />
+                </div>
+            </div>
+            <!-- end col-3 -->
         </div>
         <!-- end row -->
-    </div>
-    <!-- end col-12 -->
-</div>
-<!-- end row -->
-    <!-- begin row -->
-    <div class="row">
-        <!-- begin col-5 -->
-        <div class="col-lg-5">
-            <!-- begin row -->
-            <div class="row">
-                <!-- begin col-6 -->
-                <div class="col-lg-6 col-md-6">
-                    <div class="widget widget-stats bg-gradient-lime">
-                        <div class="stats-icon"><i class="fas fa-archive"></i></div>
-                        <div class="stats-info">
-                            <h4>TOTAL COLLECTION</h4>
-                            <p id="tot-col-card"></p>	
+        <!-- begin row -->
+        <div class="row">
+            <!-- begin col-5 -->
+            <div class="col-lg-5">
+                <!-- begin panel -->
+                <div class="panel panel-inverse">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Monthly Collection vs Deposit</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div id="canvas-div">
+                            <canvas id="line-chart" data-render="chart-js"></canvas>
                         </div>
                     </div>
                 </div>
-                <!-- end col-6 -->
-                <!-- begin col-6 -->
-                <div class="col-lg-6 col-md-6">
-                    <div class="widget widget-stats bg-gradient-black">
-                        <div class="stats-icon"><i class="fas fa-download"></i></div>
-                        <div class="stats-info">
-                            <h4>TOTAL DEPOSIT</h4>
-                            <p id="tot-dep-card"></p>	
-                        </div>
-                    </div>
-                </div>
-                <!-- end col-6 -->
+                <!-- end panel -->
             </div>
-            <!-- end row -->
-            <!-- begin row -->
-            <div class="row">
-                <!-- begin col-12 -->
-                <div class="col-lg-12">
-                    <!-- begin panel -->
-                    <div class="panel panel-inverse">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">Monthly Collection vs Deposit</h4>
-                        </div>
-                        <div class="panel-body">
-                            <div id="canvas-div">
-                                <canvas id="line-chart" data-render="chart-js"></canvas>
+            <!-- end col-5 -->
+            <!-- begin col-7 -->
+            <div class="col-lg-7">
+                <!-- begin card -->
+                <div class="card text-left">
+                    <div class="card-header">
+                        <i class="fas fa-shopping-basket m-r-5"></i>Collection Group (by Nature)
+                    </div>
+                    <div class="card-block">
+                        <div class="panel panel-white">
+                            <!-- begin panel-heading -->
+                            <div class="panel-heading">
+                                <h4 class="panel-title text-inverse"></h4>
                             </div>
+                            <!-- end panel-heading -->
+                            <!-- begin panel-body -->
+                            <div class="panel-body">
+                                <table id="data-table-combines" class="table table-hover table-bordered table-striped">
+                                    <thead>
+                                        <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="10%">Frequency</th>
+                                        <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="60%">Nature of Collection</th>
+                                        <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="30%">Total Amount</th>
+                                    </thead>
+                                    <tbody>
+                                        <!-- append tbody tr here -->
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="f-w-600 p-t-20 text-left" style="border-color: white; border-top-color: lightgray;" colspan="2">TOTAL</td>
+                                            <td class="text-right p-t-20" style="border-color: white; border-top-color: lightgray;">
+                                                <span class="label label-purple f-s-11" id="super-tot">0.00</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="f-w-600 text-left" style="border-color: white;" colspan="2">Total Deposited</td>
+                                            <td class="text-right" style="border-color: white;">
+                                                <span class="label label-success f-s-11" id="tot-dep">0.00</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="f-w-600 text-left" style="border-color: white; border-bottom-color: lightgray;" colspan="2">Total Undeposited</td>
+                                            <td class="text-right" style="border-color: white; border-bottom-color: lightgray;">
+                                                <span class="label label-danger f-s-11" id="tot-undep">0.00</span>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <!-- end panel-body -->
                         </div>
                     </div>
-                    <!-- end panel -->
                 </div>
-                <!-- end col-12 -->
+                <!-- end card -->
             </div>
-            <!-- end row -->
+            <!-- end col-7 -->
         </div>
-        <!-- end col-5 -->
-        <!-- begin col-7 -->
-        <div class="col-lg-7">
-            <!-- begin card -->
-            <div class="card text-left">
-                <div class="card-header">
-                    <i class="fas fa-shopping-basket m-r-5"></i>Collection Group (by Nature)
-                </div>
-                <div class="card-block">
-                    <div class="panel panel-white">
-                        <!-- begin panel-heading -->
-                        <div class="panel-heading">
-                            <h4 class="panel-title text-inverse"></h4>
-                        </div>
-                        <!-- end panel-heading -->
-                        <!-- begin panel-body -->
-                        <div class="panel-body">
-                            <table id="data-table-combines" class="table table-hover table-bordered table-striped">
-                                <thead>
-                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="10%">Frequency</th>
-                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="60%">Nature of Collection</th>
-                                    <th class="text-nowrap bg-inverse text-white" style="text-align: center;" width="30%">Total Amount</th>
-                                </thead>
-                                <tbody>
-                                    <!-- append tbody tr here -->
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td class="f-w-600 p-t-20 text-left" style="border-color: white; border-top-color: lightgray;" colspan="2">TOTAL</td>
-                                        <td class="text-right p-t-20" style="border-color: white; border-top-color: lightgray;">
-                                            <span class="label label-purple f-s-11" id="super-tot">0.00</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="f-w-600 text-left" style="border-color: white;" colspan="2">Total Deposited</td>
-                                        <td class="text-right" style="border-color: white;">
-                                            <span class="label label-success f-s-11" id="tot-dep">0.00</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="f-w-600 text-left" style="border-color: white; border-bottom-color: lightgray;" colspan="2">Total Undeposited</td>
-                                        <td class="text-right" style="border-color: white; border-bottom-color: lightgray;">
-                                            <span class="label label-danger f-s-11" id="tot-undep">0.00</span>
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        <!-- end panel-body -->
-                    </div>
-                </div>
-            </div>
-            <!-- end card -->
-        </div>
-        <!-- end col-7 -->
+        <!-- end col-12 -->
     </div>
     <!-- end row -->
 </div>
@@ -259,14 +224,18 @@
     $(document).ready(function() {
         App.init();
         TableManageCombine.init();
+        d = new Date();
+        var d_mon_start = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + '01';
+        var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+        $('#startDate').val(moment(new Date(d_mon_start)).format('MM/DD/YYYY'));
+        $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         FormPlugins.init();
-        loadYears();
-        $('#select-month').val((new Date).getMonth()+1);
-        $('#select-year').val((new Date).getFullYear());
         highlightSideNav();
-        getColDepCard($('#select-month').val(), $('#select-year').val());
-        getColDepGroup($('#select-month').val(), $('#select-year').val());
-        getMonthlyCollectionDeposit($('#select-year').val());
+        setTimeout(function() {
+            getColDepCard(d_mon_start, d_today);
+            getColDepGroup(d_mon_start, d_today);
+            getMonthlyCollectionDeposit(d.getFullYear());
+        },300);
     });
 
     function loadYears() {
@@ -448,7 +417,7 @@
         handleLineChart(monthly_col_obj, monthly_dep_obj);
     };
 
-    function getColDepCard(month, year) {
+    function getColDepCard(start, end) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_coldep_card' %}",
@@ -456,8 +425,8 @@
             async: false,
             dataType: 'json',
             data: {
-                month: month,
-                year: year,
+                start: start,
+                end:end,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -479,7 +448,7 @@
         });
     };
 
-    function getColDepGroup(month, year) {
+    function getColDepGroup(start,end) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_coldep_group' %}",
@@ -487,8 +456,8 @@
             async: false,
             dataType: 'json',
             data: {
-                month: month,
-                year: year,
+                start: start,
+                end: end,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -532,13 +501,6 @@
         });
     };
 
-    $('#mon-filter').on('click', function() {
-        var mon = $('#select-month').val();
-        var yr = $('#select-year').val();
-        getColDepCard(mon, yr);
-        getColDepGroup(mon, yr);
-    });
-
     $('#mon-pdf').on('click', function() {
         $('#mon-pdf-icon').removeClass('fa-file-pdf');
         $('#mon-pdf-icon').addClass('fa-spinner fa-pulse');
@@ -572,6 +534,30 @@
             }
         });
     };
+
+    $('#startDate').on('change', function() {
+        if ($('#startDate').val() != '') {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');        
+            setTimeout(function() {
+                getColDepCard(start, end);
+                getColDepGroup(start, end);
+                getMonthlyCollectionDeposit(new Date($('#startDate').val()).getFullYear());
+            },500);
+        }
+    });
+
+    $('#endDate').on('change', function() {
+        if ($('#endDate').val() != '') {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');        
+            setTimeout(function() {
+                getColDepCard(start, end);
+                getColDepGroup(start, end);
+                getMonthlyCollectionDeposit(new Date($('#startDate').val()).getFullYear());
+            },500);
+        }
+    });
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');

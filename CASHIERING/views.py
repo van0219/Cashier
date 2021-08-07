@@ -572,8 +572,8 @@ def load_monthly_collection_deposit2(request):
 def load_radar_chart(request):
     cursor = connection.cursor()
     cursor.callproc("SP_LOAD_RADAR_CHART"
-                    ,(request.POST['month']
-                    ,request.POST['year']))
+                    ,(request.POST['start']
+                    ,request.POST['end']))
     data = cursor.fetchall()
     import csv
     csv_rowlist = data
@@ -682,8 +682,8 @@ def set_email(request):
 def load_sumcol_cards(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_SUMCOL_CARDS"
-                    ,(request.POST['month']
-                    ,request.POST['year']))
+                    ,(request.POST['start']
+                    ,request.POST['end']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -720,16 +720,16 @@ def update_nature(request):
 def load_coldep_card(request):
     cursor = connection.cursor()
     cursor.callproc("SP_LOAD_COLDEP_CARD"
-                    ,(request.POST['month']
-                    ,request.POST['year']))
+                    ,(request.POST['start']
+                    ,request.POST['end']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
 def load_coldep_group(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_COLLECTION_GROUP"
-                    ,(request.POST['month']
-                    ,request.POST['year']))
+                    ,(request.POST['start']
+                    ,request.POST['end']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -932,6 +932,7 @@ def load_sum_pdf(request):
     month = int(request.POST['month'])
     year = int(request.POST['year'])
     # month_l_day = calendar.monthrange(year,month)[1]  # this is to get the last day of the month
+    month_f_day = request.POST['start_day']
     month_l_day = request.POST['end_day']
     month_object = datetime.strptime(str(month), "%m")
     cashier = request.POST['cashier']
@@ -1000,10 +1001,10 @@ def load_sum_pdf(request):
         def improved_table(self, header, data):
             # Data before table
             self.set_font('Arial', 'U', 12)
-            self.cell(0, 0, 'Month of ' + month_object.strftime("%B") + ' 1-'+ str(month_l_day) +', ' + str(year), 0, 0, 'C')
+            self.cell(0, 0, 'Month of ' + month_object.strftime("%B") + ' ' + str(month_f_day) + '-' + str(month_l_day) +', ' + str(year), 0, 0, 'C')
             self.ln(10)
             # Column widths
-            w = [58, 68, 48]
+            w = [48, 88, 38]
             # Header
             self.set_font('Arial', 'B', 12)
             for i in range(0, len(header)):
