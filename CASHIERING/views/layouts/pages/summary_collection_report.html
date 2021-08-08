@@ -72,7 +72,7 @@
                 <a href="javascript:;" class="btn btn-white btn-sm" id="sum-pdf"><i class="fas fa-file-pdf fa-2x text-red" id="sum-pdf-icon"></i></a>
                 <span class="fas fa-arrow-alt-circle-left"><small class="m-l-5">Click this!</small></span>
                 <br>
-                <span>Generate Summary of Collecion Report PDF</span>
+                <span>Generate Summary of Collection PDF</span>
             </div>
         </div>
         <!-- end col-3 -->
@@ -211,8 +211,8 @@
         $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         FormPlugins.init();
         highlightSideNav();
-        loadCards(d_mon_start, d_today);
-        loadBarChart(d_mon_start, d_today);
+        // loadCards(d_mon_start, d_today);
+        // loadBarChart(d_mon_start, d_today);
     });
     var dt_combines = $('#data-table-combines').DataTable({
         'paging'      : true,

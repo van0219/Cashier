@@ -372,7 +372,9 @@ def insert_collection(request):
 
 def load_receipt_table(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_SELECT_ALL_RECEIPTS")
+    cursor.callproc("SP_SELECT_ALL_RECEIPTS"
+                    ,(request.POST['start']
+                    ,request.POST['end']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -402,7 +404,9 @@ def load_specific_collection_breakdown(request):
 
 def load_receipts_donut(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_SELECT_RECEIPT_DONUT")
+    cursor.callproc("SP_SELECT_RECEIPT_DONUT"
+                    ,(request.POST['start']
+                    ,request.POST['end']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -509,7 +513,9 @@ def resched_deposit(request):
 
 def load_deposited(request):
     cursor = connection.cursor()
-    cursor.callproc("SP_LOAD_DEPOSITED")
+    cursor.callproc("SP_LOAD_DEPOSITED"
+                    ,(request.POST['start']
+                    ,request.POST['end']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -585,8 +591,8 @@ def load_radar_chart(request):
 def load_cash_receipt_cards(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_CASH_RECEIPT_CARDS"
-                    ,(request.POST['month']
-                    ,request.POST['year']))
+                    ,(request.POST['start']
+                    ,request.POST['end']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -736,8 +742,8 @@ def load_coldep_group(request):
 def load_top_contrib(request):
     cursor = connection.cursor()
     cursor.callproc("SP_SELECT_TOP_CONTRIB"
-                    ,(request.POST['month']
-                    ,request.POST['year']))
+                    ,(request.POST['start']
+                    ,request.POST['end']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 

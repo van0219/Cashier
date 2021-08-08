@@ -84,7 +84,7 @@
                     <a href="javascript:;" class="btn btn-white btn-sm" id="mon-pdf"><i class="fas fa-file-pdf fa-2x text-red" id="mon-pdf-icon"></i></a>
                     <span class="fas fa-arrow-alt-circle-left"><small class="m-l-5">Click this!</small></span>
                     <br>
-                    <span>Generate Monthly Collection and Deposit Report PDF</span>
+                    <span class="f-s-11">Generate Monthly Collection and Deposit PDF</span>
                 </div>
             </div>
             <!-- end col-3 -->
@@ -231,11 +231,11 @@
         $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         FormPlugins.init();
         highlightSideNav();
-        setTimeout(function() {
-            getColDepCard(d_mon_start, d_today);
-            getColDepGroup(d_mon_start, d_today);
-            getMonthlyCollectionDeposit(d.getFullYear());
-        },300);
+        // setTimeout(function() {
+        //     getColDepCard(d_mon_start, d_today);
+        //     getColDepGroup(d_mon_start, d_today);
+        //     getMonthlyCollectionDeposit(d.getFullYear());
+        // },300);
     });
 
     function loadYears() {

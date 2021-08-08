@@ -305,10 +305,10 @@
         $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         FormPlugins.init();
         highlightSideNav();
-        setTimeout(function() {
-            loadAcctFormsDash(d_mon_start, d_today);
-            loadORMonthlyReport(d_mon_start, d_today);
-        },500);
+        // setTimeout(function() {
+        //     loadAcctFormsDash(d_mon_start, d_today);
+        //     loadORMonthlyReport(d_mon_start, d_today);
+        // },500);
     });
 
     function loadYears() {
@@ -544,6 +544,7 @@
             var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
             setTimeout(function() {
                 loadAcctFormsDash(start, end);
+                loadORMonthlyReport(start, end);
             },500);
         }
     });
@@ -554,6 +555,7 @@
             var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
             setTimeout(function() {
                 loadAcctFormsDash(start, end);
+                loadORMonthlyReport(start, end);
             },500);
         }
     });

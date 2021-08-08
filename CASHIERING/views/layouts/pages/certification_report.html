@@ -240,10 +240,10 @@
         $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         FormPlugins.init();
         highlightSideNav();
-        setTimeout(function() {
-            loadDepositCertTable(d_mon_start, d_today);
-            getMonthlyCollectionDeposit(d.getFullYear());
-        },300);
+        // setTimeout(function() {
+        //     loadDepositCertTable(d_mon_start, d_today);
+        //     getMonthlyCollectionDeposit(d.getFullYear());
+        // },300);
     });
 
     function loadYears() {

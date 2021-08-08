@@ -48,46 +48,31 @@
         <div class="col-lg-12">
             <!-- begin row -->
             <div class="row">
-                <!-- begin col-6 -->
-                <div class="col-lg-6 m-t-10">
-                    <!-- begin row -->
-                    <div class="row">
-                        <div class="col-lg-3 col-sm-5">
-                            <select class="form-control bg-inverse text-white" id="select-month">
-                                <option value="1">January</option>
-                                <option value="2">February</option>
-                                <option value="3">March</option>
-                                <option value="4">April</option>
-                                <option value="5">May</option>
-                                <option value="6">June</option>
-                                <option value="7">July</option>
-                                <option value="8">August</option>
-                                <option value="9">September</option>
-                                <option value="10">October</option>
-                                <option value="11">November</option>
-                                <option value="12">December</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3 col-sm-5">
-                            <select class="form-control bg-inverse text-white" id="select-year"></select>
-                        </div>
-                        <div class="col-lg-2 col-sm-2">
-                            <a href="javascript:;" class="btn btn-primary btn-sm m-t-5" id="cash-filter"><i class="fas fa-filter m-r-5"></i>Filter</a>
-                        </div>
-                        <div class="col-lg-4">
-                            <!-- filler -->
-                        </div>
-                    </div>
-                    <!-- end row -->
-                </div>
-                <!-- end col-6 -->
-                <!-- begin col-6 -->
-                <div class="col-lg-6 m-t-10">
-                    <div class="pull-right">
-                        <a href="javascript:;" class="btn btn-primary btn-md" id="cash-pdf"><i class="fas fa-file-pdf m-r-5" id="cash-pdf-icon"></i>Cash Receipt Record (PDF)</a>
+                <!-- begin col-3 -->
+                <div class="col-lg-3 col-md-3"></div>
+                <!-- end col-3 -->
+                <!-- begin col-3 -->
+                <div class="col-lg-3 col-md-3"></div>
+                <!-- end col-3 -->
+                <!-- begin col-3 -->
+                <div class="col-lg-3 col-md-3" style="border-right: 1px #747474 solid;">
+                    <div class="pull-left">
+                        <a href="javascript:;" class="btn btn-white btn-sm" id="cash-pdf"><i class="fas fa-file-pdf fa-2x text-red" id="cash-pdf-icon"></i></a>
+                        <span class="fas fa-arrow-alt-circle-left"><small class="m-l-5">Click this!</small></span>
+                        <br>
+                        <span>Generate Cash Receipt Record PDF</span>
                     </div>
                 </div>
-                <!-- end col-6 -->
+                <!-- end col-3 -->
+                <!-- begin col-3 -->
+                <div class="col-lg-3 col-md-3">
+                    <div class="input-group input-daterange">
+                        <input type="text" class="form-control" id="startDate" name="start" placeholder="Date Start" autocomplete="off" />
+                        <span class="input-group-addon">to</span>
+                        <input type="text" class="form-control" id="endDate" name="end" placeholder="Date End" autocomplete="off" />
+                    </div>
+                </div>
+                <!-- end col-3 -->
             </div>
             <!-- end row -->
         </div>
@@ -293,18 +278,18 @@
 <script>
     $(document).ready(function() {
         App.init();
-        FormPlugins.init();
-        highlightSideNav();
-        loadYears();
-        
-        $('#select-month').val(new Date().getMonth() + 1);
-        $('#select-year').val(new Date().getFullYear());
-        loadCashReceiptCards($('#select-month').val(), $('#select-year').val());
-        loadTopContrib($('#select-month').val(), $('#select-year').val());
-        var d = new Date();
+        d = new Date();
         var d_mon_start = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + '01';
         var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
-        loadDepositOfTheMonthChart(d_mon_start, d_today);
+        $('#startDate').val(moment(new Date(d_mon_start)).format('MM/DD/YYYY'));
+        $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
+        FormPlugins.init();
+        highlightSideNav();
+        // setTimeout(function() {
+        //     loadCashReceiptCards(d_mon_start, d_today);
+        //     loadTopContrib(d_mon_start, d_today);
+        //     loadDepositOfTheMonthChart(d_mon_start, d_today);
+        // },300);
     });
 
     var dt_top_contrib = $('#table-top-contrib').DataTable({
@@ -334,15 +319,15 @@
     };
 
 
-    function loadCashReceiptCards(month, year) {
+    function loadCashReceiptCards(start, end) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_cash_receipt_cards' %}",
             // cache: true,
             dataType: 'json',
             data: {
-                month: month,
-                year: year,
+                start: start,
+                end: end,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -365,25 +350,39 @@
         });
     };
 
-    $('#cash-filter').on('click', function() {
-        var mon = $('#select-month').val();
-        var yr = $('#select-year').val();
-        loadCashReceiptCards(mon, yr);
-        loadTopContrib(mon, yr);
+    $('#startDate').on('change', function() {
+        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+        loadCashReceiptCards(start, end);
+        loadTopContrib(start, end);
         $('#dep-month-tot').text('');
         $('#donut-chart').empty();
-        loadDepositOfTheMonthChart(mon, yr);
+        setTimeout(function() {
+            loadDepositOfTheMonthChart(start, end);
+        },300);
     });
 
-    function loadTopContrib(month, year) {
+    $('#endDate').on('change', function() {
+        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+        loadCashReceiptCards(start, end);
+        loadTopContrib(start, end);
+        $('#dep-month-tot').text('');
+        $('#donut-chart').empty();
+        setTimeout(function() {
+            loadDepositOfTheMonthChart(start, end);
+        },300);
+    });
+
+    function loadTopContrib(start, end) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_top_contrib' %}",
             // cache: true,
             dataType: 'json',
             data: {
-                month: month,
-                year: year,
+                start: start,
+                end: end,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {

@@ -611,6 +611,7 @@
                 if (obj[0] != null) {
                     $('#or_lname').val(obj[0][1].toString());
                     $('#or_fname').val(obj[0][0].toString());
+                    $('#educ-levels').selectpicker('val', $('#no-studnum-checkbox').prop('checked') ? 'Select level of education' : obj[0][2].toString());
                     $('#addForm').parsley().reset();
                     enableButtons();
                 }
@@ -966,7 +967,7 @@
                         if (_url.length == 17) {
                             $('#or_studnum').val($.trim(ui.item.label.split(',')[2])).trigger('focusin');
                         }
-                        $('#educ-levels').selectpicker('val', $.trim(ui.item.label.split(',')[3]));
+                        $('#educ-levels').selectpicker('val', $('#no-studnum-checkbox').prop('checked') ? $.trim(ui.item.label.split(',')[2]) : $.trim(ui.item.label.split(',')[3]) );
                         if (event.which == 13) {
                             setTimeout(function() {
                                 $('#or_fname').click();

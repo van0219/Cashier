@@ -1,10 +1,13 @@
 {% extends 'views/layouts/pages/main.html' %}
 {% block title %} 
-<title>CTS | Deposits</title>
+<title>CMS | Deposited</title>
 {% endblock %}
 {% load static %}
 {% block page-css %}
 <!-- dito yung page css -->
+<link href="{%static 'assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/bootstrap-eonasdan-datetimepicker/build/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" />
 {% endblock %}
 {% block content %}
 <div class="content" id="content">
@@ -17,7 +20,7 @@
     <!-- begin page-header -->
     <h1 class="page-header">Deposited <small>View Deposited Collections</small></h1>
     <!-- end page-header -->
-    <!-- begin row -->
+
     <div class="row">
         <!-- begin col-1 -->
         <div class="col-lg-1">
@@ -29,10 +32,18 @@
             <!-- begin card -->
             <div class="card">
                 <div class="card-header">
-                    <ul class="nav nav-pills card-header-pills">
+                    <ul class="nav nav-pills card-header-pills col-lg-12">
                         <!-- <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-1-deposits">Pending</a></li> -->
                         <!-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#card-pill-2-deposits" id="sched-dep-tab">Scheduled Deposit</a></li> -->
                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#card-pill-3-deposits" id="deposited-tab">Deposited</a></li>
+                        <li class="nav-item col-lg-6"></li>
+                        <li class="nav-item col-lg-4">
+                            <div class="input-group input-daterange">
+                                <input type="text" class="form-control" id="startDate" name="start" placeholder="Date Start" autocomplete="off" />
+                                <span class="input-group-addon">to</span>
+                                <input type="text" class="form-control" id="endDate" name="end" placeholder="Date End" autocomplete="off" />
+                            </div>
+                        </li>
                     </ul>
                 </div>
                 <div class="card-block">
@@ -158,18 +169,103 @@
 {% endblock %}
 {% block page-js %}
 <!-- dito yung page-js -->
+<script src="{%static 'assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-daterangepicker/moment.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<script src="{%static 'assets/plugins/bootstrap-eonasdan-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
 {% endblock %}
 {% block init %}
 <script>
     $(document).ready(function() {
         App.init();
-        $('#deposited-tab').click();
+        $('#startDate').val(moment(new Date(d_mon_start)).format('MM/DD/YYYY'));
+        $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         highlightSideNav();
+        handleDatepicker();
+        handleDateRangePicker();
     });
 
     var d = new Date();  
+    var d_mon_start = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + '01';
     var d_today = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
-    var d_7day = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + (d.getDate()-6);
+
+    function handleDatepicker() {
+        $('#datepicker-default').datepicker({
+            todayHighlight: true
+        });
+        $('#datepicker-inline').datepicker({
+            todayHighlight: true
+        });
+        $('.input-daterange').datepicker({
+            todayHighlight: true
+        });
+        $('#datepicker-disabled-past').datepicker({
+            todayHighlight: true
+        });
+        $('#datepicker-autoClose').datepicker({
+            todayHighlight: true,
+            autoclose: true
+        });
+    };
+
+    function handleDateRangePicker() {
+        var d = new Date();
+        // var n = d.getFullYear();
+        $('#default-daterange').daterangepicker({
+            opens: 'right',
+            format: 'MM/DD/YYYY',
+            separator: ' to ',
+            startDate: moment().subtract('days', 29),
+            endDate: moment(),
+            minDate: '01/01/2012',
+            maxDate: d,
+        },
+        function (start, end) {
+            $('#default-daterange input').val(start.format('MMM D, YYYY') + ' - ' + end.format('MMM D, YYYY'));
+        });
+        
+        $('#advance-daterange span').html(moment().subtract('days', 29).format('MMM D,YYYY') + ' - ' + moment().format('MMM D,YYYY'));
+
+        $('#advance-daterange').daterangepicker({
+            format: 'MM/DD/YYYY',
+            startDate: moment().subtract(29, 'days'),
+            endDate: moment(),
+            minDate: '01/01/2012',
+            maxDate: d,
+            dateLimit: { days: 60 },
+            showDropdowns: true,
+            showWeekNumbers: true,
+            timePicker: false,
+            timePickerIncrement: 1,
+            timePicker12Hour: true,
+            ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            opens: 'right',
+            drops: 'down',
+            buttonClasses: ['btn', 'btn-sm'],
+            applyClass: 'btn-primary',
+            cancelClass: 'btn-default',
+            separator: ' to ',
+            locale: {
+                applyLabel: 'Submit',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                firstDay: 1
+            }
+        }, function(start, end, label) {
+            $('#advance-daterange span').html(start.format('MMM D,YYYY') + ' - ' + end.format('MMM D,YYYY'));
+        });
+    };
 
     function get_current_group_id() {
         $.ajax({
@@ -233,17 +329,27 @@
         $('#input-dep-slip').val('');
     });
     
-    $('#deposited-tab').on('click', function() {
-        load_deposited();
+    $('#startDate').on('change', function() {
+        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+        load_deposited(start, end);
     });
 
-    function load_deposited() {
+    $('#endDate').on('change', function() {
+        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+        load_deposited(start, end);
+    });
+
+    function load_deposited(start, end) {
         $.ajax({
             type: "POST",
             url: "{% url 'load_deposited' %}",
             // cache: true,
             dataType: 'json',
             data: {
+                start: start,
+                end: end,
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
@@ -266,7 +372,7 @@
                 else {
                     $('#deposited-table tbody').append(
                         `<tr>
-                            <td colspan="3">No records found</td>
+                            <td colspan="4">No records found</td>
                         </tr>`
                     );
                 }
@@ -321,7 +427,9 @@
                             $('#modal-edit-slip').modal('hide');
                             $('#dep-slip-upd-icon').removeClass('fa-spinner fa-pulse');
                             $('#dep-slip-upd-icon').addClass('fa-check-circle');
-                            load_deposited();
+                            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+                            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+                            load_deposited(start, end);
                         }
                     });
                 }, 2000);
@@ -378,7 +486,9 @@
                                     showLoaderOnConfirm: true
                                 }, function(isConfirm) {
                                     if (isConfirm) {
-                                        load_deposited();
+                                        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+                                        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+                                        load_deposited(start, end);
                                     }
                                 });
                             }, 1000);
