@@ -47,13 +47,8 @@
         <div class="col-lg-3 col-md-3"></div>
         <!-- end col-3 -->
         <!-- begin col-3 -->
-        <div class="col-lg-3 col-md-3" style="border-right: 1px #747474 solid;">
-            <div class="pull-left">
-                <a href="javascript:;" class="btn btn-white btn-sm" id="cash-pdf"><i class="fas fa-file-pdf fa-2x text-red" id="cash-pdf-icon"></i></a>
-                <span class="fas fa-arrow-alt-circle-left"><small class="m-l-5">Click this!</small></span>
-                <br>
-                <span>Generate Cash Receipt Record PDF</span>
-            </div>
+        <div class="col-lg-3 col-md-3">
+
         </div>
         <!-- end col-3 -->
         <!-- begin col-3 -->
@@ -127,12 +122,174 @@
                 </div>
                 <div class="panel-body">
                     <h4 class="text-center m-t-20 m-b-20">Receipts per Category <small>Total Receipts: <strong><span id="tot_receipt"></span></strong></small></h4>
+                    <!-- begin chart -->
                     <div id="morris-donut-chart" class="height-sm"></div>
+                    <!-- end chart -->
+                    <!-- begin col-12 -->
+                    <div class="col-lg-12">
+                        <!-- begin row -->
+                        <div class="row">
+                            <!-- begin col-6 -->
+                            <div class="col-lg-6">
+                                <!-- begin row -->
+                                <div class="row">
+                                    <!-- begin col-10 -->
+                                    <div class="col-lg-10 col-md-10">
+                                        <span><i class="fas fa-long-arrow-alt-right m-r-5"></i>Bachelor's Degree</span>
+                                    </div>
+                                    <!-- end col-10 -->
+                                    <!-- begin col-2 -->
+                                    <div class="col-lg-2 col-md-2">
+                                        <span id="b-cat" class="f-w-700">0</span>
+                                    </div>
+                                    <!-- end col-2 -->
+                                </div>
+                                <!-- end row -->
+                            </div>
+                            <!-- end col-6 -->
+                            <!-- begin col-6 -->
+                            <div class="col-lg-6">
+                                <!-- begin row -->
+                                <div class="row">
+                                    <!-- begin col-10 -->
+                                    <div class="col-lg-10 col-md-10">
+                                        <span><i class="fas fa-long-arrow-alt-right m-r-5"></i>Master's Degree</span>
+                                    </div>
+                                    <!-- end col-10 -->
+                                    <!-- begin col-2 -->
+                                    <div class="col-lg-2 col-md-2">
+                                        <span id="m-cat" class="f-w-700">0</span>
+                                    </div>
+                                    <!-- end col-2 -->
+                                </div>
+                                <!-- end row -->
+                            </div>
+                            <!-- end col-6 -->
+                        </div>
+                        <!-- end row -->
+                        <!-- begin row -->
+                        <div class="row">
+                            <!-- begin col-6 -->
+                            <div class="col-lg-6">
+                                <!-- begin row -->
+                                <div class="row">
+                                    <!-- begin col-10 -->
+                                    <div class="col-lg-10 col-md-10">
+                                        <span><i class="fas fa-long-arrow-alt-right m-r-5"></i>Diploma</span>
+                                    </div>
+                                    <!-- end col-10 -->
+                                    <!-- begin col-2 -->
+                                    <div class="col-lg-2 col-md-2">
+                                        <span id="d-cat" class="f-w-700">0</span>
+                                    </div>
+                                    <!-- end col-2 -->
+                                </div>
+                                <!-- end row -->
+                            </div>
+                            <!-- end col-6 -->
+                            <!-- begin col-6 -->
+                            <div class="col-lg-6">
+                                <!-- begin row -->
+                                <div class="row">
+                                    <!-- begin col-10 -->
+                                    <div class="col-lg-10 col-md-10">
+                                        <span><i class="fas fa-long-arrow-alt-right m-r-5"></i>SIS Payment</span>
+                                    </div>
+                                    <!-- end col-10 -->
+                                    <!-- begin col-2 -->
+                                    <div class="col-lg-2 col-md-2">
+                                        <span id="s-cat" class="f-w-700">0</span>
+                                    </div>
+                                    <!-- end col-2 -->
+                                </div>
+                                <!-- end row -->
+                            </div>
+                            <!-- end col-6 -->
+                        </div>
+                        <!-- end row -->
+                        <!-- begin row -->
+                        <div class="row">
+                            <!-- begin col-6 -->
+                            <div class="col-lg-6">
+                                <!-- begin row -->
+                                <div class="row">
+                                    <!-- begin col-10 -->
+                                    <div class="col-lg-10 col-md-10">
+                                        <span><i class="fas fa-long-arrow-alt-right m-r-5"></i>Non-Student</span>
+                                    </div>
+                                    <!-- end col-10 -->
+                                    <!-- begin col-2 -->
+                                    <div class="col-lg-2 col-md-2">
+                                        <span id="n-cat" class="f-w-700">0</span>
+                                    </div>
+                                    <!-- end col-2 -->
+                                </div>
+                                <!-- end row -->
+                            </div>
+                            <!-- end col-6 -->
+                            <!-- begin col-6 -->
+                            <div class="col-lg-6">
+                                <!-- begin row -->
+                                <div class="row">
+                                    <!-- begin col-10 -->
+                                    <div class="col-lg-10 col-md-10">
+                                        <span><i class="fas fa-long-arrow-alt-right m-r-5"></i>Company</span>
+                                    </div>
+                                    <!-- end col-10 -->
+                                    <!-- begin col-2 -->
+                                    <div class="col-lg-2 col-md-2">
+                                        <span id="c-cat" class="f-w-700">0</span>
+                                    </div>
+                                    <!-- end col-2 -->
+                                </div>
+                                <!-- end row -->
+                            </div>
+                            <!-- end col-6 -->
+                        </div>
+                        <!-- end row -->
+                    </div>
+                    <!-- end col-12 -->
                 </div>
             </div>
             <!-- end panel -->
         </div>
         <!-- end col-5 -->
+    </div>
+    <!-- end row -->
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-12 -->
+        <div class="col-lg-12">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <!-- begin panel-heading -->
+                <div class="panel-heading">                       
+                    <h4 class="panel-title"><i class="fas fa-list-ol m-r-5"></i>Payor Category</h4>
+                </div>
+                <!-- end panel-heading -->
+                <!-- begin panel-body -->
+                <div class="panel-body">
+                    <table class="table table-hover table-striped" id="category-table">
+                        <thead>
+                            <th class="text-nowrap" width="10%">No.</th>
+                            <th class="text-nowrap" width="40%">Name</th>
+                            <th class="text-nowrap" width="25%">Category</th>
+                            <th class="text-nowrap" width="10%">Frequency</th>
+                            <th class="text-nowrap text-right" width="15%">Amount</th>
+                        </thead>
+                        <tbody>
+                            <!-- append here -->
+                        </tbody>
+                        <tfoot>
+                            <!-- append here -->
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- end panel-body -->
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-12 -->
     </div>
     <!-- end row -->
 </div>
@@ -178,11 +335,29 @@
         handleDatepicker();
         handleDateRangePicker();
         highlightSideNav();
-        // setTimeout(function() {
-        //     loadReceiptsDonut(d_mon_start, d_today);
-        //     loadReceiptTable(d_mon_start, d_today);
-        // },300);
+
+        setTimeout(function() {
+            loadReceiptsDonut(d_mon_start, d_today);
+            loadReceiptTable(d_mon_start, d_today);
+            loadCatTable(d_mon_start, d_today);
+        },300);
         // document.querySelector("#data-table-combines_length > label > select").setAttribute('style', 'width: 60px;')
+
+        $('#startDate').on('change', function() {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+            loadReceiptsDonut(start, end);
+            loadReceiptTable(start, end);
+            loadCatTable(start, end);
+        });
+
+        $('#endDate').on('change', function() {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+            loadReceiptsDonut(start, end);
+            loadReceiptTable(start, end);
+            loadCatTable(start, end);
+        });
     });
 
     function handleDatepicker() {
@@ -415,6 +590,58 @@
             }
         ],
     });
+
+    var dt_cat_table = $('#category-table').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : true,
+        'autoWidth'   : false,
+        "columns" : [ 
+            { sWidth: '10%' },
+            { sWidth: '40%' },
+            { sWidth: '25%' },
+            { sWidth: '10%' },
+            { sWidth: '15%' }
+        ],
+        pagingType: 'numbers',
+        dom: 'lBfrtip',
+        buttons: [
+        {
+            extend:    'print',
+            text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
+            titleAttr: 'Print',
+            exportOptions: {
+                columns: [0,1,2,3,4]
+            }
+        },
+        {
+            extend:    'excel',
+            text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
+            titleAttr: 'Excel',
+            exportOptions: {
+                columns: [0,1,2,3,4]
+            }
+        },
+        {
+            extend:    'pdf',
+            text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
+            titleAttr: 'PDF',
+            exportOptions: {
+                columns: [0,1,2,3,4]
+            }
+        }
+    ],
+        "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ],
+        columnDefs:[
+            {
+                targets: 4, 
+                className: 'text-right'
+            }
+        ],
+    });
+
     function loadReceiptsDonut(start, end) {
         $.ajax({
             type: "POST",
@@ -431,13 +658,43 @@
                 var val = [];
                 var data = [];
                 var tot = 0;
+                var b_cat = 0;
+                var m_cat = 0;
+                var d_cat = 0;
+                var s_cat = 0;
+                var n_cat = 0;
+                var c_cat = 0;
                 for ( i = 0; i < obj.length; i++) {
                     lbl[i] = obj[i][0];
                     val[i] = parseFloat(obj[i][2]).toFixed(2) % 2 == 0 ? parseInt(obj[i][2]) : parseFloat(obj[i][2]).toFixed(2);
                     data[i] = {label: lbl[i], value: val[i]}; //eto
                     tot = tot + obj[i][1];
+                    if ($.trim(lbl[i]).toLowerCase() == 'bachelor\'s degree') {
+                        b_cat = obj[i][1];
+                    }
+                    else if ($.trim(lbl[i]).toLowerCase() == 'master\'s degree') {
+                        m_cat = obj[i][1];
+                    }
+                    else if ($.trim(lbl[i]).toLowerCase() == 'diploma') {
+                        d_cat = obj[i][1];
+                    }
+                    else if ($.trim(lbl[i]).toLowerCase() == 'non-student') {
+                        n_cat = obj[i][1];
+                    }
+                    else if ($.trim(lbl[i]).toLowerCase() == 'sis payment') {
+                        s_cat = obj[i][1];
+                    }
+                    else if ($.trim(lbl[i]).toLowerCase() == 'company') {
+                        c_cat = obj[i][1];
+                    }
                 }
                 $('#tot_receipt').text(tot);
+                $('#b-cat').text(b_cat);
+                $('#m-cat').text(m_cat);
+                $('#d-cat').text(d_cat);
+                $('#n-cat').text(n_cat);
+                $('#s-cat').text(s_cat);
+                $('#c-cat').text(c_cat);
                 $('#morris-donut-chart').empty();
                 handleMorrisDonusChart();
                 function handleMorrisDonusChart() {
@@ -474,19 +731,42 @@
         loadSpecificCollectionBreakdown(or_num);
     });
 
-    $('#startDate').on('change', function() {
-        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
-        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-        loadReceiptsDonut(start, end);
-        loadReceiptTable(start, end);
-    });
-
-    $('#endDate').on('change', function() {
-        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
-        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-        loadReceiptsDonut(start, end);
-        loadReceiptTable(start, end);
-    });
+    function loadCatTable(start, end) {
+        $.ajax({
+            url: "load_cat_table",
+            type: "POST",
+            cache: false,
+            dataType: 'json',
+            data: {
+                start: start,
+                end: end,
+                csrfmiddlewaretoken: "{{csrf_token}}"
+            },
+            success: function(obj) {
+                dt_cat_table.clear().draw();
+                $.each(obj, function(index, data){
+                    dt_cat_table.row.add([
+                        index+1,
+                        data[0],
+                        data[1],
+                        data[2],
+                        data[3]
+                    ]);
+                });
+                dt_cat_table.draw();
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');

@@ -285,11 +285,35 @@
         $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         FormPlugins.init();
         highlightSideNav();
-        // setTimeout(function() {
-        //     loadCashReceiptCards(d_mon_start, d_today);
-        //     loadTopContrib(d_mon_start, d_today);
-        //     loadDepositOfTheMonthChart(d_mon_start, d_today);
-        // },300);
+        setTimeout(function() {
+            loadCashReceiptCards(d_mon_start, d_today);
+            loadTopContrib(d_mon_start, d_today);
+            loadDepositOfTheMonthChart(d_mon_start, d_today);
+        },300);
+
+        $('#startDate').on('change', function() {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+            loadCashReceiptCards(start, end);
+            loadTopContrib(start, end);
+            $('#dep-month-tot').text('');
+            $('#donut-chart').empty();
+            setTimeout(function() {
+                loadDepositOfTheMonthChart(start, end);
+            },300);
+        });
+
+        $('#endDate').on('change', function() {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+            loadCashReceiptCards(start, end);
+            loadTopContrib(start, end);
+            $('#dep-month-tot').text('');
+            $('#donut-chart').empty();
+            setTimeout(function() {
+                loadDepositOfTheMonthChart(start, end);
+            },300);
+        });
     });
 
     var dt_top_contrib = $('#table-top-contrib').DataTable({
@@ -349,30 +373,6 @@
             }
         });
     };
-
-    $('#startDate').on('change', function() {
-        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
-        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-        loadCashReceiptCards(start, end);
-        loadTopContrib(start, end);
-        $('#dep-month-tot').text('');
-        $('#donut-chart').empty();
-        setTimeout(function() {
-            loadDepositOfTheMonthChart(start, end);
-        },300);
-    });
-
-    $('#endDate').on('change', function() {
-        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
-        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-        loadCashReceiptCards(start, end);
-        loadTopContrib(start, end);
-        $('#dep-month-tot').text('');
-        $('#donut-chart').empty();
-        setTimeout(function() {
-            loadDepositOfTheMonthChart(start, end);
-        },300);
-    });
 
     function loadTopContrib(start, end) {
         $.ajax({

@@ -305,10 +305,31 @@
         $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         FormPlugins.init();
         highlightSideNav();
-        // setTimeout(function() {
-        //     loadAcctFormsDash(d_mon_start, d_today);
-        //     loadORMonthlyReport(d_mon_start, d_today);
-        // },500);
+        setTimeout(function() {
+            loadAcctFormsDash(d_mon_start, d_today);
+            loadORMonthlyReport(d_mon_start, d_today);
+        },500);
+        $('#startDate').on('change', function() {
+            if ($('#startDate').val() != '') {
+                var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+                var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+                setTimeout(function() {
+                    loadAcctFormsDash(start, end);
+                    loadORMonthlyReport(start, end);
+                },500);
+            }
+        });
+
+        $('#endDate').on('change', function() {
+            if ($('#endDate').val() != '') {
+                var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+                var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+                setTimeout(function() {
+                    loadAcctFormsDash(start, end);
+                    loadORMonthlyReport(start, end);
+                },500);
+            }
+        });
     });
 
     function loadYears() {
@@ -538,27 +559,6 @@
         });
     };
 
-    $('#startDate').on('change', function() {
-        if ($('#startDate').val() != '') {
-            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
-            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-            setTimeout(function() {
-                loadAcctFormsDash(start, end);
-                loadORMonthlyReport(start, end);
-            },500);
-        }
-    });
-
-    $('#endDate').on('change', function() {
-        if ($('#endDate').val() != '') {
-            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
-            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-            setTimeout(function() {
-                loadAcctFormsDash(start, end);
-                loadORMonthlyReport(start, end);
-            },500);
-        }
-    });
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');

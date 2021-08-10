@@ -211,8 +211,24 @@
         $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         FormPlugins.init();
         highlightSideNav();
-        // loadCards(d_mon_start, d_today);
-        // loadBarChart(d_mon_start, d_today);
+        setTimeout(function() {
+            loadCards(d_mon_start, d_today);
+            loadBarChart(d_mon_start, d_today);
+        },200);
+
+        $('#startDate').on('change', function() {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+            loadCards(start, end);
+            loadBarChart(start, end);
+        });
+
+        $('#endDate').on('change', function() {
+            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
+            loadCards(start, end);
+            loadBarChart(start, end);
+        });
     });
     var dt_combines = $('#data-table-combines').DataTable({
         'paging'      : true,
@@ -392,20 +408,6 @@
             }
         });
     };
-
-    $('#startDate').on('change', function() {
-        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
-        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-        loadCards(start, end);
-        loadBarChart(start, end);
-    });
-
-    $('#endDate').on('change', function() {
-        var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
-        var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
-        loadCards(start, end);
-        loadBarChart(start, end);
-    });
 
     $('#sum-pdf').on('click', function() {
         $('#sum-pdf-icon').removeClass('fa-file-pdf');

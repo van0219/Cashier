@@ -154,4 +154,6 @@ urlpatterns = [
     path('save_educ_level', views.save_educ_level, name="save_educ_level"),
     path('load_educ_level', views.load_educ_level, name="load_educ_level"),
     path('remove_educ_level', views.remove_educ_level, name="remove_educ_level"),
+    path('load_cat_table', views.load_cat_table, name="load_cat_table"),
+    path('load_dep_search', views.load_dep_search, name="load_dep_search"),
 ]

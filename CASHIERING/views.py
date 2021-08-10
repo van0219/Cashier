@@ -1726,3 +1726,18 @@ def remove_educ_level(request):
                     ,(request.POST['desc'],))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def load_cat_table(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_CAT_TABLE"
+                    ,(request.POST['start']
+                    ,request.POST['end']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_dep_search(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_DEP_SEARCH"
+                    ,(request.POST['group_id'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)

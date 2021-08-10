@@ -231,11 +231,35 @@
         $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         FormPlugins.init();
         highlightSideNav();
-        // setTimeout(function() {
-        //     getColDepCard(d_mon_start, d_today);
-        //     getColDepGroup(d_mon_start, d_today);
-        //     getMonthlyCollectionDeposit(d.getFullYear());
-        // },300);
+        setTimeout(function() {
+            getColDepCard(d_mon_start, d_today);
+            getColDepGroup(d_mon_start, d_today);
+            getMonthlyCollectionDeposit(d.getFullYear());
+        },200);
+
+        $('#startDate').on('change', function() {
+            if ($('#startDate').val() != '') {
+                var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+                var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');        
+                setTimeout(function() {
+                    getColDepCard(start, end);
+                    getColDepGroup(start, end);
+                    getMonthlyCollectionDeposit(new Date($('#startDate').val()).getFullYear());
+                },200);
+            }
+        });
+
+        $('#endDate').on('change', function() {
+            if ($('#endDate').val() != '') {
+                var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
+                var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');        
+                setTimeout(function() {
+                    getColDepCard(start, end);
+                    getColDepGroup(start, end);
+                    getMonthlyCollectionDeposit(new Date($('#startDate').val()).getFullYear());
+                },200);
+            }
+        });
     });
 
     function loadYears() {
@@ -534,30 +558,6 @@
             }
         });
     };
-
-    $('#startDate').on('change', function() {
-        if ($('#startDate').val() != '') {
-            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
-            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');        
-            setTimeout(function() {
-                getColDepCard(start, end);
-                getColDepGroup(start, end);
-                getMonthlyCollectionDeposit(new Date($('#startDate').val()).getFullYear());
-            },500);
-        }
-    });
-
-    $('#endDate').on('change', function() {
-        if ($('#endDate').val() != '') {
-            var start = moment(new Date($('#startDate').val())).format('YYYY/MM/DD');
-            var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');        
-            setTimeout(function() {
-                getColDepCard(start, end);
-                getColDepGroup(start, end);
-                getMonthlyCollectionDeposit(new Date($('#startDate').val()).getFullYear());
-            },500);
-        }
-    });
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');
