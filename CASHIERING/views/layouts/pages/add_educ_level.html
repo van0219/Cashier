@@ -169,8 +169,7 @@
             if ($.trim(desc_new) != '') {
                 $(this).closest('tr').find('td:eq(3)').find('.edit').find('#edit-icon').removeClass('fa-check-circle');
                 $(this).closest('tr').find('td:eq(3)').find('.edit').find('#edit-icon').addClass('fa-spinner fa-pulse');
-                var eto = this;
-                saveEducLevel(desc_b4, desc_new, eto);
+                saveEducLevel(desc_b4, desc_new, this);
             }
             else {
                 $(this).closest('tr').find('td:eq(1)').find('.full').addClass('is-invalid');
@@ -199,6 +198,7 @@
                 $(eto).closest('tr').find('td:eq(3)').find('.edit').removeClass('btn-success');
                 $(eto).closest('tr').find('td:eq(3)').find('.edit').addClass('btn-primary');
                 $(eto).closest('tr').find('td:eq(1)').find('.full').prop('disabled', true);
+                $(eto).closest('tr').find('td:eq(2)').find('#educ-badge').removeClass('badge-primary').addClass('badge-lime').text('Active');
             },
             error: function(xhr, status, error) {
                 swal({
