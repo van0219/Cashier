@@ -173,10 +173,10 @@
                         <!-- end hr -->
                         <!-- begin row -->
                         <div class="row">
-                            <!-- begin col-4 -->
-                            <div class="col-lg-4">
+                            <!-- begin col-3 -->
+                            <div class="col-lg-3">
                                 <div class="form-group row m-b-15 m-t-15">
-                                    <label class="col-md-5 col-sm-5 col-form-label">Income Type <span class="pull-right">:</span></label>
+                                    <label class="col-md-5 col-sm-5 col-form-label">Income Type :</label>
                                     <div class="col-md-7 col-sm-7">
                                         <select class="form-control" data-dropup-auto="false" data-size="10" data-live-search="false" data-style="btn-white"  id="inc-select" data-parsley-excluded="true">
                                             <option value="Please choose" selected disabled>Please choose</option>
@@ -200,7 +200,17 @@
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
-                                    <label class="col-md-5 col-sm-5 col-form-label" for="message">Amount <span class="pull-right">:</span></label>
+                                    <label class="col-md-5 col-sm-5 col-form-label" for="qty">Quantity <span class="pull-right">:</span></label>
+                                    <div class="col-md-3 col-sm-3">
+                                        <input class="form-control text-center" type="text" id="qty" name="qty" data-parsley-excluded="true" value="1" onfocus="this.blur()"/>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 text-nowrap m-t-5">
+                                        <a href="javascript:;" class="btn btn-white btn-sm" id="qty-minus"><i class="fas fa-minus text-danger"></i></a>
+                                        <a href="javascript:;" class="btn btn-white btn-sm" id="qty-plus"><i class="fas fa-plus text-success"></i></a>
+                                    </div>
+                                </div>
+                                <div class="form-group row m-b-15">
+                                    <label class="col-md-5 col-sm-5 col-form-label" for="number">Amount <span class="pull-right">:</span></label>
                                     <div class="col-md-7 col-sm-7">
                                         <input class="form-control" type="number" id="number" name="number" data-parsley-excluded="true" placeholder="Amount in peso"/>
                                     </div>
@@ -212,9 +222,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- end col-4 -->
-                            <!-- begin col-8 -->
-                            <div class="col-lg-8">
+                            <!-- end col-3 -->
+                            <!-- begin col-9 -->
+                            <div class="col-lg-9">
                                 <div class="panel">
                                     <!-- begin panel-heading -->
 
@@ -224,11 +234,12 @@
                                         <table id="data-table-responsives" class="table">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-nowrap">Income Type</th>
-                                                    <th class="text-nowrap">Description</th>
-                                                    <th class="text-nowrap">Nature</th>
-                                                    <th class="text-nowrap">Amount</th>
-                                                    <th style="max-width: 20px;" class="text-nowrap"></th>
+                                                    <th class="text-nowrap" width="20%">Income Type</th>
+                                                    <th class="text-nowrap" width="30%">Description</th>
+                                                    <th class="text-nowrap" width="20%">Nature</th>
+                                                    <th class="text-nowrap" width="10%">Qty</th>
+                                                    <th class="text-nowrap" width="15%">Amount</th>
+                                                    <th class="text-nowrap" width="5%"></th>
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>
@@ -251,7 +262,7 @@
                                     </td>
                                 </table>
                             </div>
-                            <!-- end col-8 -->
+                            <!-- end col-9 -->
                         </div>  
                         <!-- end row -->
                     </form>
@@ -803,6 +814,7 @@
         var uacs = $('#uacs_select').find('option:selected').text();
         var nature = $('#nature-select').find('option:selected').text() == 'Please choose' ? '' : $('#nature-select').find('option:selected').text();
         var amt = parseFloat($('#number').val());
+        var qty = $('#qty').val();
         var amtBox = $('#number').val().trim();
         if (inctype == 'Please choose' || uacs == 'Please choose') {
             if (inctype == 'Please choose') {
@@ -839,6 +851,7 @@
                         </td>
                         <td class="f-s-12">${uacs}</td>
                         <td class="f-s-12">${nature}</td>
+                        <td class="f-s-12">${qty}</td>
                         <td>${amt.toFixed(2)}</td>
                         <td align="center">
                             <a href="javascript:;" class="btn btn-danger btn-icon btn-circle btn-sm remove" title="remove"><i class="fas fa-times"></i></a>
@@ -1004,6 +1017,18 @@
         }
         else {
             $('#or_studnum').prop('disabled', false);
+        }
+    });
+
+    $('#qty-plus').on('click', function() {
+        var qty = $('#qty').val();
+        $('#qty').val(parseInt(qty)+1);
+    });
+
+    $('#qty-minus').on('click', function() {
+        var qty = $('#qty').val();
+        if (parseInt(qty) != 1) {
+            $('#qty').val(parseInt(qty)-1); 
         }
     });
 

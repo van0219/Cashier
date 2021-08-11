@@ -6,7 +6,13 @@
 {% block page-css %}
 <!-- dito yung page css -->
 <link href="{%static 'assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Buttons/css/buttons.bootstrap.min.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/AutoFill/css/autoFill.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/ColReorder/css/colReorder.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/KeyTable/css/keyTable.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/RowReorder/css/rowReorder.bootstrap.min.css' %}" rel="stylesheet" />
+<link href="{%static 'assets/plugins/DataTables/extensions/Select/css/select.bootstrap.min.css' %}" rel="stylesheet" />
 <!--  -->
 <link href="{%static 'assets/plugins/bootstrap-combobox/css/bootstrap-combobox.css' %}" rel="stylesheet" />
 <link href="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
@@ -111,11 +117,11 @@
                 <!-- end panel-heading -->
                 <!-- begin panel-body -->
                 <div class="panel-body">
-                    <table class="table table-hover table-striped">
+                    <table class="table table-hover table-striped" id="stud-tbl">
                         <thead>
-                            <th class="text-center" width="20%">Student No.</th>
-                            <th class="text-center" width="25%">Last Name</th>
-                            <th class="text-center" width="25%">First Name</th>
+                            <th class="text-center" width="5%">No.</th>
+                            <th class="text-center" width="30%">Student No.</th>
+                            <th class="text-center" width="35%">Full Name</th>
                             <th class="text-center" width="30%">Course</th>
                         </thead>
                     </table>
@@ -132,10 +138,24 @@
 <!-- dito yung page-js -->
 <script src="{%static 'assets/plugins/chart-js/Chart.min.js' %}"></script>
 <script src="{%static 'assets/js/demo/chart-js.demo.min.js' %}"></script>
+<!--  -->
 <script src="{%static 'assets/plugins/DataTables/media/js/jquery.dataTables.js' %}"></script>
 <script src="{%static 'assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.bootstrap.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.flash.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/jszip.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/pdfmake.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/vfs_fonts.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Buttons/js/buttons.print.min.js' %}"></script>
 <script src="{%static 'assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js' %}"></script>
-<script src="{%static 'assets/js/demo/table-manage-responsive.demo.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/AutoFill/js/dataTables.autoFill.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/ColReorder/js/dataTables.colReorder.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/KeyTable/js/dataTables.keyTable.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/RowReorder/js/dataTables.rowReorder.min.js' %}"></script>
+<script src="{%static 'assets/plugins/DataTables/extensions/Select/js/dataTables.select.min.js' %}"></script>
+<script src="{%static 'assets/js/demo/table-manage-combine.demo.min.js' %}"></script>
 <!--  -->
 <script src="{%static 'assets/plugins/bootstrap-combobox/js/bootstrap-combobox.js' %}"></script>
 <script src="{%static 'assets/plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
@@ -145,8 +165,93 @@
 <script>
     $(document).ready(function() {
         App.init();
-        TableManageResponsive.init();
-        $('select').selectpicker('render');
+        $('#course').selectpicker('render');
+        $('#educ-level').selectpicker('render');
     });
+
+    loadStudTbl();
+
+    var dt_stud = $('#stud-tbl').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : true,
+        'autoWidth'   : true,
+        'order'       : [0,'asc'],
+        dom: 'lBfrtip',
+    buttons: [
+        {
+            extend:    'print',
+            text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
+            titleAttr: 'Print',
+            exportOptions: {
+                columns: [0,1,2,3]
+            }
+        },
+        {
+            extend:    'excel',
+            text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
+            titleAttr: 'Excel',
+            exportOptions: {
+                columns: [0,1,2,3]
+            }
+        },
+        {
+            extend:    'pdf',
+            text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
+            titleAttr: 'PDF',
+            exportOptions: {
+                columns: [0,1,2,3]
+            }
+        }
+    ],
+    "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ],
+    columnDefs:[
+        {
+            targets:2, render:function(data){
+                return $.trim(data).toUpperCase();
+            },
+        },
+        {
+            targets:[0,1,2,3],
+                className: 'text-center',  
+        },
+    ]
+
+    });
+
+    function loadStudTbl() {
+        $.ajax({
+            url: "load_stud_tbl",
+            type: "POST",
+            cache: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken: "{{csrf_token}}"
+            },
+            success: function(obj) {
+                dt_stud.clear().draw();
+                $.each(obj, function(index, data){
+                    dt_stud.row.add( [
+                        index+1
+                        ,data[0]
+                        ,data[1]
+                        ,data[2]
+                    ] ).draw();
+                });
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
 </script>
 {% endblock %}

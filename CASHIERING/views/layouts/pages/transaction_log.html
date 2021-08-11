@@ -152,13 +152,13 @@
                                     <!-- begin row -->
                                     <div class="row">
                                         <!-- begin col-3 -->
-                                        <div class="col-lg-3 m-t-5">
+                                        <div class="col-lg-3 m-t-5 text-right">
                                             <label for="group-id">Reference Number :</label>
                                         </div>
                                         <!-- end col-3 -->
                                         <!-- begin col-4 -->
                                         <div class="col-lg-4">
-                                            <input type="text" class="form-control" id="group-id"/>
+                                            <input type="text" class="form-control" id="group-id" style="text-transform: uppercase;"/>
                                         </div>
                                         <!-- end col-4 -->
                                         <!-- begin col-2 -->
@@ -171,6 +171,44 @@
                                             <!-- filler -->
                                         </div>
                                         <!-- end col-3 -->
+                                    </div>
+                                    <!-- end row -->
+                                    <!-- begin row -->
+                                    <div class="row m-t-10" id="dep-date-div" style="display: none;">
+                                        <!-- begin col-3 -->
+                                        <div class="col-lg-3 m-t-5 text-right">
+                                            <label for="group-id">Date Deposited :</label>
+                                        </div>
+                                        <!-- end col-3 -->
+                                        <!-- begin col-4 -->
+                                        <div class="col-lg-4">
+                                            <input type="text" class="form-control" id="dep-date"/>
+                                        </div>
+                                        <!-- end col-4 -->
+                                        <!-- begin col-5 -->
+                                        <div class="col-lg-5">
+                                            <!-- filler -->
+                                        </div>
+                                        <!-- end col-5 -->
+                                    </div>
+                                    <!-- end row -->
+                                    <!-- begin row -->
+                                    <div class="row m-t-10" id="dep-amt-div" style="display: none;">
+                                        <!-- begin col-3 -->
+                                        <div class="col-lg-3 m-t-5 text-right">
+                                            <label for="group-id">Amount :</label>
+                                        </div>
+                                        <!-- end col-3 -->
+                                        <!-- begin col-4 -->
+                                        <div class="col-lg-4">
+                                            <input type="text" class="form-control" id="dep-amt"/>
+                                        </div>
+                                        <!-- end col-4 -->
+                                        <!-- begin col-5 -->
+                                        <div class="col-lg-5">
+                                            <!-- filler -->
+                                        </div>
+                                        <!-- end col-5 -->
                                     </div>
                                     <!-- end row -->
                                 </div>
@@ -692,17 +730,38 @@
             },
             success: function(obj) {
                 $('#dep-search-table tbody tr').remove();
-                for (var i = 0; i < obj.length; i++) {
-                    $('#dep-search-table tbody').append(
-                        `<tr>
-                            <td class="text-center">${obj[i][0]}</td>
-                            <td class="text-center">${obj[i][1]}</td>
-                            <td class="text-center">${obj[i][2]}</td>
-                            <td class="text-center">${moment(new Date(obj[i][3])).format('MM/DD/YYYY')}</td>
-                        </tr>`
-                    );
-                }
                 $('#table-count2').text(obj.length);
+                if (obj.length > 0) {
+                    var amt = 0;
+                    for (var i = 0; i < obj.length; i++) {
+                        $('#dep-search-table tbody').append(
+                            `<tr>
+                                <td class="text-center">${obj[i][0]}</td>
+                                <td class="text-center">${obj[i][1]}</td>
+                                <td class="text-center">${obj[i][2]}</td>
+                                <td class="text-center">${moment(new Date(obj[i][3])).format('MM/DD/YYYY')}</td>
+                            </tr>`
+                        );
+                        amt += parseFloat(obj[i][2]);
+                    }
+                    $('#dep-date').val(moment(new Date(obj[0][4])).format('MM/DD/YYYY')).prop('disabled', true);
+                    $('#dep-amt').val('₱'+amt.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")).prop('disabled', true);
+                    $('#dep-date-div').show();
+                    $('#dep-amt-div').show();
+                }
+                else {
+                    $('#dep-date').val('').prop('disabled', true);
+                    $('#dep-amt').val('').prop('disabled', true);
+                    $('#dep-date-div').hide();
+                    $('#dep-amt-div').hide();
+                    swal({
+                        title: "No Record Found", 
+                        text: "Please check the entered reference number.",
+                        type: "warning",
+                        confirmButtonColor: "#428bca",
+                        showLoaderOnConfirm: true
+                    });
+                }
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;

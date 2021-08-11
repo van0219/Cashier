@@ -156,4 +156,5 @@ urlpatterns = [
     path('remove_educ_level', views.remove_educ_level, name="remove_educ_level"),
     path('load_cat_table', views.load_cat_table, name="load_cat_table"),
     path('load_dep_search', views.load_dep_search, name="load_dep_search"),
+    path('load_stud_tbl', views.load_stud_tbl, name="load_stud_tbl"),
 ]

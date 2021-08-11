@@ -1723,7 +1723,8 @@ def load_educ_level(request):
 def remove_educ_level(request):
     cursor = connection.cursor()
     cursor.callproc("SP_REMOVE_EDUC_LEVEL"
-                    ,(request.POST['desc'],))
+                    ,(request.POST['desc']
+                    ,request.POST['stat']))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
@@ -1739,5 +1740,11 @@ def load_dep_search(request):
     cursor = connection.cursor()
     cursor.callproc("SP_LOAD_DEP_SEARCH"
                     ,(request.POST['group_id'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def load_stud_tbl(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_LOAD_STUD_TBL")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
