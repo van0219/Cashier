@@ -559,6 +559,7 @@
             extend:    'print',
             text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
             titleAttr: 'Print',
+            title: 'Receipt List',
             exportOptions: {
                 columns: [0,1,2]
             }
@@ -567,6 +568,7 @@
             extend:    'excel',
             text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
             titleAttr: 'Excel',
+            title: 'Receipt List',
             exportOptions: {
                 columns: [0,1,2]
             }
@@ -575,6 +577,11 @@
             extend:    'pdf',
             text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
             titleAttr: 'PDF',
+            title: 'Receipt List',
+            customize: function (doc) {
+                doc.content[1].table.widths = 
+                    Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+            },
             exportOptions: {
                 columns: [0,1,2]
             }
@@ -612,14 +619,16 @@
             extend:    'print',
             text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
             titleAttr: 'Print',
+            title: 'Payor Category',
             exportOptions: {
-                columns: [0,1,2,3,4]
+                columns: [0,1,2,3,4],
             }
         },
         {
             extend:    'excel',
             text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
             titleAttr: 'Excel',
+            title: 'Payor Category',
             exportOptions: {
                 columns: [0,1,2,3,4]
             }
@@ -628,6 +637,11 @@
             extend:    'pdf',
             text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
             titleAttr: 'PDF',
+            title: 'Payor Category',
+            customize: function (doc) {
+                doc.content[1].table.widths = 
+                    Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+            },
             exportOptions: {
                 columns: [0,1,2,3,4]
             }

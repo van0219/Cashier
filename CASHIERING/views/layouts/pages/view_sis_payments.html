@@ -350,6 +350,7 @@
                 extend:    'print',
                 text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
                 titleAttr: 'Print',
+                title: 'SIS Payments',
                 exportOptions: {
                     columns: [0,1,2]
                 }
@@ -358,6 +359,7 @@
                 extend:    'excel',
                 text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
                 titleAttr: 'Excel',
+                title: 'SIS Payments',
                 exportOptions: {
                     columns: [0,1,2]
                 }
@@ -366,6 +368,11 @@
                 extend:    'pdf',
                 text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
                 titleAttr: 'PDF',
+                title: 'SIS Payments',
+                customize: function (doc) {
+                    doc.content[1].table.widths = 
+                        Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                },
                 exportOptions: {
                     columns: [0,1,2]
                 }
