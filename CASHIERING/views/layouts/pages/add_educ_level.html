@@ -91,8 +91,10 @@
     $(document).ready(function() {
         App.init();
         TableManageResponsive.init();
-        loadEducTbl();
+        highlightSideNav();
     });
+
+    loadEducTbl();
 
     function loadEducTbl() {
         $.ajax({
@@ -108,7 +110,7 @@
                 for (var i = 0; i < obj.length; i++) {
                     var num = $('#educ-tbl tbody tr').length + 1;
                     var r_claz = obj[i][1] == 1 ? 'btn-danger' : 'btn-warning';
-                    var ri_claz = obj[i][1] == 1 ? 'fa-trash-alt' : 'fa-undo';
+                    var ri_claz = obj[i][1] == 1 ? 'fa-ban' : 'fa-undo';
                     var status = obj[i][1] == 1 ? 'badge-lime' : 'badge-secondary';
                     var stat_text = obj[i][1] == 1 ? 'Active' : 'Inactive';
                     $('#educ-tbl tbody').append(
@@ -145,7 +147,7 @@
                 <td class="text-center"><span class="badge badge-primary" id="educ-badge">Pending</span></td>
                 <td class="text-center">
                     <a href="javascript:;" class="btn btn-success btn-md edit"><i class="fas fa-check-circle fa-lg" id="edit-icon"></i></a>
-                    <a href="javascript:;" class="btn btn-danger btn-md remove"><i class="fas fa-trash-alt fa-lg" id="remove-icon"></i></a>        
+                    <a href="javascript:;" class="btn btn-danger btn-md remove"><i class="fas fa-ban fa-lg" id="remove-icon"></i></a>        
                 </td>
             </tr>`
         );
@@ -216,7 +218,7 @@
         var claz = $(this).closest('tr').find('td:eq(3)').find('.remove').prop('class').indexOf('btn-danger');
         if ($(this).closest('tr').find('td:eq(1)').find('.full').prop('disabled') && claz >= 0) {
             removeEducLevel($(this).closest('tr').find('td:eq(1)').find('.full').val(), 0, this);
-            $(this).closest('tr').find('td:eq(3)').find('#remove-icon').removeClass('fa-trash-alt').addClass('fa-spinner fa-pulse');
+            $(this).closest('tr').find('td:eq(3)').find('#remove-icon').removeClass('fa-ban').addClass('fa-spinner fa-pulse');
         }
         else if ($(this).closest('tr').find('td:eq(1)').find('.full').prop('disabled') && claz < 0) {
             removeEducLevel($(this).closest('tr').find('td:eq(1)').find('.full').val(), 1, this);
@@ -244,7 +246,7 @@
             },
             success: function(obj) {
                 if (stat == 1) {
-                    $(eto).closest('tr').find('td:eq(3)').find('#remove-icon').removeClass('fa-spinner fa-pulse').addClass('fa-trash-alt');
+                    $(eto).closest('tr').find('td:eq(3)').find('#remove-icon').removeClass('fa-spinner fa-pulse').addClass('fa-ban');
                     $(eto).closest('tr').find('td:eq(3)').find('.remove').removeClass('btn-warning').addClass('btn-danger');
                     $(eto).closest('tr').find('td:eq(2)').find('#educ-badge').removeClass('badge-secondary').addClass('badge-lime').text('Active');
                 }
@@ -277,5 +279,21 @@
             $(this).closest('tr').find('td:eq(1)').find('.full').prop('style', 'text-transform: capitalize;');
         }
     });
+
+    function highlightSideNav() {
+        $('#li-dash').removeClass('text-white');
+        $('#li-user-mngt').removeClass('text-white');
+        $('#li-add').removeClass('text-white');
+        $('#li-edit').removeClass('text-white');
+        $('#li-conf').removeClass('text-white');
+        $('#li-orsetup').removeClass('text-white');
+        $('#setup').removeClass('text-white');
+        $('#li-email').removeClass('text-white');
+        $('#li-stud-mngt').addClass('text-white');
+        $('#li-stud-mngt').click();
+        $('#li-add-stud').removeClass('text-white');
+        $('#li-educ-level').addClass('text-white');
+        $('#li-add-course').removeClass('text-white');
+    };
 </script>
 {% endblock %}

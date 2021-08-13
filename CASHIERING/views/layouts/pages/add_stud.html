@@ -165,11 +165,42 @@
 <script>
     $(document).ready(function() {
         App.init();
+        highlightSideNav();
         $('#course').selectpicker('render');
         $('#educ-level').selectpicker('render');
+        loadEducLevel();
     });
 
     loadStudTbl();
+
+    function loadEducLevel() {
+        $.ajax({
+            url: "load_educ_level",
+            type: "POST",
+            cache: false,
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken: "{{csrf_token}}"
+            },
+            success: function(obj) {
+                $.each(obj, function(index, option){
+                    if (option[1] == 1) {
+                        $('#educ-level').append( new Option(option[0],option[0])); //value and text
+                    }
+                });
+                $('#educ-level').selectpicker('refresh');
+            },
+            error: function(xhr, status, error) {
+                swal({
+                    title: "Error!", 
+                    text: error,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                });
+            }
+        });
+    };
 
     var dt_stud = $('#stud-tbl').DataTable({
         'paging'      : true,
@@ -213,7 +244,7 @@
             }
         }
     ],
-    "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ],
+    "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
     columnDefs:[
         {
             targets:2, render:function(data){
@@ -259,6 +290,22 @@
                 })
             }
         });
+    };
+
+    function highlightSideNav() {
+        $('#li-dash').removeClass('text-white');
+        $('#li-user-mngt').removeClass('text-white');
+        $('#li-add').removeClass('text-white');
+        $('#li-edit').removeClass('text-white');
+        $('#li-conf').removeClass('text-white');
+        $('#li-orsetup').removeClass('text-white');
+        $('#setup').removeClass('text-white');
+        $('#li-email').removeClass('text-white');
+        $('#li-stud-mngt').addClass('text-white');
+        $('#li-stud-mngt').click();
+        $('#li-add-stud').addClass('text-white');
+        $('#li-educ-level').removeClass('text-white');
+        $('#li-add-course').removeClass('text-white');
     };
 </script>
 {% endblock %}

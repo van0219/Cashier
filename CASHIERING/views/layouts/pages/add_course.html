@@ -83,8 +83,11 @@
     $(document).ready(function() {
         App.init();
         TableManageResponsive.init();
-        loadEducLevel();
+        highlightSideNav();
+        $('#educ-level').selectpicker('render');
     });
+
+    loadEducLevel();
 
     $('#add-educ-btn').on('click', function() {
         var num = $('#course-tbl tbody tr').length + 1;
@@ -122,9 +125,12 @@
                     `<option selected disabled>Select level of education</option>`
                 );
                 $.each(obj, function(index, option){
-                    $('#educ-level' + num).append( new Option(option,option)); //value and text
+                    if (option[1] == 1) {
+                        $('#educ-level' + num).append( new Option(option[0],option[0])); //value and text 
+                    }
                 });
                 $('#educ-level'+ num +' option').prop('style', 'font-size: 11px;')
+                $('#educ-level' + num).selectpicker('refresh');
             },
             error: function(xhr, status, error) {
                 swal({
@@ -189,5 +195,21 @@
             }
         }
     });
+
+    function highlightSideNav() {
+        $('#li-dash').removeClass('text-white');
+        $('#li-user-mngt').removeClass('text-white');
+        $('#li-add').removeClass('text-white');
+        $('#li-edit').removeClass('text-white');
+        $('#li-conf').removeClass('text-white');
+        $('#li-orsetup').removeClass('text-white');
+        $('#setup').removeClass('text-white');
+        $('#li-email').removeClass('text-white');
+        $('#li-stud-mngt').addClass('text-white');
+        $('#li-stud-mngt').click();
+        $('#li-add-stud').removeClass('text-white');
+        $('#li-educ-level').removeClass('text-white');
+        $('#li-add-course').addClass('text-white');
+    };
 </script>
 {% endblock %}
