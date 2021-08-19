@@ -1748,3 +1748,29 @@ def load_stud_tbl(request):
     cursor.callproc("SP_LOAD_STUD_TBL")
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
+
+def backup_db(request):
+    # Import required python libraries
+
+    import os
+    import pipes
+
+    DB_HOST = 'localhost' 
+    DB_USER = 'root'
+    DB_USER_PASSWORD = ''
+    DB_NAME = 'cashiering_db'
+    BACKUP_PATH = 'CASHIERING/views/layouts/db_backup'
+
+    # Checking if backup folder already exists or not. If not exists will create it.
+    try:
+        os.stat(BACKUP_PATH)
+    except:
+        os.mkdir(BACKUP_PATH)
+
+    # Starting actual database backup process.
+    db = DB_NAME
+    dumpcmd = "mysqldump -h " + DB_HOST + " -u " + DB_USER + " -p" + DB_USER_PASSWORD + " " + db + " > " + pipes.quote(BACKUP_PATH) + "/" + db + ".sql"
+    os.system(dumpcmd)
+    gzipcmd = "gzip " + pipes.quote(BACKUP_PATH) + "/" + db + ".sql"
+    os.system(gzipcmd)
+    return JsonResponse(BACKUP_PATH + db +'.sql', safe=False)

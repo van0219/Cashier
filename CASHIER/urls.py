@@ -157,4 +157,5 @@ urlpatterns = [
     path('load_cat_table', views.load_cat_table, name="load_cat_table"),
     path('load_dep_search', views.load_dep_search, name="load_dep_search"),
     path('load_stud_tbl', views.load_stud_tbl, name="load_stud_tbl"),
+    path('backup_db', views.backup_db, name="backup_db"),
 ]

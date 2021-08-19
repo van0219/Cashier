@@ -79,7 +79,7 @@
                 <div class="panel-body">
                     <form class="form-horizontal" name="demo-form" id="add-uacs-form" autocomplete="off">
                         <div class="form-group row m-b-15">
-                            <label class="col-md-4 col-sm-4 col-form-label" for="fndtype">Fund Type <span class="text-red">*</span> :</label>
+                            <label class="col-md-4 col-sm-4 col-form-label" for="fndtype">Fund Type <span class="pull-right"><span class="text-red">*</span>:</span></label>
                             <div class="col-md-8 col-sm-8">
                                 <select class="form-control selectpicker1" name="fndtype" id="fndtype" data-style="btn-white">
                                     <option selected disabled class="text-grey-darker optdummy1" style="display: block;">Select Fund Type</option>
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                         <div class="form-group row m-b-15">
-                            <label class="col-md-4 col-sm-4 col-form-label f-s-12" for="inctype">Income Type <span class="text-red">*</span> :</label>
+                            <label class="col-md-4 col-sm-4 col-form-label f-s-12" for="inctype">Income Type <span class="pull-right"><span class="text-red">*</span>:</span></label>
                             <div class="col-md-8 col-sm-8">
                                 <select class="form-control selectpicker2" name="inctype" id="inctype" data-style="btn-white">
                                     <option selected disabled class="text-grey-darker optdummy2" style="display: block;">Select Income Type</option>
@@ -95,32 +95,32 @@
                             </div>
                         </div>
                         <div class="form-group row m-b-15">
-                            <label class="col-md-4 col-sm-4 col-form-label" for="code">Old Code :</label>
+                            <label class="col-md-4 col-sm-4 col-form-label" for="code">Old Code <span class="pull-right">:</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="text" id="o_code" name="o_code" placeholder="Old Code" />
                             </div>
                             <div class="col-md-2 col-sm-2 m-t-15" style="margin-left: -10px;">
-                                <input class="" style="margin-right: 3px;" type="checkbox" id="o_check" name="o_check" title="Click if old code is not applicable"/><small>N/A</small>
+                                <input class="" style="margin-right: 3px;" type="checkbox" id="o_check" name="o_check" title="Click if old code is not applicable"/><label for="o_check"><small>N/A</small></label>
                             </div>
                         </div>
                         <div class="form-group row m-b-15">
-                            <label class="col-md-4 col-sm-4 col-form-label" for="code">New Code <span class="text-red">*</span> :</label>
+                            <label class="col-md-4 col-sm-4 col-form-label" for="code">New Code <span class="pull-right"><span class="text-red">*</span>:</span></label>
                             <div class="col-md-8 col-sm-8">
                                 <input class="form-control" type="text" id="code" name="code" placeholder="New Code" data-parsley-required="true" data-parsley-required-message="UACS code is required" />
                             </div>
                         </div>
                         <div class="form-group row m-b-15">
-                            <label class="col-md-4 col-sm-4 col-form-label" for="desc">Description <span class="text-red">*</span> :</label>
+                            <label class="col-md-4 col-sm-4 col-form-label" for="desc">Description <span class="pull-right"><span class="text-red">*</span>:</span></label>
                             <div class="col-md-8 col-sm-8">
                                 <input class="form-control" type="text" id="desc" name="desc" placeholder="Description" data-parsley-required="true" data-parsley-required-message="Description is required" />
                             </div>
                         </div>
-                        <!-- <div class="form-group row m-b-15">
-                            <label class="col-md-4 col-sm-4 col-form-label" for="desc">Amount <span class="text-red">*</span> :</label>
+                        <div class="form-group row m-b-15">
+                            <label class="col-md-4 col-sm-4 col-form-label" for="desc">Price <span class="pull-right">:</span></label>
                             <div class="col-md-8 col-sm-8">
-                                <input class="form-control" type="number" id="amt" name="amt" placeholder="Amount in peso" data-parsley-type="digits" data-parsley-required="true" />
+                                <input class="form-control" type="number" id="price" name="price" placeholder="Price per item" />
                             </div>
-                        </div> -->
+                        </div>
                         <div class="form-group row m-b-0">
                             <label class="col-md-4 col-sm-4 col-form-label">&nbsp;</label>
                             <div class="col-md-8 col-sm-8">
@@ -2315,11 +2315,15 @@
         $('#li-user-mngt').removeClass('text-white');
         $('#li-add').removeClass('text-white');
         $('#li-edit').removeClass('text-white');
+        $('#li-conf').removeClass('text-white');
         $('#li-conf').click();
-        $('#li-conf').addClass('text-white');
         $('#li-orsetup').removeClass('text-white');
         $('#setup').addClass('text-white');
         $('#li-email').removeClass('text-white');
+        $('#li-stud-mngt').removeClass('text-white');
+        $('#li-add-stud').removeClass('text-white');
+        $('#li-educ-level').removeClass('text-white');
+        $('#li-add-course').removeClass('text-white');
     };
 </script>
 {% endblock %}
