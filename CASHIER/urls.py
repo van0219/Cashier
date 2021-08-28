@@ -158,4 +158,6 @@ urlpatterns = [
     path('load_dep_search', views.load_dep_search, name="load_dep_search"),
     path('load_stud_tbl', views.load_stud_tbl, name="load_stud_tbl"),
     path('backup_db', views.backup_db, name="backup_db"),
+    path('check_price', views.check_price, name="check_price"),
+    path('check_price_nature', views.check_price_nature, name="check_price_nature"),
 ]

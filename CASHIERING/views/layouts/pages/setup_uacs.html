@@ -118,7 +118,7 @@
                         <div class="form-group row m-b-15">
                             <label class="col-md-4 col-sm-4 col-form-label" for="desc">Price <span class="pull-right">:</span></label>
                             <div class="col-md-8 col-sm-8">
-                                <input class="form-control" type="number" id="price" name="price" placeholder="Price per item" />
+                                <input class="form-control" type="digit" id="price" name="price" placeholder="Price per item" />
                             </div>
                         </div>
                         <div class="form-group row m-b-0">
@@ -173,6 +173,7 @@
                                                 <th class="text-nowrap">Description</th>
                                                 <th class="text-nowrap">Fund Type</th>
                                                 <th class="text-nowrap">Income Type</th>
+                                                <th class="text-nowrap">Price</th>
                                                 <th class="text-nowrap text-center">Options</th>
                                             </tr>
                                         </thead>
@@ -185,6 +186,7 @@
                                                 <td style="max-width: 100px;" title="{{val.4}}">{{val.4}}</td>
                                                 <td>{{val.2}}</td>
                                                 <td>{{val.3}}</td>
+                                                <td>{{val.6}}</td>
                                                 <td align="center">
                                                     <a href="#view_modal" class="btn btn-xs btn-primary view" data-toggle="modal"><i class="fas fa-eye m-r-5"></i>View</a>
                                                     <a href="javascript:;" class="btn btn-xs btn-danger remove"><i class="fas fa-trash m-r-5"></i>Remove</a>
@@ -221,6 +223,7 @@
                                                 <th class="text-nowrap">Description</th>
                                                 <th class="text-nowrap">Fund Type</th>
                                                 <th class="text-nowrap">Income Type</th>
+                                                <th class="text-nowrap">Price</th>
                                                 <th class="text-nowrap text-center">Options</th>
                                             </tr>
                                         </thead>
@@ -233,6 +236,7 @@
                                                 <td style="max-width: 100px;" class="text-ellipsis" title="{{val.4}}">{{val.4}}</td>
                                                 <td>{{val.2}}</td>
                                                 <td>{{val.3}}</td>
+                                                <td>{{val.6}}</td>
                                                 <td align="center">
 
                                                 </td>
@@ -539,6 +543,12 @@
                                             <input class="form-control" type="text" id="desc-name" name="desc-name" placeholder="Description" data-parsley-required="true" data-parsley-required-message="Description is required"/>
                                         </div>
                                     </div>
+                                    <div class="form-group row m-b-15">
+                                        <label class="col-md-4 col-sm-4 col-form-label" for="price-m">Price <span class="text-red">*</span> :</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" id="price-m" name="price-m" placeholder="NA"/>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                             <!-- end panel-body -->
@@ -584,7 +594,7 @@
                                     <div class="form-group row m-b-15">
                                         <label class="col-md-5 col-sm-5 col-form-label" for="editFund-desc">Fund Description <span class="text-red">*</span> :</label>
                                         <div class="col-md-7 col-sm-7">
-                                            <input class="form-control" type="text" id="editFund-desc" name="editFund-desc" placeholder="Fund Description" data-parsley-required="true" data-parsley-required-message="Fund description is required" style="text-transform: uppercase;" />
+                                            <input class="form-control" type="text" id="editFund-desc" name="editFund-desc" placeholder="Fund Description" data-parsley-required="true" data-parsley-required-message="Fund description is required" style="text-transform: uppercase;" readonly/>
                                         </div>
                                     </div>
                                 </form>
@@ -1270,8 +1280,7 @@
 
         ],
         columnDefs:[{targets:1, render:function(data){
-            return `<a href="#editInc" class="btn btn-xs btn-primary editIncBtn" data-toggle="modal"><i class="fas fa-edit m-r-5"></i>Edit</a>
-                   <a href="javascript:;" class="btn btn-xs btn-danger deleteIncBtn"><i class="fas fa-trash m-r-5"></i>Delete</a>`;
+            return `<a href="javascript:;" class="btn btn-xs btn-danger deleteIncBtn"><i class="fas fa-trash m-r-5"></i>Delete</a>`;
         }}]
     });
     var dt_combines = $('#data-table-combines').DataTable({
@@ -1289,6 +1298,7 @@
             { sWidth: '40%' },
             { sWidth: '0%' },
             { sWidth: '0%' },
+            { sWidth: '0%' },
             { sWidth: '15%' }
         ],
         dom: 'lBfrtip',
@@ -1298,7 +1308,7 @@
             text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
             titleAttr: 'Print',
             exportOptions: {
-                columns: [0,1,2,3,4]
+                columns: [0,1,2,3,4,5]
             }
         },
         {
@@ -1306,7 +1316,7 @@
             text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
             titleAttr: 'Excel',
             exportOptions: {
-                columns: [0,1,2,3,4]
+                columns: [0,1,2,3,4,5]
             }
         },
         {
@@ -1314,24 +1324,24 @@
             text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
             titleAttr: 'PDF',
             exportOptions: {
-                columns: [0,1,2,3,4]
+                columns: [0,1,2,3,4,5]
             }
         }
     ],
         "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ],
         columnDefs:[
             {
-                targets:5, render:function(data){
+                targets:6, render:function(data){
                     return `<a href="#view_modal" class="btn btn-xs btn-primary view" data-toggle="modal" title="View"><i class="fas fa-eye"></i></a>
                             <a href="javascript:;" class="btn btn-xs btn-danger remove" title="Remove"><i class="fas fa-trash"></i></a>`;
-                }
+                }, orderable: false
             },
             {
                 targets:2,
                 className: 'col-3-4-w',              
             },
             {
-                targets:[3,4],
+                targets:[3,4,5],
                 visible: false,
             }
         ],
@@ -1382,6 +1392,7 @@
             { sWidth: '45%' },
             { sWidth: '0%' },
             { sWidth: '0%' },
+            { sWidth: '0%' },
             { sWidth: '10%' }
         ],
         dom: 'lBfrtip',
@@ -1391,7 +1402,7 @@
             text:      '<i class="fas fa-print text-orange-lighter f-s-16"></i>',
             titleAttr: 'Print',
             exportOptions: {
-                columns: [0,1,2,3,4]
+                columns: [0,1,2,3,4,5]
             }
         },
         {
@@ -1399,7 +1410,7 @@
             text:      '<i class="fas fa-file-excel text-green-lighter f-s-16"></i>',
             titleAttr: 'Excel',
             exportOptions: {
-                columns: [0,1,2,3,4]
+                columns: [0,1,2,3,4,5]
             }
         },
         {
@@ -1407,30 +1418,30 @@
             text:      '<i class="fas fa-file-pdf text-red-lighter f-s-16"></i>',
             titleAttr: 'PDF',
             exportOptions: {
-                columns: [0,1,2,3,4]
+                columns: [0,1,2,3,4,5]
             }
         }
     ],
         "lengthMenu": [ [5, 25, 50, -1], [5, 25, 50, "All"] ],
         columnDefs:[
             {
-                targets:5, render:function(data){
+                targets:6, render:function(data){
                     return '<a href="javascript:;" class="btn btn-xs btn-warning redo" title="Restore" style="cursor: pointer;" ><i class="fas fa-undo-alt"></i></a>';
-                }
+                },orderable: false
             },
             {
                 targets:2,
                 className: 'col-3-4',              
             },
             {
-                targets:[3,4],
+                targets:[3,4,5],
                 visible: false,
             }
         ]
     });
 
     $('#data-table-combines2 tbody').on('click', '.redo', function() {
-        dt_combines2.columns([3,4]).visible(true);
+        dt_combines2.columns([3,4,5]).visible(true);
         var desc = $(this).closest('tr').find('td:eq(2)').html();
         var rowIdx = dt_combines2.row($(this).closest('tr')).index();
         var row = dt_combines2.row(rowIdx);
@@ -1465,7 +1476,7 @@
                         csrfmiddlewaretoken:"{{csrf_token}}"
                     },
                     success: function(obj) {
-                        dt_combines2.columns([3,4]).visible(false);
+                        dt_combines2.columns([3,4,5]).visible(false);
                         loadUACSdata();
                         swal({
                             title: "Restored Successfully", 
@@ -1488,13 +1499,13 @@
                 });
             }
             else {
-                dt_combines2.columns([3,4]).visible(false);
+                dt_combines2.columns([3,4,5]).visible(false);
             }
         });
     });
 
     $('#data-table-combines tbody').on( 'click', '.remove', function () {
-        dt_combines.columns([3,4]).visible(true);
+        dt_combines.columns([3,4,5]).visible(true);
         var desc = $(this).closest('tr').find('td:eq(2)').html();
         var rowIdx = dt_combines.row($(this).closest('tr')).index();
         var row = dt_combines.row(rowIdx);
@@ -1530,7 +1541,7 @@
                         csrfmiddlewaretoken:"{{csrf_token}}"
                     },
                     success: function(obj) {
-                        dt_combines.columns([3,4]).visible(false);
+                        dt_combines.columns([3,4,5]).visible(false);
                         swal({
                             title: "Removed Successfully", 
                             text: desc.toUpperCase() + "\nwas transferred to the Inactive tab!", 
@@ -1552,7 +1563,7 @@
                 });
             }
             else {
-                dt_combines.columns([3,4]).visible(false);
+                dt_combines.columns([3,4,5]).visible(false);
             }
         });
     });
@@ -1561,13 +1572,15 @@
     //     return $('#view_modal').is(':visible');
     // };
     $('#view_modal').on('hidden.bs.modal', function (e) {
-        dt_combines.columns([3,4]).visible(false);
-    })
+        dt_combines.columns([3,4,5]).visible(false);
+    });
+
     var comp_fnd_type = '';
     var comp_inc_type = '';
     var id = '';
+
     $('#data-table-combines tbody').on('click', '.view', function() {
-        dt_combines.columns([3,4]).visible(true);
+        dt_combines.columns([3,4,5]).visible(true);
         $('#view_editBtn').removeClass('btn-success');
         $('#view_editBtn').addClass('btn-primary');
         $('#view_editBtn').text('Edit');
@@ -1600,29 +1613,34 @@
         $('#old-code').val($(this).closest('tr').find('td:eq(0)').html());
         $('#new-code').val($(this).closest('tr').find('td:eq(1)').html());
         $('#desc-name').val($(this).closest('tr').find('td:eq(2)').html());
+        $('#price-m').val($(this).closest('tr').find('td:eq(5)').html())
         document.getElementById( "old-code" ).setAttribute('readonly',true);
         document.getElementById( "new-code" ).setAttribute('readonly',true);
         document.getElementById( "fnd-type" ).setAttribute('disabled',true);
         document.getElementById( "inc-type" ).setAttribute('disabled',true);
         document.getElementById( "desc-name" ).setAttribute('readonly',true);
+        document.getElementById( "price-m" ).setAttribute('readonly',true);
     });
+
     $('#view_editBtn').on('click', function() {
         comp_fnd_type = '';
         comp_inc_type = '';
         var txt = $('#view_editBtn').text();
-        var old_code = $('#old-code').val();
-        var new_code = $('#new-code').val();
+        var old_code = $('#old-code').val().trim();
+        var new_code = $('#new-code').val().trim();
         var fnd_type = $('#fnd-type').find("option:selected").text();
         var inc_type = $('#inc-type').find("option:selected").text();
-        var desc_name = $('#desc-name').val();
+        var desc_name = $('#desc-name').val().trim();
+        var price = $('#price-m').val().trim();
         $('#view_editBtn').removeClass('btn-primary');
         $('#view_editBtn').addClass('btn-success');
-        if(txt == 'Edit') {
+        if(txt.toUpperCase() == 'EDIT') {
             document.getElementById( "old-code" ).removeAttribute('readonly');
             document.getElementById( "new-code" ).removeAttribute('readonly');
             document.getElementById( "fnd-type" ).removeAttribute('disabled');
             document.getElementById( "inc-type" ).removeAttribute('disabled');
             document.getElementById( "desc-name" ).removeAttribute('readonly');
+            document.getElementById( "price-m" ).removeAttribute('readonly');
             $('#view_editBtn').text('Update');
         }
         else if(txt == 'Update') {
@@ -1652,6 +1670,7 @@
                             fnd_type: fnd_type,
                             inc_type: inc_type,
                             desc_name: desc_name,
+                            price: price,
                             csrfmiddlewaretoken:"{{csrf_token}}"
                         },
                         success: function(obj) {
@@ -1691,6 +1710,7 @@
         var o_code = $('#o_code').val().trim() == '' ? 'N/A' : $('#o_code').val().trim();
         var code = $('#code').val().trim();
         var desc = $('#desc').val().trim().toUpperCase();
+        var price = $('#price').val().trim();
         var fnd_empty = 0;
         var inc_empty = 0;
 
@@ -1735,6 +1755,7 @@
                                 o_code: o_code,
                                 code: code,
                                 desc: desc,
+                                price: price,
                                 csrfmiddlewaretoken:"{{csrf_token}}"
                             },
                             timeout: 5000,
@@ -1754,6 +1775,7 @@
                                         $('#code').val('');
                                         $('#o_code').val('');
                                         $('#desc').val('');
+                                        $('#price').val('');
                                     }
                                 })
                             },
@@ -1923,7 +1945,8 @@
                             data[0],
                             data[4],
                             data[2],
-                            data[3]
+                            data[3],
+                            data[6]
                         ]);
                     }
                 })

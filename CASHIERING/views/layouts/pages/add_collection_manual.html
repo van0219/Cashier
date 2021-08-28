@@ -441,7 +441,7 @@
             },
             success: function(obj) {
                 $.each(obj, function(index, option){
-                    $('#educ-levels').append( new Option(option,option)); //value and text
+                    $('#educ-levels').append( new Option(option[0],option[0])); //value and text
                 });
                 $('#educ-levels option').prop('style', 'font-size: 11px;')
                 $('#educ-levels').selectpicker('refresh');
@@ -463,7 +463,7 @@
         var collected = parseFloat($('#r_grandtotal').text().substring(1).replace(/,/g,''));
         var studno = $('#r_studnum').text();
         var client = $('#r_name').text(); 
-        var educ_level = $('#radiorequired2').prop('checked')  ? '' : $('#radiorequired').prop('checked') ? 'NON-STUDENT' : $('.individual_sel').val();
+        var educ_level = $('#radiorequired2').prop('checked')  ? '' : $('#radiorequired').prop('checked') ? 'NON-STUDENT' : $('#educ-levels').selectpicker('val');
         var userID = getCurrentUserID;
         var is_direct = $('#direct_deposit_checkbox').prop('checked') ? 1 : 0;
         $.ajax({
@@ -507,7 +507,7 @@
         for (var i = 0; i < dt_res_len; i++) {
             var desc = dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text();
             var nature = dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text();
-            var amt = dt_res.find('tr:eq('+ i +')').find('td:eq(3)').text();
+            var amt = dt_res.find('tr:eq('+ i +')').find('td:eq(4)').text();
             $.ajax({
                 type: "POST",
                 url: "{% url 'insert_collection_breakdown' %}",
@@ -680,6 +680,8 @@
         }
     });
 
+    var quty = 1;
+
     function no_err_when_save_collection() {
         var ornum = $('#or_num').val();
         if ($('#data-table-responsives tbody tr').length > 0) {
@@ -690,9 +692,9 @@
                 $('.table-invoice tbody').append(
                     `<tr>
                         <td>
-                            <span class="text-inverse" id="r_desc">${dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text() + (dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text() != '' ? ' ('+dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()+')' : '')}</span><br />
+                            <span class="text-inverse" id="r_desc">${quty + ' ' +dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text() + (dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text() != '' ? ' ('+dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()+')' : '')}</span><br />
                         </td>
-                        <td class="text-center" id="r_amount">${dt_res.find('tr:eq('+ i +')').find('td:eq(3)').text()}</td>
+                        <td class="text-center" id="r_amount">${dt_res.find('tr:eq('+ i +')').find('td:eq(4)').text()}</td>
                     </tr>`
                 );
             }
@@ -843,6 +845,7 @@
             $('#inc-select').removeClass('is-invalid');
             $('#uacs_select').removeClass('is-invalid');
             if (amtBox != '' && amtBox.length != 0) {
+                quty = $('#qty').val();
                 $('#number').removeClass('is-invalid');
                 $('#data-table-responsives tbody').append(
                     `<tr>
@@ -863,7 +866,7 @@
                 $('#inc-select').selectpicker('val','Please choose');
                 $('#uacs_select').selectpicker('val','Please choose');
                 $('#nature-select').selectpicker('val','Please choose');
-                $('#number').val('');
+                $('#number').val('').prop('readonly', false);
             }
             else {
                 $('#number').addClass('is-invalid');
@@ -876,14 +879,20 @@
         }
         else {
             $('#inc-select').selectpicker().removeClass('is-invalid');
+            $('#nature-div').hide();
+            $('#number').val('').prop('readonly', false);
         }
     });
     $('#uacs_select').on('change', function() {
         if ($('#uacs_select').val() == 'Please choose') {
             $('#uacs_select').addClass('is-invalid');
+            $('#nature-div').hide();
+            $('#number').val('').prop('readonly', false);
         }
         else {
             $('#uacs_select').removeClass('is-invalid');
+            $('#nature-div').hide();
+            $('#number').val('').prop('readonly', false);
             var uacs = $('#uacs_select').val();
             $.ajax({
                 type: "POST",
@@ -896,7 +905,7 @@
                 },
                 success: function(obj) {
                     if (obj.length != 0) {
-                        $('#nature-div').show();
+                        $('#nature-div').show(); 
                         $('#nature-select').empty();
                         $('#nature-select').append(new Option('Please choose')).select();
                         $('#nature-select').find('option:selected').prop('disabled',true);                
@@ -904,11 +913,13 @@
                             $('#nature-select').append( new Option(option[0],option[0])); //text and value
                         });
                         $('#nature-select option').prop('style', 'font-size: 11px;');
-                        $('#nature-select').selectpicker('refresh');
+                        $('#nature-select').selectpicker('refresh');                       
                     }
                     else {
                         $('#nature-div').hide();
+                        checkPrice($('#uacs_select').selectpicker('val'));
                     }
+                    $('#qty').val('1');
                 },
                 error: function(xhr, status, error) {
                     var errMsg = xhr.status + ': ' + xhr.statusText;
@@ -923,6 +934,79 @@
             }); 
         }
     });
+
+    $('#nature-select').on('change', function() {
+        checkPriceNature($('#nature-select').selectpicker('val'));
+    });
+
+    function checkPrice(uacs) {
+        $.ajax({
+            type: 'POST',
+            url: '{% url "check_price" %}',
+            cache: true,
+            dataType: 'json',
+            data: {
+                uacs: uacs,
+                csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+            success: function(obj) {
+                if (obj[0][0] != null) {
+                    var price = parseFloat(obj);
+                    var qty = parseFloat($('#qty').val());
+                    var amt = price * qty;
+                    $('#number').val(amt.toFixed(2)).prop('readonly', true);
+                }
+                else {
+                    $('#number').val('').prop('readonly', false);
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+
+    function checkPriceNature(name) {
+        $.ajax({
+            type: 'POST',
+            url: '{% url "check_price_nature" %}',
+            cache: true,
+            dataType: 'json',
+            data: {
+                name: name,
+                csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+            success: function(obj) {
+                if (obj[0][0] != null) {
+                    var price = parseFloat(obj);
+                    var qty = parseFloat($('#qty').val());
+                    var amt = price * qty;
+                    $('#number').val(amt.toFixed(2)).prop('readonly', true);
+                }
+                else {
+                    $('#number').val('').prop('readonly', false);
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+
     $('#number').on('input', function() {
         if ($('#number').val().trim().length == 0) {
             $('#number').addClass('is-invalid');
@@ -939,7 +1023,7 @@
     });
 
     $('#data-table-responsives tbody').on('click', '.remove', function() {
-        minus_fee = $(this).closest('tr').find('td:eq(3)').html();
+        minus_fee = $(this).closest('tr').find('td:eq(4)').html();
         total_fee = total_fee - parseFloat(minus_fee);
         $('#total-fee').text(total_fee.toFixed(2));
         $(this).closest('tr').remove();
@@ -1021,14 +1105,24 @@
     });
 
     $('#qty-plus').on('click', function() {
-        var qty = $('#qty').val();
-        $('#qty').val(parseInt(qty)+1);
+        if ($('#number').val().trim().length != 0) {
+            var qty = $('#qty').val();
+            $('#qty').val(parseInt(qty)+1);
+            var amt = parseFloat($('#number').val())/qty;
+            qty++;
+            $('#number').val((amt * qty).toFixed(2));
+        }
     });
 
     $('#qty-minus').on('click', function() {
-        var qty = $('#qty').val();
-        if (parseInt(qty) != 1) {
-            $('#qty').val(parseInt(qty)-1); 
+        if ($('#number').val().trim().length != 0) {
+            var qty = $('#qty').val();
+            if (parseInt(qty) != 1) {
+                $('#qty').val(parseInt(qty)-1); 
+                var amt = parseFloat($('#number').val())/qty;
+                qty--;
+                $('#number').val((amt * qty).toFixed(2));
+            }
         }
     });
 

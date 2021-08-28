@@ -194,6 +194,20 @@ def reload_UACS_data_table(request):
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
 
+def check_price(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_CHECK_PRICE"
+                    ,(request.POST['uacs'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def check_price_nature(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_CHECK_PRICE_NATURE"
+                    ,(request.POST['name'],))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
 def change_status_uacs(request):
     cursor = connection.cursor()
     cursor.callproc("SP_UPDATE_STATUS_UACS", (request.POST['code'], request.POST['new_status']))
@@ -208,6 +222,7 @@ def update_uacs(request):
                     ,request.POST['fnd_type']
                     ,request.POST['inc_type']
                     ,request.POST['desc_name']
+                    ,request.POST['price']
                     ))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
@@ -220,6 +235,7 @@ def add_uacs_list(request):
                     ,request.POST['o_code']
                     ,request.POST['code']
                     ,request.POST['desc']
+                    ,request.POST['price']
                     ))
     data = cursor.fetchall()
     return JsonResponse(data, safe=False)
