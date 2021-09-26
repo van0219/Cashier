@@ -1770,13 +1770,14 @@ def backup_db(request):
 
     import os
     import pipes
+    import gzip
 
     DB_HOST = 'localhost' 
     DB_USER = 'root'
     DB_USER_PASSWORD = ''
     DB_NAME = 'cashiering_db'
     BACKUP_PATH = 'CASHIERING/views/layouts/db_backup'
-
+    # mysqldump -u root -p --databases educba > backupOfEducba.sql
     # Checking if backup folder already exists or not. If not exists will create it.
     try:
         os.stat(BACKUP_PATH)
@@ -1789,4 +1790,4 @@ def backup_db(request):
     os.system(dumpcmd)
     gzipcmd = "gzip " + pipes.quote(BACKUP_PATH) + "/" + db + ".sql"
     os.system(gzipcmd)
-    return JsonResponse(BACKUP_PATH + db +'.sql', safe=False)
+    return JsonResponse(BACKUP_PATH + '/' + db +'.sql', safe=False)

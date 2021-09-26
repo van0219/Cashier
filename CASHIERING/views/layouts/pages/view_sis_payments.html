@@ -335,14 +335,11 @@
         'searching'   : true,
         'ordering'    : true,
         'info'        : true,
-        'autoWidth'   : false,
+        'autoWidth'   : true,
         'order'       : [[0, "desc" ]],
         'pagingType'  : 'numbers',
         "columns" : [ 
-            { sWidth: '30%' },
-            { sWidth: '20%' },
-            { sWidth: '35%' },
-            { sWidth: '15%' }
+        
         ],
         dom: 'lBfrtip',
             buttons: [
@@ -398,6 +395,10 @@
                 targets:[0,2,3],
                     className: 'text-center',  
             },
+            {
+                targets:3,
+                orderable: false
+            }
         ]
     });
     var dt_combines2 = $('#data-table-combines2').DataTable({
@@ -406,14 +407,14 @@
         'searching'   : true,
         'ordering'    : true,
         'info'        : true,
-        'autoWidth'   : false,
+        'autoWidth'   : true,
         'order'   : [[0, "desc" ]],
         'pagingType'  : 'numbers',
         "columns" : [ 
-           { sWidth: '30%' },
-            { sWidth: '20%' },
-            { sWidth: '35%' },
-            { sWidth: '15%' }
+            // { sWidth: '30%' },
+            // { sWidth: '15%' },
+            // { sWidth: '25%' },
+            // { sWidth: '30%' }
         ],
         dom: 'lBfrtip',
             buttons: [
@@ -462,6 +463,10 @@
                 targets:[0,2,3],
                     className: 'text-center',  
             },
+            {
+                targets:3,
+                orderable: false
+            }
         ]
     });
     
