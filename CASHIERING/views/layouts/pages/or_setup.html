@@ -31,22 +31,26 @@
                     <!-- begin panel-body -->
                     <div class="panel-body">
                         <form action="" method="POST" id="or-form" data-parsley-focus="none">
-                        <!-- begin row -->
-                        <div class="row">
-                            <div class="col-lg-4 form-group m-r-10 m-l-20 m-t-40">
-                                <label class="form-label m-r-10" for="min"><i class="fas fa-hourglass-start m-r-5"></i>Starting Value :</label>
-                                <input type="text" id="min" class="form-control" data-parsley-required="true" data-parsley-required-message="Starting value is required" autocomplete="off"/>
+                            <!-- begin col-12 -->
+                            <div class="col-lg-12">
+                                <!-- begin row -->
+                                <div class="row">
+                                    <div class="col-lg-4 form-group m-t-40">
+                                        <label class="form-label m-r-10" for="min"><i class="fas fa-hourglass-start m-r-5"></i>Starting Value :</label>
+                                        <input type="text" id="min" class="form-control" data-parsley-required="true" data-parsley-required-message="Starting value is required" autocomplete="off"/>
+                                    </div>
+                                    <div class="col-lg-4 form-group m-t-40">
+                                        <label class="form-label m-r-10" for="max"><i class="fas fa-hourglass-end m-r-5"></i>Ending Value :</label>
+                                        <input type="text" id="max" class="form-control" data-parsley-required="true" data-parsley-required-message="Ending value is required" autocomplete="off"/>
+                                    </div>
+                                    <div class="col-lg-4 form-group" style="margin-top: 65px;">
+                                        <a href="javascript:;" id="set" class="btn btn-md btn-primary m-r-5"><i class="fas fa-gavel"></i> Set</a>
+                                        <a href="javascript:;" class="btn btn-md btn-default" id="clear"><i class="fas fa-undo"></i> Clear</a>
+                                    </div>
+                                </div>
+                                <!-- end row -->
                             </div>
-                            <div class="col-lg-4 form-group m-r-10 m-l-20 m-t-40">
-                                <label class="form-label m-r-10" for="max"><i class="fas fa-hourglass-end m-r-5"></i>Ending Value :</label>
-                                <input type="text" id="max" class="form-control" data-parsley-required="true" data-parsley-required-message="Ending value is required" autocomplete="off"/>
-                            </div>
-                            <div class="col-lg-2 form-group" style="margin-top: 65px;">
-                                <a href="javascript:;" id="set" class="btn btn-md btn-primary m-r-5"><i class="fas fa-gavel"></i> Set</a>
-                                <a href="javascript:;" class="btn btn-md btn-default" id="clear"><i class="fas fa-undo"></i> Clear</a>
-                            </div>
-                        </div>
-                        <!-- end row -->
+                            <!-- end col-12 -->
                         </form>
                     </div>
                     <!-- end panel-body -->
