@@ -207,6 +207,7 @@
                                     <div class="col-md-4 col-sm-4 text-nowrap m-t-5">
                                         <a href="javascript:;" class="btn btn-white btn-sm" id="qty-minus"><i class="fas fa-minus text-danger"></i></a>
                                         <a href="javascript:;" class="btn btn-white btn-sm" id="qty-plus"><i class="fas fa-plus text-success"></i></a>
+                                        <a href="javascript:;" class="btn btn-white btn-sm" id="edit-amt"><i class="fas fa-edit text-inverse"></i></a>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
@@ -646,38 +647,52 @@
     }
 
     $("#save").on('click', function() { //save entry is clicked
-        
-        if ($('#no-studnum-checkbox').prop('checked')) {
-            $('#or_studnum').prop('required', false);
-        }
-        else {
-            $('#or_studnum').prop('required', true);
-        }
-        $('#addForm').parsley();
-        if ($('#addForm').parsley().validate()) {
-            $('#save-icon').removeClass('fa-save');
-            $('#save-icon').addClass('fa-spinner fa-pulse');
-            if ($('#radiorequired3').prop('checked')) { // student is checked
-                if ($('.individual_sel').find('option:selected').text() =='Select level of education') { // missing level of education
-                    swal({
-                        title: "Missing Data", 
-                        text: "Please select level of education.",
-                        type: "info",
-                        confirmButtonColor: "#428bca",
-                        showLoaderOnConfirm: true
-                    },function(isConfirm) {
-                        $('#save-icon').removeClass('fa-spinner fa-pulse');
-                        $('#save-icon').addClass('fa-save');
-                    });
+        swal({
+            title: "Generate Receipt?", 
+            text: "Please review the details before saving this transaction",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#f0ad4e",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: true,
+            closeOnCancel: true,
+            customClass: "Custom_Cancel",
+        },function(isConfirm) {
+            if (isConfirm) {
+                if ($('#no-studnum-checkbox').prop('checked')) {
+                    $('#or_studnum').prop('required', false);
                 }
                 else {
-                    no_err_when_save_collection();
+                    $('#or_studnum').prop('required', true);
+                }
+                $('#addForm').parsley();
+                if ($('#addForm').parsley().validate()) {
+                    $('#save-icon').removeClass('fa-save');
+                    $('#save-icon').addClass('fa-spinner fa-pulse');
+                    if ($('#radiorequired3').prop('checked')) { // student is checked
+                        if ($('.individual_sel').find('option:selected').text() =='Select level of education') { // missing level of education
+                            swal({
+                                title: "Missing Data", 
+                                text: "Please select level of education.",
+                                type: "info",
+                                confirmButtonColor: "#428bca",
+                                showLoaderOnConfirm: true
+                            },function(isConfirm) {
+                                $('#save-icon').removeClass('fa-spinner fa-pulse');
+                                $('#save-icon').addClass('fa-save');
+                            });
+                        }
+                        else {
+                            no_err_when_save_collection();
+                        }
+                    }
+                    else { // not student
+                        no_err_when_save_collection();
+                    }
                 }
             }
-            else { // not student
-                no_err_when_save_collection();
-            }
-        }
+        });
     });
 
     var quty = 1;
@@ -692,7 +707,7 @@
                 $('.table-invoice tbody').append(
                     `<tr>
                         <td>
-                            <span class="text-inverse" id="r_desc">${quty + ' ' +dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text() + (dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text() != '' ? ' ('+dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()+')' : '')}</span><br />
+                            <span class="text-inverse" id="r_desc">${quty + 'x  ' +dt_res.find('tr:eq('+ i +')').find('td:eq(1)').text() + (dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text() != '' ? ' ('+dt_res.find('tr:eq('+ i +')').find('td:eq(2)').text()+')' : '')}</span><br />
                         </td>
                         <td class="text-center" id="r_amount">${dt_res.find('tr:eq('+ i +')').find('td:eq(4)').text()}</td>
                     </tr>`
@@ -1106,6 +1121,7 @@
 
     $('#qty-plus').on('click', function() {
         if ($('#number').val().trim().length != 0) {
+            $('#number').prop('readonly', true);
             var qty = $('#qty').val();
             $('#qty').val(parseInt(qty)+1);
             var amt = parseFloat($('#number').val())/qty;
@@ -1116,6 +1132,9 @@
 
     $('#qty-minus').on('click', function() {
         if ($('#number').val().trim().length != 0) {
+            if ($('#qty').val() != 1) {
+                $('#number').prop('readonly', true);
+            }
             var qty = $('#qty').val();
             if (parseInt(qty) != 1) {
                 $('#qty').val(parseInt(qty)-1); 
@@ -1125,6 +1144,13 @@
             }
         }
     });
+
+    $('#edit-amt').on('click', function() {
+        if ($('#number').prop('readonly')) {
+            $('#number').prop('readonly', false).val('');
+            $('#qty').val(1);
+        }
+    })
 
     function highlightSideNav() {
         $('#li-dash').removeClass('text-white');
