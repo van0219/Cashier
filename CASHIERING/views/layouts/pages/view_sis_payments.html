@@ -67,10 +67,10 @@
                                     <table id="data-table-combines" class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="text-nowrap">OR Number</th>
-                                                <th class="text-nowrap">Total Amount</th>
-                                                <th class="text-nowrap">Transaction Date</th>
-                                                <th class="text-nowrap">Options</th>
+                                                <th class="text-nowrap text-center">OR Number</th>
+                                                <th class="text-nowrap text-right">Total Amount</th>
+                                                <th class="text-nowrap text-center">Transaction Date</th>
+                                                <th class="text-nowrap text-center">Options</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -333,13 +333,16 @@
         'paging'      : true,
         'lengthChange': true,
         'searching'   : true,
-        'ordering'    : true,
+        'ordering'    : false,
         'info'        : true,
         'autoWidth'   : true,
         'order'       : [[0, "desc" ]],
         'pagingType'  : 'numbers',
         "columns" : [ 
-        
+            { sWidth: '30%' },
+            { sWidth: '15%' },
+            { sWidth: '35%' },
+            { sWidth: '20%' } 
         ],
         dom: 'lBfrtip',
             buttons: [

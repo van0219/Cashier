@@ -251,7 +251,7 @@
                 var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
                 setTimeout(function() {
                     loadDepositCertTable(start, end);
-                    getMonthlyCollectionDeposit(new Date(end).getFullYear());
+                    getMonthlyCollectionDeposit(new Date(end != start ? start : end).getFullYear());
                 },300);
             }
         });
@@ -262,7 +262,7 @@
                 var end = moment(new Date($('#endDate').val())).format('YYYY/MM/DD');
                 setTimeout(function() {
                     loadDepositCertTable(start, end);
-                    getMonthlyCollectionDeposit(new Date(end).getFullYear());
+                    getMonthlyCollectionDeposit(new Date(end != start ? start : end).getFullYear());
                 },300);
             }
         });
@@ -280,11 +280,11 @@
     var dt_combines = $('#data-table-combines').DataTable({
         'paging'      : true,
         'lengthChange': true,
-        'searching'   : false,
+        'searching'   : true,
         'ordering'    : true,
         'info'        : true,
         'autoWidth'   : true,
-        'order'       : [[1, "desc" ]],
+        'order'       : [[0, "desc" ]],
         dom: 'lBfrtip',
     buttons: [
         {
@@ -428,7 +428,7 @@
                 });
             }
         });
-        $('#year-span').text(moment(new Date($('#endDate').val())).format('YYYY'));
+        $('#year-span').text(moment(new Date($('#startDate').val())).format('YYYY'));
         $('#year-span').show();
         $('#canvas-div canvas').remove();
         $('#canvas-div').append(`<canvas id="line-chart" data-render="chart-js"></canvas>`);
