@@ -1505,7 +1505,7 @@ def load_acc_pdf(request):
             # Text String
             self.set_font('Arial', '', 11)
             self.ln(20)
-            self.set_fill_color(255,255,240)
+            self.set_fill_color(255,255,255)
             self.multi_cell(w=0, h=5, txt='I hereby  certify that the foregoing is a true statement of all accountable forms received, issued and transferred by me during the period above-stated and that the beginning and ending balances are correct.', border=0, align='J', fill=1, split_only=False)
             self.ln(10)
             # Arial 11 Bold

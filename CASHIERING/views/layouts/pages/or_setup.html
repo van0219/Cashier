@@ -258,7 +258,7 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                if (parseInt(obj[0]) == 0) {
+                if (parseInt(obj[0]) <= 0) {
                     or_set_empty();
                 }
                 else {

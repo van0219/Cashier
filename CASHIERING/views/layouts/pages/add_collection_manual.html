@@ -401,7 +401,23 @@
                 csrfmiddlewaretoken:"{{csrf_token}}"
             },
             success: function(obj) {
-                $('#or_num').val(obj[0].toString());
+                var or_num = obj[0].toString();
+                if (or_num != '') {
+                    $('#or_num').val(or_num);
+                } else {
+                    swal({
+                        title: "OR Number Missing", 
+                        text: "Please setup OR Number to proceed.",
+                        type: "warning",
+                        showCancelButton: false,
+                        confirmButtonColor: "#f0ad4e",
+                        confirmButtonText: "Ok",
+                    },function(isConfirm) {
+                        if (isConfirm) {
+                            window.location = "{% url 'dashboard' %}";
+                        }
+                    });
+                }  
             },
             error: function(xhr, status, error) {
                 var errMsg = xhr.status + ': ' + xhr.statusText;
