@@ -57,10 +57,10 @@
                 <!-- begin col-3 -->
                 <div class="col-lg-3 col-md-3" style="border-right: 1px #747474 solid;">
                     <div class="pull-left">
-                        <a href="javascript:;" class="btn btn-white btn-sm" id="cash-pdf"><i class="fas fa-file-pdf fa-2x text-red" id="cash-pdf-icon"></i></a>
+                        <a href="javascript:;" class="btn btn-white btn-sm" id="cash-pdf"><i class="fas fa-file-excel fa-2x text-green" id="cash-pdf-icon"></i></a>
                         <span class="fas fa-arrow-alt-circle-left"><small class="m-l-5">Click this!</small></span>
                         <br>
-                        <span>Generate Cash Receipt Record PDF</span>
+                        <span>Generate Cash Receipt Record Excel</span>
                     </div>
                 </div>
                 <!-- end col-3 -->
@@ -223,6 +223,17 @@
         <!-- end col-6 -->
     </div>
     <!-- end row -->
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-12 -->
+        <div class="col-lg-12">
+            <table id="cash-receipt-tbl" class="table bg-white table-bordered">
+                <!-- append cash receipt table here -->
+            </table>
+        </div>
+        <!-- end col-12 -->
+    </div>
+    <!-- end row -->
 </div>
 <!-- end #content -->
 {% endblock %}
@@ -285,6 +296,7 @@
         $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         FormPlugins.init();
         highlightSideNav();
+        createCashReceiptTbl();
         setTimeout(function() {
             loadCashReceiptCards(d_mon_start, d_today);
             loadTopContrib(d_mon_start, d_today);
@@ -300,6 +312,8 @@
             $('#donut-chart').empty();
             setTimeout(function() {
                 loadDepositOfTheMonthChart(start, end);
+                createCashReceiptTbl();
+                showFullTbl(start, end);
             },300);
         });
 
@@ -312,6 +326,8 @@
             $('#donut-chart').empty();
             setTimeout(function() {
                 loadDepositOfTheMonthChart(start, end);
+                createCashReceiptTbl();
+                showFullTbl(start, end);
             },300);
         });
     });
@@ -429,7 +445,7 @@
                         tot_dep = tot_dep + parseFloat(obj[i][2]);
                     }
                     $('#dep-month-tot').append(
-                        `Total Deposits for the Month of ${moment(new Date(obj[0][0])).format('MMMM')}: <b>${'₱ ' 
+                        `Total Deposits for the Month of ${moment(new Date(obj[0][0])).format('MMMM')} ${new Date($('#startDate').val()).getMonth()!=new Date($('#endDate').val()).getMonth()? 'to ' + moment(new Date($('#endDate').val())).format('MMMM') : '' }: <b>${'₱ ' 
                             + tot_dep.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b>`);
                     handleDonutChart(obj);
                 }
@@ -482,8 +498,21 @@
     $('#cash-pdf').on('click', function() {
         $('#cash-pdf-icon').removeClass('fa-file-pdf');
         $('#cash-pdf-icon').addClass('fa-spinner fa-pulse');
-        loadCashPDF();
+        tabletoExcel('cash-receipt-tbl', 'Cash Receipt Record');
     });
+
+    function tabletoExcel(table, Name) {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+            , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+            , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))); }
+            , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }); };
+            if (!table.nodeType) table = document.getElementById(table);
+            var ctx = { worksheet: Name || 'Worksheet', table: table.innerHTML };
+            window.location.href = uri + base64(format(template, ctx));
+        
+        $('#cash-pdf-icon').removeClass('fa-spinner fa-pulse');
+        $('#cash-pdf-icon').addClass('fa-file-excel');
+    }
 
     function loadCashPDF() {
         $.ajax({
@@ -510,6 +539,136 @@
                 });
             }
         });
+    };
+
+    var colBreakdown = [];
+
+    function getCollectionBreakdown(start, end) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_collection_breakdown' %}",
+            cache: true,
+            dataType: 'json',
+            data: {
+                start,
+                end,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                for (var i = 0; i < obj.length; i++) {
+                    colBreakdown[i] = obj[i];
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+
+    var totalDescNature = 0;
+    var descNature = [];
+
+    function getDescNature(start, end) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_desc_nature' %}",
+            cache: true,
+            dataType: 'json',
+            data: {
+                start,
+                end,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                for (var i = 0; i < obj.length; i++) {
+                    descNature[i] = obj[i];
+                }
+                totalDescNature = descNature.length;
+                createCashReceiptTbl();
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    }
+
+    function createCashReceiptTbl() {
+        $('#cash-receipt-tbl').empty();
+        $('#cash-receipt-tbl').append(`
+            <thead>
+                <tr>
+                    <th colspan="8" style="text-align:left;"><strong>Cash Receipt Record</strong></th>
+                </tr> 
+                <tr>
+                    <th colspan="5" style="text-align: left;"><b>Entity Name:</b> POLYTECHNIC UNIVERSITY OF THE PHILIPPINES</th>
+                    <th colspan="3" style="text-align: left;"><b>Year:</b> ${new Date($('#startDate').val()).getFullYear()}</th>
+                </tr>   
+            </thead>
+            <thead>
+                <tr>
+                    <th colspan="5" style="text-align:left;"><b>Fund Cluster:</b> 5 02 06 441 (164)</th>
+                    <th colspan="3" style="text-align:left;"><b>Period:</b> ${moment(new Date($('#startDate').val())).format('MMMM') + ' ' +(new Date($('#startDate').val()).getDate())} ${new Date($('#startDate').val()).getMonth()!=new Date($('#endDate').val()).getMonth()? 'to ' + moment(new Date($('#endDate').val())).format('MMMM') + ' ' + new Date($('#endDate').val()).getDate() + ' ' + new Date($('#endDate').val()).getFullYear(): '' }</th>
+                </tr>
+            </thead>
+            <thead>
+                <tr style="text-align: center;">
+                    <th colspan="3"><b>IRYNNE P. GATCHALIAN</b></th>
+                    <th colspan="2"><b>Collecting and Disbursing Officer</b></th>
+                    <th colspan="3"><b>PUP Quezon City</b></th>
+                </tr>
+                <tr style="text-align: center;">
+                    <th colspan="3">Accountable Officer</th>
+                    <th colspan="2">Official Designation</th>
+                    <th colspan="3">Station</th>
+                </tr>
+            </thead>
+            <thead>
+                <tr style="text-align: center;">
+                    <th><b>Date</b></th>
+                    <th><b>Reference No.</b></th>
+                    <th><b>Payor</b></th>
+                    <th><b>UACS Code</b></th>
+                    <th><b>Nature of Collection</b></th>
+                    <th><b>Collection</b></th>
+                    <th><b>Deposit</b></th>
+                    <th><b>Undeposited Collection</b></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        `);
+        for (var i = 0; i < colBreakdown.length; i++) {
+            $('#cash-receipt-tbl tbody').append(`
+                <tr id="tr${i}">
+                    <td style="text-align: right;">${colBreakdown[i][5]}</td>
+                    <td style="text-align: right;">${colBreakdown[i][0]}</td>
+                    <td>${colBreakdown[i][1]}</td>
+                    <td></td>
+                    <td>${colBreakdown[i][4]!=null&&colBreakdown[i][4]!='' ? colBreakdown[i][3] + ' - ' + colBreakdown[i][4] : colBreakdown[i][3]}</td>
+                    <td style="text-align: right;">${colBreakdown[i][2].replace(/(\.0+|0+)$/, '')}</td>
+                    <td></td>
+                    <td style="text-align: right;">${colBreakdown[i][2].replace(/(\.0+|0+)$/, '')}</td>
+                </tr>
+            `);
+        }
+    };
+
+    function showFullTbl(start, end) {
+        getCollectionBreakdown(start, end);
+        getDescNature(start, end);
     };
 
     function highlightSideNav() {

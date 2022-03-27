@@ -81,10 +81,10 @@
             <!-- begin col-3 -->
             <div class="col-lg-3 col-md-3" style="border-right: 1px #747474 solid;">
                 <div class="pull-left">
-                    <a href="javascript:;" class="btn btn-white btn-sm" id="mon-pdf"><i class="fas fa-file-pdf fa-2x text-red" id="mon-pdf-icon"></i></a>
+                    <a href="javascript:;" class="btn btn-white btn-sm" id="mon-pdf"><i class="fas fa-file-excel fa-2x text-green" id="mon-pdf-icon"></i></a>
                     <span class="fas fa-arrow-alt-circle-left"><small class="m-l-5">Click this!</small></span>
                     <br>
-                    <span class="f-s-11">Generate Monthly Collection and Deposit PDF</span>
+                    <span class="f-s-11">Generate Monthly Collection and Deposit Excel</span>
                 </div>
             </div>
             <!-- end col-3 -->
@@ -173,6 +173,13 @@
             <!-- end col-7 -->
         </div>
         <!-- end col-12 -->
+        <!-- begin col-12 -->
+        <div class="col-lg-12" style="overflow-x: scroll;">
+            <table id="monthly-full-tbl" class="table bg-white table-bordered">
+                <!-- append monthly collection full table here -->
+            </table>
+        </div>
+        <!-- end col-12 -->
     </div>
     <!-- end row -->
 </div>
@@ -231,6 +238,7 @@
         $('#endDate').val(moment(new Date(d_today)).format('MM/DD/YYYY'));
         FormPlugins.init();
         highlightSideNav();
+        showFullTbl(d_mon_start, d_today);
         setTimeout(function() {
             getColDepCard(d_mon_start, d_today);
             getColDepGroup(d_mon_start, d_today);
@@ -245,6 +253,7 @@
                     getColDepCard(start, end);
                     getColDepGroup(start, end);
                     getMonthlyCollectionDeposit(new Date($('#startDate').val()).getFullYear());
+                    showFullTbl(start, end);
                 },200);
             }
         });
@@ -257,6 +266,7 @@
                     getColDepCard(start, end);
                     getColDepGroup(start, end);
                     getMonthlyCollectionDeposit(new Date($('#startDate').val()).getFullYear());
+                    showFullTbl(start, end);
                 },200);
             }
         });
@@ -528,8 +538,21 @@
     $('#mon-pdf').on('click', function() {
         $('#mon-pdf-icon').removeClass('fa-file-pdf');
         $('#mon-pdf-icon').addClass('fa-spinner fa-pulse');
-        loadMonPDF();
+        tabletoExcel('monthly-full-tbl', 'MonthlyReport');
     });
+
+    function tabletoExcel(table, Name) {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+            , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+            , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))); }
+            , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }); };
+            if (!table.nodeType) table = document.getElementById(table);
+            var ctx = { worksheet: Name || 'Worksheet', table: table.innerHTML };
+            window.location.href = uri + base64(format(template, ctx));
+        
+        $('#mon-pdf-icon').removeClass('fa-spinner fa-pulse');
+        $('#mon-pdf-icon').addClass('fa-file-excel');
+    }
 
     function loadMonPDF() {
         $.ajax({
@@ -557,6 +580,234 @@
                 });
             }
         });
+    };
+
+    var colBreakdown = [];
+
+    function getCollectionBreakdown(start, end) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_collection_breakdown' %}",
+            cache: true,
+            dataType: 'json',
+            data: {
+                start,
+                end,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                for (var i = 0; i < obj.length; i++) {
+                    colBreakdown[i] = obj[i];
+                }
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    };
+
+    var totalDescNature = 0;
+    var descNature = [];
+
+    function getDescNature(start, end) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_desc_nature' %}",
+            cache: true,
+            dataType: 'json',
+            data: {
+                start,
+                end,
+                csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(obj) {
+                for (var i = 0; i < obj.length; i++) {
+                    descNature[i] = obj[i];
+                }
+                totalDescNature = descNature.length;
+                createFullTable();
+            },
+            error: function(xhr, status, error) {
+                var errMsg = xhr.status + ': ' + xhr.statusText;
+                swal({
+                    title: "Error!", 
+                    text: errMsg,
+                    type: "error",
+                    confirmButtonColor: "#428bca",
+                    showLoaderOnConfirm: true
+                })
+            }
+        });
+    }
+
+    function createFullTable() {
+        $('#monthly-full-tbl').empty();
+        $('#monthly-full-tbl').append(`
+            <thead>
+                <tr>
+                    <th colspan="5" style="border:none; text-align: center;">Monthly Report of Collections and Deposits</th>  
+                    <th colspan="${totalDescNature+3} style="border:none;"></th>  
+                </tr>
+                <tr style="border:none;">
+                    <th colspan="5" style="border:none; text-align: left;"><b>Entity Name:</b> POLYTECHNIC UNIVERSITY OF THE PHILIPPINES</th>
+                    <th colspan="${totalDescNature+3}" style="border:none; text-align: left;"><b>Name of Collecting Officer/Cashier:</b> Ms. MERLY B. GONZALBO</th>
+                </tr>
+                <tr style="border:none;">
+                    <th colspan="5" style="border:none; text-align: left;"><b>Sub-Office/District/Division :</b> CASHIERS OFFICES</th>
+                    <th colspan="${totalDescNature+3}" style="border:none; text-align: left;"><b>Fund Cluster :</b> 05205441</th>
+                </tr>
+                <tr style="border:none;">
+                    <th colspan="5" style="border:none; text-align: left;"><b>Municipality/City/Province :</b> QUEZON CITY</th>
+                    <th colspan="${totalDescNature+3}" style="border:none; text-align: left;"><b>Sheet No. :</b></th>
+                </tr>
+                <tr style="border:none;">
+                    <th colspan="5" style="border:none; text-align: left;"></th>
+                    <th colspan="${totalDescNature+3}" style="border:none; text-align: left;"><b>Date :</b> ${moment($('#startDate').val()).format('MM/DD/YYYY')} to ${moment($('#endDate').val()).format('MM/DD/YYYY')}</th>
+                </tr>
+            </thead>
+            <thead style="text-align:center" id="secondThead">
+                <tr>
+                    <th colspan="2"><b>Official Receipt /<br>Deposit Slip</b></th>
+                    <th colspan="3" rowspan="2"><b>Payor</b></th>
+                    <th colspan="1"><b>Cash Collecting Officer</b></th>
+                    <th colspan="${totalDescNature+1}"><b>BREAKDOWN OF RECEIPTS</b></th>
+                </tr>
+                <tr id="secondHeader">
+                    <th colspan="1">Date</th>
+                    <th colspan="1">Number</th>
+                    <th colspan="1">Receipts</th>
+                    <th colspan="1">Total</th>
+        `);
+        for (var i = 0; i < totalDescNature; i++) {
+            $('#secondHeader').append(`
+                <th colspan="1">${(descNature[i][1]!=null&&descNature[i][1]!='') ? descNature[i][1] : descNature[i][0]}</th>
+            `);
+        }
+        $('#secondThead').append(`
+                </tr>
+            </thead>
+        `);
+        $('#monthly-full-tbl').append(`
+            <tbody id="tbod"></tbody>
+        `);
+        var rowTotal = 0;
+        var trMarker = 0;
+        var counter = 0;
+        for (var i = 0; i < colBreakdown.length; i++) {
+            if (i > 0) {
+                if (colBreakdown[i][0]==colBreakdown[i-1][0]) { //check if OR number is the same
+                    counter++;
+                    trMarker = i-counter;
+                    var tot = counter==1 ? parseFloat(colBreakdown[i-1][2]) + parseFloat(colBreakdown[i][2]) : parseFloat(colBreakdown[i][2]);
+                    rowTotal += tot;
+                    var rTotStr = rowTotal.toFixed(2).replace(/(\.0+|0+)$/, '');
+                    $('#tot1'+trMarker).text(rTotStr);
+                    $('#tot2'+trMarker).text(rTotStr);
+                    if (colBreakdown[i][4]!=null&&colBreakdown[i][4]!='') { // if Nature is not empty
+                        var natureIdx;
+                        for (var k = 0; k < descNature.length; k++) {
+                            if (colBreakdown[i][4].trim()==descNature[k][1].trim()) {
+                                natureIdx = k;
+                            }
+                        }
+                        $('#tr'+trMarker+'td'+natureIdx).text(colBreakdown[i][2]);
+                    }
+                    else {
+                        var descIdx;
+                        for (var k = 0; k < descNature.length; k++) {
+                            if (colBreakdown[i][3].trim()==descNature[k][0].trim()) {
+                                descIdx = k;
+                            }
+                        }
+                        $('#tr'+trMarker+'td'+descIdx).text(colBreakdown[i][2]);
+                    }
+                } 
+                else {
+                    counter = 0;
+                    rowTotal = 0;
+                    $('#monthly-full-tbl tbody').append(`
+                        <tr id="tr${i}">
+                            <td style="text-align: right;">${colBreakdown[i][5]}</td>
+                            <td>${colBreakdown[i][0]}</td>
+                            <td colspan="3">${colBreakdown[i][1]}</td>
+                            <td id="tot1${i}">${colBreakdown[i][2].replace(/(\.0+|0+)$/, '')}</td>
+                            <td id="tot2${i}">${colBreakdown[i][2].replace(/(\.0+|0+)$/, '')}</td>
+                        </tr>
+                    `);
+                    for (var j = 0; j < descNature.length; j++) {
+                        $('#tr'+i).append(`
+                            <td id="tr${i}td${j}"></td>
+                        `);
+                    };
+                    if (colBreakdown[i][4]!=null&&colBreakdown[i][4]!='') {
+                        var natureIdx;
+                        for (var k = 0; k < descNature.length; k++) {
+                            if (colBreakdown[i][4].trim()==descNature[k][1].trim()) {
+                                natureIdx = k;
+                            }
+                        }
+                        $('#tr'+i+'td'+natureIdx).text(colBreakdown[i][2]);
+                    }
+                    else {
+                        var descIdx;
+                        for (var k = 0; k < descNature.length; k++) {
+                            if (colBreakdown[i][3].trim()==descNature[k][0].trim()) {
+                                descIdx = k;
+                            }
+                        }
+                        $('#tr'+i+'td'+descIdx).text(colBreakdown[i][2]);
+                    }
+                }
+            }
+            else {
+                counter = 0;
+                rowTotal = 0;
+                $('#monthly-full-tbl tbody').append(`
+                    <tr id="tr${i}">
+                        <td style="text-align: right;">${colBreakdown[i][5]}</td>
+                        <td>${colBreakdown[i][0]}</td>
+                        <td colspan="3">${colBreakdown[i][1]}</td>
+                        <td id="tot1${i}">${colBreakdown[i][2].replace(/(\.0+|0+)$/, '')}</td>
+                        <td id="tot2${i}">${colBreakdown[i][2].replace(/(\.0+|0+)$/, '')}</td>
+                    </tr>
+                `);
+                for (var j = 0; j < descNature.length; j++) {
+                    $('#tr'+i).append(`
+                        <td id="tr${i}td${j}"></td>
+                    `);
+                };
+                if (colBreakdown[i][4]!=null&&colBreakdown[i][4]!='') {
+                    var natureIdx;
+                    for (var k = 0; k < descNature.length; k++) {
+                        if (colBreakdown[i][4].trim()==descNature[k][1].trim()) {
+                            natureIdx = k;
+                        }
+                    }
+                    $('#tr'+i+'td'+natureIdx).text(colBreakdown[i][2]);
+                }
+                else {
+                    var descIdx;
+                    for (var k = 0; k < descNature.length; k++) {
+                        if (colBreakdown[i][3].trim()==descNature[k][0].trim()) {
+                            descIdx = k;
+                        }
+                    }
+                    $('#tr'+i+'td'+descIdx).text(colBreakdown[i][2]);
+                }
+            }
+        }
+    }
+
+    function showFullTbl(start, end) {
+        getCollectionBreakdown(start, end);
+        getDescNature(start, end);
     };
 
     function highlightSideNav() {

@@ -160,4 +160,6 @@ urlpatterns = [
     path('backup_db', views.backup_db, name="backup_db"),
     path('check_price', views.check_price, name="check_price"),
     path('check_price_nature', views.check_price_nature, name="check_price_nature"),
+    path('get_collection_breakdown', views.get_collection_breakdown, name="get_collection_breakdown"),
+    path('get_desc_nature', views.get_desc_nature, name="get_desc_nature"),
 ]

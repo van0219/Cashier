@@ -919,7 +919,7 @@ def load_cert_pdf(request):
             self.set_font('Arial', '', 11)
             self.ln(20)
             self.set_fill_color(255,255,240)
-            self.multi_cell(w=0, h=5, txt='I hereby certify on my official oath that the above is a true statement of all collections and deposits had by me during the period stated above for which Official Receipts Nos. '+ str(or_start) +'-'+ str(or_end) +' inclusive, were actually issued by me in the amounts shown thereon. I also certify that I have not received money from whatever source without saving issued the necessary Official Receipt in Acknowledgement thereof. Collections received by sub-collectors are recorded above in lump-sum opposite their respective report numbers. I certify further that the balance shown above agrees with the balance appearing in my Cash Receipt Record.', border=0, align='J', fill=1, split_only=False)
+            self.multi_cell(w=0, h=5, txt='I hereby certify on my official oath that the above is a true statement of all collections and deposits had by me during the period stated above for which Official Receipts Nos. '+ str(or_start) +'-'+ str(or_end) +' inclusive, were actually issued by me in the amounts shown thereon. I also certify that I have not received money from whatever source without saving issued the necessary Official Receipt in Acknowledgement thereof. Collections received by sub-collectors are recorded above in lump-sum opposite their respective report numbers. I certify further that the balance shown above agrees with the balance appearing in my Cash Receipt Record.', border=0, align='J', fill=0, split_only=False)
             self.ln(10)
             # Arial 11 Bold
             self.set_font('Arial', 'B', 11) 
@@ -1049,7 +1049,7 @@ def load_sum_pdf(request):
             self.set_font('Arial', '', 11)
             self.ln(10)
             self.set_fill_color(255,255,240)
-            self.multi_cell(w=0, h=5, txt='I hereby certify on my official oath that the above is a true statement of all collections and deposits had by me during the period stated above for which Official Receipts Nos. inclusive, were actually issued by me in the amounts shown thereon. I also certify that I have not received money from whatever source without saving issued the necessary Official Receipt in Acknowledgement thereof. Collections received by sub-collectors are recorded above in lump-sum opposite their respective report numbers. I certify further that the balance shown above agrees with the balance appearing in my Cash Receipt Record.', border=0, align='J', fill=1, split_only=False)
+            self.multi_cell(w=0, h=5, txt='I hereby certify on my official oath that the above is a true statement of all collections and deposits had by me during the period stated above for which Official Receipts Nos. inclusive, were actually issued by me in the amounts shown thereon. I also certify that I have not received money from whatever source without saving issued the necessary Official Receipt in Acknowledgement thereof. Collections received by sub-collectors are recorded above in lump-sum opposite their respective report numbers. I certify further that the balance shown above agrees with the balance appearing in my Cash Receipt Record.', border=0, align='J', fill=0, split_only=False)
             self.ln(10)
             # Arial 11 Bold
             self.set_font('Arial', 'B', 11) 
@@ -1473,7 +1473,7 @@ def load_acc_pdf(request):
                 self.cell(w[8], 7, row[1], 'LR', 0, 'C')
                 self.cell(w[9], 7, row[2], 'LR', 0, 'C')
                 self.cell(w[10], 7, str(int(float(row[9]))), 'LR', 0, 'C')
-                self.cell(w[11], 7, str(int(row[2]) + 1), 'LR', 0, 'C')
+                self.cell(w[11], 7, str(int(float(row[2])) + 1), 'LR', 0, 'C')
                 self.cell(w[12], 7, row[7], 'LR', 0, 'C')
                 self.ln()
             self.cell(w[0], 7, 'WITHOUT FACE VALUE', 'LR', 0, 'C')
@@ -1490,18 +1490,57 @@ def load_acc_pdf(request):
             self.cell(w[11], 7, '', 'LR', 0, 'C')
             self.cell(w[12], 7, '', 'LR', 0, 'C')
             self.ln()
+            self.cell(w[0], 7, '', 'LR', 0, 'C')
+            self.cell(w[1], 7, '', 'LR', 0, 'C')
+            self.cell(w[2], 7, '', 'LR', 0, 'C')
+            self.cell(w[3], 7, '', 'LR', 0, 'C')
+            self.cell(w[4], 7, '', 'LR', 0, 'C')
+            self.cell(w[5], 7, '', 'LR', 0, 'C')
+            self.cell(w[6], 7, '', 'LR', 0, 'C')
+            self.cell(w[7], 7, '', 'LR', 0, 'C')
+            self.cell(w[8], 7, '', 'LR', 0, 'C')
+            self.cell(w[9], 7, '', 'LR', 0, 'C')
+            self.cell(w[10], 7, '', 'LR', 0, 'C')
+            self.cell(w[11], 7, '', 'LR', 0, 'C')
+            self.cell(w[12], 7, '', 'LR', 0, 'C')
+            self.ln()
+            self.cell(w[0], 7, '', 'LR', 0, 'C')
+            self.cell(w[1], 7, str(int(float(row[8]))), 'LR', 0, 'C')
+            self.cell(w[2], 7, '', 'LR', 0, 'C')
+            self.cell(w[3], 7, '', 'LR', 0, 'C')
+            self.cell(w[4], 7, '', 'LR', 0, 'C')
+            self.cell(w[5], 7, '', 'LR', 0, 'C')
+            self.cell(w[6], 7, '', 'LR', 0, 'C')
+            self.cell(w[7], 7, str(int(float(row[0]))), 'LR', 0, 'C')
+            self.cell(w[8], 7, '', 'LR', 0, 'C')
+            self.cell(w[9], 7, '', 'LR', 0, 'C')
+            self.cell(w[10], 7, str(int(float(row[9]))), 'LR', 0, 'C')
+            self.cell(w[11], 7, '', 'LR', 0, 'C')
+            self.cell(w[12], 7, '', 'LR', 0, 'C')
+            self.ln()
+
+        # Dummy Table 3
+        def dummy_table3(self, header):
+            # Column widths
+            w = [50, 22, 48, 22, 48, 22, 48, 22, 48]
+            # Header
+            self.set_font('Arial', 'B', 10)
+            for i in range(0, len(header)):
+                self.cell(w[i], 7, header[i], 1, 0, 'C')
+            self.ln()
+
             # Closure line
-            self.cell(sum(w), 0, '', 'T')
-            self.ln(20)
-            self.cell(0, 0, 'Beginning Balance: ', 0, 0, 'L')
-            self.cell(0, 0, str(int(float(data[0][8]))), 0, 0, 'R')
-            self.ln(5)
-            self.cell(0, 0, 'Quantity Issued:', 0, 0, 'L')
-            self.cell(0, 0, str(int(float(data[0][0]))), 0, 0, 'R')
-            self.ln(5)
-            self.set_font('Arial', 'B', 12)
-            self.cell(0, 0, 'Ending Balance:', 0, 0, 'L')
-            self.cell(0, 0, str(int(float(data[0][9]))), 0, 0, 'R')
+            # self.cell(sum(w), 0, '', 'T')
+            # self.ln(20)
+            # self.cell(0, 0, 'Beginning Balance: ', 0, 0, 'L')
+            # self.cell(0, 0, str(int(float(data[0][8]))), 0, 0, 'R')
+            # self.ln(5)
+            # self.cell(0, 0, 'Quantity Issued:', 0, 0, 'L')
+            # self.cell(0, 0, str(int(float(data[0][0]))), 0, 0, 'R')
+            # self.ln(5)
+            # self.set_font('Arial', 'B', 12)
+            # self.cell(0, 0, 'Ending Balance:', 0, 0, 'L')
+            # self.cell(0, 0, str(int(float(data[0][9]))), 0, 0, 'R')
             # Text String
             self.set_font('Arial', '', 11)
             self.ln(20)
@@ -1522,6 +1561,7 @@ def load_acc_pdf(request):
     # Column titles
     dummy_header = ['Accountable Forms', 'Beginning Balance', 'Receipt', 'Issuance', 'Ending Balance']
     dummy_header2 = ['', '', 'Inclusive Serial Nos.', '', 'Inclusive Serial Nos.', '', 'Inclusive Serial Nos.', '', 'Inclusive Serial Nos.']
+    dummy_header3 = ['','','','','','','','','']
     header = ['Face Value', 'Qty', 'From', 'To', 'Qty', 'From', 'To', 'Qty', 'From', 'To', 'Qty', 'From', 'To']
     # Data loading
     data = pdf.load_data(r'CASHIERING\views\layouts\textfiles\acc_obj.txt')
@@ -1532,6 +1572,7 @@ def load_acc_pdf(request):
     pdf.dummy_table(dummy_header)
     pdf.dummy_table2(dummy_header2)
     pdf.improved_table(header, data)
+    pdf.dummy_table3(dummy_header3)
     pdf.alias_nb_pages()
     pdf.output(r'CASHIERING\views\layouts\reports\accountable_report.pdf', 'F')
 
@@ -1791,3 +1832,19 @@ def backup_db(request):
     gzipcmd = "gzip " + pipes.quote(BACKUP_PATH) + "/" + db + ".sql"
     os.system(gzipcmd)
     return JsonResponse(BACKUP_PATH + '/' + db +'.sql', safe=False)
+
+def get_collection_breakdown(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_GET_COLLECTION_BREAKDOWN"
+                    ,(request.POST['start']
+                    ,request.POST['end']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
+
+def get_desc_nature(request):
+    cursor = connection.cursor()
+    cursor.callproc("SP_SELECT_DESC_NATURE"
+                    ,(request.POST['start']
+                    ,request.POST['end']))
+    data = cursor.fetchall()
+    return JsonResponse(data, safe=False)
